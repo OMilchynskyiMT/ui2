@@ -37,12 +37,14 @@
   --bezier-magnetic: cubic-bezier(0.175, 0.885, 0.32, 1.275);
 
   --input-height: calc(3.5 * var(--font-size));
+  --input-gap: var(--font-size);
   --input-border-width: 2px;
   --input-border-color: light-dark(var(--grey-300), var(--grey-600));
   --input-border-hover-color: light-dark(var(--grey-400), var(--grey-500));
   --input-border-active-color: light-dark(var(--blue-500), var(--blue-600));
   --input-border-error-color: light-dark(var(--red-500), var(--red-600));
   --input-border-radius: var(--radius-md);
+  --input-ring-width: 2px;
 
   --input-bg: var(--surface-bg);
   --input-text-color: light-dark(var(--grey-900), var(--grey-100));

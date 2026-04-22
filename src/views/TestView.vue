@@ -25,10 +25,10 @@
     <FormInput label="Max Attempts" type="number" error="test error" />
 
     <FormCheckbox label="Test checkbox" />
-    <FormCheckbox label="another checkbox label" />
+    <FormCheckbox label="another checkbox label" disabled />
 
     <FormToggle label="Test toggle" />
-    <FormToggle label="another toggle label" />
+    <FormToggle label="another toggle label" disabled />
   </div>
 </template>
 

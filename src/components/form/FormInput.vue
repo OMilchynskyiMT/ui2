@@ -77,7 +77,7 @@ onBeforeUnmount(() => {
 }
 
 .form-input > .control {
-  --gap: 0.75rem;
+  --gap: var(--input-gap);
   --bg: var(--input-bg);
 
   display: flex;
