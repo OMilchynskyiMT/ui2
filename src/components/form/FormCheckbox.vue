@@ -30,7 +30,7 @@
 
 <script lang="ts" setup>
 import { useAttrs, useSlots } from 'vue'
-import { generateHtmlId } from '@/components/form/FormInput.vue'
+import { generateHtmlId, type BaseFormControlProps } from '@/components/form/shared'
 
 defineOptions({
   inheritAttrs: false,
@@ -44,12 +44,11 @@ const {
   label = null,
   title = '',
   error = null,
-} = defineProps<{
-  id?: string
-  label?: string | null
-  title?: string
-  error?: string | null
-}>()
+} = defineProps<
+  BaseFormControlProps & {
+    error?: string | null
+  }
+>()
 </script>
 
 <style scoped>

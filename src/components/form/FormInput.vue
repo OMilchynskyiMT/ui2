@@ -16,12 +16,6 @@
 </template>
 
 <script lang="ts">
-export const generateHtmlId = (length: number = 6): string => {
-  return Math.random()
-    .toString(36)
-    .substring(2, length + 2)
-}
-
 export type InputType =
   | 'text'
   | 'email'
@@ -36,7 +30,9 @@ export type InputType =
 
 <script lang="ts" setup>
 import { onBeforeUnmount, onMounted, useAttrs, useSlots, useTemplateRef } from 'vue'
+import { generateHtmlId, type BaseFormControlProps } from '@/components/form/shared'
 
+defineOptions({ inheritAttrs: false })
 const attrs = useAttrs()
 const slots = useSlots()
 const {
@@ -45,13 +41,11 @@ const {
   title = '',
   type = 'text',
   error = null,
-} = defineProps<{
-  id?: string
-  label?: string
-  title?: string
-  type?: InputType
-  error?: string
-}>()
+} = defineProps<
+  BaseFormControlProps & {
+    type?: InputType
+  }
+>()
 
 const controlRef = useTemplateRef('control')
 const beforeRef = useTemplateRef('before')

@@ -11,12 +11,12 @@
     "
   >
     <FormInput label="Host">
-      <template #before><GlobeIcon style="color: var(--purple-500); cursor: pointer;" /></template>
+      <template #before><GlobeIcon style="color: var(--purple-500); cursor: pointer" /></template>
     </FormInput>
     <FormInput type="number">
       Port from default slot
       <template #before>
-        <ChevronsLeftRightEllipsisIcon style="color: var(--blue-500);" />
+        <ChevronsLeftRightEllipsisIcon style="color: var(--blue-500)" />
       </template>
     </FormInput>
     <FormInput label="Service Name" />
@@ -33,8 +33,9 @@
 </template>
 
 <script lang="ts" setup>
-import FormInput from '@/components/form/FormInput.vue'
-import FormCheckbox from '@/components/form/FormCheckbox.vue';
 import { ChevronsLeftRightEllipsisIcon, GlobeIcon } from '@lucide/vue'
-import FormToggle from '@/components/form/FormToggle.vue';
+
+import FormInput from '@/components/form/FormInput.vue'
+import FormCheckbox from '@/components/form/FormCheckbox.vue'
+import FormToggle from '@/components/form/FormToggle.vue'
 </script>
