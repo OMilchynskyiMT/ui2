@@ -1,0 +1,173 @@
+:root {
+  --white: oklch(100% 0 0);
+
+  /* grey */
+  --grey-50: oklch(98.5% 0.002 250);
+  --grey-100: oklch(96.5% 0.003 250);
+  --grey-200: oklch(93% 0.004 250);
+  --grey-300: oklch(87% 0.006 250);
+  --grey-400: oklch(71% 0.008 250);
+  --grey-500: oklch(56% 0.01 250);
+  --grey-600: oklch(46% 0.009 250);
+  --grey-700: oklch(38% 0.008 250);
+  --grey-800: oklch(31% 0.007 250);
+  --grey-900: oklch(24% 0.006 250);
+  --grey-950: oklch(17% 0.005 250);
+
+  /* red */
+  --red-50: oklch(97.5% 0.012 25);
+  --red-100: oklch(94.5% 0.028 25);
+  --red-200: oklch(89% 0.055 25);
+  --red-300: oklch(82% 0.09 25);
+  --red-400: oklch(71% 0.125 25);
+  --red-500: oklch(61% 0.15 25);
+  --red-600: oklch(54% 0.132 25);
+  --red-700: oklch(46% 0.112 25);
+  --red-800: oklch(38% 0.092 25);
+  --red-900: oklch(31% 0.072 25);
+  --red-950: oklch(24% 0.052 25);
+
+  /* orange */
+  --orange-50: oklch(98% 0.014 55);
+  --orange-100: oklch(95.5% 0.032 55);
+  --orange-200: oklch(91% 0.062 55);
+  --orange-300: oklch(84% 0.096 55);
+  --orange-400: oklch(74% 0.126 55);
+  --orange-500: oklch(64% 0.146 55);
+  --orange-600: oklch(56% 0.128 55);
+  --orange-700: oklch(48% 0.108 55);
+  --orange-800: oklch(40% 0.088 55);
+  --orange-900: oklch(33% 0.07 55);
+  --orange-950: oklch(26% 0.05 55);
+
+  /* amber */
+  --amber-50: oklch(98.5% 0.012 88);
+  --amber-100: oklch(96% 0.028 88);
+  --amber-200: oklch(92% 0.056 88);
+  --amber-300: oklch(86% 0.088 88);
+  --amber-400: oklch(78% 0.114 88);
+  --amber-500: oklch(69% 0.132 88);
+  --amber-600: oklch(60% 0.116 88);
+  --amber-700: oklch(51% 0.098 88);
+  --amber-800: oklch(42% 0.078 88);
+  --amber-900: oklch(34% 0.06 88);
+  --amber-950: oklch(27% 0.042 88);
+
+  /* yellow */
+  --yellow-50: oklch(98.5% 0.01 100);
+  --yellow-100: oklch(96.5% 0.024 100);
+  --yellow-200: oklch(93% 0.05 100);
+  --yellow-300: oklch(87% 0.08 100);
+  --yellow-400: oklch(79% 0.104 100);
+  --yellow-500: oklch(70% 0.12 100);
+  --yellow-600: oklch(61% 0.104 100);
+  --yellow-700: oklch(52% 0.088 100);
+  --yellow-800: oklch(43% 0.07 100);
+  --yellow-900: oklch(35% 0.054 100);
+  --yellow-950: oklch(28% 0.038 100);
+
+  /* lime */
+  --lime-50: oklch(98% 0.01 128);
+  --lime-100: oklch(95.5% 0.024 128);
+  --lime-200: oklch(91% 0.046 128);
+  --lime-300: oklch(84% 0.072 128);
+  --lime-400: oklch(73% 0.1 128);
+  --lime-500: oklch(63% 0.118 128);
+  --lime-600: oklch(55% 0.104 128);
+  --lime-700: oklch(47% 0.088 128);
+  --lime-800: oklch(39% 0.072 128);
+  --lime-900: oklch(32% 0.056 128);
+  --lime-950: oklch(25% 0.04 128);
+
+  /* green */
+  --green-50: oklch(98% 0.01 145);
+  --green-100: oklch(95% 0.024 145);
+  --green-200: oklch(90% 0.048 145);
+  --green-300: oklch(83% 0.078 145);
+  --green-400: oklch(72% 0.108 145);
+  --green-500: oklch(62% 0.128 145);
+  --green-600: oklch(54% 0.112 145);
+  --green-700: oklch(46% 0.096 145);
+  --green-800: oklch(38% 0.078 145);
+  --green-900: oklch(31% 0.06 145);
+  --green-950: oklch(24% 0.042 145);
+
+  /* teal */
+  --teal-50: oklch(98% 0.01 185);
+  --teal-100: oklch(95% 0.024 185);
+  --teal-200: oklch(90% 0.046 185);
+  --teal-300: oklch(83% 0.074 185);
+  --teal-400: oklch(72% 0.102 185);
+  --teal-500: oklch(61% 0.122 185);
+  --teal-600: oklch(53% 0.108 185);
+  --teal-700: oklch(45% 0.092 185);
+  --teal-800: oklch(37% 0.076 185);
+  --teal-900: oklch(30% 0.058 185);
+  --teal-950: oklch(23% 0.04 185);
+
+  /* cyan */
+  --cyan-50: oklch(98% 0.012 220);
+  --cyan-100: oklch(95% 0.028 220);
+  --cyan-200: oklch(90% 0.052 220);
+  --cyan-300: oklch(83% 0.082 220);
+  --cyan-400: oklch(72% 0.11 220);
+  --cyan-500: oklch(61% 0.13 220);
+  --cyan-600: oklch(53% 0.116 220);
+  --cyan-700: oklch(45% 0.098 220);
+  --cyan-800: oklch(37% 0.08 220);
+  --cyan-900: oklch(30% 0.062 220);
+  --cyan-950: oklch(23% 0.044 220);
+
+  /* blue */
+  --blue-50: oklch(98% 0.014 248.04);
+  --blue-100: oklch(95% 0.032 248.04);
+  --blue-200: oklch(90% 0.058 248.04);
+  --blue-300: oklch(82% 0.088 248.04);
+  --blue-400: oklch(68% 0.118 248.04);
+  --blue-500: oklch(53.58% 0.1444 248.04); /* #0071bc */
+  --blue-600: oklch(47% 0.126 248.04);
+  --blue-700: oklch(40% 0.106 248.04);
+  --blue-800: oklch(33% 0.086 248.04);
+  --blue-900: oklch(27% 0.066 248.04);
+  --blue-950: oklch(21% 0.048 248.04);
+
+  /* indigo */
+  --indigo-50: oklch(98% 0.012 280);
+  --indigo-100: oklch(95% 0.028 280);
+  --indigo-200: oklch(90% 0.052 280);
+  --indigo-300: oklch(83% 0.08 280);
+  --indigo-400: oklch(72% 0.104 280);
+  --indigo-500: oklch(61% 0.122 280);
+  --indigo-600: oklch(53% 0.108 280);
+  --indigo-700: oklch(45% 0.094 280);
+  --indigo-800: oklch(37% 0.078 280);
+  --indigo-900: oklch(30% 0.062 280);
+  --indigo-950: oklch(23% 0.044 280);
+
+  /* purple */
+  --purple-50: oklch(98% 0.012 305);
+  --purple-100: oklch(95% 0.028 305);
+  --purple-200: oklch(90% 0.052 305);
+  --purple-300: oklch(83% 0.082 305);
+  --purple-400: oklch(72% 0.108 305);
+  --purple-500: oklch(61% 0.128 305);
+  --purple-600: oklch(53% 0.112 305);
+  --purple-700: oklch(45% 0.096 305);
+  --purple-800: oklch(37% 0.078 305);
+  --purple-900: oklch(30% 0.06 305);
+  --purple-950: oklch(23% 0.044 305);
+
+  /* pink */
+  --pink-50: oklch(98% 0.012 350);
+  --pink-100: oklch(95% 0.028 350);
+  --pink-200: oklch(90% 0.054 350);
+  --pink-300: oklch(83% 0.084 350);
+  --pink-400: oklch(72% 0.112 350);
+  --pink-500: oklch(61% 0.132 350);
+  --pink-600: oklch(53% 0.116 350);
+  --pink-700: oklch(45% 0.098 350);
+  --pink-800: oklch(37% 0.08 350);
+  --pink-900: oklch(30% 0.062 350);
+  --pink-950: oklch(23% 0.044 350);
+}
+

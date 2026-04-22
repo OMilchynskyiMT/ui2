@@ -1,0 +1,19 @@
+body {
+  min-height: 100vh;
+  font: var(--font-weight-normal) var(--font-size) var(--font-sans);
+  background-color: var(--bg);
+  color: var(--text-color);
+}
+
+#app {
+  min-height: 100vh;
+  display: grid;
+
+  &:has(> main):has(> footer) {
+    grid-template-rows: 1fr auto;
+  }
+
+  &:has(> header):has(> main):has(> footer) {
+    grid-template-rows: auto 1fr auto;
+  }
+}

@@ -1,0 +1,11 @@
+@layer normalize, theme, base, components, utilities;
+
+@import 'normalize.css' layer(normalize);
+
+@import 'base.css' layer(base);
+
+@import 'themes/default/index.css' layer(theme);
+
+@import 'components/index.css' layer(components);
+
+@import 'utils/index.css' layer(utilities);

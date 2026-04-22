@@ -1,0 +1,56 @@
+@import 'fonts.css';
+@import 'palette.css';
+
+:root {
+  color-scheme: light dark;
+  &[data-theme='dark'] {
+    color-scheme: dark;
+  }
+  &[data-theme='light'] {
+    color-scheme: light;
+  }
+
+  --bg: light-dark(var(--white), var(--grey-800));
+  --surface-bg: light-dark(var(--white), var(--grey-900));
+  --text-color: light-dark(var(--grey-800), var(--grey-200));
+  --text-color-dimmed: light-dark(var(--grey-600), var(--grey-400));
+  --error-text-color: light-dark(var(--red-600), var(--red-400));
+
+  --link-color: light-dark(var(--blue-500), var(--blue-400));
+  --link-hover-color: light-dark(var(--blue-600), var(--blue-500));
+
+  --duration-xs: 0.05s;
+  --duration-sm: 0.1s;
+  --duration-md: 0.15s;
+  --duration-lg: 0.3s;
+  --duration-xl: 0.5s;
+
+  --radius-sm: 0.125rem;
+  --radius-md: 0.25rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 1rem;
+
+  --bezier-smooth-entrance: cubic-bezier(0, 0, 0.2, 1);
+  --bezier-soft-exit: cubic-bezier(0.4, 0, 1, 1);
+  --bezier-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --bezier-bounce: cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  --bezier-magnetic: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+  --input-height: calc(3.5 * var(--font-size));
+  --input-border-width: 2px;
+  --input-border-color: light-dark(var(--grey-300), var(--grey-600));
+  --input-border-hover-color: light-dark(var(--grey-400), var(--grey-500));
+  --input-border-active-color: light-dark(var(--blue-500), var(--blue-600));
+  --input-border-error-color: light-dark(var(--red-500), var(--red-600));
+  --input-border-radius: var(--radius-md);
+
+  --input-bg: var(--surface-bg);
+  --input-text-color: light-dark(var(--grey-900), var(--grey-100));
+  --input-label-color: light-dark(var(--grey-800), var(--grey-300));
+  --input-label-active-color: light-dark(var(--grey-600), var(--grey-400));
+
+  --input-font-size: var(--font-size-md);
+
+  --input-error-color: light-dark(var(--red-600), var(--red-400));
+  --input-error-font-size: var(--font-size-sm);
+}
