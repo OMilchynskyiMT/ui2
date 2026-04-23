@@ -1,10 +1,10 @@
-export const generateHtmlId = (length: number = 6): string => {
+export const generateHtmlId = (length = 6): string => {
   return Math.random()
     .toString(36)
-    .substring(2, length + 2)
+    .slice(2, length + 2)
 }
 
-export type BaseFormControlProps = {
+export interface BaseFormControlProps {
   id?: string
   label?: string | null
   title?: string

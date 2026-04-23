@@ -1,15 +1,17 @@
 <template>
   <div class="form-input">
-    <div class="control" ref="control">
-      <div v-if="slots.before" class="before" ref="before"><slot name="before" /></div>
+    <div ref="control" class="control">
+      <div v-if="slots.before" ref="before" class="before"><slot name="before" /></div>
       <div class="field">
         <label v-if="slots.default || label" :for="id" :title="title">
           <slot>{{ label }}</slot>
         </label>
-        <input :type="type" :id="id" v-bind="attrs" placeholder=" " />
+        <input :id="id" v-bind="attrs" :placeholder="''" :type="type" />
       </div>
       <div v-if="slots.after" class="after"><slot name="after" /></div>
     </div>
+
+    <div a="1" b="2" c="3" />
 
     <div v-if="error" class="error">{{ error }}</div>
   </div>
@@ -17,17 +19,18 @@
 
 <script lang="ts" setup>
 import { onBeforeUnmount, onMounted, useAttrs, useSlots, useTemplateRef } from 'vue'
-import { generateHtmlId, type BaseFormControlProps } from '@/components/form/shared'
+
+import { type BaseFormControlProps, generateHtmlId } from '@/components/form/shared'
 
 defineOptions({ inheritAttrs: false })
 const attrs = useAttrs()
 const slots = useSlots()
 const {
   id = generateHtmlId(),
-  label = null,
+  label,
   title = '',
   type = 'text',
-  error = null,
+  error,
 } = defineProps<
   BaseFormControlProps & {
     type?: HTMLInputElement['type']
@@ -75,6 +78,8 @@ onBeforeUnmount(() => {
   border-radius: var(--input-border-radius);
   padding-inline: var(--gap);
   background-color: var(--bg);
+  opacity: var(--input-opacity, 1);
+  cursor: var(--input-cursor, text);
 
   transition-property: border-color;
   transition-duration: var(--duration-md);
@@ -106,16 +111,13 @@ onBeforeUnmount(() => {
       position: absolute;
       top: calc(-1.5 * var(--input-border-width));
       left: 0;
-      transform: translate(
-        var(--label-translate-x, 0),
-        var(--label-translate-y, calc(var(--input-height) / 3))
-      );
+      transform: translate(var(--label-translate-x, 0), var(--label-translate-y, calc(var(--input-height) / 3)));
       font-size: var(--label-font-size, 1rem);
       background-color: var(--label-bg, transparent);
       color: var(--label-color, var(--input-label-color));
       padding-inline: var(--padding, 0);
       user-select: none;
-      cursor: text;
+      cursor: var(--input-cursor);
       text-wrap: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -136,6 +138,7 @@ onBeforeUnmount(() => {
       color: var(--input-text-color);
       font-size: var(--input-font-size);
       background-color: transparent;
+      cursor: var(--input-cursor);
     }
   }
 
@@ -158,6 +161,12 @@ onBeforeUnmount(() => {
     &:has(input:not(:placeholder-shown)) {
       --label-translate-x: calc(-1 * (var(--before-width, 0) + var(--gap) + var(--gap) / 2));
     }
+  }
+
+  &:has(input:disabled) {
+    --input-opacity: 0.6;
+    --border-color: var(--input-border-color);
+    --input-cursor: not-allowed;
   }
 }
 

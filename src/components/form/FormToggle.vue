@@ -1,7 +1,7 @@
 <template>
   <FormBinaryWrapper>
     <template #indicator>
-      <span class="switch" aria-hidden="true">
+      <span aria-hidden="true" class="switch">
         <span class="thumb" />
       </span>
     </template>
@@ -9,7 +9,7 @@
 </template>
 
 <script lang="ts" setup>
-import FormBinaryWrapper from './FormBinary.wrapper.vue'
+import FormBinaryWrapper from '@/components/form/FormBinary.wrapper.vue'
 </script>
 
 <style>

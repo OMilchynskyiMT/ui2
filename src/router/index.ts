@@ -11,7 +11,7 @@ const router = createRouter({
           path: '',
           component: () => import('@/views/TestView.vue'),
         },
-      ]
+      ],
     },
     {
       path: '/dashboard',
@@ -20,9 +20,9 @@ const router = createRouter({
         {
           path: '',
           component: () => import('@/views/TestView.vue'),
-        }
-      ]
-    }
+        },
+      ],
+    },
   ],
 })
 

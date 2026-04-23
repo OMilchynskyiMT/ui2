@@ -1,10 +1,10 @@
 <template>
-  <div class="form-binary" :class="{ 'has-error': !!error }">
+  <div :class="{ 'has-error': !!error }" class="form-binary">
     <div class="control">
       <div v-if="slots.before" class="before"><slot name="before" /></div>
 
-      <label class="main" :for="id" :title="title">
-        <input :id="id" type="checkbox" v-bind="attrs" :role="role" />
+      <label :for="id" :title="title" class="main">
+        <input :id="id" v-bind="attrs" :role="role" type="checkbox" />
         <slot name="indicator" />
         <span v-if="slots.default || label" class="label">
           <slot>{{ label }}</slot>
@@ -20,15 +20,16 @@
 
 <script lang="ts" setup>
 import { useAttrs, useSlots } from 'vue'
-import { generateHtmlId, type BaseFormControlProps } from '@/components/form/shared'
+
 import FormError from '@/components/form/FormError.vue'
+import { type BaseFormControlProps, generateHtmlId } from '@/components/form/shared'
 
 const slots = useSlots()
 const attrs = useAttrs()
 
 const {
   id = generateHtmlId(),
-  label = undefined,
+  label,
   title = '',
   role = 'checkbox',
   error = undefined,

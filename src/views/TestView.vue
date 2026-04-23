@@ -11,33 +11,36 @@
     "
   >
     <FormInput label="Host">
-      <template #before><GlobeIcon style="color: var(--purple-500); cursor: pointer" /></template>
+      <template #before>
+        <AppIcon :icon="GlobeIcon" style="color: var(--purple-500); cursor: pointer" />
+      </template>
     </FormInput>
     <FormInput type="number">
       Port from default slot
       <template #before>
-        <ChevronsLeftRightEllipsisIcon style="color: var(--blue-500)" />
+        <AppIcon :icon="ChevronsLeftRightEllipsisIcon" style="color: var(--blue-500)" />
       </template>
     </FormInput>
     <FormInput label="Service Name" />
     <FormInput label="Packet Size (bytes)" type="number" />
 
-    <FormPassword label="Password" />
+    <FormPassword disabled label="Disabled password" />
     <FormPassword label="another password field" />
 
     <FormCheckbox label="Test checkbox" />
-    <FormCheckbox label="another checkbox label" disabled />
+    <FormCheckbox disabled label="another disabled checkbox" />
 
     <FormToggle label="Test toggle" />
-    <FormToggle label="another toggle label" disabled />
+    <FormToggle disabled label="another disabled toggle" />
   </div>
 </template>
 
 <script lang="ts" setup>
 import { ChevronsLeftRightEllipsisIcon, GlobeIcon } from '@lucide/vue'
 
-import FormInput from '@/components/form/FormInput.vue'
+import AppIcon from '@/components/AppIcon.vue'
 import FormCheckbox from '@/components/form/FormCheckbox.vue'
+import FormInput from '@/components/form/FormInput.vue'
+import FormPassword from '@/components/form/FormPassword.vue'
 import FormToggle from '@/components/form/FormToggle.vue'
-import FormPassword from '@/components/form/FormPassword.vue';
 </script>

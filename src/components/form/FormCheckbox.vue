@@ -11,7 +11,7 @@
 </template>
 
 <script lang="ts" setup>
-import FormBinaryWrapper from './FormBinary.wrapper.vue'
+import FormBinaryWrapper from '@/components/form/FormBinary.wrapper.vue'
 </script>
 
 <style>
@@ -26,8 +26,7 @@ import FormBinaryWrapper from './FormBinary.wrapper.vue'
         flex: none;
         display: grid;
         place-items: center;
-        border: var(--input-border-width) solid
-          var(--checkbox-border-color, var(--input-border-color));
+        border: var(--input-border-width) solid var(--checkbox-border-color, var(--input-border-color));
         border-radius: calc(var(--input-border-radius) / 2);
         background-color: var(--checkbox-bg, var(--surface-bg));
         opacity: var(--checkbox-opacity, 1);
@@ -63,8 +62,7 @@ import FormBinaryWrapper from './FormBinary.wrapper.vue'
 
       & > input:focus-visible + .indicator {
         --checkbox-border-color: var(--input-border-active-color);
-        box-shadow: 0 0 0 var(--input-ring-width)
-          color-mix(in srgb, var(--input-border-active-color) 20%, transparent);
+        box-shadow: 0 0 0 var(--input-ring-width) color-mix(in srgb, var(--input-border-active-color) 20%, transparent);
       }
 
       & > input:checked + .indicator {
