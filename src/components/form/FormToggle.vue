@@ -1,10 +1,12 @@
 <template>
-  <FormBinaryWrapper>
+  <FormBinaryWrapper type="checkbox" variant="toggle">
     <template #indicator>
-      <span aria-hidden="true" class="switch">
-        <span class="thumb" />
-      </span>
+      <span class="thumb" />
     </template>
+
+    <template v-if="$slots.before" #before><slot name="before" /></template>
+    <slot />
+    <template v-if="$slots.after" #after><slot name="after" /></template>
   </FormBinaryWrapper>
 </template>
 
@@ -13,25 +15,19 @@ import FormBinaryWrapper from '@/components/form/FormBinary.wrapper.vue'
 </script>
 
 <style>
-.form-binary {
+.form-binary[data-variant='toggle'] {
   & > .control {
     --switch-width: 2.5rem;
     --switch-height: 1.5rem;
     --thumb-size: calc(var(--switch-height) - 0.25rem);
 
     & > .main {
-      & > .switch {
-        position: relative;
-        flex: none;
+      & > .indicator {
         width: var(--switch-width);
         height: var(--switch-height);
         border-radius: 999px;
         opacity: var(--toggle-opacity, 1);
         background-color: var(--toggle-track-color, var(--input-border-color));
-        transition:
-          background-color var(--duration-md),
-          box-shadow var(--duration-md);
-        transition-timing-function: var(--bezier-magnetic);
 
         & > .thumb {
           position: absolute;
@@ -48,17 +44,15 @@ import FormBinaryWrapper from '@/components/form/FormBinary.wrapper.vue'
         }
       }
 
-      &:hover .switch {
+      &:hover > .indicator {
         --toggle-track-color: var(--input-border-hover-color);
       }
 
-      & > input:focus-visible + .switch {
+      & > input:focus-visible + .indicator {
         --toggle-track-color: var(--input-border-active-color);
-        box-shadow: 0 0 0 var(--input-ring-width)
-          color-mix(in srgb, var(--input-border-active-color) 20%, transparent);
       }
 
-      & > input:checked + .switch {
+      & > input:checked + .indicator {
         --toggle-track-color: var(--toggle-active-color, var(--input-border-active-color));
 
         & > .thumb {
@@ -66,14 +60,14 @@ import FormBinaryWrapper from '@/components/form/FormBinary.wrapper.vue'
         }
       }
 
-      & > input:disabled + .switch {
+      & > input:disabled + .indicator {
         --toggle-opacity: 0.6;
         --toggle-track-color: var(--input-border-color);
       }
     }
   }
 
-  &:has(.error) .switch {
+  &.has-error .indicator {
     --toggle-track-color: var(--input-border-error-color);
   }
 }

@@ -32,6 +32,9 @@
 
     <FormToggle label="Test toggle" />
     <FormToggle disabled label="another disabled toggle" />
+
+    <FormRadio label="Test radio" />
+    <FormRadio disabled label="another disabled radio" />
   </div>
 </template>
 
@@ -42,5 +45,6 @@ import AppIcon from '@/components/AppIcon.vue'
 import FormCheckbox from '@/components/form/FormCheckbox.vue'
 import FormInput from '@/components/form/FormInput.vue'
 import FormPassword from '@/components/form/FormPassword.vue'
+import FormRadio from '@/components/form/FormRadio.vue'
 import FormToggle from '@/components/form/FormToggle.vue'
 </script>
