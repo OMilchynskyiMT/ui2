@@ -1,7 +1,13 @@
 <template>
   <RouterView />
+
+  <Teleport to="#notifications">
+    <NotificationsRoot />
+  </Teleport>
 </template>
 
-<script setup lang="ts"></script>
+<script lang="ts" setup>
+import { NotificationsRoot } from '@/features/notifications'
+</script>
 
 <style scoped></style>

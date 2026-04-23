@@ -47,4 +47,9 @@ import FormInput from '@/components/form/FormInput.vue'
 import FormPassword from '@/components/form/FormPassword.vue'
 import FormRadio from '@/components/form/FormRadio.vue'
 import FormToggle from '@/components/form/FormToggle.vue'
+
+import { useNotify } from '@/features/notifications'
+
+const { info } = useNotify()
+info('Test notification message', { timeout: 5000 })
 </script>
