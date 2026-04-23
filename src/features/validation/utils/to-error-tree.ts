@@ -10,6 +10,15 @@ function getOrCreateBranch(target: ValidationErrorBranch, key: string): Validati
 
   if (isBranch(current)) return current
 
+  if (Array.isArray(current)) {
+    const next: ValidationErrorBranch = {
+      _errors: [...current],
+    }
+
+    target[key] = next
+    return next
+  }
+
   const next: ValidationErrorBranch = {}
   target[key] = next
   return next
