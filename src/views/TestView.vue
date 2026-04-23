@@ -21,8 +21,9 @@
     </FormInput>
     <FormInput label="Service Name" />
     <FormInput label="Packet Size (bytes)" type="number" />
-    <FormInput label="Interval (seconds)" type="number" />
-    <FormInput label="Max Attempts" type="number" error="test error" />
+
+    <FormPassword label="Password" />
+    <FormPassword label="another password field" />
 
     <FormCheckbox label="Test checkbox" />
     <FormCheckbox label="another checkbox label" disabled />
@@ -38,4 +39,5 @@ import { ChevronsLeftRightEllipsisIcon, GlobeIcon } from '@lucide/vue'
 import FormInput from '@/components/form/FormInput.vue'
 import FormCheckbox from '@/components/form/FormCheckbox.vue'
 import FormToggle from '@/components/form/FormToggle.vue'
+import FormPassword from '@/components/form/FormPassword.vue';
 </script>

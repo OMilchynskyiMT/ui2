@@ -15,19 +15,6 @@
   </div>
 </template>
 
-<script lang="ts">
-export type InputType =
-  | 'text'
-  | 'email'
-  | 'password'
-  | 'number'
-  | 'tel'
-  | 'url'
-  | 'search'
-  | 'time'
-  | 'date'
-</script>
-
 <script lang="ts" setup>
 import { onBeforeUnmount, onMounted, useAttrs, useSlots, useTemplateRef } from 'vue'
 import { generateHtmlId, type BaseFormControlProps } from '@/components/form/shared'
@@ -43,7 +30,7 @@ const {
   error = null,
 } = defineProps<
   BaseFormControlProps & {
-    type?: InputType
+    type?: HTMLInputElement['type']
   }
 >()
 
