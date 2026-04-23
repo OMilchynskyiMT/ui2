@@ -2,7 +2,7 @@
   <div v-if="error" class="error">{{ error }}</div>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 defineProps<{ error?: string | null }>()
 </script>
 

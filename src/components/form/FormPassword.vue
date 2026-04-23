@@ -4,17 +4,13 @@
       <slot name="before"><AppIcon :icon="LockIcon" /></slot>
     </template>
     <template #after>
-      <AppIcon
-        v-if="showPassword"
-        class="u-pointer"
-        :icon="EyeOffIcon"
-        @click.prevent="togglePassword" />
-      <AppIcon v-else class="u-pointer" :icon="EyeIcon" @click.prevent="togglePassword" />
+      <AppIcon v-if="showPassword" @click.prevent="togglePassword" :icon="EyeOffIcon" class="u-pointer" />
+      <AppIcon v-else @click.prevent="togglePassword" :icon="EyeIcon" class="u-pointer" />
     </template>
   </FormInput>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import { ref } from 'vue'
 import { EyeIcon, EyeOffIcon, LockIcon } from '@lucide/vue'
 

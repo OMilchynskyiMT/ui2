@@ -1,4 +1,4 @@
-export type NotificationKind = 'info' | 'success' | 'warning' | 'error';
+export type NotificationKind = 'info' | 'success' | 'warning' | 'error'
 
 export interface NotificationItem {
   id: string
