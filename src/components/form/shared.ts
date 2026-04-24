@@ -4,9 +4,36 @@ export const generateHtmlId = (length = 6): string => {
     .slice(2, length + 2)
 }
 
-export interface BaseFormControlProperties {
+export type BaseFormControlProperties = {
   id?: string
   label?: string | null
   title?: string
   error?: string | null
+}
+
+export type FormComboInputValue = string | number
+
+export type FormComboInputOption =
+  | FormComboInputValue
+  | {
+      value: FormComboInputValue
+      title: string
+      disabled?: boolean
+    }
+
+export type NormalizedFormComboInputOption = {
+  value: FormComboInputValue
+  title: string
+  disabled?: boolean
+}
+
+export const normalizeFormComboInputOption = (option: FormComboInputOption): NormalizedFormComboInputOption => {
+  if (typeof option === 'object') {
+    return option
+  }
+
+  return {
+    value: option,
+    title: String(option),
+  }
 }

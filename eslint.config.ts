@@ -58,6 +58,7 @@ export default defineConfigWithVueTs(
           caughtErrorsIgnorePattern: '^_',
         },
       ],
+      "@typescript-eslint/consistent-type-definitions": ["error", "type"]
     },
   },
 

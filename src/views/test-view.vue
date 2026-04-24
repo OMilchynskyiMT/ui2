@@ -35,6 +35,12 @@
 
     <form-radio label="Test radio" />
     <form-radio disabled label="another disabled radio" />
+
+    <form-combo-input v-model="combo" :options="comboOptions" label="Combo input">
+      <template #before><app-icon :icon="GlobeIcon" style="color: var(--blue-500)" /></template>
+    </form-combo-input>
+
+    <div>{{ combo }}</div>
   </div>
 
   <tab-bar>
@@ -45,7 +51,7 @@
       :disabled="tab.disabled"
       @click="activeTab = tab.label"
     >
-      <AppIcon :icon="tab.icon" />
+      <app-icon :icon="tab.icon" />
       {{ tab.label }}
     </tab-item>
   </tab-bar>
@@ -57,6 +63,7 @@ import { ChevronsLeftRightEllipsisIcon, GlobeIcon } from '@lucide/vue'
 
 import AppIcon from '@/components/app-icon.vue'
 import FormCheckbox from '@/components/form/form-checkbox.vue'
+import FormComboInput from '@/components/form/form-combo-input.vue'
 import FormInput from '@/components/form/form-input.vue'
 import FormPassword from '@/components/form/form-password.vue'
 import FormRadio from '@/components/form/form-radio.vue'
@@ -73,6 +80,16 @@ const tabs = [
   { icon: GlobeIcon, label: 'Tab four' },
 ]
 const activeTab = ref('Tab 1')
+
+const comboOptions = [
+  { value: '8080:8181', title: 'Local addresses' },
+  { value: 'disabled value', title: 'Disabled option', disabled: true },
+  { value: '22', title: 'SSH' },
+  { value: '80', title: 'Lighttpd' },
+  { value: '443', title: 'Secured Lighttpd' },
+]
+
+const combo = ref('22')
 
 const { info } = useNotify()
 info('Test notification message', { timeout: 5000 })
