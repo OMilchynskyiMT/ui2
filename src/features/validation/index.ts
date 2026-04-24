@@ -32,7 +32,13 @@ export {
   type InferDiscriminatedUnionOutput,
   type NonEmptyDiscriminatedUnionMembers,
 } from './schema/discriminated-union'
-export { defineExtension, type SchemaExtension } from './schema/extension'
+export {
+  defineBooleanExtension,
+  defineExtension,
+  defineNumberExtension,
+  defineStringExtension,
+  type SchemaExtension,
+} from './schema/extension'
 export { literal, LiteralSchema, type LiteralValue } from './schema/literal'
 export { number, NumberSchema } from './schema/number'
 export type { InferObjectOutput, ObjectShape } from './schema/object'

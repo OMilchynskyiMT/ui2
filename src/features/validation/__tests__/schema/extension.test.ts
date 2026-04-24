@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import { defineExtension, string, type StringSchema } from '@/features/validation'
 
-const email = defineExtension<StringSchema<string>, [message?: string]>(
+const email = defineExtension<StringSchema, [message?: string]>(
   (message = 'Invalid email') =>
     schema =>
       schema.pattern(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, message)
