@@ -19,8 +19,12 @@ const { active = false, disabled = false } = defineProps<{
   align-items: center;
   justify-content: center;
   padding-inline: var(--gap, calc(var(--tab-font-size) * 1));
+
+  will-change: color, opacity;
+  transition-property: color, opacity;
   transition-duration: var(--duration-md);
   transition-timing-function: var(--bezier-smooth);
+
   user-select: none;
   font-size: var(--tab-font-size);
   gap: calc(var(--tab-font-size) / 2);

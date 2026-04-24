@@ -36,6 +36,7 @@ import FormBinaryWrapper from '@/components/form/form-binary.wrapper.vue'
           background-color: var(--radio-dot-color, var(--input-border-active-color));
           transform: var(--radio-dot-transform, scale(0.5));
           opacity: var(--radio-dot-opacity, 0);
+          will-change: transform, opacity, background-color;
           transition:
             opacity var(--duration-sm),
             transform var(--duration-md),

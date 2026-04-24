@@ -184,6 +184,7 @@ watch(filteredOptions, () => {
   opacity: 1;
   transform: translateY(0);
 
+  will-change: opacity, transform;
   transition-behavior: allow-discrete;
   transition-property: opacity, transform;
   transition-duration: var(--duration-md);

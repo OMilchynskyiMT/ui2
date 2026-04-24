@@ -104,6 +104,7 @@ const {
         display: grid;
         place-items: center;
         position: relative;
+        will-change: border-color, background-color, opacity, box-shadow;
         transition:
           border-color var(--duration-md),
           background-color var(--duration-md),

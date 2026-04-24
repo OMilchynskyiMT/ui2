@@ -33,6 +33,7 @@ import FormBinaryWrapper from '@/components/form/form-binary.wrapper.vue'
         & > svg {
           width: calc(var(--size) * 0.7);
           height: calc(var(--size) * 0.7);
+          will-change: transform, opacity;
           transform: var(--checkbox-transform, scale(0.75) translateY(calc(-0.25 * var(--size))));
           opacity: var(--indicator-opacity, 0);
           transition:

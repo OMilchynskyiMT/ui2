@@ -1,6 +1,6 @@
 import type { Directive } from 'vue'
 
-interface RippleOptions {
+type RippleOptions = {
   disabled?: boolean
 }
 
@@ -15,18 +15,17 @@ type RippleElement = HTMLElement & {
 
 const RIPPLE_CLASS = 'ripple'
 
-const createRipple = (el: RippleElement, event: PointerEvent, centered: boolean) => {
-  const state = el.__ripple__
+const createRipple = (element: RippleElement, event: PointerEvent, centered: boolean) => {
+  const state = element.__ripple__
 
   if (!state) return
   if (state.options.disabled) return
   if (event.button !== 0) return
 
-  const rect = el.getBoundingClientRect()
+  const rect = element.getBoundingClientRect()
   const size = Math.max(rect.width, rect.height) * 2
 
   const x = centered ? rect.width / 2 - size / 2 : event.clientX - rect.left - size / 2
-
   const y = centered ? rect.height / 2 - size / 2 : event.clientY - rect.top - size / 2
 
   const ripple = document.createElement('span')
@@ -36,7 +35,7 @@ const createRipple = (el: RippleElement, event: PointerEvent, centered: boolean)
   ripple.style.setProperty('--ripple-x', `${x}px`)
   ripple.style.setProperty('--ripple-y', `${y}px`)
 
-  el.append(ripple)
+  element.append(ripple)
 
   ripple.addEventListener('animationend', () => ripple.remove(), {
     once: true,
@@ -44,54 +43,54 @@ const createRipple = (el: RippleElement, event: PointerEvent, centered: boolean)
 }
 
 export const ripple: Directive<RippleElement, RippleOptions | undefined> = {
-  mounted(el, binding) {
-    const style = getComputedStyle(el)
+  mounted(element, binding) {
+    const style = getComputedStyle(element)
 
-    const position = el.style.position
-    const overflow = el.style.overflow
+    const position = element.style.position
+    const overflow = element.style.overflow
 
     if (style.position === 'static') {
-      el.style.position = 'relative'
+      element.style.position = 'relative'
     }
 
     if (style.overflow === 'visible') {
-      el.style.overflow = 'hidden'
+      element.style.overflow = 'hidden'
     }
 
     const onPointerDown = (event: PointerEvent) => {
-      createRipple(el, event, Boolean(binding.modifiers.center))
+      createRipple(element, event, Boolean(binding.modifiers.center))
     }
 
-    el.addEventListener('pointerdown', onPointerDown, {
+    element.addEventListener('pointerdown', onPointerDown, {
       passive: true,
     })
 
-    el.__ripple__ = {
+    element.__ripple__ = {
       options: binding.value ?? {},
       cleanup: () => {
-        el.removeEventListener('pointerdown', onPointerDown)
+        element.removeEventListener('pointerdown', onPointerDown)
       },
       position,
       overflow,
     }
   },
 
-  updated(el, binding) {
-    if (!el.__ripple__) return
+  updated(element, binding) {
+    if (!element.__ripple__) return
 
-    el.__ripple__.options = binding.value ?? {}
+    element.__ripple__.options = binding.value ?? {}
   },
 
-  unmounted(el) {
-    const state = el.__ripple__
+  unmounted(element) {
+    const state = element.__ripple__
 
     if (!state) return
 
     state.cleanup()
 
-    el.style.position = state.position
-    el.style.overflow = state.overflow
+    element.style.position = state.position
+    element.style.overflow = state.overflow
 
-    delete el.__ripple__
+    delete element.__ripple__
   },
 }

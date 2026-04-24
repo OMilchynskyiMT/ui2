@@ -70,7 +70,8 @@ onBeforeUnmount(() => {
   opacity: var(--input-opacity, 1);
   cursor: var(--input-cursor, text);
 
-  transition-property: border-color;
+  will-change: border-color, opacity;
+  transition-property: border-color, opacity;
   transition-duration: var(--duration-md);
 
   &:hover {

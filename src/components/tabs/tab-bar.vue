@@ -49,7 +49,6 @@ onBeforeUnmount(() => {
   gap: var(--gap, 0);
 
   & > .indicator {
-    will-change: transform, width;
     position: absolute;
     bottom: 0;
     background-color: var(--tab-active-border-color);
@@ -57,6 +56,7 @@ onBeforeUnmount(() => {
     border-radius: var(--radius-full);
     width: var(--indicator-width);
     transform: translateX(var(--indicator-x, 0));
+    will-change: transform, width;
     transition:
       transform var(--duration-lg) var(--bezier-magnetic),
       width var(--duration-md) var(--bezier-smooth);

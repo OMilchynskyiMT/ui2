@@ -37,6 +37,7 @@ import FormBinaryWrapper from '@/components/form/form-binary.wrapper.vue'
           height: var(--thumb-size);
           border-radius: 50%;
           background-color: var(--toggle-thumb-color, var(--surface-bg));
+          will-change: transform, background-color;
           transition:
             transform var(--duration-md),
             background-color var(--duration-md);
