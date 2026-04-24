@@ -11,8 +11,6 @@
       <div v-if="slots.after" class="after"><slot name="after" /></div>
     </div>
 
-    <div a="1" b="2" c="3" />
-
     <div v-if="error" class="error">{{ error }}</div>
   </div>
 </template>
