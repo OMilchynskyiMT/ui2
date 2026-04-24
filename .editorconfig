@@ -3,16 +3,15 @@ root = true
 [*]
 charset = utf-8
 end_of_line = lf
+indent_size = 2
+indent_style = space
+trim_trailing_whitespace = true
 
 [*.{js,ts,css}]
 indent_size = 2
 indent_style = space
-trim_trailing_whitespace = true
 max_line_length = 100
 
-[*.{vue,html}]
-indent_size = 2
-indent_style = space
+[*.{vue,html,jsx,tsx}]
 insert_final_newline = false
-trim_trailing_whitespace = true
 trim_final_newlines = true

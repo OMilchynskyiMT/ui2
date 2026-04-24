@@ -1,4 +1,6 @@
-export default {
+import { type Config } from 'prettier'
+
+const config: Config = {
   singleQuote: true,
   semi: false,
   trailingComma: 'es5',
@@ -34,3 +36,5 @@ export default {
   attributeSort: 'ASC',
   plugins: ['prettier-plugin-organize-attributes'],
 }
+
+export default config
