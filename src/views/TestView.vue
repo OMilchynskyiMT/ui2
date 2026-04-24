@@ -69,8 +69,8 @@ import { useNotify } from '@/features/notifications'
 const tabs = [
   { icon: GlobeIcon, label: 'Tab 1' },
   { icon: ChevronsLeftRightEllipsisIcon, label: 'Tab #2' },
-  { icon: GlobeIcon, label: 'Tab three' },
-  { icon: GlobeIcon, label: 'Tab four', disabled: true },
+  { icon: GlobeIcon, label: 'Tab three (disabled)', disabled: true },
+  { icon: GlobeIcon, label: 'Tab four' },
 ]
 const activeTab = ref('Tab 1')
 

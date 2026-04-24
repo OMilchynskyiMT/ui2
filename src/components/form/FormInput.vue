@@ -126,8 +126,7 @@ onBeforeUnmount(() => {
       transition:
         transform var(--duration-lg),
         color var(--duration-md),
-        padding-inline var(--duration-md),
-        background-color var(--duration-xs) var(--duration-sm),
+        background-color var(--duration-sm),
         font-size var(--duration-md);
       transition-timing-function: var(--bezier-magnetic);
     }
