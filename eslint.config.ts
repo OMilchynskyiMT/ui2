@@ -43,6 +43,7 @@ export default defineConfigWithVueTs(
       'vue/component-name-in-template-casing': ['error', 'kebab-case'],
       'vue/component-definition-name-casing': ['error', 'PascalCase'],
 
+      'unicorn/prevent-abbreviations': 'off',
       'unicorn/filename-case': [
         'error',
         {
