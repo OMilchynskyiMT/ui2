@@ -8,28 +8,28 @@
 <script lang="ts" setup>
 import { onBeforeUnmount, onMounted, useTemplateRef } from 'vue'
 
-const tabBarRef = useTemplateRef('tabBarRef')
-const indicatorRef = useTemplateRef('indicator')
+const tabBarReference = useTemplateRef('tabBarRef')
+const indicatorReference = useTemplateRef('indicator')
 
-let observer: MutationObserver | null = null
+let observer: MutationObserver
 
 const updateIndicatorStyle = () => {
   console.log('updateIndicatorStyle')
-  if (!tabBarRef.value || !indicatorRef.value) return
+  if (!tabBarReference.value || !indicatorReference.value) return
 
-  const activeTab = tabBarRef.value.querySelector('.tab-item.active')
+  const activeTab = tabBarReference.value.querySelector('.tab-item.active')
   if (!activeTab) return
 
   const { left, width } = activeTab.getBoundingClientRect()
-  indicatorRef.value.style.setProperty('--indicator-x', `${left}px`)
-  indicatorRef.value.style.setProperty('--indicator-width', `${width}px`)
+  indicatorReference.value.style.setProperty('--indicator-x', `${left}px`)
+  indicatorReference.value.style.setProperty('--indicator-width', `${width}px`)
 }
 
 onMounted(() => {
-  if (!tabBarRef.value) return
+  if (!tabBarReference.value) return
   updateIndicatorStyle()
   observer = new MutationObserver(updateIndicatorStyle)
-  observer.observe(tabBarRef.value, { childList: true, subtree: true, attributes: true })
+  observer.observe(tabBarReference.value, { childList: true, subtree: true, attributes: true })
 })
 
 onBeforeUnmount(() => {

@@ -5,21 +5,21 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      component: () => import('@/layouts/BaseLayout.vue'),
+      component: () => import('@/layouts/base-layout.vue'),
       children: [
         {
           path: '',
-          component: () => import('@/views/TestView.vue'),
+          component: () => import('@/views/test-view.vue'),
         },
       ],
     },
     {
       path: '/dashboard',
-      component: () => import('@/layouts/DashboardLayout.vue'),
+      component: () => import('@/layouts/dashboard-layout.vue'),
       children: [
         {
           path: '',
-          component: () => import('@/views/TestView.vue'),
+          component: () => import('@/views/test-view.vue'),
         },
       ],
     },

@@ -1,7 +1,7 @@
 <template>
   <div
-    v-bind="rootAttrs"
-    :class="[{ 'has-error': error }, rootAttrs.class]"
+    v-bind="rootAttributes"
+    :class="[{ 'has-error': error }, rootAttributes.class]"
     :data-variant="variant"
     class="form-binary"
   >
@@ -9,7 +9,7 @@
       <div v-if="slots.before" class="before"><slot name="before" /></div>
 
       <label :for="id" :title="title" class="main">
-        <input :id="id" v-bind="inputAttrs" :type="type" />
+        <input :id="id" v-bind="inputAttributes" :type="type" />
         <span class="indicator" aria-hidden="true">
           <slot name="indicator" />
         </span>
@@ -22,27 +22,27 @@
       <div v-if="slots.after" class="after"><slot name="after" /></div>
     </div>
 
-    <FormError :error="error" />
+    <form-error :error="error" />
   </div>
 </template>
 
 <script lang="ts" setup>
 import { computed, useAttrs, useSlots } from 'vue'
 
-import FormError from '@/components/form/FormError.vue'
-import { type BaseFormControlProps, generateHtmlId } from '@/components/form/shared'
+import FormError from '@/components/form/form-error.vue'
+import { type BaseFormControlProperties, generateHtmlId } from '@/components/form/shared'
 
 defineOptions({ inheritAttrs: false })
 const slots = useSlots()
-const attrs = useAttrs()
+const attributes = useAttrs()
 
-const rootAttrs = computed(() => ({
-  class: attrs.class,
-  style: attrs.style,
+const rootAttributes = computed(() => ({
+  class: attributes.class,
+  style: attributes.style,
 }))
 
-const inputAttrs = computed(() => {
-  const { class: _class, style: _style, ...rest } = attrs
+const inputAttributes = computed(() => {
+  const { class: _class, style: _style, ...rest } = attributes
   return rest
 })
 
@@ -52,9 +52,9 @@ const {
   title = '',
   type = 'checkbox',
   variant = 'checkbox',
-  error = undefined,
+  error,
 } = defineProps<
-  BaseFormControlProps & {
+  BaseFormControlProperties & {
     type?: 'checkbox' | 'radio'
     variant?: 'checkbox' | 'radio' | 'toggle'
     error?: string

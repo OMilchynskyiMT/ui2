@@ -6,7 +6,7 @@
         <label v-if="slots.default || label" :for="id" :title="title">
           <slot>{{ label }}</slot>
         </label>
-        <input :id="id" v-bind="attrs" :type="type" placeholder=" " />
+        <input :id="id" v-bind="attributes" :type="type" placeholder=" " />
       </div>
       <div v-if="slots.after" class="after"><slot name="after" /></div>
     </div>
@@ -18,10 +18,10 @@
 <script lang="ts" setup>
 import { onBeforeUnmount, onMounted, useAttrs, useSlots, useTemplateRef } from 'vue'
 
-import { type BaseFormControlProps, generateHtmlId } from '@/components/form/shared'
+import { type BaseFormControlProperties, generateHtmlId } from '@/components/form/shared'
 
 defineOptions({ inheritAttrs: false })
-const attrs = useAttrs()
+const attributes = useAttrs()
 const slots = useSlots()
 const {
   id = generateHtmlId(),
@@ -30,25 +30,25 @@ const {
   type = 'text',
   error,
 } = defineProps<
-  BaseFormControlProps & {
+  BaseFormControlProperties & {
     type?: HTMLInputElement['type']
   }
 >()
 
-const controlRef = useTemplateRef('control')
-const beforeRef = useTemplateRef('before')
+const controlReference = useTemplateRef('control')
+const beforeReference = useTemplateRef('before')
 
-let observer: ResizeObserver | null = null
+let observer: ResizeObserver
 const updateBeforeWidth = () => {
-  const width = beforeRef.value?.offsetWidth ?? 0
-  controlRef.value?.style.setProperty('--before-width', `${width}px`)
+  const width = beforeReference.value?.offsetWidth ?? 0
+  controlReference.value?.style.setProperty('--before-width', `${width}px`)
 }
 
 onMounted(() => {
   updateBeforeWidth()
   observer = new ResizeObserver(updateBeforeWidth)
-  if (beforeRef.value) {
-    observer.observe(beforeRef.value)
+  if (beforeReference.value) {
+    observer.observe(beforeReference.value)
   }
 })
 

@@ -1,5 +1,5 @@
 <template>
-  <FormBinaryWrapper type="checkbox" variant="checkbox">
+  <form-binary-wrapper type="checkbox" variant="checkbox">
     <template #indicator>
       <svg viewBox="0 0 16 16">
         <path d="M3.5 8.5 6.5 11.5 12.5 4.5" />
@@ -9,11 +9,11 @@
     <template v-if="$slots.before" #before><slot name="before" /></template>
     <slot />
     <template v-if="$slots.after" #after><slot name="after" /></template>
-  </FormBinaryWrapper>
+  </form-binary-wrapper>
 </template>
 
 <script lang="ts" setup>
-import FormBinaryWrapper from '@/components/form/FormBinary.wrapper.vue'
+import FormBinaryWrapper from '@/components/form/form-binary.wrapper.vue'
 </script>
 
 <style>

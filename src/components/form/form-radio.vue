@@ -1,5 +1,5 @@
 <template>
-  <FormBinaryWrapper type="radio" variant="radio">
+  <form-binary-wrapper type="radio" variant="radio">
     <template #indicator>
       <span class="dot" />
     </template>
@@ -7,11 +7,11 @@
     <template v-if="$slots.before" #before><slot name="before" /></template>
     <slot />
     <template v-if="$slots.after" #after><slot name="after" /></template>
-  </FormBinaryWrapper>
+  </form-binary-wrapper>
 </template>
 
 <script lang="ts" setup>
-import FormBinaryWrapper from '@/components/form/FormBinary.wrapper.vue'
+import FormBinaryWrapper from '@/components/form/form-binary.wrapper.vue'
 </script>
 
 <style>

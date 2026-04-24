@@ -4,7 +4,7 @@ export const generateHtmlId = (length = 6): string => {
     .slice(2, length + 2)
 }
 
-export interface BaseFormControlProps {
+export interface BaseFormControlProperties {
   id?: string
   label?: string | null
   title?: string
