@@ -1,15 +1,15 @@
 <template>
   <div class="form-input">
-    <div ref="control" class="control">
+    <label ref="control" :for="id" :title="title" class="control">
       <div v-if="slots.before" ref="before" class="before"><slot name="before" /></div>
       <div class="field">
-        <label v-if="slots.label || label" :for="id" :title="title">
+        <span v-if="slots.label || label" role="label">
           <slot name="label">{{ label }}</slot>
-        </label>
+        </span>
         <slot />
       </div>
       <div v-if="slots.after" class="after"><slot name="after" /></div>
-    </div>
+    </label>
 
     <slot name="options" />
 
@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onBeforeUnmount, onMounted, useSlots, useTemplateRef } from 'vue'
+import {  onBeforeUnmount, onMounted, useSlots, useTemplateRef } from 'vue'
 
 import FormError from '@/components/form/form-error.vue'
 import { type BaseFormControlProperties, generateHtmlId } from '@/components/form/shared'
@@ -97,7 +97,7 @@ onBeforeUnmount(() => {
     position: relative;
     flex: 1;
 
-    & > label {
+    & > [role='label'] {
       position: absolute;
       top: calc(-1.5 * var(--input-border-width));
       left: 0;

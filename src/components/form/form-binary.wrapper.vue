@@ -1,26 +1,21 @@
 <template>
-  <div
-    v-bind="rootAttributes"
-    :class="[{ 'has-error': error }, rootAttributes.class]"
-    :data-variant="variant"
-    class="form-binary"
-  >
-    <div class="control">
+  <div v-bind="rootAttributes" :class="rootAttributes.class" :data-variant="variant" class="form-binary">
+    <label :for="id" :title="title" class="control">
       <div v-if="slots.before" class="before"><slot name="before" /></div>
 
-      <label :for="id" :title="title" class="main">
+      <div class="main">
         <input :id="id" v-bind="inputAttributes" :type="type" />
         <span class="indicator" aria-hidden="true">
           <slot name="indicator" />
         </span>
 
-        <span v-if="slots.default || label" class="label">
+        <span v-if="slots.default || label" role="label" class="label">
           <slot>{{ label }}</slot>
         </span>
-      </label>
+      </div>
 
       <div v-if="slots.after" class="after"><slot name="after" /></div>
-    </div>
+    </label>
 
     <form-error :error="error" />
   </div>
