@@ -1,15 +1,15 @@
 <template>
   <div
+    v-bind="rootAttrs"
     :class="[{ 'has-error': error }, rootAttrs.class]"
     :data-variant="variant"
-    v-bind="rootAttrs"
     class="form-binary"
   >
     <div class="control">
       <div v-if="slots.before" class="before"><slot name="before" /></div>
 
       <label :for="id" :title="title" class="main">
-        <input :id="id" :type="type" v-bind="inputAttrs" />
+        <input :id="id" v-bind="inputAttrs" :type="type" />
         <span class="indicator" aria-hidden="true">
           <slot name="indicator" />
         </span>

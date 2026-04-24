@@ -1,5 +1,5 @@
 <template>
-  <div :class="['tab-item', { active, disabled }]" v-ripple><slot /></div>
+  <div v-ripple :class="['tab-item', { active, disabled }]"><slot /></div>
 </template>
 
 <script lang="ts" setup>

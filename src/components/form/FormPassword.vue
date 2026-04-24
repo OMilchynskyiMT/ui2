@@ -4,8 +4,8 @@
       <slot name="before"><AppIcon :icon="LockIcon" /></slot>
     </template>
     <template #after>
-      <AppIcon v-if="showPassword" :icon="EyeOffIcon" @click.prevent="togglePassword" class="u-pointer" />
-      <AppIcon v-else :icon="EyeIcon" @click.prevent="togglePassword" class="u-pointer" />
+      <AppIcon v-if="showPassword" :icon="EyeOffIcon" class="u-pointer" @click.prevent="togglePassword" />
+      <AppIcon v-else :icon="EyeIcon" class="u-pointer" @click.prevent="togglePassword" />
     </template>
   </FormInput>
 </template>
