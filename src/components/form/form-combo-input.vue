@@ -28,7 +28,13 @@
     <template v-if="slots.after" #after><slot name="after" /></template>
 
     <template #options>
-      <div v-if="opened && filteredOptions.length > 0" :id="optionsId" role="listbox" class="form-combo-options">
+      <div
+        v-if="opened && filteredOptions.length > 0"
+        :id="optionsId"
+        ref="comboOptions"
+        role="listbox"
+        class="form-combo-options"
+      >
         <button
           v-for="(option, index) in filteredOptions"
           :id="getOptionId(index)"
@@ -41,7 +47,7 @@
           type="button"
           @mousedown.prevent="select(option)"
         >
-          <slot name="option" :option="option">
+          <slot :option="option" name="option">
             <header class="title">{{ option.title }}</header>
             <p class="value">{{ option.value }}</p>
           </slot>
@@ -52,7 +58,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, useAttrs, useSlots, watch } from 'vue'
+import { computed, ref, useAttrs, useSlots, useTemplateRef, watch } from 'vue'
 
 import FormInputWrapper from '@/components/form/form-input.wrapper.vue'
 import {
@@ -80,6 +86,7 @@ const {
   }
 >()
 
+const comboOptionsReference = useTemplateRef('comboOptions')
 const optionsId = `${id}-options`
 const opened = ref(false)
 const query = ref('')
@@ -138,6 +145,9 @@ const move = (direction: 1 | -1) => {
     index = (index + direction + options.length) % options.length
     if (!options[index]?.disabled) {
       activeIndex.value = index
+      comboOptionsReference.value?.scrollTo({
+        top: globalThis.document.querySelector<HTMLButtonElement>(`#${getOptionId(index)}`)?.offsetTop,
+      })
       return
     }
   }
@@ -183,6 +193,7 @@ watch(filteredOptions, () => {
   box-shadow: var(--shadow-md);
   opacity: 1;
   transform: translateY(0);
+  scroll-behavior: smooth;
 
   will-change: opacity, transform;
   transition-behavior: allow-discrete;
