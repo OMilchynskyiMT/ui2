@@ -123,11 +123,9 @@ onBeforeUnmount(() => {
       text-overflow: ellipsis;
       max-width: 100%;
 
-      transition:
-        transform var(--duration-lg),
-        color var(--duration-md),
-        background-color var(--duration-sm),
-        font-size var(--duration-md);
+      will-change: transform, padding-inline, color, background-color, font-size;
+      transition: transform, padding-inline, color, background-color, font-size;
+      transition-duration: var(--duration, var(--duration-lg));
       transition-timing-function: var(--bezier-magnetic);
     }
 

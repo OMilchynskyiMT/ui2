@@ -46,9 +46,10 @@ onBeforeUnmount(() => {
   justify-content: flex-start;
   align-items: stretch;
   align-content: stretch;
-  gap: var(--gap, calc(var(--tab-font-size) * 2));
+  gap: var(--gap, 0);
 
   & > .indicator {
+    will-change: transform, width;
     position: absolute;
     bottom: 0;
     background-color: var(--tab-active-border-color);

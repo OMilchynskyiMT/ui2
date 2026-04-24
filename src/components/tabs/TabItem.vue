@@ -12,12 +12,13 @@ const { active = false, disabled = false } = defineProps<{
 <style scoped>
 .tab-item {
   position: relative;
-  min-height: var(--tab-height);
+  height: var(--tab-height);
   color: var(--color, var(--tab-color));
   cursor: var(--cursor, pointer);
   display: flex;
   align-items: center;
   justify-content: center;
+  padding-inline: var(--gap, calc(var(--tab-font-size) * 1));
   transition-duration: var(--duration-md);
   transition-timing-function: var(--bezier-smooth);
   user-select: none;
