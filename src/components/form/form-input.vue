@@ -1,7 +1,9 @@
 <template>
   <form-input-wrapper :id="id" :error="error" :label="label" :title="title">
     <template v-if="slots.before" #before><slot name="before" /></template>
-    <template v-if="slots.default || label" #label><slot>{{ label }}</slot></template>
+    <template v-if="slots.default || label" #label>
+      <slot>{{ label }}</slot>
+    </template>
     <input :id="id" v-bind="attributes" :type="type" placeholder=" " />
     <template v-if="slots.after" #after><slot name="after" /></template>
   </form-input-wrapper>

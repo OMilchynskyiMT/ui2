@@ -6,7 +6,7 @@ export default {
   printWidth: 120,
   endOfLine: 'lf',
   arrowParens: 'avoid',
-  htmlWhitespaceSensitivity: 'ignore',
+  htmlWhitespaceSensitivity: 'css',
   vueIndentScriptAndStyle: false,
   singleAttributePerLine: false,
   useTabs: false,
