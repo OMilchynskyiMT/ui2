@@ -65,4 +65,9 @@
   --tab-active-color: var(--link-color);
   --tab-active-border-color: var(--link-color);
   --tab-active-bg: var(--surface-bg);
+
+  --ripple-opacity: 0.2;
+  --ripple-duration: 550ms;
+  --ripple-color: currentColor;
+  --ripple-bezier: var(--bezier-smooth-entrance);
 }

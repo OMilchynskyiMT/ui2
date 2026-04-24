@@ -6,7 +6,7 @@
         <label v-if="slots.default || label" :for="id" :title="title">
           <slot>{{ label }}</slot>
         </label>
-        <input :id="id" v-bind="attrs" :placeholder="''" :type="type" />
+        <input :id="id" :placeholder="''" :type="type" v-bind="attrs" />
       </div>
       <div v-if="slots.after" class="after"><slot name="after" /></div>
     </div>

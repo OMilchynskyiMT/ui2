@@ -6,12 +6,12 @@
 </template>
 
 <script lang="ts" setup>
-import { onBeforeUnmount, onMounted, useTemplateRef } from 'vue';
+import { onBeforeUnmount, onMounted, useTemplateRef } from 'vue'
 
-const tabBarRef = useTemplateRef('tabBarRef');
-const indicatorRef = useTemplateRef('indicator');
+const tabBarRef = useTemplateRef('tabBarRef')
+const indicatorRef = useTemplateRef('indicator')
 
-let observer: MutationObserver | null = null;
+let observer: MutationObserver | null = null
 
 const updateIndicatorStyle = () => {
   console.log('updateIndicatorStyle')

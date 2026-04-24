@@ -1,5 +1,5 @@
 <template>
-  <div :class="['tab-item', { active, disabled }]"><slot /></div>
+  <div :class="['tab-item', { active, disabled }]" v-ripple><slot /></div>
 </template>
 
 <script lang="ts" setup>
@@ -11,6 +11,7 @@ const { active = false, disabled = false } = defineProps<{
 
 <style scoped>
 .tab-item {
+  position: relative;
   min-height: var(--tab-height);
   color: var(--color, var(--tab-color));
   cursor: var(--cursor, pointer);
