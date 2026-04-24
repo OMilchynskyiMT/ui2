@@ -29,6 +29,7 @@
   --radius-md: 0.25rem;
   --radius-lg: 0.5rem;
   --radius-xl: 1rem;
+  --radius-full: 9999px;
 
   --bezier-smooth-entrance: cubic-bezier(0, 0, 0.2, 1);
   --bezier-soft-exit: cubic-bezier(0.4, 0, 1, 1);
@@ -55,4 +56,13 @@
 
   --input-error-color: light-dark(var(--red-600), var(--red-400));
   --input-error-font-size: var(--font-size-sm);
+
+  --tab-height: calc(var(--font-size) * 3);
+  --tab-font-size: var(--font-size-md);
+  --tab-color: var(--text-color);
+  --tab-bg: var(--surface-bg);
+  --tab-border-width: var(--input-border-width);
+  --tab-active-color: var(--link-color);
+  --tab-active-border-color: var(--link-color);
+  --tab-active-bg: var(--surface-bg);
 }

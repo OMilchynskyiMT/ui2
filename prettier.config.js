@@ -22,7 +22,7 @@ export default {
     '^:?(id|key|ref)$',
     '^(v-slot|slot)$',
     '^v-model',
-    '^(@|v-on(?::|$))',
+    '^(@|v-on(?::|$)|:|v-bind:)',
     '^v-(html|text|bind)$',
     '^#',
     '$DEFAULT',

@@ -36,9 +36,23 @@
     <FormRadio label="Test radio" />
     <FormRadio disabled label="another disabled radio" />
   </div>
+
+  <TabBar>
+    <TabItem
+      v-for="tab in tabs"
+      :key="tab.label"
+      :active="activeTab === tab.label"
+      :disabled="tab.disabled"
+      @click="activeTab = tab.label"
+    >
+      <AppIcon :icon="tab.icon" />
+      {{ tab.label }}
+    </TabItem>
+  </TabBar>
 </template>
 
 <script lang="ts" setup>
+import { ref } from 'vue'
 import { ChevronsLeftRightEllipsisIcon, GlobeIcon } from '@lucide/vue'
 
 import AppIcon from '@/components/AppIcon.vue'
@@ -47,8 +61,18 @@ import FormInput from '@/components/form/FormInput.vue'
 import FormPassword from '@/components/form/FormPassword.vue'
 import FormRadio from '@/components/form/FormRadio.vue'
 import FormToggle from '@/components/form/FormToggle.vue'
+import TabBar from '@/components/tabs/TabBar.vue'
+import TabItem from '@/components/tabs/TabItem.vue'
 
 import { useNotify } from '@/features/notifications'
+
+const tabs = [
+  { icon: GlobeIcon, label: 'Tab 1' },
+  { icon: ChevronsLeftRightEllipsisIcon, label: 'Tab #2' },
+  { icon: GlobeIcon, label: 'Tab three' },
+  { icon: GlobeIcon, label: 'Tab four', disabled: true },
+]
+const activeTab = ref('Tab 1')
 
 const { info } = useNotify()
 info('Test notification message', { timeout: 5000 })
