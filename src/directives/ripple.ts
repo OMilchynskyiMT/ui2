@@ -25,8 +25,9 @@ const createRipple = (element: RippleElement, event: PointerEvent, centered: boo
   const rect = element.getBoundingClientRect()
   const size = Math.max(rect.width, rect.height) * 2
 
-  const x = centered ? rect.width / 2 - size / 2 : event.clientX - rect.left - size / 2
-  const y = centered ? rect.height / 2 - size / 2 : event.clientY - rect.top - size / 2
+  const halfSize = size / 2
+  const x = centered ? rect.width / 2 - halfSize : event.clientX - rect.left - halfSize
+  const y = centered ? rect.height / 2 - halfSize : event.clientY - rect.top - halfSize
 
   const ripple = document.createElement('span')
 
