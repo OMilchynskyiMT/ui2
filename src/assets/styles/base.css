@@ -1,6 +1,7 @@
 body {
   min-height: 100vh;
   font: var(--font-weight-normal) var(--font-size) var(--font-sans);
+  line-height: var(--line-height);
   background-color: var(--bg);
   color: var(--text-color);
 }

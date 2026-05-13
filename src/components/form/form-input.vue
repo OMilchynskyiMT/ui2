@@ -1,5 +1,5 @@
 <template>
-  <form-input-wrapper :id="id" :error="error" :label="label" :title="title">
+  <form-input-wrapper :id="id" :error="error" :label="label" :style="containerStyle" :title="title">
     <template v-if="slots.before" #before><slot name="before" /></template>
     <template v-if="slots.default || label" #label>
       <slot>{{ label }}</slot>
@@ -24,6 +24,7 @@ const {
   title = '',
   type = 'text',
   error,
+  containerStyle,
 } = defineProps<
   BaseFormControlProperties & {
     type?: HTMLInputElement['type']

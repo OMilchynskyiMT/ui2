@@ -1,15 +1,22 @@
 <template>
   <div class="form-input">
-    <label ref="control" :for="id" :title="title" class="control">
-      <div v-if="slots.before" ref="before" class="before"><slot name="before" /></div>
-      <div class="field">
+    <fieldset>
+      <legend>
         <span v-if="slots.label || label" role="label">
           <slot name="label">{{ label }}</slot>
         </span>
-        <slot />
-      </div>
-      <div v-if="slots.after" class="after"><slot name="after" /></div>
-    </label>
+      </legend>
+      <label ref="control" :for="id" :title="title" class="control">
+        <div v-if="slots.before" ref="before" class="before"><slot name="before" /></div>
+        <div class="field">
+          <span v-if="slots.label || label" role="label">
+            <slot name="label">{{ label }}</slot>
+          </span>
+          <slot />
+        </div>
+        <div v-if="slots.after" class="after"><slot name="after" /></div>
+      </label>
+    </fieldset>
 
     <slot name="options" />
 
@@ -50,21 +57,53 @@ onBeforeUnmount(() => {
 
 <style>
 .form-input {
+  --gap: var(--input-gap);
+  --bg: var(--input-bg);
+
+  --label-padding: 0;
+  --legend-width: 0;
+
   position: relative;
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
 }
 
-.form-input > .control {
-  --gap: var(--input-gap);
-  --bg: var(--input-bg);
+.form-input > fieldset {
+  border: var(--input-border-width) solid var(--border-color, var(--input-border-color));
+  border-radius: var(--input-border-radius);
+  inset: 0;
+  margin: 0;
+  min-inline-size: 0;
 
+  & > legend {
+    line-height: 0;
+    height: 0;
+    margin-left: calc(var(--gap) / 2);
+    padding-inline: var(--label-padding);
+    width: var(--legend-width);
+    visibility: hidden;
+    font-size: var(--label-font-size, 0);
+    will-change: width, padding-inline;
+    transition-property: width, padding-inline;
+    transition-duration: var(--duration-xl);
+  }
+
+  &:focus-within,
+  &:has(input:not(:placeholder-shown)) {
+    --legend-width: auto;
+    --label-font-size: var(--font-size-sm);
+    --label-padding: calc(var(--gap) / 2);
+    --label-translate-y: -50%;
+    --label-translate-x: calc(-1 * var(--gap) / 2);
+    --label-color: var(--input-label-active-color);
+  }
+}
+
+.form-input > fieldset > .control {
   display: flex;
   gap: var(--gap);
   align-items: center;
   height: var(--input-height);
-  border: var(--input-border-width) solid var(--border-color, var(--input-border-color));
-  border-radius: var(--input-border-radius);
   padding-inline: var(--gap);
   background-color: var(--bg);
   opacity: var(--input-opacity, 1);
@@ -99,13 +138,12 @@ onBeforeUnmount(() => {
 
     & > [role='label'] {
       position: absolute;
-      top: calc(-1.5 * var(--input-border-width));
+      top: calc(-1 * var(--input-border-width));
       left: 0;
       transform: translate(var(--label-translate-x, 0), var(--label-translate-y, calc(var(--input-height) / 3)));
       font-size: var(--label-font-size, 1rem);
-      background-color: var(--label-bg, transparent);
       color: var(--label-color, var(--input-label-color));
-      padding-inline: var(--padding, 0);
+      padding-inline: var(--label-padding, 0);
       user-select: none;
       cursor: var(--input-cursor);
       text-wrap: nowrap;
@@ -113,8 +151,8 @@ onBeforeUnmount(() => {
       text-overflow: ellipsis;
       max-width: 100%;
 
-      will-change: transform, padding-inline, color, background-color, font-size;
-      transition: transform, padding-inline, color, background-color, font-size;
+      will-change: transform, color, font-size;
+      transition: transform, color, font-size;
       transition-duration: var(--duration, var(--duration-lg));
       transition-timing-function: var(--bezier-magnetic);
     }
@@ -131,16 +169,6 @@ onBeforeUnmount(() => {
 
   &:focus-within {
     --border-color: var(--input-border-active-color);
-  }
-
-  &:focus-within,
-  &:has(input:not(:placeholder-shown)) {
-    --padding: calc(var(--gap) / 2);
-    --label-translate-y: -50%;
-    --label-translate-x: calc(-1 * var(--gap) / 2);
-    --label-bg: var(--surface-bg);
-    --label-color: var(--input-label-active-color);
-    --label-font-size: var(--font-size-sm);
   }
 
   &:has(> .before) {

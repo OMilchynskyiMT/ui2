@@ -9,6 +9,7 @@ export type BaseFormControlProperties = {
   label?: string | null
   title?: string
   error?: string | null
+  containerStyle?: HTMLElement['style']
 }
 
 export type FormComboInputValue = string | number

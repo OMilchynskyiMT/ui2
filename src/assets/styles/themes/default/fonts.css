@@ -7,7 +7,7 @@
   --font-size: clamp(14px, 1.25vw, 1rem);
   --font-size-xs: calc(var(--font-size) * 0.75);
   --font-size-sm: calc(var(--font-size) * 0.875);
-  --font-size-md: calc(var(--font-size) * 1.125);
+  --font-size-md: var(--font-size);
   --font-size-lg: calc(var(--font-size) * 1.5);
   --font-size-xl: calc(var(--font-size) * 2);
   --font-size-xxl: calc(var(--font-size) * 3);
@@ -16,4 +16,6 @@
   --font-weight-semibold: 500;
   --font-weight-normal: 400;
   --font-weight-light: 300;
+
+  --line-height: 1.43;
 }
