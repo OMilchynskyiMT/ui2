@@ -62,6 +62,7 @@ onBeforeUnmount(() => {
 
   --label-padding: 0;
   --legend-width: 0;
+  --label-font-size: var(--input-font-size);
 
   position: relative;
   display: grid;
@@ -84,7 +85,7 @@ onBeforeUnmount(() => {
     padding-inline: var(--label-padding);
     width: var(--legend-width);
     visibility: hidden;
-    font-size: var(--label-font-size, 0);
+    font-size: var(--label-font-size);
     will-change: width, padding-inline;
     transition-property: width, padding-inline;
     transition-duration: var(--duration-xl);
