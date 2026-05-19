@@ -74,6 +74,8 @@ onBeforeUnmount(() => {
   inset: 0;
   margin: 0;
   min-inline-size: 0;
+  transition-property: border-color;
+  transition-duration: var(--duration-lg);
 
   & > legend {
     line-height: 0;
@@ -86,6 +88,10 @@ onBeforeUnmount(() => {
     will-change: width, padding-inline;
     transition-property: width, padding-inline;
     transition-duration: var(--duration-xl);
+  }
+
+  &:focus-within {
+    --border-color: var(--input-border-active-color);
   }
 
   &:focus-within,
@@ -185,7 +191,7 @@ onBeforeUnmount(() => {
   }
 }
 
-.form-input:has(.error) > .control {
+.form-input:has(.error) > fieldset {
   --border-color: var(--input-border-error-color);
 }
 </style>
