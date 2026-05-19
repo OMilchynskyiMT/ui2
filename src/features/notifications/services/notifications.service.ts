@@ -1,34 +1,20 @@
 import { readonly, ref } from 'vue'
 
-import type { NotificationItem, NotificationKind } from '../model/types'
-
-export interface NotifyInput {
-  id?: string
-  title?: string
-  message: string
-  kind?: NotificationKind
-  timeout?: number
-}
-
-export type NamedNotifyInput = Omit<NotifyInput, 'message' | 'kind'>
-
-export interface NotificationsPluginOptions {
-  max?: number
-}
+import type { Notification, NotificationInput, NotificationOptions, NotificationsPluginOptions } from '../model/types'
 
 export function createNotificationsService(_options: NotificationsPluginOptions = {}) {
-  const items = ref<NotificationItem[]>([])
+  const items = ref<Notification[]>([])
 
-  function push(input: NotifyInput) {
+  function push(input: NotificationInput) {
     if (input.id && items.value.some(item => item.id === input.id)) {
       return input.id
     }
 
-    const item: NotificationItem = {
+    const item: Notification = {
       id: (input.id ??= crypto.randomUUID()),
       title: input.title,
       message: input.message,
-      kind: input.kind ?? 'info',
+      kind: input.kind,
       timeout: input.timeout,
     }
 
@@ -41,7 +27,7 @@ export function createNotificationsService(_options: NotificationsPluginOptions 
     return item.id
   }
 
-  function info(message: string, options?: NamedNotifyInput) {
+  function info(message: string, options?: NotificationOptions) {
     return push({
       message,
       kind: 'info',
@@ -49,7 +35,7 @@ export function createNotificationsService(_options: NotificationsPluginOptions 
     })
   }
 
-  function success(message: string, options?: NamedNotifyInput) {
+  function success(message: string, options?: NotificationOptions) {
     return push({
       message,
       kind: 'success',
@@ -57,7 +43,7 @@ export function createNotificationsService(_options: NotificationsPluginOptions 
     })
   }
 
-  function warning(message: string, options?: NamedNotifyInput) {
+  function warning(message: string, options?: NotificationOptions) {
     return push({
       message,
       kind: 'warning',
@@ -65,7 +51,7 @@ export function createNotificationsService(_options: NotificationsPluginOptions 
     })
   }
 
-  function error(message: string, options?: NamedNotifyInput) {
+  function error(message: string, options?: NotificationOptions) {
     return push({
       message,
       kind: 'error',

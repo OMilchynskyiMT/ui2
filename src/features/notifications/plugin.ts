@@ -1,6 +1,7 @@
 import type { App } from 'vue'
 
-import { createNotificationsService, type NotificationsPluginOptions } from './services/notifications.service'
+import type { NotificationsPluginOptions } from './model/types'
+import { createNotificationsService } from './services/notifications.service'
 import { NotificationsKey } from './symbols'
 
 export function createNotificationsPlugin(options: NotificationsPluginOptions = {}) {
