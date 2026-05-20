@@ -25,7 +25,7 @@
     <form-input label="Packet Size (bytes)" type="number" />
 
     <form-password disabled label="Disabled password" />
-    <form-password label="another password field" />
+    <form-password error="This is an error" label="another password field" />
 
     <form-checkbox label="Test checkbox" />
     <form-checkbox disabled label="another disabled checkbox" />
@@ -41,6 +41,17 @@
     </form-combo-input>
 
     <div>{{ combo }}</div>
+
+    <div>
+      <form-button :loading="buttonLoading" tone="danger" variant="text" @click.prevent="testButtonClick">
+        <template #before><app-icon :icon="GlobeIcon" /></template>
+        Test button
+      </form-button>
+    </div>
+
+    <div>
+      <spinner-progress-bar :indeterminate="buttonLoading" :stroke-width="4" :value="progressValue" style="color: var(--blue-500)" />
+    </div>
   </div>
 
   <tab-bar>
@@ -62,12 +73,14 @@ import { ref } from 'vue'
 import { ChevronsLeftRightEllipsisIcon, GlobeIcon } from '@lucide/vue'
 
 import AppIcon from '@/components/app-icon.vue'
+import FormButton from '@/components/form/form-button.vue'
 import FormCheckbox from '@/components/form/form-checkbox.vue'
 import FormComboInput from '@/components/form/form-combo-input.vue'
 import FormInput from '@/components/form/form-input.vue'
 import FormPassword from '@/components/form/form-password.vue'
 import FormRadio from '@/components/form/form-radio.vue'
 import FormToggle from '@/components/form/form-toggle.vue'
+import spinnerProgressBar from '@/components/spinner-progress-bar.vue'
 import TabBar from '@/components/tabs/tab-bar.vue'
 import TabItem from '@/components/tabs/tab-item.vue'
 
@@ -93,4 +106,17 @@ const combo = ref('22')
 
 const { info } = useNotify()
 info('Test notification message', { timeout: 5000 })
+
+const buttonLoading = ref(false)
+const testButtonClick = () => {
+  buttonLoading.value = true
+  setTimeout(() => {
+    buttonLoading.value = false
+  }, 2000)
+}
+
+const progressValue = ref(0)
+setInterval(() => {
+  progressValue.value = Math.floor(Math.random() * 100)
+}, 2000)
 </script>
