@@ -14,7 +14,6 @@ const indicatorReference = useTemplateRef('indicator')
 let observer: MutationObserver
 
 const updateIndicatorStyle = () => {
-  console.log('updateIndicatorStyle')
   if (!tabBarReference.value || !indicatorReference.value) return
 
   const activeTab = tabBarReference.value.querySelector('.tab-item.active')

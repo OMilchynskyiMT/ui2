@@ -43,7 +43,7 @@
     <div>{{ combo }}</div>
 
     <div>
-      <form-button :loading="buttonLoading" tone="danger" variant="text" @click.prevent="testButtonClick">
+      <form-button :loading="buttonLoading" tone="neutral" size="md" variant="tonal" @click.prevent="testButtonClick">
         <template #before><app-icon :icon="GlobeIcon" /></template>
         Test button
       </form-button>

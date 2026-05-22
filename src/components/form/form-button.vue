@@ -1,8 +1,8 @@
 <template>
   <component
     :is="component"
-    v-ripple
     v-bind="rootAttributes"
+    v-ripple
     :aria-busy="loading || undefined"
     :class="[
       'app-button',
@@ -20,7 +20,10 @@
     :style="attributes.style"
     @click="click"
   >
-    <span v-if="loading" class="loader" aria-hidden="true" />
+    <slot v-if="loading" name="loader">
+      <spinner-progress-bar :size="loaderSize" :stroke-width="3" class="loader" indeterminate aria-hidden="true" />
+    </slot>
+
     <span v-if="slots.before" class="before"><slot name="before" /></span>
 
     <span v-if="slots.default || label" class="label">
@@ -33,6 +36,8 @@
 
 <script lang="ts" setup>
 import { computed, useAttrs, useSlots } from 'vue'
+
+import spinnerProgressBar from '@/components/spinner-progress-bar.vue'
 
 type FormButtonVariant = 'filled' | 'tonal' | 'outlined' | 'text' | 'elevated'
 type FormButtonTone = 'primary' | 'neutral' | 'danger'
@@ -96,15 +101,22 @@ const click = (event: MouseEvent) => {
   event.preventDefault()
   event.stopImmediatePropagation()
 }
+
+const loaderSize = computed(() => {
+  if (size === 'sm') return '1.5rem'
+  if (size === 'lg') return '2.5rem'
+  return '2rem'
+})
 </script>
 
-<style>
+<style scoped>
 .app-button {
   --border-width: 0;
   --border-color: var(--button-color, transparent);
 
   --bg: transparent;
   --text-color: oklch(from var(--border-color) calc(l - 0.1) c h);
+  --loader-color: oklch(from var(--border-color) calc(l - 0.1) c h);
   --height: var(--button-height);
   --gap: calc(var(--input-gap) / 1.5);
   --padding-inline: calc(var(--input-gap) * 1.5);
@@ -156,11 +168,11 @@ const click = (event: MouseEvent) => {
   }
 
   &:hover {
-    --state-opacity: 0.04;
+    --state-opacity: 0.06;
   }
 
   &:active {
-    --state-opacity: 0.1;
+    --state-opacity: 0.14;
   }
 
   & > .before,
@@ -186,8 +198,7 @@ const click = (event: MouseEvent) => {
 
   & > .loader {
     position: absolute;
-    min-width: 100%;
-    min-height: 100%;
+    color: var(--loader-color);
   }
 
   &:where(:disabled, .is-disabled, [aria-disabled='true']) {
@@ -205,7 +216,7 @@ const click = (event: MouseEvent) => {
 }
 
 .app-button[data-size='lg'] {
-  --height: calc(var(--input-height) * 1.5);
+  --height: calc(var(--input-height) * 1.15);
   --padding-inline: calc(var(--input-gap) * 2);
   --font-size: var(--font-size);
 }
@@ -236,6 +247,7 @@ const click = (event: MouseEvent) => {
   --bg: var(--button-color);
   --border-width: 0;
   --text-color: var(--white);
+  --loader-color: var(--white);
 }
 
 .app-button[data-variant='elevated'] {
@@ -243,6 +255,7 @@ const click = (event: MouseEvent) => {
   --border-width: var(--button-border-width);
   --border-color: transparent;
   --text-color: var(--button-color);
+  --loader-color: var(--button-color);
   --shadow: var(--shadow-md);
 }
 
@@ -250,6 +263,7 @@ const click = (event: MouseEvent) => {
   --bg: color-mix(in oklch, var(--button-color) 16%, transparent);
   --border-color: transparent;
   --border-width: var(--button-border-width);
+  --loader-color: var(--button-color);
   --text-color: var(--button-color);
 }
 
@@ -262,14 +276,13 @@ const click = (event: MouseEvent) => {
   --bg: transparent;
   --border-color: transparent;
   --text-color: var(--button-color);
+  --loader-color: var(--button-color);
   --padding-inline: calc(var(--input-gap) / 1.5);
   min-width: 0;
 }
 
-@keyframes app-button-loader {
-  to {
-    transform: rotate(1turn);
-  }
+.app-button[data-loading='true'] {
+  --text-color: transparent;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -278,10 +291,6 @@ const click = (event: MouseEvent) => {
 
     &::before {
       transition: none;
-    }
-
-    & > .loader {
-      animation: none;
     }
   }
 }

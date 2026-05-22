@@ -1,10 +1,11 @@
 <template>
   <svg
+    ref="svg"
     role="progressbar"
     :class="{ indeterminate }"
     :height="size"
-    :viewBox="`0 0 ${viewBoxSize} ${viewBoxSize}`"
     :width="size"
+    :viewBox="`0 0 ${viewBoxSize} ${viewBoxSize}`"
     xmlns="http://www.w3.org/2000/svg"
     aria-valuemax="100"
     aria-valuemin="0"
@@ -44,8 +45,9 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue'
+import { computed, onMounted, useTemplateRef, watch } from 'vue'
 
+const svg = useTemplateRef<SVGElement>('svg')
 const viewBoxSize = 48
 const halfBoxSize = viewBoxSize / 2
 const {
@@ -56,12 +58,14 @@ const {
 } = defineProps<{ size?: string; strokeWidth?: number; value?: number; indeterminate?: boolean }>()
 
 const strokeDashOffset = computed(() => 100 - Math.min(100, Math.max(0, value ?? 0)))
+
+const syncSize = () => svg.value?.style.setProperty('--size', size)
+watch(() => size, syncSize)
+onMounted(syncSize)
 </script>
 
 <style scoped>
 svg {
-  --size: 3rem;
-
   position: relative;
   inline-size: var(--size);
   block-size: var(--size);
@@ -72,7 +76,7 @@ svg {
     transform: rotate(0deg);
     animation: material-spinner-rotate 1.4s linear infinite;
 
-    & > .progress {
+    & > circle.progress {
       animation: material-spinner-dash 1.4s ease-in-out infinite;
     }
   }
@@ -81,7 +85,7 @@ svg {
     stroke: color-mix(in oklch, currentColor, transparent 90%);
   }
 
-  & > circle {
+  & > circle.progress {
     transition-property: stroke-dashoffset, stroke-dasharray, stroke-width, transform;
     transition-duration: var(--duration-lg);
     transition-timing-function: var(--bezier-magnetic);
@@ -120,7 +124,7 @@ svg {
     animation: none;
 
     & > circle {
-      transition-duration: 1ms;
+      transition: none;
     }
 
     & > .progress {

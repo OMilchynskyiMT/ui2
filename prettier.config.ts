@@ -21,7 +21,7 @@ const config: Config = {
     '^v-for$',
     '^v-(if|else-if|else|show|cloak)$',
     '^(v-once|v-pre)$',
-    '^:?(id|key|ref)$',
+    '^:?(id|key|ref|is)$',
     '^(v-slot|slot)$',
     '^v-model$',
     '^v-',

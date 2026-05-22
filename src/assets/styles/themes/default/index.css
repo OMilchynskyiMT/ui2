@@ -67,7 +67,7 @@
   --button-border-width: var(--input-border-width);
   --button-border-radius: var(--input-border-radius);
   --button-primary-color: light-dark(var(--blue-500), var(--blue-500));
-  --button-neutral-color: light-dark(var(--grey-600), var(--grey-400));
+  --button-neutral-color: light-dark(var(--grey-500), var(--grey-400));
   --button-danger-color: light-dark(var(--red-500), var(--red-500));
 
   --tab-height: calc(var(--font-size) * 3);
