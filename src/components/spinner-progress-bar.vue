@@ -12,6 +12,7 @@
     xmlns="http://www.w3.org/2000/svg"
   >
     <circle
+      v-if="showTrack"
       :cx="halfBoxSize"
       :cy="halfBoxSize"
       :r="halfBoxSize - strokeWidth / 2"
@@ -56,11 +57,13 @@ const {
   strokeWidth = 2,
   value,
   indeterminate = false,
+  showTrack = true,
 } = defineProps<{
   size?: string
   strokeWidth?: number
   value?: number
   indeterminate?: boolean
+  showTrack?: boolean
 }>()
 
 const normalizedValue = computed(() => Math.min(100, Math.max(0, value ?? 0)))
