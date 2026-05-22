@@ -33,7 +33,6 @@
       stroke-dasharray="100"
     />
     <text
-      v-if="value !== undefined && !indeterminate"
       :x="halfBoxSize"
       :y="(viewBoxSize + strokeWidth) / 2"
       dominant-baseline="middle"
@@ -83,11 +82,14 @@ svg {
   place-items: center;
 
   &.indeterminate {
-    transform: rotate(0deg);
-    animation: material-spinner-rotate 1.4s linear infinite;
-
     & > circle.progress {
-      animation: material-spinner-dash 1.4s ease-in-out infinite;
+      animation-name: spinner-rotate, spinner-dash;
+      animation-timing-function: var(--bezier-smooth);
+      animation-duration: 1.5s;
+      animation-iteration-count: infinite;
+    }
+    & > text {
+      --opacity: 0;
     }
   }
 
@@ -104,41 +106,45 @@ svg {
     transform: rotate(-90deg);
     transform-origin: center;
   }
-}
 
-@keyframes material-spinner-rotate {
-  to {
-    transform: rotate(360deg);
+  & > text {
+    opacity: var(--opacity, 1);
+    transition: opacity var(--duration-md);
   }
 }
 
-@keyframes material-spinner-dash {
+@keyframes spinner-rotate {
+  to {
+    transform: rotate(270deg);
+  }
+}
+
+@keyframes spinner-dash {
   0% {
-    stroke-dasharray: 1 100;
+    stroke-dasharray: 0 100;
     stroke-dashoffset: 0;
   }
 
   50% {
-    stroke-dasharray: 80 100;
-    stroke-dashoffset: -20;
+    stroke-dasharray: 85 100;
+    stroke-dashoffset: -15;
   }
 
   100% {
-    stroke-dasharray: 1 100;
-    stroke-dashoffset: -101;
+    stroke-dasharray: 0 100;
+    stroke-dashoffset: -100;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   svg {
-    animation: none;
-
-    & > circle {
+    & > text {
       transition: none;
     }
 
-    & > .progress {
+    & > circle.progress {
       animation: none;
+      transition: none;
     }
   }
 }

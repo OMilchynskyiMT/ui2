@@ -117,7 +117,7 @@ const testButtonClick = () => {
   buttonLoading.value = true
   setTimeout(() => {
     buttonLoading.value = false
-  }, 2000)
+  }, 5000)
 }
 
 const progressValue = ref(0)
