@@ -1,6 +1,6 @@
 import { computed, type ComputedRef, type MaybeRefOrGetter, toValue } from 'vue'
 
-import type { UseValidationReturn, ValidationPathInput } from './useValidation'
+import type { UseValidationReturn, ValidationPathInput } from './use-validation'
 
 export function useHasError<TOutput>(
   validation: UseValidationReturn<TOutput>,

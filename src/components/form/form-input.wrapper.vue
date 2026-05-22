@@ -2,14 +2,16 @@
   <div class="form-input">
     <fieldset>
       <legend>
-        <span v-if="slots.label || label" role="label">
+        <span v-if="slots.label || label">
           <slot name="label">{{ label }}</slot>
         </span>
       </legend>
       <label ref="control" :for="id" :title="title" class="control">
-        <div v-if="slots.before" ref="before" class="before"><slot name="before" /></div>
+        <div v-if="slots.before" ref="before" class="before">
+          <slot name="before" />
+        </div>
         <div class="field">
-          <span v-if="slots.label || label" role="label">
+          <span v-if="slots.label || label" class="label">
             <slot name="label">{{ label }}</slot>
           </span>
           <slot />
@@ -143,7 +145,7 @@ onBeforeUnmount(() => {
     position: relative;
     flex: 1;
 
-    & > [role='label'] {
+    & > .label {
       position: absolute;
       top: calc(-1 * var(--input-border-width));
       left: 0;

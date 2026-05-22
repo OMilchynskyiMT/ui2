@@ -1,6 +1,6 @@
 export type ValidationErrorLeaf = string[]
 
-export interface ValidationErrorBranch {
+export type ValidationErrorBranch = {
   _errors?: string[]
   [key: string]: ValidationErrorNode | string[] | undefined
 }

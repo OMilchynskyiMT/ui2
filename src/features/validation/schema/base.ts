@@ -14,17 +14,17 @@ import {
   type RefinementContext,
 } from './context'
 
-export interface Schema<Input = unknown, Output = Input> {
+export type Schema<Input = unknown, Output = Input> = {
   parse(input: Input, options?: ValidationOptions): Output
   safeParse(input: Input, options?: ValidationOptions): ValidationResult<Output>
 }
 
-export interface RefineOptions {
+export type RefineOptions = {
   code?: string
   message: string
 }
 
-export interface RefinementRule<T> {
+export type RefinementRule<T> = {
   code: string
   message: string
   check: (value: T, context: RefinementContext) => void | boolean
@@ -33,7 +33,7 @@ export interface RefinementRule<T> {
 export type PreprocessFn = (input: unknown) => unknown
 export type DefaultValueFactory<T> = () => T
 
-export interface SchemaDefinition<TOutput = unknown> {
+export type SchemaDefinition<TOutput = unknown> = {
   isOptional: boolean
   isNullable: boolean
   defaultValue?: DefaultValueFactory<TOutput>
@@ -47,7 +47,6 @@ export function createSchemaDefinition<TOutput>(): SchemaDefinition<TOutput> {
   return {
     isOptional: false,
     isNullable: false,
-    defaultValue: undefined,
     requiredMessage: 'Required',
     nonnullableMessage: 'Must not be null',
     preprocessors: [],
@@ -87,14 +86,15 @@ export class ValidationError extends Error {
   }
 }
 
-export interface RuntimeSchema<Input = unknown, Output = Input> extends Schema<Input, Output> {
-  _run(input: unknown, context: ParseContext): ParseResult<Output>
+export type RuntimeSchema<Input = unknown, Output = Input> = Schema<Input, Output> & {
+  _run: (input: unknown, context: ParseContext) => ParseResult<Output>
 }
 
-export type InferSchemaInput<TSchema extends Schema<unknown, unknown>> =
-  TSchema extends Schema<infer TInput, unknown> ? TInput : never
+export type AnySchema = Schema<never, unknown>
 
-export type InferSchemaOutput<TSchema extends Schema<unknown, unknown>> =
+export type InferSchemaInput<TSchema extends AnySchema> = TSchema extends Schema<infer TInput, unknown> ? TInput : never
+
+export type InferSchemaOutput<TSchema extends AnySchema> =
   TSchema extends Schema<unknown, infer TOutput> ? TOutput : never
 
 export abstract class BaseSchema<Input = unknown, Output = Input> implements RuntimeSchema<Input, Output> {

@@ -1,11 +1,11 @@
-import type { Schema } from './base'
+import type { AnySchema } from './base'
 import type { BooleanSchema } from './boolean'
 import type { NumberSchema } from './number'
 import type { StringSchema } from './string'
 
-export type SchemaExtension<TSchema extends Schema> = (schema: TSchema) => TSchema
+export type SchemaExtension<TSchema extends AnySchema> = (schema: TSchema) => TSchema
 
-export function defineExtension<TSchema extends Schema, TArgs extends unknown[]>(
+export function defineExtension<TSchema extends AnySchema, TArgs extends unknown[]>(
   factory: (...args: TArgs) => SchemaExtension<TSchema>
 ): (...args: TArgs) => SchemaExtension<TSchema> {
   return factory

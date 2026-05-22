@@ -13,6 +13,8 @@
       :aria-controls="optionsId"
       :aria-expanded="opened"
       :value="query"
+      aria-autocomplete="list"
+      aria-haspopup="listbox"
       autocomplete="off"
       placeholder=" "
       type="text"
@@ -102,10 +104,14 @@ const filteredOptions = computed(() => {
     return normalizedOptions.value
   }
 
-  return normalizedOptions.value.filter(option => option.title.toLowerCase().includes(value))
+  return normalizedOptions.value.filter(option => {
+    return option.title.toLowerCase().includes(value) || String(option.value).toLowerCase().includes(value)
+  })
 })
 
-const activeOptionId = computed(() => (activeIndex.value === -1 ? undefined : getOptionId(activeIndex.value)))
+const activeOptionId = computed(() =>
+  opened.value && activeIndex.value !== -1 ? getOptionId(activeIndex.value) : undefined
+)
 const firstEnabledOptionIndex = computed(() => filteredOptions.value.findIndex(option => !option.disabled))
 
 const getOptionId = (index: number) => `${optionsId}-${index}`
@@ -147,7 +153,7 @@ const move = (direction: 1 | -1) => {
     if (!options[index]?.disabled) {
       activeIndex.value = index
       comboOptionsReference.value?.scrollTo({
-        top: globalThis.document.querySelector<HTMLButtonElement>(`#${getOptionId(index)}`)?.offsetTop,
+        top: comboOptionsReference.value.querySelector<HTMLElement>(`#${CSS.escape(getOptionId(index))}`)?.offsetTop,
       })
       return
     }
@@ -173,7 +179,9 @@ const enter = (event: KeyboardEvent) => {
   select(option)
 }
 
-watch(() => model.value, syncQuery, { immediate: true })
+watch(() => [model.value, selectedOption.value?.title], syncQuery, {
+  immediate: true,
+})
 watch(filteredOptions, () => {
   activeIndex.value = firstEnabledOptionIndex.value
 })

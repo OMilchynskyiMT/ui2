@@ -44,6 +44,7 @@ export default defineConfigWithVueTs(
       'vue/component-definition-name-casing': ['error', 'PascalCase'],
 
       'unicorn/prevent-abbreviations': 'off',
+      'unicorn/no-null': 'off',
       'unicorn/filename-case': [
         'error',
         {
@@ -60,6 +61,14 @@ export default defineConfigWithVueTs(
         },
       ],
       '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
+    },
+  },
+
+  {
+    name: 'app/test-rules',
+    files: ['src/**/__tests__/**/*.ts'],
+    rules: {
+      'unicorn/no-useless-undefined': 'off',
     },
   },
 

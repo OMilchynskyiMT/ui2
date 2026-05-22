@@ -1,6 +1,6 @@
 import type { ValidationPath } from './path'
 
-export interface ValidationIssue {
+export type ValidationIssue = {
   path: ValidationPath
   code: string
   message: string

@@ -2,11 +2,11 @@ import type { ValidationIssue } from '../model/issues'
 import type { ValidationObjectMode, ValidationOptions } from '../model/options'
 import type { ValidationPath, ValidationPathSegment } from '../model/path'
 
-export interface NormalizedValidationOptions {
+export type NormalizedValidationOptions = {
   objectMode: ValidationObjectMode
 }
 
-export interface IssueInput {
+export type IssueInput = {
   code: string
   message: string
   input?: unknown
@@ -14,26 +14,26 @@ export interface IssueInput {
   path?: ValidationPath
 }
 
-export interface ParseContext {
+export type ParseContext = {
   readonly path: ValidationPath
   readonly issues: ValidationIssue[]
   readonly options: NormalizedValidationOptions
 
-  child(segment: ValidationPathSegment): ParseContext
-  addIssue(issue: IssueInput): void
+  child: (segment: ValidationPathSegment) => ParseContext
+  addIssue: (issue: IssueInput) => void
 }
 
-export interface RefinementContext {
+export type RefinementContext = {
   readonly path: ValidationPath
-  addIssue(issue: IssueInput): void
+  addIssue: (issue: IssueInput) => void
 }
 
-export interface ParseSuccess<T> {
+export type ParseSuccess<T> = {
   ok: true
   value: T
 }
 
-export interface ParseFailure {
+export type ParseFailure = {
   ok: false
 }
 

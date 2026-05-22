@@ -4,13 +4,13 @@
     <template v-if="slots.default || label" #label>
       <slot>{{ label }}</slot>
     </template>
-    <input :id="id" v-bind="attributes" :type="type" placeholder=" " />
+    <input :id="id" v-bind="attributes" :type="type" :value="inputValue" placeholder=" " @input="input" />
     <template v-if="slots.after" #after><slot name="after" /></template>
   </form-input-wrapper>
 </template>
 
 <script lang="ts" setup>
-import { useAttrs, useSlots } from 'vue'
+import { computed, useAttrs, useSlots } from 'vue'
 
 import FormInputWrapper from '@/components/form/form-input.wrapper.vue'
 import { type BaseFormControlProperties, generateHtmlId } from '@/components/form/shared'
@@ -18,6 +18,7 @@ import { type BaseFormControlProperties, generateHtmlId } from '@/components/for
 defineOptions({ inheritAttrs: false })
 const attributes = useAttrs()
 const slots = useSlots()
+const model = defineModel<string | number>()
 const {
   id = generateHtmlId(),
   label,
@@ -30,4 +31,10 @@ const {
     type?: HTMLInputElement['type']
   }
 >()
+
+const inputValue = computed(() => model.value ?? (attributes.value as string | number | undefined) ?? '')
+
+const input = (event: Event) => {
+  model.value = (event.target as HTMLInputElement).value
+}
 </script>

@@ -2,13 +2,14 @@
   <svg
     ref="svg"
     role="progressbar"
+    :aria-valuenow="indeterminate ? undefined : normalizedValue"
     :class="{ indeterminate }"
     :height="size"
-    :width="size"
     :viewBox="`0 0 ${viewBoxSize} ${viewBoxSize}`"
-    xmlns="http://www.w3.org/2000/svg"
+    :width="size"
     aria-valuemax="100"
     aria-valuemin="0"
+    xmlns="http://www.w3.org/2000/svg"
   >
     <circle
       :cx="halfBoxSize"
@@ -39,7 +40,7 @@
       font-size="1rem"
       text-anchor="middle"
     >
-      {{ value }}
+      {{ normalizedValue }}
     </text>
   </svg>
 </template>
@@ -55,9 +56,15 @@ const {
   strokeWidth = 2,
   value,
   indeterminate = false,
-} = defineProps<{ size?: string; strokeWidth?: number; value?: number; indeterminate?: boolean }>()
+} = defineProps<{
+  size?: string
+  strokeWidth?: number
+  value?: number
+  indeterminate?: boolean
+}>()
 
-const strokeDashOffset = computed(() => 100 - Math.min(100, Math.max(0, value ?? 0)))
+const normalizedValue = computed(() => Math.min(100, Math.max(0, value ?? 0)))
+const strokeDashOffset = computed(() => 100 - normalizedValue.value)
 
 const syncSize = () => svg.value?.style.setProperty('--size', size)
 watch(() => size, syncSize)

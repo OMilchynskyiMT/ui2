@@ -1,14 +1,14 @@
 import type { ValidationErrorBranch } from './errors'
 import type { ValidationIssue } from './issues'
 
-export interface ValidationSuccess<T> {
+export type ValidationSuccess<T> = {
   ok: true
   value: T
   issues: []
   errors: ValidationErrorBranch
 }
 
-export interface ValidationFailure {
+export type ValidationFailure = {
   ok: false
   issues: ValidationIssue[]
   errors: ValidationErrorBranch

@@ -1,15 +1,20 @@
 <template>
-  <div v-bind="rootAttributes" :class="rootAttributes.class" :data-variant="variant" class="form-binary">
+  <div
+    v-bind="rootAttributes"
+    :class="[rootAttributes.class, { 'has-error': Boolean(error) }]"
+    :data-variant="variant"
+    class="form-binary"
+  >
     <label :for="id" :title="title" class="control">
       <div v-if="slots.before" class="before"><slot name="before" /></div>
 
       <div class="main">
-        <input :id="id" v-bind="inputAttributes" :type="type" />
-        <span class="indicator" aria-hidden="true">
+        <input :id="id" v-bind="inputAttributes" :checked="checked" :type="type" @change="change" />
+        <span aria-hidden="true" class="indicator">
           <slot name="indicator" />
         </span>
 
-        <span v-if="slots.default || label" role="label" class="label">
+        <span v-if="slots.default || label" class="label">
           <slot>{{ label }}</slot>
         </span>
       </div>
@@ -30,6 +35,7 @@ import { type BaseFormControlProperties, generateHtmlId } from '@/components/for
 defineOptions({ inheritAttrs: false })
 const slots = useSlots()
 const attributes = useAttrs()
+const model = defineModel<boolean | string | number | null>()
 
 const rootAttributes = computed(() => ({
   class: attributes.class,
@@ -55,6 +61,33 @@ const {
     error?: string
   }
 >()
+
+const inputValue = computed(() => inputAttributes.value.value as string | number | undefined)
+
+const checked = computed(() => {
+  if (type === 'radio') {
+    return model.value === inputValue.value || Boolean(inputAttributes.value.checked)
+  }
+
+  if (typeof model.value === 'boolean') {
+    return model.value
+  }
+
+  return Boolean(inputAttributes.value.checked)
+})
+
+const change = (event: Event) => {
+  const target = event.target as HTMLInputElement
+
+  if (type === 'radio') {
+    if (target.checked) {
+      model.value = inputValue.value ?? target.value
+    }
+    return
+  }
+
+  model.value = target.checked
+}
 </script>
 
 <style scoped>

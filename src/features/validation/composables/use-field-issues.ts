@@ -2,7 +2,7 @@ import { computed, type ComputedRef, type MaybeRefOrGetter, toValue } from 'vue'
 
 import type { ValidationIssue } from '../model/issues'
 
-import type { UseValidationReturn, ValidationPathInput } from './useValidation'
+import type { UseValidationReturn, ValidationPathInput } from './use-validation'
 
 export function useFieldIssues<TOutput>(
   validation: UseValidationReturn<TOutput>,

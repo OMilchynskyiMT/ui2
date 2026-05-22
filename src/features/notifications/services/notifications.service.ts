@@ -2,7 +2,7 @@ import { readonly, ref } from 'vue'
 
 import type { Notification, NotificationInput, NotificationOptions, NotificationsPluginOptions } from '../model/types'
 
-export function createNotificationsService(_options: NotificationsPluginOptions = {}) {
+export function createNotificationsService(options: NotificationsPluginOptions = {}) {
   const items = ref<Notification[]>([])
 
   function push(input: NotificationInput) {
@@ -19,6 +19,10 @@ export function createNotificationsService(_options: NotificationsPluginOptions 
     }
 
     items.value.push(item)
+
+    if (options.max && options.max > 0 && items.value.length > options.max) {
+      items.value.splice(0, items.value.length - options.max)
+    }
 
     if (item.timeout && item.timeout > 0) {
       globalThis.setTimeout(() => remove(item.id), item.timeout)

@@ -1,5 +1,5 @@
 <template>
-  <component :is="icon" :size="size" :stroke-width="strokeWidth" class="app-icon" aria-hidden="true" />
+  <component :is="icon" :size="size" :stroke-width="strokeWidth" aria-hidden="true" class="app-icon" />
 </template>
 
 <script lang="ts" setup>

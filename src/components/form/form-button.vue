@@ -21,7 +21,7 @@
     @click="click"
   >
     <slot v-if="loading" name="loader">
-      <spinner-progress-bar :size="loaderSize" :stroke-width="3" class="loader" indeterminate aria-hidden="true" />
+      <spinner-progress-bar :size="loaderSize" :stroke-width="3" aria-hidden="true" class="loader" indeterminate />
     </slot>
 
     <span v-if="slots.before" class="before"><slot name="before" /></span>
@@ -37,7 +37,7 @@
 <script lang="ts" setup>
 import { computed, useAttrs, useSlots } from 'vue'
 
-import spinnerProgressBar from '@/components/spinner-progress-bar.vue'
+import SpinnerProgressBar from '@/components/spinner-progress-bar.vue'
 
 type FormButtonVariant = 'filled' | 'tonal' | 'outlined' | 'text' | 'elevated'
 type FormButtonTone = 'primary' | 'neutral' | 'danger'

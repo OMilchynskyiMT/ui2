@@ -15,13 +15,13 @@ import {
 } from './context'
 import type { SchemaExtension } from './extension'
 
-interface RefinementEffect<TOutput> {
+type RefinementEffect<TOutput> = {
   code: string
   message: string
   check: (value: TOutput, context: RefinementContext) => void | boolean
 }
 
-interface EffectsLayer<TOutput> {
+type EffectsLayer<TOutput> = {
   transform?: (value: unknown) => unknown
   refinement?: RefinementEffect<TOutput>
 }

@@ -1,5 +1,5 @@
 export type ValidationObjectMode = 'strip' | 'allow' | 'exact'
 
-export interface ValidationOptions {
+export type ValidationOptions = {
   objectMode?: ValidationObjectMode
 }

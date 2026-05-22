@@ -43,14 +43,19 @@
     <div>{{ combo }}</div>
 
     <div>
-      <form-button :loading="buttonLoading" tone="neutral" size="md" variant="tonal" @click.prevent="testButtonClick">
+      <form-button :loading="buttonLoading" size="md" tone="neutral" variant="tonal" @click.prevent="testButtonClick">
         <template #before><app-icon :icon="GlobeIcon" /></template>
         Test button
       </form-button>
     </div>
 
     <div>
-      <spinner-progress-bar :indeterminate="buttonLoading" :stroke-width="4" :value="progressValue" style="color: var(--blue-500)" />
+      <spinner-progress-bar
+        :indeterminate="buttonLoading"
+        :stroke-width="4"
+        :value="progressValue"
+        style="color: var(--blue-500)"
+      />
     </div>
   </div>
 
@@ -80,7 +85,7 @@ import FormInput from '@/components/form/form-input.vue'
 import FormPassword from '@/components/form/form-password.vue'
 import FormRadio from '@/components/form/form-radio.vue'
 import FormToggle from '@/components/form/form-toggle.vue'
-import spinnerProgressBar from '@/components/spinner-progress-bar.vue'
+import SpinnerProgressBar from '@/components/spinner-progress-bar.vue'
 import TabBar from '@/components/tabs/tab-bar.vue'
 import TabItem from '@/components/tabs/tab-item.vue'
 

@@ -52,7 +52,9 @@ export class ObjectSchema<
 
   public constructor(shape?: TShape, objectMode?: ValidationObjectMode, definition?: SchemaDefinition<TOutput>) {
     super(definition)
-    this.shape = Object.freeze({ ...(shape ?? EMPTY_SHAPE) }) as FrozenShape<TShape>
+    this.shape = Object.freeze({
+      ...(shape ?? EMPTY_SHAPE),
+    }) as FrozenShape<TShape>
     this.objectMode = objectMode
   }
 

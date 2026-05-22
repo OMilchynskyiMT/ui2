@@ -1,6 +1,5 @@
-import { type Config } from 'prettier'
-
-const config: Config = {
+/** @type {import('prettier').Config} */
+const config = {
   singleQuote: true,
   semi: false,
   trailingComma: 'es5',
@@ -17,11 +16,12 @@ const config: Config = {
   bracketSpacing: true,
   bracketSameLine: false,
   attributeGroups: [
-    '^(v-is|is)$',
+    '^(v-is|is|:is)$',
     '^v-for$',
     '^v-(if|else-if|else|show|cloak)$',
     '^(v-once|v-pre)$',
-    '^:?(id|key|ref|is)$',
+    '^:?(id)$',
+    '^:?(key|ref)$',
     '^(v-slot|slot)$',
     '^v-model$',
     '^v-',
@@ -31,7 +31,6 @@ const config: Config = {
     '^(@|v-on(?::|$))',
     '^v-(html|text)$',
     '^#',
-    '^aria-',
   ],
   attributeSort: 'ASC',
   plugins: ['prettier-plugin-organize-attributes'],

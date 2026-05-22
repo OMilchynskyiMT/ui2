@@ -10,6 +10,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useNotifications } from '../composables/useNotifications'
+import { useNotifications } from '../composables/use-notifications'
 const notifications = useNotifications()
 </script>

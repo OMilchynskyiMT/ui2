@@ -11,28 +11,52 @@ import { onBeforeUnmount, onMounted, useTemplateRef } from 'vue'
 const tabBarReference = useTemplateRef('tabBarRef')
 const indicatorReference = useTemplateRef('indicator')
 
-let observer: MutationObserver
+let mutationObserver: MutationObserver | undefined
+let resizeObserver: ResizeObserver | undefined
 
 const updateIndicatorStyle = () => {
-  if (!tabBarReference.value || !indicatorReference.value) return
+  const tabBar = tabBarReference.value
+  const indicator = indicatorReference.value
 
-  const activeTab = tabBarReference.value.querySelector('.tab-item.active')
-  if (!activeTab) return
+  if (!tabBar || !indicator) return
 
-  const { left, width } = activeTab.getBoundingClientRect()
-  indicatorReference.value.style.setProperty('--indicator-x', `${left}px`)
-  indicatorReference.value.style.setProperty('--indicator-width', `${width}px`)
+  const activeTab = tabBar.querySelector<HTMLElement>('.tab-item.active')
+  if (!activeTab) {
+    indicator.style.setProperty('--indicator-width', '0px')
+    return
+  }
+
+  const tabBarRect = tabBar.getBoundingClientRect()
+  const activeTabRect = activeTab.getBoundingClientRect()
+
+  indicator.style.setProperty('--indicator-x', `${activeTabRect.left - tabBarRect.left}px`)
+  indicator.style.setProperty('--indicator-width', `${activeTabRect.width}px`)
 }
 
 onMounted(() => {
-  if (!tabBarReference.value) return
+  const tabBar = tabBarReference.value
+  if (!tabBar) return
+
   updateIndicatorStyle()
-  observer = new MutationObserver(updateIndicatorStyle)
-  observer.observe(tabBarReference.value, { childList: true, subtree: true, attributes: true })
+
+  mutationObserver = new MutationObserver(updateIndicatorStyle)
+  mutationObserver.observe(tabBar, {
+    attributes: true,
+    childList: true,
+    subtree: true,
+  })
+
+  resizeObserver = new ResizeObserver(updateIndicatorStyle)
+  resizeObserver.observe(tabBar)
+
+  for (const tab of tabBar.querySelectorAll('.tab-item')) {
+    resizeObserver.observe(tab)
+  }
 })
 
 onBeforeUnmount(() => {
-  observer?.disconnect()
+  mutationObserver?.disconnect()
+  resizeObserver?.disconnect()
 })
 </script>
 
@@ -53,7 +77,7 @@ onBeforeUnmount(() => {
     background-color: var(--tab-active-border-color);
     height: var(--tab-border-width);
     border-radius: var(--radius-full);
-    width: var(--indicator-width);
+    width: var(--indicator-width, 0);
     transform: translateX(var(--indicator-x, 0));
     will-change: transform, width;
     transition:

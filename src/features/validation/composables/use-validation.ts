@@ -8,11 +8,11 @@ import type { Schema } from '../schema/base'
 
 export type ValidationPathInput = string | ValidationPath
 
-export interface UseValidationOptions {
+export type UseValidationOptions = {
   validateOnChange?: boolean
 }
 
-export interface UseValidationReturn<TOutput> {
+export type UseValidationReturn<TOutput> = {
   issues: Ref<ValidationIssue[]>
   errors: Ref<ValidationErrorBranch>
   isValid: ComputedRef<boolean>
