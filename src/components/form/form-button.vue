@@ -2,7 +2,7 @@
   <component
     :is="component"
     v-bind="rootAttributes"
-    v-ripple
+    v-ripple="{ disabled: isDisabled || loading }"
     :aria-busy="loading || undefined"
     :class="[
       'app-button',
