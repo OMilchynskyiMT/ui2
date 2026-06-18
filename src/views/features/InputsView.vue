@@ -55,18 +55,18 @@
       </template>
     </MSelect>
 
-    <section class="selection-demo">
+    <section style="grid-column: 1 / span 2; display: flex; gap: 2rem">
       <MCheckbox v-model="checkboxModel" label="Checkbox" />
       <MCheckbox
         v-model="checkboxModel"
-        hint="Custom color and larger control size"
+        hint="Custom color"
         label="Custom checkbox"
-        style="--control-color: var(--green-500); --control-size: 1.5rem"
+        style="--control-color: var(--green-500)"
       />
       <MCheckbox v-model="indeterminateModel" indeterminate label="Indeterminate checkbox" />
     </section>
 
-    <section class="selection-demo">
+    <section style="grid-column: 1 / span 2; display: flex; gap: 2rem">
       <MRadio
         v-model="radioModel"
         label="HTTP"
@@ -85,23 +85,25 @@
         v-model="radioModel"
         label="SSH"
         name="protocol-radio"
-        style="--control-color: var(--green-500); --control-size: 1.8rem"
+        style="--control-color: var(--green-500)"
         value="ssh"
       />
     </section>
 
-    <section class="selection-demo">
+    <section style="grid-column: 1 / span 2; display: flex; gap: 2rem">
       <MToggle v-model="toggleModel" label="Toggle" />
       <MToggle
         v-model="toggleModel"
-        hint="Custom color and larger switch size"
+        hint="Custom color"
         label="Custom toggle"
-        style="--control-color: var(--teal-500); --control-size: 1.7rem"
+        style="--control-color: var(--teal-500)"
       />
     </section>
 
-    <div>{{ comboModel }}</div>
-    <div>{{ selectModel }}</div>
+    <MColor v-model="colorModel" label="Color Picker" suffix="hex">
+      <template #hint>Lorem ipsum dolor sit amet consectetur adipisicing elit</template>
+    </MColor>
+    <div>{{ colorModel }}</div>
   </div>
 </template>
 
@@ -110,6 +112,7 @@ import { ref } from 'vue'
 import { EthernetPortIcon, MailPlusIcon } from '@lucide/vue'
 
 import MCheckbox from '@/components/fields/MCheckbox.vue'
+import MColor from '@/components/fields/MColor.vue'
 import MCombobox from '@/components/fields/MCombobox.vue'
 import MField from '@/components/fields/MField.vue'
 import MNumber from '@/components/fields/MNumber.vue'
@@ -128,6 +131,7 @@ const checkboxModel = ref(false)
 const indeterminateModel = ref(false)
 const radioModel = ref('http')
 const toggleModel = ref(false)
+const colorModel = ref('#f59')
 
 const comboOptions: ListItem<string>[] = [
   { value: '80' },
