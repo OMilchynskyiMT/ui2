@@ -38,7 +38,6 @@ const colorInput = useTemplateRef<HTMLInputElement>('colorInput')
 
   & .leading {
     & button {
-      border: none;
       background-color: var(--target-color);
       padding: var(--input-border-width);
       display: inline-flex;

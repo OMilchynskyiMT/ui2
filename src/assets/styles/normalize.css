@@ -38,6 +38,7 @@ textarea {
   color: inherit;
   background-color: transparent;
   line-height: inherit;
+  border: 0 none;
 }
 
 textarea {

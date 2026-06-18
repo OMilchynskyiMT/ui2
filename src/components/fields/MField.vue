@@ -142,7 +142,6 @@ input {
   min-inline-size: 0;
   inline-size: 100%;
   block-size: var(--input-height);
-  border: 0;
   cursor: var(--cursor);
 }
 </style>
