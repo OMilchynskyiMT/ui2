@@ -40,7 +40,7 @@ export default defineConfigWithVueTs(
     },
     rules: {
       'vue/require-default-prop': 'off',
-      'vue/component-name-in-template-casing': ['error', 'kebab-case'],
+      'vue/component-name-in-template-casing': ['error', 'PascalCase'],
       'vue/component-definition-name-casing': ['error', 'PascalCase'],
 
       'unicorn/prevent-abbreviations': 'off',
@@ -48,7 +48,10 @@ export default defineConfigWithVueTs(
       'unicorn/filename-case': [
         'error',
         {
-          case: 'kebabCase',
+          cases: {
+            camelCase: true,
+            pascalCase: true,
+          },
         },
       ],
 

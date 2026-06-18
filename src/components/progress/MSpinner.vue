@@ -33,11 +33,11 @@
       stroke-dasharray="100"
     />
     <text
+      :font-size="fontSize"
       :x="halfBoxSize"
       :y="(viewBoxSize + strokeWidth) / 2"
       dominant-baseline="middle"
       fill="currentColor"
-      font-size="1rem"
       text-anchor="middle"
     >
       {{ normalizedValue }}
@@ -53,12 +53,14 @@ const viewBoxSize = 48
 const halfBoxSize = viewBoxSize / 2
 const {
   size = '3rem',
+  fontSize = '1rem',
   strokeWidth = 2,
   value,
   indeterminate = false,
   showTrack = true,
 } = defineProps<{
   size?: string
+  fontSize?: string
   strokeWidth?: number
   value?: number
   indeterminate?: boolean

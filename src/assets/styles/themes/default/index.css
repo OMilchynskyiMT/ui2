@@ -44,24 +44,26 @@
   --bezier-magnetic: cubic-bezier(0.175, 0.885, 0.32, 1.275);
 
   --input-height: calc(3.5 * var(--font-size));
-  --input-gap: var(--font-size);
+  --input-gap-x: calc(var(--font-size) / 2);
+  --input-padding-inline: var(--font-size);
   --input-border-width: 2px;
   --input-border-color: light-dark(var(--grey-300), var(--grey-600));
   --input-border-hover-color: light-dark(var(--grey-400), var(--grey-500));
-  --input-border-active-color: light-dark(var(--blue-500), var(--blue-600));
-  --input-border-error-color: light-dark(var(--red-500), var(--red-600));
+  --input-border-active-color: light-dark(var(--blue-500), var(--blue-500));
+  --input-border-error-color: light-dark(var(--red-500), var(--red-500));
   --input-border-radius: var(--radius-md);
-  --input-ring-width: 2px;
 
-  --input-bg: var(--surface-bg);
+  --input-bg: transparent;
   --input-text-color: light-dark(var(--grey-900), var(--grey-100));
   --input-label-color: light-dark(var(--grey-800), var(--grey-300));
-  --input-label-active-color: light-dark(var(--grey-600), var(--grey-400));
+  --input-label-active-color: light-dark(var(--blue-600), var(--blue-300));
 
   --input-font-size: var(--font-size-md);
 
   --input-error-color: light-dark(var(--red-600), var(--red-400));
   --input-error-font-size: var(--font-size-sm);
+
+  --input-hint-color: oklch(from var(--input-text-color) l c h / 0.5);
 
   --button-height: calc(var(--font-size) * 3);
   --button-border-width: var(--input-border-width);

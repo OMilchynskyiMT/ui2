@@ -2,7 +2,7 @@
   <RouterView />
 
   <Teleport to="#notifications">
-    <notifications-root />
+    <NotificationsRoot />
   </Teleport>
 </template>
 

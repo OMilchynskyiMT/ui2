@@ -5,21 +5,44 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      component: () => import('@/layouts/base-layout.vue'),
+      component: () => import('@/layouts/BaseLayout.vue'),
       children: [
         {
           path: '',
-          component: () => import('@/views/test-view.vue'),
+          component: () => import('@/views/TestView.vue'),
+          redirect: { name: 'inputs' },
+          children: [
+            {
+              path: 'inputs',
+              name: 'inputs',
+              component: () => import('@/views/features/InputsView.vue'),
+            },
+            {
+              path: 'spinners',
+              name: 'spinners',
+              component: () => import('@/views/features/SpinnersView.vue'),
+            },
+            {
+              path: 'buttons',
+              name: 'buttons',
+              component: () => import('@/views/features/ButtonsView.vue'),
+            },
+            {
+              path: 'lists',
+              name: 'lists',
+              component: () => import('@/views/features/ListsView.vue'),
+            },
+          ],
         },
       ],
     },
     {
       path: '/dashboard',
-      component: () => import('@/layouts/dashboard-layout.vue'),
+      component: () => import('@/layouts/DashboardLayout.vue'),
       children: [
         {
           path: '',
-          component: () => import('@/views/test-view.vue'),
+          component: () => import('@/views/TestView.vue'),
         },
       ],
     },

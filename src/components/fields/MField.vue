@@ -1,0 +1,148 @@
+<template>
+  <MFieldFrame
+    :id="id"
+    :disabled="disabled"
+    :error="error"
+    :focused="isFocused"
+    :hint="hint"
+    :invalid="isInvalid"
+    :label="label"
+    :populated="model !== '' || placeholder.trim() !== ''"
+    :prefix="prefix"
+    :readonly="readonly"
+    :suffix="suffix"
+    :title="title"
+    @request-focus="focus"
+  >
+    <template v-for="name in Object.keys(slots).filter(name => name !== 'default')" #[name]>
+      <slot :name="name" />
+    </template>
+
+    <input
+      :id="id"
+      ref="input"
+      v-bind="attrs"
+      :aria-details="hint || slots.hint ? `${id}-hint` : undefined"
+      :aria-disabled="disabled"
+      :aria-errormessage="isInvalid && (error || slots.error) ? `${id}-error` : undefined"
+      :aria-invalid="isInvalid || undefined"
+      :aria-readonly="readonly"
+      :disabled="disabled"
+      :placeholder="placeholder"
+      :readonly="readonly"
+      :type="type"
+      :value="model"
+      @blur="onBlur"
+      @change="onChange"
+      @focus="onFocus"
+      @input="onInput"
+    />
+  </MFieldFrame>
+</template>
+
+<script lang="ts">
+export type MFieldExpose = {
+  focus: (options?: FocusOptions) => void
+  blur: () => void
+  select: () => void
+}
+</script>
+
+<script lang="ts" setup>
+import { computed, ref, useAttrs, useId, useSlots, useTemplateRef } from 'vue'
+
+import { type MFieldProperties } from './mfield.shared'
+import MFieldFrame from './MFieldFrame.vue'
+
+type Properties = Omit<MFieldProperties, 'id' | 'focused' | 'populated' | 'multiline'> & {
+  id?: string
+  type?: HTMLInputElement['type']
+  lazy?: boolean
+  placeholder?: string
+}
+
+defineOptions({
+  inheritAttrs: false,
+})
+
+const slots = useSlots()
+const attrs = useAttrs()
+
+const {
+  id = useId(),
+  readonly = false,
+  disabled = false,
+  label = '',
+  title,
+  prefix = '',
+  suffix = '',
+  error = '',
+  invalid = false,
+  hint = '',
+  type = 'text',
+  lazy = false,
+  placeholder = '',
+} = defineProps<Properties>()
+
+const model = defineModel<string>({ required: true })
+const inputReference = useTemplateRef<HTMLInputElement>('input')
+const isFocused = ref(false)
+const isInvalid = computed(() => invalid || Boolean(error || slots.error))
+
+const focus = (options?: FocusOptions): void => {
+  inputReference.value?.focus(options)
+}
+
+const emit = defineEmits<{
+  input: [event: InputEvent]
+  change: [event: Event]
+  focus: [event: FocusEvent]
+  blur: [event: FocusEvent]
+}>()
+
+defineExpose<MFieldExpose>({
+  focus,
+  blur: () => inputReference.value?.blur(),
+  select: () => inputReference.value?.select(),
+})
+
+const onFocus = ($event: FocusEvent): void => {
+  isFocused.value = true
+  emit('focus', $event)
+}
+const onBlur = ($event: FocusEvent): void => {
+  isFocused.value = false
+  emit('blur', $event)
+}
+
+const update = (event: Event): void => {
+  model.value = (event.currentTarget as HTMLInputElement).value
+}
+
+const onInput = (event: InputEvent): void => {
+  if (!lazy && !event.isComposing) {
+    update(event)
+  }
+
+  emit('input', event)
+}
+
+const onChange = (event: Event): void => {
+  if (lazy) {
+    update(event)
+  }
+
+  emit('change', event)
+}
+</script>
+
+<style scoped>
+input {
+  display: block;
+  min-inline-size: 0;
+  inline-size: 100%;
+  block-size: var(--input-height);
+  border: 0;
+  cursor: var(--cursor);
+}
+</style>

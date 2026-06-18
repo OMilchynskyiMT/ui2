@@ -1,0 +1,173 @@
+<template>
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; max-width: 60vw">
+    <MField v-model="inputModel" label="Regular text field" title="Test title" />
+    <MField v-model="inputModel" label="with prefix and suffix" prefix="$" suffix=".00" />
+
+    <MField v-model="inputModel" disabled label="Disabled" />
+    <MField v-model="inputModel" label="Read Only" readonly />
+
+    <MField v-model="inputModel" label="With error and hint" prefix="$" suffix=".00">
+      <template #leading>
+        <MIcon :icon="MailPlusIcon" style="color: var(--green-500)" />
+      </template>
+      <template #hint>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste veritatis laborum amet quasi esse praesentium,
+        nesciunt possimus error odio omnis, itaque accusantium ab sapiente porro facere eaque eligendi, architecto
+        officia?
+      </template>
+      <template #error> Lorem ipsum dolor sit amet consectetur adipisicing elit. </template>
+    </MField>
+
+    <MField v-model="inputModel" label="with spinner" placeholder="Loading...">
+      <template #leading>
+        <MIcon :icon="MailPlusIcon" />
+      </template>
+      <template #trailing>
+        <MSpinner :stroke-width="5" indeterminate size="1.5rem" style="color: var(--blue-300)" />
+      </template>
+      <template #hint>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste veritatis laborum amet quasi esse praesentium
+      </template>
+    </MField>
+
+    <MNumber v-model="numberModel" :max="10" :min="5" clamp-on-blur label="Number field x>5<10 with clamp" />
+    <MNumber v-model="numberModel" label="Number field #2" placeholder="Numbers only" />
+
+    <MCombobox
+      v-model="comboModel"
+      :create-custom-value="v => v"
+      :options="comboOptions"
+      allow-custom
+      label="Combobox"
+      suffix="@192.168.2.1"
+    >
+      <template #leading>
+        <MIcon :icon="EthernetPortIcon" style="color: var(--indigo-600)" />
+      </template>
+      <template #hint>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste veritatis laborum amet quasi esse praesentium
+      </template>
+    </MCombobox>
+
+    <MSelect v-model="selectModel" :options="selectOptions" label="Select" placeholder="Choose protocol">
+      <template #leading>
+        <MIcon :icon="EthernetPortIcon" style="color: var(--indigo-600)" />
+      </template>
+    </MSelect>
+
+    <section class="selection-demo">
+      <MCheckbox v-model="checkboxModel" label="Checkbox" />
+      <MCheckbox
+        v-model="checkboxModel"
+        hint="Custom color and larger control size"
+        label="Custom checkbox"
+        style="--control-color: var(--green-500); --control-size: 1.5rem"
+      />
+      <MCheckbox v-model="indeterminateModel" indeterminate label="Indeterminate checkbox" />
+    </section>
+
+    <section class="selection-demo">
+      <MRadio
+        v-model="radioModel"
+        label="HTTP"
+        name="protocol-radio"
+        style="--control-color: var(--red-500)"
+        value="http"
+      />
+      <MRadio
+        v-model="radioModel"
+        label="HTTPS"
+        name="protocol-radio"
+        style="--control-color: var(--yellow-500)"
+        value="https"
+      />
+      <MRadio
+        v-model="radioModel"
+        label="SSH"
+        name="protocol-radio"
+        style="--control-color: var(--green-500); --control-size: 1.8rem"
+        value="ssh"
+      />
+    </section>
+
+    <section class="selection-demo">
+      <MToggle v-model="toggleModel" label="Toggle" />
+      <MToggle
+        v-model="toggleModel"
+        hint="Custom color and larger switch size"
+        label="Custom toggle"
+        style="--control-color: var(--teal-500); --control-size: 1.7rem"
+      />
+    </section>
+
+    <div>{{ comboModel }}</div>
+    <div>{{ selectModel }}</div>
+  </div>
+</template>
+
+<script lang="ts" setup>
+import { ref } from 'vue'
+import { EthernetPortIcon, MailPlusIcon } from '@lucide/vue'
+
+import MCheckbox from '@/components/fields/MCheckbox.vue'
+import MCombobox from '@/components/fields/MCombobox.vue'
+import MField from '@/components/fields/MField.vue'
+import MNumber from '@/components/fields/MNumber.vue'
+import MRadio from '@/components/fields/MRadio.vue'
+import MSelect from '@/components/fields/MSelect.vue'
+import MToggle from '@/components/fields/MToggle.vue'
+import type { ListItem, ListOption } from '@/components/list/MList.vue'
+import MIcon from '@/components/MIcon.vue'
+import MSpinner from '@/components/progress/MSpinner.vue'
+
+const inputModel = ref('')
+const numberModel = ref<number | null>(null)
+const comboModel = ref()
+const selectModel = ref<string | null>(null)
+const checkboxModel = ref(false)
+const indeterminateModel = ref(false)
+const radioModel = ref('http')
+const toggleModel = ref(false)
+
+const comboOptions: ListItem<string>[] = [
+  { value: '80' },
+  { value: '8080-8085', title: 'Strange Web Server' },
+  { value: '443', title: 'HTTPS' },
+  { value: '22, 10022', title: 'SSH' },
+  { value: '25, 587, 2525', title: 'SMTP' },
+  { value: '53', title: 'DNS' },
+  { value: '123', title: 'NTP', disabled: true },
+  { value: '67, 68', title: 'DHCP' },
+  { value: '21', title: 'FTP' },
+  { value: '69', title: 'TFTP' },
+]
+
+const selectOptions: ListOption<string>[] = [
+  {
+    type: 'group',
+    title: 'Common',
+    items: [
+      { value: 'http', title: 'HTTP' },
+      { value: 'https', title: 'HTTPS' },
+      { value: 'ssh', title: 'SSH' },
+    ],
+  },
+  {
+    type: 'group',
+    title: 'Network',
+    items: [
+      { value: 'dns', title: 'DNS' },
+      { value: 'dhcp', title: 'DHCP' },
+      { value: 'ntp', title: 'NTP', disabled: true },
+    ],
+  },
+]
+</script>
+
+<style scoped>
+.selection-demo {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--input-gap-x) * 1.5);
+}
+</style>

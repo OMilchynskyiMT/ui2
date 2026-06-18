@@ -1,7 +1,7 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 
-import App from '@/app.vue'
+import App from '@/App.vue'
 import { ripple } from '@/directives/ripple'
 import { createNotificationsPlugin } from '@/features/notifications'
 import router from '@/router'
