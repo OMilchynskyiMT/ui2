@@ -23,29 +23,29 @@ const cssDuration = `${duration}ms`
 </script>
 
 <style>
-.fade-y-enter-active .popup,
-.fade-y-leave-active .popup {
+.fade-y-enter-active,
+.fade-y-leave-active {
   will-change: transform, opacity;
   transition-property: transform, opacity;
   transition-duration: v-bind(cssDuration);
 }
 
-.fade-y-enter-active .popup {
+.fade-y-enter-active {
   transition-timing-function: var(--bezier-smooth-entrance);
 }
 
-.fade-y-leave-active .popup {
+.fade-y-leave-active {
   transition-timing-function: var(--bezier-soft-exit);
 }
 
-.fade-y-enter-from .popup,
-.fade-y-leave-to .popup {
+.fade-y-enter-from,
+.fade-y-leave-to {
   opacity: 0;
   transform: translateY(var(--popup-translate-y, 0));
 }
 
-.fade-y-enter-to .popup,
-.fade-y-leave-from .popup {
+.fade-y-enter-to,
+.fade-y-leave-from {
   opacity: 1;
   transform: translateY(0);
 }
@@ -59,13 +59,13 @@ const cssDuration = `${duration}ms`
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .fade-y-enter-active .popup,
-  .fade-y-leave-active .popup {
+  .fade-y-enter-active,
+  .fade-y-leave-active {
     transition-duration: 1ms;
   }
 
-  .fade-y-enter-from .popup,
-  .fade-y-leave-to .popup {
+  .fade-y-enter-from,
+  .fade-y-leave-to {
     transform: none;
   }
 }
