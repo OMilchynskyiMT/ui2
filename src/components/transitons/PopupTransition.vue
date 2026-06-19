@@ -22,7 +22,7 @@ const {
 const cssDuration = `${duration}ms`
 </script>
 
-<style>
+<style scoped>
 .fade-y-enter-active,
 .fade-y-leave-active {
   will-change: transform, opacity;
@@ -61,7 +61,7 @@ const cssDuration = `${duration}ms`
 @media (prefers-reduced-motion: reduce) {
   .fade-y-enter-active,
   .fade-y-leave-active {
-    transition-duration: 1ms;
+    transition: none;
   }
 
   .fade-y-enter-from,
