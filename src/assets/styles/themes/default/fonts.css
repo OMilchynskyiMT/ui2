@@ -8,9 +8,9 @@
   --font-size-xs: calc(var(--font-size) * 0.75);
   --font-size-sm: calc(var(--font-size) * 0.875);
   --font-size-md: var(--font-size);
-  --font-size-lg: calc(var(--font-size) * 1.5);
-  --font-size-xl: calc(var(--font-size) * 2);
-  --font-size-xxl: calc(var(--font-size) * 3);
+  --font-size-lg: calc(var(--font-size) * 1.25);
+  --font-size-xl: calc(var(--font-size) * 1.5);
+  --font-size-xxl: calc(var(--font-size) * 2.25);
 
   --font-weight-bold: 600;
   --font-weight-semibold: 500;
