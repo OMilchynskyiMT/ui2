@@ -1,21 +1,65 @@
 <template>
-  <div>
-    <MSpinner
-      :indeterminate="false"
-      :stroke-width="5"
-      :value="progressValue"
-      style="color: var(--blue-500)"
-    />
+  <div style="display: grid; gap: 2rem">
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(5rem, 1fr))">
+      <MSpinner
+        v-for="size in ['1rem', '1.5rem', '2rem', '2.5rem', '3rem', '4rem', '5rem']"
+        :key="size"
+        :indeterminate="false"
+        :size="size"
+        :stroke-width="5"
+        :value="progressValue"
+        style="color: var(--blue-500)"
+      />
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(5rem, 1fr))">
+      <MSpinner
+        v-for="size in ['1rem', '1.5rem', '2rem', '2.5rem', '3rem', '4rem', '5rem']"
+        :key="size"
+        :indeterminate="false"
+        :size="size"
+        :stroke-width="10"
+        :value="progress"
+        style="color: var(--purple-600)"
+      />
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(5rem, 1fr))">
+      <MSpinner
+        v-for="size in ['1rem', '1.5rem', '2rem', '2.5rem', '3rem', '4rem', '5rem']"
+        :key="size"
+        :size="size"
+        :stroke-width="3"
+        indeterminate
+        style="color: var(--green-500)"
+      />
+    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { onUnmounted, ref } from 'vue'
 
 import MSpinner from '@/components/progress/MSpinner.vue'
 
+const progress = ref(0)
+
+const progressInterval = setInterval(() => {
+  if (progress.value >= 100) {
+    progress.value = 0
+    return
+  }
+
+  progress.value += 1
+}, 100)
+
 const progressValue = ref(0)
-setInterval(() => {
+const interval = setInterval(() => {
   progressValue.value = Math.floor(Math.random() * 100)
 }, 2000)
+
+onUnmounted(() => {
+  clearInterval(interval)
+  clearInterval(progressInterval)
+})
 </script>

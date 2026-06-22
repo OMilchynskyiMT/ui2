@@ -15,7 +15,9 @@
       <slot name="default">{{ label ?? '' }}</slot>
     </div>
     <div class="progress">
-      <FadeTransition appear :duration="500"><MSpinner v-if="loading" :stroke-width="5" indeterminate /></FadeTransition>
+      <FadeTransition :duration="500" appear
+        ><MSpinner v-if="loading" :stroke-width="5" indeterminate
+      /></FadeTransition>
     </div>
   </button>
 </template>
@@ -104,10 +106,10 @@ const {
     & > div.progress {
       --duration: var(--duration-lg);
 
+      block-size: 100%;
       display: flex;
       align-items: center;
       justify-content: center;
-      line-height: 1;
 
       transition-property: opacity, transform;
       transition-duration: var(--duration);
@@ -121,7 +123,7 @@ const {
     }
 
     & > div.progress {
-      transform: scale(1.25);
+      transform: scale(1.5);
       position: absolute;
       inset: 0;
 
@@ -200,7 +202,6 @@ const {
       &:not([data-variant='text']):is(:focus) {
         --outline-width: var(--input-border-width);
         --outline-color: oklch(from var(--accent-color) l c h / 0.15);
-        --shadow: var(--shadow-sm);
       }
 
       &:is(:hover, :focus) {

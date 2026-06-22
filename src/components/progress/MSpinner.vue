@@ -72,6 +72,7 @@ svg {
     cy: 50%;
     fill: none;
     stroke: currentColor;
+    stroke-linecap: square;
   }
 
   & > circle.track {
