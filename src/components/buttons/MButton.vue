@@ -37,7 +37,6 @@ export type Properties = {
   loading?: boolean
   label?: string
   title?: string
-  href?: string
 }
 </script>
 
