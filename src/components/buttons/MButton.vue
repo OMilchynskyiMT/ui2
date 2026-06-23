@@ -84,6 +84,7 @@ const {
     cursor: pointer;
     user-select: none;
 
+    line-height: normal;
     block-size: var(--block-size);
     padding-inline: var(--padding-inline);
     padding-block: var(--padding-block);
