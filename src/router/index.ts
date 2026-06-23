@@ -32,6 +32,11 @@ const router = createRouter({
               name: 'lists',
               component: () => import('@/views/features/ListsView.vue'),
             },
+            {
+              path: 'chips',
+              name: 'chips',
+              component: () => import('@/views/features/ChipsView.vue'),
+            },
           ],
         },
       ],

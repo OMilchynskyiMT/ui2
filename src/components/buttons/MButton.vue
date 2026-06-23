@@ -15,9 +15,9 @@
       <slot name="default">{{ label ?? '' }}</slot>
     </div>
     <div class="progress">
-      <FadeTransition :duration="500" appear
-        ><MSpinner v-if="loading" :stroke-width="5" indeterminate
-      /></FadeTransition>
+      <FadeTransition :duration="500" appear>
+        <MSpinner v-if="loading" :stroke-width="5" indeterminate />
+      </FadeTransition>
     </div>
   </button>
 </template>
