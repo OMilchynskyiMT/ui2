@@ -9,7 +9,7 @@ export type Exposed = {
 </script>
 
 <script lang="ts" setup>
-import { type Component,useTemplateRef } from 'vue'
+import { type Component, useTemplateRef } from 'vue'
 
 const { size = 24, strokeWidth = 2 } = defineProps<{
   icon: Component
@@ -20,7 +20,7 @@ const iconReference = useTemplateRef<SVGElement>('icon')
 
 defineExpose<Exposed>({
   setColor: (color: string) => {
-    iconReference.value?.style.setProperty('--color', color);
+    iconReference.value?.style.setProperty('--color', color)
   },
 })
 </script>
