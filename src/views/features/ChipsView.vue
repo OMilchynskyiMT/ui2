@@ -5,8 +5,8 @@
       <div class="content">
         <div v-for="{ kind, variant } in all()" :key="`${kind}-${variant}`">
           <MChip :kind="kind" :variant="variant" closable>
-            <template #leading><MIcon :icon="UserIcon" size="1rem" /></template>
-            <template #trailing><MIcon :icon="LockOpenIcon" size="1rem" /></template>
+            <template #leading><MIcon :icon="UserIcon" size="0.75rem" /></template>
+            <template #trailing><MIcon :icon="LockOpenIcon" size="0.75rem" /></template>
             {{ `${kind} ${variant}` }}
           </MChip>
         </div>
@@ -17,10 +17,8 @@
       <h2>Size: small</h2>
       <div class="content">
         <div v-for="{ kind, variant } in all()" :key="`${kind}-${variant}`">
-          <MChip :kind="kind" :variant="variant" closable size="small">
-            <template #leading><MIcon :icon="UserIcon" size="0.875rem" /></template>
-            <template #trailing><MIcon :icon="LockOpenIcon" size="0.875rem" /></template>
-            {{ `${kind} ${variant}` }}
+          123<MChip tag="sup" :kind="kind" :variant="variant" size="small">
+            123
           </MChip>
         </div>
       </div>
@@ -31,8 +29,8 @@
       <div class="content">
         <div v-for="{ kind, variant } in all()" :key="`${kind}-${variant}`">
           <MChip :kind="kind" :variant="variant" closable size="large" @close="() => console.debug('close pressed')">
-            <template #leading><MIcon :icon="UserIcon" size="1rem" /></template>
-            <template #trailing><MIcon :icon="LockOpenIcon" size="1rem" /></template>
+            <template #leading><MIcon :icon="UserIcon" size="0.75rem" /></template>
+            <template #trailing><MIcon :icon="LockOpenIcon" size="0.75rem" /></template>
             {{ `${kind} ${variant}` }}
           </MChip>
         </div>

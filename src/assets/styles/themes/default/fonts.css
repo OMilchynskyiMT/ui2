@@ -5,6 +5,7 @@
   --font-mono: 'SFMono-Regular', Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
 
   --font-size: 0.875rem;
+  --font-size-xxs: calc(var(--font-size) * 0.625);
   --font-size-xs: calc(var(--font-size) * 0.75);
   --font-size-sm: calc(var(--font-size) * 0.875);
   --font-size-md: var(--font-size);

@@ -1,5 +1,5 @@
 <template>
-  <div :data-kind="kind" :data-size="size" :data-variant="variant" :title="title" class="chip">
+  <component :is="tag" :data-kind="kind" :data-size="size" :data-variant="variant" :title="title" class="chip">
     <div v-if="slots.leading"><slot name="leading" /></div>
     <main>
       <span class="label">
@@ -18,7 +18,7 @@
       variant="icon"
       @click.prevent="emit('close')"
     />
-  </div>
+  </component>
 </template>
 
 <script lang="ts">
@@ -27,6 +27,7 @@ export type Kind = 'primary' | 'attention' | 'success' | 'neutral' | 'caution'
 export type Size = 'small' | 'medium' | 'large'
 
 export type Properties = {
+  tag?: 'div' | 'sup' | 'sub'
   variant?: Variant
   kind?: Kind
   size?: Size
@@ -43,6 +44,7 @@ import MButton from './buttons/MButton.vue'
 
 const slots = useSlots()
 const {
+  tag = 'div',
   variant = 'outlined',
   kind = 'primary',
   size = 'medium',
@@ -68,7 +70,7 @@ const emit = defineEmits<{
   --accent-color: currentColor;
   --font-size: var(--font-size-sm);
   padding-inline: var(--padding-inline, var(--space-sm));
-  block-size: var(--block-size, calc(var(--font-size) * 2));
+  padding-block: var(--padding-block, 0);
   column-gap: var(--gap-x, var(--space-xs));
   border-radius: var(--radius, var(--radius-md));
   cursor: var(--cursor, default);
@@ -108,21 +110,26 @@ const emit = defineEmits<{
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+      line-height: normal;
     }
   }
 
   &[data-size='small'] {
     --radius: var(--radius-sm);
-    --font-size: var(--font-size-xs);
-    --padding-inline: var(--space-xs);
-    --padding-block: var(--space-xxs);
+    --font-size: var(--font-size-xxs);
+    --padding-inline: var(--space-xxs);
     --gap-x: var(--space-xxs);
+  }
+  &[data-size='medium'] {
+    --padding-block: var(--space-xxs);
+    --padding-inline: var(--space-xs);
+    --font-size: var(--font-size-xs);
   }
   &[data-size='large'] {
     --radius: var(--radius-lg);
-    --font-size: var(--font-size-md);
+    --font-size: var(--font-size-sm);
     --padding-inline: var(--space-sm);
-    --padding-block: var(--space-sm);
+    --padding-block: var(--space-xs);
     --gap-x: var(--space-xs);
   }
 
