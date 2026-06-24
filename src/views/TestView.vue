@@ -40,6 +40,7 @@ const tabs = [
   { icon: GlobeIcon, label: 'Tab four', disabled: true },
   { label: 'Lists', route: 'lists' },
   { label: 'Chips', route: 'chips' },
+  { label: 'Dialogs', route: 'dialogs' },
 ]
 const $router = useRouter()
 const $route = useRoute()

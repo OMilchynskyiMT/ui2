@@ -37,6 +37,11 @@ const router = createRouter({
               name: 'chips',
               component: () => import('@/views/features/ChipsView.vue'),
             },
+            {
+              path: 'dialogs',
+              name: 'dialogs',
+              component: () => import('@/views/features/DialogsView.vue'),
+            },
           ],
         },
       ],
