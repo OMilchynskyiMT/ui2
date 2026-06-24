@@ -201,7 +201,7 @@ const {
     &:not(:disabled, .disabled, [data-variant='icon']) {
       &:not([data-variant='text']):is(:focus) {
         --outline-width: var(--input-border-width);
-        --outline-color: oklch(from var(--accent-color) l c h / 0.15);
+        --outline-color: oklch(from var(--accent-color) l c h / 0.1);
       }
 
       &:is(:hover, :focus) {
