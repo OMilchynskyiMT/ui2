@@ -142,6 +142,7 @@ onBeforeUnmount(() => {
   --border-color: var(--input-border-color);
   --transition-duration: var(--duration-md);
   --transition-func: var(--bezier-smooth);
+  --field-label-clearance: calc(var(--label-font-size-active) / 2);
 
   --prefix-color: oklch(from var(--input-text-color) l c h / 0.5);
   --prefix-opacity: 0;
@@ -154,6 +155,7 @@ onBeforeUnmount(() => {
   row-gap: var(--field-gap-y);
   cursor: var(--cursor);
   opacity: var(--opacity);
+  padding-block-start: var(--field-label-clearance);
 
   &:is(.not-ready) {
     --transition-duration: 0s;

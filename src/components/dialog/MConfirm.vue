@@ -59,9 +59,10 @@ export type Exposed = {
 import { onBeforeUnmount, useId, useSlots, useTemplateRef } from 'vue'
 import { CheckIcon, MessageSquareWarningIcon, XIcon } from '@lucide/vue'
 
-import MButton from '@/components/buttons/MButton.vue'
-import MDialog, { type Exposed as DialogExposed } from '@/components/dialog/MDialog.vue'
-import MIcon from '@/components/MIcon.vue'
+import MButton from '../buttons/MButton.vue'
+import MIcon from '../MIcon.vue'
+
+import MDialog, { type Exposed as DialogExposed } from './MDialog.vue'
 
 const dialog = useTemplateRef<DialogExposed>('dialog')
 
