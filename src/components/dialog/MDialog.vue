@@ -176,8 +176,8 @@ defineExpose<Exposed>({ show, close })
 dialog {
   margin: auto;
 
-  width: min(100% - 2rem, var(--dialog-width, 32rem));
-  max-block-size: calc(100dvb - 2rem);
+  width: min(100% - var(--space-xxl), var(--dialog-width, 32rem));
+  max-block-size: calc(100dvb - var(--space-xxl));
 
   color: inherit;
   background-color: transparent;

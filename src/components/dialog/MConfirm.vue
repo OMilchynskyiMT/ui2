@@ -128,8 +128,8 @@ section.content {
   position: relative;
   display: grid;
   grid-template-columns: 1fr;
-  gap: var(--gap, 2rem);
-  padding: var(--padding, 2rem);
+  gap: var(--gap, var(--space-xxl));
+  padding: var(--padding, var(--space-xxl));
 
   & > header {
     &,
@@ -141,14 +141,14 @@ section.content {
 
   & > footer.actions {
     display: flex;
-    gap: var(--actions-padding, 1rem);
+    gap: var(--actions-padding, var(--space-lg));
     justify-content: flex-end;
   }
 
   & > main {
     display: grid;
     grid-template-columns: 3rem 1fr;
-    gap: var(--gap, 2rem);
+    gap: var(--gap, var(--space-xxl));
 
     & > svg.icon {
       --color: var(--icon-color, var(--orange-400));
