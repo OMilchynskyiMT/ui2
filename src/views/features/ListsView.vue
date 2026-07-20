@@ -48,7 +48,7 @@ const popupShow = ref(false)
 const popupAnchor = ref<HTMLElement | null>(null)
 const popupPosition = ref<Placement>('bottom-start')
 
-const getbyId = (id: string): HTMLElement | null => globalThis.document.querySelector(`#${id}`)
+const getbyId = (id: string): HTMLElement | null => document.querySelector(`#${id}`)
 
 const showPopup = (anchor: HTMLElement | null, position: Placement) => {
   popupAnchor.value = anchor

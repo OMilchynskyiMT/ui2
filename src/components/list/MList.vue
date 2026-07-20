@@ -96,7 +96,7 @@ export const createListRows = <V,>(items: readonly ListOption<V>[], listId: stri
 
   const walk = (options: readonly ListOption<V>[], level: number, path: string): void => {
     for (const [index, option] of options.entries()) {
-      const key = path ? `${path}-${index}` : `${index}`
+      const key = path ? `${path}-${index}` : String(index)
 
       if (isListGroup(option)) {
         rows.push({ type: 'group', key: `group-${key}`, group: option, level })
