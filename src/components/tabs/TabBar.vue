@@ -11,9 +11,6 @@ import { onBeforeUnmount, onMounted, useTemplateRef } from 'vue'
 const tabBarReference = useTemplateRef('tabBarRef')
 const indicatorReference = useTemplateRef('indicator')
 
-let mutationObserver: MutationObserver | undefined
-let resizeObserver: ResizeObserver | undefined
-
 const updateIndicatorStyle = () => {
   const tabBar = tabBarReference.value
   const indicator = indicatorReference.value
@@ -33,21 +30,20 @@ const updateIndicatorStyle = () => {
   indicator.style.setProperty('--indicator-width', `${activeTabRect.width}px`)
 }
 
+const mutationObserver: MutationObserver = new MutationObserver(updateIndicatorStyle)
+const resizeObserver: ResizeObserver = new ResizeObserver(updateIndicatorStyle)
+
 onMounted(() => {
   const tabBar = tabBarReference.value
   if (!tabBar) return
-
-  updateIndicatorStyle()
-
-  mutationObserver = new MutationObserver(updateIndicatorStyle)
+  resizeObserver.observe(tabBar)
   mutationObserver.observe(tabBar, {
     attributes: true,
     childList: true,
     subtree: true,
   })
 
-  resizeObserver = new ResizeObserver(updateIndicatorStyle)
-  resizeObserver.observe(tabBar)
+  updateIndicatorStyle()
 
   for (const tab of tabBar.querySelectorAll('.tab-item')) {
     resizeObserver.observe(tab)
