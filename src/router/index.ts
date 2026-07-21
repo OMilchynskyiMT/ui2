@@ -47,6 +47,11 @@ const router = createRouter({
               name: 'menu',
               component: () => import('@/views/features/MenuView.vue'),
             },
+            {
+              path: 'grid',
+              name: 'grid',
+              component: () => import('@/views/features/GridView.vue'),
+            },
           ],
         },
       ],

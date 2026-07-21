@@ -12,7 +12,7 @@
     </TabItem>
   </TabBar>
 
-  <main style="padding: 3rem; overflow: clip;">
+  <main style="padding: 3rem; overflow: clip">
     <RouterView v-slot="{ Component }">
       <PageTransition :name="transtionName" appear>
         <component :is="Component" :key="$route.fullPath" />
@@ -42,6 +42,7 @@ const tabs = [
   { label: 'Chips', route: 'chips' },
   { label: 'Dialogs', route: 'dialogs' },
   { label: 'Menu', route: 'menu' },
+  { label: 'Grid', route: 'grid' },
 ]
 const $router = useRouter()
 const $route = useRoute()
