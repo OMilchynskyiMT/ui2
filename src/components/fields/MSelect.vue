@@ -25,7 +25,7 @@
     <button
       :id="id"
       ref="trigger"
-      v-bind="triggerAttrs"
+      v-bind="triggerAttributes"
       role="combobox"
       :aria-activedescendant="activeOptionId"
       :aria-controls="listId"
@@ -50,7 +50,9 @@
         </slot>
         <template v-else>{{ placeholder }}</template>
       </span>
-      <span aria-hidden="true" class="indicator" />
+      <span aria-hidden="true" class="indicator">
+        <MIcon :icon="ChevronDownIcon" size="1rem" />
+      </span>
     </button>
 
     <MPopup :anchor="popupAnchor" :offset="2" :open="isOpen" class="select-popup" parent-width @close="close">
@@ -107,9 +109,12 @@ export const TYPEAHEAD_RESET_TIMEOUT = 700
 
 <script generic="V extends string | number" lang="ts" setup>
 import { computed, nextTick, onBeforeUnmount, ref, useAttrs, useId, useSlots, useTemplateRef } from 'vue'
+import { ChevronDownIcon } from '@lucide/vue'
 
 import MList, { flattenListItems, getListOptionId, type ListItem as MListItem } from '@/components/list/MList.vue'
 import MPopup from '@/components/popup/MPopup.vue'
+
+import MIcon from '../MIcon.vue'
 
 import MFieldFrame, { type MFieldFrameExpose } from './MFieldFrame.vue'
 
@@ -144,7 +149,7 @@ const emit = defineEmits<{
 }>()
 
 const model = defineModel<V | null>({ required: true })
-const attrs = useAttrs()
+const attributes = useAttrs()
 const slots = useSlots()
 const frame = ref<MFieldFrameExpose>()
 const triggerReference = useTemplateRef<HTMLButtonElement>('trigger')
@@ -157,8 +162,8 @@ const previousValue = ref<V | null>(null)
 let typeaheadTimer: ReturnType<typeof globalThis.setTimeout> | undefined
 
 const popupAnchor = computed(() => frame.value?.container ?? null)
-const triggerAttrs = computed(() => {
-  const { name: _name, ...rest } = attrs
+const triggerAttributes = computed(() => {
+  const { name: _name, ...rest } = attributes
 
   return rest
 })
@@ -185,7 +190,7 @@ const isInvalid = computed(() => invalid || Boolean(error || slots.error))
 const isPopulated = computed(() => Boolean(selectedItem.value) || model.value != null || placeholder.trim() !== '')
 
 const hiddenInputName = computed(() => {
-  const name = attrs.name
+  const name = attributes.name
   return !disabled && typeof name === 'string' ? name : undefined
 })
 
@@ -201,11 +206,7 @@ const focus = (options?: FocusOptions): void => {
 
 const clearTypeahead = (): void => {
   typeahead.value = ''
-
-  if (typeaheadTimer) {
-    clearTimeout(typeaheadTimer)
-    typeaheadTimer = undefined
-  }
+  if (typeaheadTimer) clearTimeout(typeaheadTimer)
 }
 
 const close = (): void => {
@@ -320,7 +321,8 @@ const applyTypeahead = (key: string): void => {
     }
   }
 
-  typeaheadTimer = globalThis.setTimeout(clearTypeahead, TYPEAHEAD_RESET_TIMEOUT)
+  // eslint-disable-next-line unicorn/no-top-level-assignment-in-function
+  typeaheadTimer = setTimeout(clearTypeahead, TYPEAHEAD_RESET_TIMEOUT)
 }
 
 const isTypeaheadKey = (event: KeyboardEvent): boolean => {
@@ -447,19 +449,16 @@ defineExpose<MSelectExpose>({
   }
 
   & > .indicator {
-    flex: 0 0 auto;
-    inline-size: 0.5rem;
-    block-size: 0.5rem;
-    border-block-end: 2px solid currentColor;
-    border-inline-end: 2px solid currentColor;
-    opacity: 0.72;
-    transform: translateY(-25%) rotate(45deg);
+    display: grid;
+    place-items: center;
+    transform: scaleY(1);
+    color: oklch(from currentColor l c h / 0.5);
 
-    transition: transform var(--duration-sm) var(--bezier-smooth);
+    transition: transform var(--duration-md) var(--bezier-smooth);
   }
 
   &[aria-expanded='true'] > .indicator {
-    transform: translateY(25%) rotate(225deg);
+    transform: scaleY(-1);
   }
 }
 </style>
