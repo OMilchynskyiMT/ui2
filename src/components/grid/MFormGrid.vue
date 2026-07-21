@@ -42,7 +42,7 @@ div.outer {
   --row-gap: var(--space-xxl);
   --column-gap: var(--space-xxl);
 
-  inline-size: min(100%, var(--container-xl));
+  max-inline-size: min(100%, var(--container-xl));
   container-type: inline-size;
 
   & > div.grid {
@@ -56,19 +56,19 @@ div.outer {
     gap: var(--row-gap) var(--column-gap);
   }
 
-  @container (min-width: var(--container-md)) {
+  @container (min-width: container-token(--container-md)) {
     div.grid {
       --grid-columns: var(--columns-md, var(--columns-sm, 1));
     }
   }
 
-  @container (min-width: var(--container-lg)) {
+  @container (min-width: container-token(--container-lg)) {
     div.grid {
       --grid-columns: var(--columns-lg, var(--columns-md, var(--columns-sm, 1)));
     }
   }
 
-  @container (min-width: var(--container-xl)) {
+  @container (min-width: container-token(--container-xl)) {
     div.grid {
       --grid-columns: var(--columns-xl, var(--columns-lg, var(--columns-md, var(--columns-sm, 1))));
     }

@@ -107,8 +107,8 @@
   --ripple-color: currentColor;
   --ripple-bezier: var(--bezier-smooth-entrance);
 
-  --container-sm: 36rem;
-  --container-md: 48rem;
-  --container-lg: 64rem;
-  --container-xl: 80rem;
+  --container-sm: container-token(--container-sm);
+  --container-md: container-token(--container-md);
+  --container-lg: container-token(--container-lg);
+  --container-xl: container-token(--container-xl);
 }
