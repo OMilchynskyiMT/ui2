@@ -31,11 +31,23 @@
   --radius-xl: 1rem;
   --radius-full: 9999px;
 
-  --shadow-xs: 0 0 0.125rem oklch(0 0 0 / 0.1);
-  --shadow-sm: 0 0.125rem 0.25rem oklch(0 0 0 / 0.12);
-  --shadow-md: 0 0.25rem 0.5rem oklch(0 0 0 / 0.12);
-  --shadow-lg: 0 0.5rem 1rem oklch(0 0 0 / 0.18);
-  --shadow-xl: 0 1rem 2rem oklch(0 0 0 / 0.2);
+  --shadow-xs-shape: 0 0.0625rem 0.125rem;
+  --shadow-sm-shape: 0 0.125rem 0.25rem;
+  --shadow-md-shape: 0 0.25rem 0.5rem;
+  --shadow-lg-shape: 0 0.5rem 1rem;
+  --shadow-xl-shape: 0 1rem 2rem;
+
+  --shadow-xs-opacity: 0.5;
+  --shadow-sm-opacity: 0.25;
+  --shadow-md-opacity: 0.225;
+  --shadow-lg-opacity: 0.25;
+  --shadow-xl-opacity: 0.25;
+
+  --shadow-xs: var(--shadow-xs-shape) oklch(from var(--black) l c h / var(--shadow-xs-opacity));
+  --shadow-sm: var(--shadow-sm-shape) oklch(from var(--black) l c h / var(--shadow-sm-opacity));
+  --shadow-md: var(--shadow-md-shape) oklch(from var(--black) l c h / var(--shadow-md-opacity));
+  --shadow-lg: var(--shadow-lg-shape) oklch(from var(--black) l c h / var(--shadow-lg-opacity));
+  --shadow-xl: var(--shadow-xl-shape) oklch(from var(--black) l c h / var(--shadow-xl-opacity));
 
   --bezier-smooth-entrance: cubic-bezier(0, 0, 0.2, 1);
   --bezier-soft-exit: cubic-bezier(0.4, 0, 1, 1);
@@ -94,4 +106,9 @@
   --ripple-duration: 550ms;
   --ripple-color: currentColor;
   --ripple-bezier: var(--bezier-smooth-entrance);
+
+  --container-sm: 36rem;
+  --container-md: 48rem;
+  --container-lg: 64rem;
+  --container-xl: 80rem;
 }

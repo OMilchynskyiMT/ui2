@@ -1,5 +1,6 @@
 :root {
   --white: oklch(100% 0 0);
+  --black: oklch(0% 0 0);
 
   /* grey */
   --gray-50: oklch(98.5% 0.002 250);
