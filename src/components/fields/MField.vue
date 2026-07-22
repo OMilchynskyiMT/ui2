@@ -21,7 +21,7 @@
     <input
       :id="id"
       ref="input"
-      v-bind="attrs"
+      v-bind="attributes"
       :aria-details="hint || slots.hint ? `${id}-hint` : undefined"
       :aria-disabled="disabled"
       :aria-errormessage="isInvalid && (error || slots.error) ? `${id}-error` : undefined"
@@ -66,7 +66,7 @@ defineOptions({
 })
 
 const slots = useSlots()
-const attrs = useAttrs()
+const attributes = useAttrs()
 
 const {
   id = useId(),
@@ -137,11 +137,13 @@ const onChange = (event: Event): void => {
 </script>
 
 <style scoped>
-input {
-  display: block;
-  min-inline-size: 0;
-  inline-size: 100%;
-  block-size: var(--input-height);
-  cursor: var(--cursor);
+@layer components {
+  input {
+    display: block;
+    min-inline-size: 0;
+    inline-size: 100%;
+    block-size: var(--input-height);
+    cursor: var(--cursor);
+  }
 }
 </style>

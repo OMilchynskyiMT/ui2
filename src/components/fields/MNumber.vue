@@ -3,7 +3,7 @@
     :id="id"
     ref="field"
     v-model="text"
-    v-bind="attrs"
+    v-bind="attributes"
     :aria-valuemax="max"
     :aria-valuemin="min"
     :disabled="disabled"
@@ -94,7 +94,7 @@ const emit = defineEmits<{
 }>()
 
 const slots = useSlots()
-const attrs = useAttrs()
+const attributes = useAttrs()
 
 const model = defineModel<NumberModel>({ required: true })
 const field = ref<MFieldExpose>()

@@ -57,28 +57,30 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
-.tab-bar {
-  position: relative;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  justify-content: flex-start;
-  align-items: stretch;
-  align-content: stretch;
-  gap: var(--gap, 0);
+@layer components {
+  .tab-bar {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: stretch;
+    align-content: stretch;
+    gap: var(--gap, 0);
 
-  & > .indicator {
-    position: absolute;
-    bottom: 0;
-    background-color: var(--tab-active-border-color);
-    height: var(--tab-border-width);
-    border-radius: var(--radius-full);
-    width: var(--indicator-width, 0);
-    transform: translateX(var(--indicator-x, 0));
-    will-change: transform, width;
-    transition:
-      transform var(--duration-lg) var(--bezier-magnetic),
-      width var(--duration-md) var(--bezier-smooth);
+    & > .indicator {
+      position: absolute;
+      bottom: 0;
+      background-color: var(--tab-active-border-color);
+      height: var(--tab-border-width);
+      border-radius: var(--radius-full);
+      width: var(--indicator-width, 0);
+      transform: translateX(var(--indicator-x, 0));
+      will-change: transform, width;
+      transition:
+        transform var(--duration-lg) var(--bezier-magnetic),
+        width var(--duration-md) var(--bezier-smooth);
+    }
   }
 }
 </style>

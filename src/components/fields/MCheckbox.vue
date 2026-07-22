@@ -2,7 +2,7 @@
   <MSelectionControl
     :id="id"
     ref="control"
-    v-bind="attrs"
+    v-bind="attributes"
     :checked="model"
     :disabled="disabled"
     :error="error"
@@ -74,7 +74,7 @@ const emit = defineEmits<{
 }>()
 
 const model = defineModel<boolean>({ required: true })
-const attrs = useAttrs()
+const attributes = useAttrs()
 const slots = useSlots()
 const control = ref<MSelectionControlExpose>()
 

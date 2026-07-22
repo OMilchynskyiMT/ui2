@@ -12,10 +12,10 @@ export type TransitionName = 'fade'
 const {
   name = 'fade',
   duration = 160,
-  appear = false
+  appear = false,
 } = defineProps<{
   name?: TransitionName
-  duration?: number,
+  duration?: number
   appear?: boolean
 }>()
 
@@ -23,28 +23,30 @@ const cssDuration = `${duration}ms`
 </script>
 
 <style scoped>
-.fade-enter-active,
-.fade-leave-active {
-  will-change: opacity;
-  transition-property: opacity;
-  transition-duration: var(--duration, v-bind(cssDuration));
-  transition-timing-function: var(--bezier-smooth);
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-
-.fade-enter-to,
-.fade-leave-from {
-  opacity: 1;
-}
-
-@media (prefers-reduced-motion: reduce) {
+@layer components {
   .fade-enter-active,
   .fade-leave-active {
-    transition: none;
+    will-change: opacity;
+    transition-property: opacity;
+    transition-duration: var(--duration, v-bind(cssDuration));
+    transition-timing-function: var(--bezier-smooth);
+  }
+
+  .fade-enter-from,
+  .fade-leave-to {
+    opacity: 0;
+  }
+
+  .fade-enter-to,
+  .fade-leave-from {
+    opacity: 1;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fade-enter-active,
+    .fade-leave-active {
+      transition: none;
+    }
   }
 }
 </style>

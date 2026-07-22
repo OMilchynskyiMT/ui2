@@ -1,36 +1,37 @@
 <template>
   <MDialog
     ref="dialog"
-    :aria-describedby="messageId"
-    :aria-labeledby="slots.title || title ? headerId : undefined"
+    :aria-describedby="slots.default || message ? messageId : undefined"
+    :aria-labelledby="slots.title || title ? headerId : undefined"
     @close="closed"
+    @closing="closing"
   >
-    <form action="" @reset.prevent="decline" @submit.prevent="accept">
-      <section class="content">
+    <form @submit.prevent="accept">
+      <div class="content">
         <header v-if="slots.title || title">
           <h2 :id="headerId">
             <slot name="title">{{ title }}</slot>
           </h2>
         </header>
 
-        <main v-if="slots.default || message" :id="messageId">
-          <MIcon :icon="MessageSquareWarningIcon" size="3rem" />
+        <div v-if="slots.default || message" :id="messageId" :style="{ '--icon-size': iconSize }" class="message">
+          <MIcon :icon="icon" :size="iconSize" class="message-icon" />
           <div>
             <slot>{{ message }}</slot>
           </div>
-        </main>
+        </div>
 
         <footer class="actions">
-          <MButton kind="primary" type="submit" variant="outlined">
-            <MIcon :icon="CheckIcon" size="1rem" />
-            <span>{{ acceptText }}</span>
-          </MButton>
-          <MButton kind="neutral" type="reset" variant="tonal">
-            <MIcon :icon="XIcon" size="1rem" />
+          <MButton kind="neutral" variant="tonal" @click="decline">
+            <MIcon :icon="XIcon" :size="actionIconSize" />
             <span>{{ declineText }}</span>
           </MButton>
+          <MButton kind="primary" type="submit" variant="outlined">
+            <MIcon :icon="CheckIcon" :size="actionIconSize" />
+            <span>{{ acceptText }}</span>
+          </MButton>
         </footer>
-      </section>
+      </div>
     </form>
   </MDialog>
 </template>
@@ -45,6 +46,8 @@ export type Properties = {
   title?: string
   message?: string
   icon?: Component
+  iconSize?: string
+  actionIconSize?: string
 
   acceptText?: string
   declineText?: string
@@ -52,6 +55,12 @@ export type Properties = {
 
 export type Exposed = {
   confirm: () => Promise<boolean>
+}
+
+type PendingConfirmation = {
+  promise: Promise<boolean>
+  resolve: (value: boolean | PromiseLike<boolean>) => void
+  result?: boolean
 }
 </script>
 
@@ -64,6 +73,7 @@ import MIcon from '../MIcon.vue'
 
 import MDialog, { type Exposed as DialogExposed } from './MDialog.vue'
 
+let pending: PendingConfirmation | undefined
 const dialog = useTemplateRef<DialogExposed>('dialog')
 
 const slots = useSlots()
@@ -74,89 +84,90 @@ const {
   message,
   acceptText = 'OK',
   declineText = 'Cancel',
+  icon = MessageSquareWarningIcon,
+  iconSize = '3rem',
+  actionIconSize = '1rem',
 } = defineProps<Properties>()
 
-let promise: Promise<boolean> | undefined
-let resolvePromise: ((value: boolean) => void) | undefined
-let result = false
-
-const resolve = (value: boolean): void => {
-  if (!resolvePromise) return
-  const resolver = resolvePromise
-
-  promise = undefined
-  resolvePromise = undefined
-  result = false
-
-  resolver(value)
-}
-
 const confirm = (): Promise<boolean> => {
-  if (promise) return promise
+  if (pending) {
+    return pending.promise
+  }
+
   if (!dialog.value) return Promise.resolve(false)
 
-  result = false
-
-  promise = new Promise<boolean>(resolve => {
-    resolvePromise = resolve
-  })
-
+  const { promise, resolve } = Promise.withResolvers<boolean>()
+  pending = { promise, resolve }
   dialog.value.show()
 
   return promise
 }
 
 const setResult = (value: boolean): void => {
-  if (!resolvePromise) return
-  result = value
+  // NOTE: first close decision wins
+  if (!pending || pending.result !== undefined) return
+  pending.result = value
   dialog.value?.close()
+}
+
+const settle = (fallback: boolean): void => {
+  if (!pending) return
+
+  const current = pending
+  pending = undefined
+  current.resolve(current.result ?? fallback)
+}
+
+const closing = (): void => {
+  if (!pending) return
+  pending.result ??= false
 }
 
 const accept = (): void => setResult(true)
 const decline = (): void => setResult(false)
-const closed = (): void => {
-  resolve(result)
-}
+const closed = (): void => settle(false)
 
 defineExpose<Exposed>({ confirm })
-onBeforeUnmount(() => {
-  resolve(false)
-})
+onBeforeUnmount(() => settle(false))
 </script>
 
 <style scoped>
-section.content {
-  position: relative;
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--gap, var(--space-xxl));
-  padding: var(--padding, var(--space-xxl));
-
-  & > header {
-    &,
-    & > h2 {
-      line-height: 1;
-      font-weight: 500;
-    }
-  }
-
-  & > footer.actions {
-    display: flex;
-    gap: var(--actions-padding, var(--space-lg));
-    justify-content: flex-end;
-  }
-
-  & > main {
+@layer components {
+  div.content {
+    position: relative;
     display: grid;
-    grid-template-columns: 3rem 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: var(--gap, var(--space-xxl));
+    padding: var(--padding, var(--space-xxl));
 
-    & > svg.icon {
-      --color: var(--icon-color, var(--orange-400));
+    & > header {
+      &,
+      & > h2 {
+        font-weight: var(--font-weight-semibold);
+      }
     }
 
-    & > div {
-      font-size: var(--font-size-md);
+    & > footer.actions {
+      display: flex;
+      flex-wrap: wrap;
+      flex-direction: row-reverse;
+      gap: var(--actions-gap, var(--space-lg));
+    }
+
+    & > div.message {
+      display: grid;
+      grid-template-columns: var(--icon-size) minmax(0, 1fr);
+      gap: var(--gap, var(--space-xxl));
+
+      & > .message-icon {
+        --color: var(--icon-color, var(--orange-400));
+      }
+
+      & > div {
+        min-inline-size: 0;
+        overflow-wrap: anywhere;
+        font-size: var(--font-size-md);
+      }
     }
   }
 }

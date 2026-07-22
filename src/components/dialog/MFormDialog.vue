@@ -1,7 +1,7 @@
 <template>
   <MDialog
     ref="dialog"
-    v-bind="{ style: attrs.style, class: attrs.class }"
+    v-bind="{ style: attributes.style, class: attributes.class }"
     :aria-labelledby="title ? headerId : undefined"
     :persistent="persistent || submitting"
     class="m-form-dialog"
@@ -15,12 +15,16 @@
         </h2>
       </header>
 
-      <main class="content">
+      <div class="content">
         <slot :cancel="cancel" :close="close" :submit="submitForm" :submitting="submitting" />
-      </main>
+      </div>
 
       <footer class="actions">
         <slot :cancel="cancel" :close="close" :submit="submitForm" :submitting="submitting" name="actions">
+          <MButton :disabled="submitting" kind="neutral" type="reset" variant="tonal" @click="cancel">
+            <MIcon :icon="XIcon" size="1rem" />
+            {{ cancelText }}
+          </MButton>
           <MButton
             :disabled="submitting || submitDisabled"
             :loading="submitting && !submittingText"
@@ -30,10 +34,6 @@
           >
             <MIcon :icon="CheckIcon" size="1rem" />
             {{ submitting && submittingText ? submittingText : submitText }}
-          </MButton>
-          <MButton :disabled="submitting" kind="neutral" type="reset" variant="tonal" @click="cancel">
-            <MIcon :icon="XIcon" size="1rem" />
-            {{ cancelText }}
           </MButton>
         </slot>
       </footer>
@@ -94,7 +94,7 @@ const emit = defineEmits<{
 
 const dialog = useTemplateRef<DialogExposed>('dialog')
 const form = useTemplateRef<HTMLFormElement>('form')
-const attrs = useAttrs()
+const attributes = useAttrs()
 
 const submitting = ref(false)
 
@@ -123,7 +123,7 @@ const closed = (): void => {
   emit('close')
 }
 
-const runNativeValidation = (): boolean => {
+const isValid = (): boolean => {
   if (!validate) return true
   if (!form.value) return true
   return form.value.reportValidity()
@@ -132,7 +132,7 @@ const runNativeValidation = (): boolean => {
 const submitForm = async (): Promise<void> => {
   if (submitting.value) return
   if (submitDisabled) return
-  if (!runNativeValidation()) return
+  if (!isValid()) return
 
   submitting.value = true
 
@@ -156,32 +156,33 @@ defineExpose<Exposed>({
 </script>
 
 <style scoped>
-.form {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--form-gap, var(--space-xxl));
-  max-block-size: inherit;
-  padding: var(--form-padding, var(--space-xxl));
-
-  .title {
-    margin: 0;
-    font-size: var(--title-font-size, var(--font-size-lg));
-    font-weight: 600;
-    line-height: 1.3;
-  }
-
-  .content {
+@layer components {
+  .form {
     display: grid;
-    gap: var(--form-content-gap, var(--space-xxl));
-    min-block-size: 0;
-    overflow: auto;
-    overscroll-behavior: contain;
-  }
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--form-gap, var(--space-xxl));
+    max-block-size: inherit;
+    padding: var(--form-padding, var(--space-xxl));
 
-  .actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: var(--space-md);
+    .title {
+      font-size: var(--title-font-size, var(--font-size-lg));
+      font-weight: var(--font-weight-semibold);
+    }
+
+    .content {
+      display: grid;
+      gap: var(--form-content-gap, var(--space-xxl));
+      min-block-size: 0;
+      overflow: auto;
+      overscroll-behavior: contain;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      flex-direction: row-reverse;
+      gap: var(--actions-gap, var(--space-lg));
+    }
   }
 }
 </style>

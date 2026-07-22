@@ -1,12 +1,11 @@
 <template>
-  <Teleport to="#modals">
+  <Teleport :to="teleportTo">
     <dialog
       ref="dialog"
-      v-bind="dialogAttrs"
+      v-bind="getDialogAttributes()"
       :data-phase="phase"
       @cancel="cancel"
       @close="closed"
-      @keydown.capture="keydown"
       @transitionend.self="transitionend"
     >
       <div class="surface"><slot /></div>
@@ -16,26 +15,28 @@
 
 <script lang="ts">
 export type Exposed = {
-  show: (modal?: boolean) => void
+  show: (isModal?: boolean) => void
   close: () => void
 }
 </script>
 
 <script lang="ts" setup>
-import { computed, onBeforeUnmount, ref, useAttrs, useTemplateRef } from 'vue'
+import { onBeforeUnmount, ref, type TeleportProps, useAttrs, useTemplateRef } from 'vue'
 
 defineOptions({ inheritAttrs: false })
 
 type Phase = 'closed' | 'opened' | 'closing'
 
-const attrs = useAttrs()
+const attributes = useAttrs()
 
-const { persistent = false } = defineProps<{
+const { persistent = false, teleportTo = '#modals' } = defineProps<{
+  teleportTo?: TeleportProps['to']
   persistent?: boolean
 }>()
 
 const emit = defineEmits<{
   show: [modal: boolean]
+  closing: []
   close: []
   cancel: [event: Event]
 }>()
@@ -45,20 +46,22 @@ const phase = ref<Phase>('closed')
 
 let closeTimer: number | undefined
 
-const dialogAttrs = computed(() => {
-  const result = { ...attrs }
+const getDialogAttributes = (): Record<string, unknown> => {
+  const result = { ...attributes }
   delete result.open
   return result
-})
+}
 
 const clearCloseTimer = (): void => {
   if (closeTimer === undefined) return
-  globalThis.clearTimeout(closeTimer)
+
+  clearTimeout(closeTimer)
   closeTimer = undefined
 }
 
 const parseCssTime = (value: string): number => {
   const trimmed = value.trim()
+  // eslint-disable-next-line unicorn/prefer-number-coercion
   const amount = Number.parseFloat(trimmed)
   if (Number.isNaN(amount)) return 0
 
@@ -66,7 +69,7 @@ const parseCssTime = (value: string): number => {
 }
 
 const getTransitionDuration = (element: HTMLElement): number => {
-  const styles = globalThis.getComputedStyle(element)
+  const styles = getComputedStyle(element)
   const durations = styles.transitionDuration.split(',').map(value => parseCssTime(value))
   const delays = styles.transitionDelay.split(',').map(value => parseCssTime(value))
   const count = Math.max(durations.length, delays.length)
@@ -84,9 +87,9 @@ const getTransitionDuration = (element: HTMLElement): number => {
 }
 
 const finishClose = (): void => {
+  clearCloseTimer()
   const element = dialog.value
   if (!element?.open) return
-  clearCloseTimer()
 
   phase.value = 'closed'
   element.close()
@@ -104,23 +107,23 @@ const scheduleClose = (): void => {
     return
   }
 
-  closeTimer = globalThis.setTimeout(finishClose, duration + 50)
+  closeTimer = setTimeout(finishClose, duration + 50)
 }
 
-const show = (modal = true): void => {
+const show = (isModal = true): void => {
   const element = dialog.value
   if (!element || element.open) return
   clearCloseTimer()
 
   phase.value = 'opened'
 
-  if (modal) {
+  if (isModal) {
     element.showModal()
   } else {
     element.show()
   }
 
-  emit('show', modal)
+  emit('show', isModal)
 }
 
 const close = (): void => {
@@ -129,17 +132,8 @@ const close = (): void => {
   if (phase.value === 'closing') return
 
   phase.value = 'closing'
+  emit('closing')
   scheduleClose()
-}
-
-const keydown = (event: KeyboardEvent): void => {
-  if (!persistent) return
-  if (event.key !== 'Escape') return
-  if (!dialog.value?.open) return
-
-  event.preventDefault()
-  event.stopPropagation()
-  event.stopImmediatePropagation()
 }
 
 const cancel = (event: Event): void => {
@@ -173,79 +167,81 @@ defineExpose<Exposed>({ show, close })
 </script>
 
 <style scoped>
-dialog {
-  margin: auto;
+@layer components {
+  dialog {
+    margin: auto;
 
-  width: min(100% - var(--space-xxl), var(--dialog-width, 32rem));
-  max-block-size: calc(100dvb - var(--space-xxl));
+    inline-size: min(100% - var(--space-xxl), var(--dialog-width, 32rem));
+    max-block-size: calc(100dvb - var(--space-xxl));
 
-  color: inherit;
-  background-color: transparent;
-  opacity: 0;
-  overflow: visible;
-  transform: scale(0.96) translateY(-0.75rem);
-  border-radius: var(--dialog-radius, var(--radius-md));
-  box-shadow: var(--dialog-shadow, var(--shadow-md));
-
-  transition-property: opacity, transform;
-  transition-duration: var(--duration-md);
-  transition-timing-function: var(--bezier-magnetic);
-
-  &[data-phase='opened'] {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
-
-  &[data-phase='closing'] {
-    opacity: 0;
-    transform: scale(0.96) translateY(-0.75rem);
-  }
-
-  & > div.surface {
-    max-block-size: inherit;
-    overflow: auto;
-    overscroll-behavior: contain;
-
-    border-radius: inherit;
-    background-color: var(--dialog-bg, var(--bg));
-  }
-
-  &::backdrop {
+    color: inherit;
     background-color: transparent;
-    backdrop-filter: blur(0);
+    opacity: 0;
+    overflow: visible;
+    transform: scale(0.96) translateY(-0.75rem);
+    border-radius: var(--dialog-radius, var(--radius-md));
+    box-shadow: var(--dialog-shadow, var(--shadow-md));
 
-    transition-property: background-color, backdrop-filter;
+    transition-property: opacity, transform;
     transition-duration: var(--duration-md);
-    transition-timing-function: var(--bezier-smooth);
+    transition-timing-function: var(--bezier-magnetic);
+
+    &[data-phase='opened'] {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+
+    &[data-phase='closing'] {
+      opacity: 0;
+      transform: scale(0.96) translateY(-0.75rem);
+    }
+
+    & > div.surface {
+      max-block-size: inherit;
+      overflow: auto;
+      overscroll-behavior: contain;
+
+      border-radius: inherit;
+      background-color: var(--dialog-bg, var(--bg));
+    }
+
+    &::backdrop {
+      background-color: transparent;
+      backdrop-filter: blur(0);
+
+      transition-property: background-color, backdrop-filter;
+      transition-duration: var(--duration-md);
+      transition-timing-function: var(--bezier-smooth);
+    }
+
+    &[data-phase='opened']::backdrop {
+      background-color: var(--dialog-backdrop-bg, oklch(0 0 0 / 0.25));
+      backdrop-filter: var(--dialog-backdrop-filter, blur(0.15rem));
+    }
+
+    &[data-phase='closing']::backdrop {
+      background-color: transparent;
+      backdrop-filter: blur(0);
+    }
   }
 
-  &[data-phase='opened']::backdrop {
-    background-color: var(--dialog-backdrop-bg, oklch(0 0 0 / 0.25));
-    backdrop-filter: var(--dialog-backdrop-filter, blur(0.15rem));
+  @starting-style {
+    dialog[data-phase='opened'] {
+      opacity: 0;
+      transform: scale(0.96) translateY(-0.75rem);
+    }
+
+    dialog[data-phase='opened']::backdrop {
+      background-color: transparent;
+      backdrop-filter: blur(0);
+    }
   }
 
-  &[data-phase='closing']::backdrop {
-    background-color: transparent;
-    backdrop-filter: blur(0);
-  }
-}
-
-@starting-style {
-  dialog[data-phase='opened'] {
-    opacity: 0;
-    transform: scale(0.96) translateY(-0.75rem);
-  }
-
-  dialog[data-phase='opened']::backdrop {
-    background-color: transparent;
-    backdrop-filter: blur(0);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  dialog,
-  dialog::backdrop {
-    transition-duration: 0s;
+  @media (prefers-reduced-motion: reduce) {
+    dialog,
+    dialog::backdrop {
+      transition-duration: 0s;
+    }
   }
 }
 </style>

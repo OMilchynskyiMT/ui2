@@ -38,39 +38,41 @@ const styles = computed(() =>
 </script>
 
 <style scoped>
-div.outer {
-  --row-gap: var(--space-xxl);
-  --column-gap: var(--space-xxl);
+@layer components {
+  div.outer {
+    --row-gap: var(--space-xxl);
+    --column-gap: var(--space-xxl);
 
-  max-inline-size: min(100%, var(--container-xl));
-  container-type: inline-size;
+    max-inline-size: min(100%, var(--container-xl));
+    container-type: inline-size;
 
-  & > div.grid {
-    --grid-columns: var(--columns-sm, 1);
+    & > div.grid {
+      --grid-columns: var(--columns-sm, 1);
 
-    display: grid;
-    grid-template-columns: repeat(var(--grid-columns), minmax(0, 1fr));
-    place-items: start;
-    align-items: start;
-    justify-items: stretch;
-    gap: var(--row-gap) var(--column-gap);
-  }
-
-  @container (min-width: container-token(--container-md)) {
-    div.grid {
-      --grid-columns: var(--columns-md, var(--columns-sm, 1));
+      display: grid;
+      grid-template-columns: repeat(var(--grid-columns), minmax(0, 1fr));
+      place-items: start;
+      align-items: start;
+      justify-items: stretch;
+      gap: var(--row-gap) var(--column-gap);
     }
-  }
 
-  @container (min-width: container-token(--container-lg)) {
-    div.grid {
-      --grid-columns: var(--columns-lg, var(--columns-md, var(--columns-sm, 1)));
+    @container (min-width: container-token(--container-md)) {
+      div.grid {
+        --grid-columns: var(--columns-md, var(--columns-sm, 1));
+      }
     }
-  }
 
-  @container (min-width: container-token(--container-xl)) {
-    div.grid {
-      --grid-columns: var(--columns-xl, var(--columns-lg, var(--columns-md, var(--columns-sm, 1))));
+    @container (min-width: container-token(--container-lg)) {
+      div.grid {
+        --grid-columns: var(--columns-lg, var(--columns-md, var(--columns-sm, 1)));
+      }
+    }
+
+    @container (min-width: container-token(--container-xl)) {
+      div.grid {
+        --grid-columns: var(--columns-xl, var(--columns-lg, var(--columns-md, var(--columns-sm, 1))));
+      }
     }
   }
 }

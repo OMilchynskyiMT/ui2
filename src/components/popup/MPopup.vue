@@ -2,7 +2,7 @@
   <Teleport to="body">
     <PopupTransition>
       <div v-if="open" ref="positioner" :data-placement="currentPlacement" class="popup-positioner">
-        <div ref="popup" v-bind="attrs" class="popup" @pointerdown.stop>
+        <div ref="popup" v-bind="attributes" class="popup" @pointerdown.stop>
           <slot />
         </div>
       </div>
@@ -34,11 +34,7 @@ type Position = {
   inlineStart: number
 }
 
-const props = withDefaults(defineProps<Properties>(), {
-  placement: 'bottom-start',
-  offset: 0,
-  parentWidth: false,
-})
+const { placement = 'bottom-start', offset = 0, parentWidth = false, open, anchor } = defineProps<Properties>()
 
 const emit = defineEmits<{
   close: []
@@ -48,29 +44,29 @@ defineOptions({
   inheritAttrs: false,
 })
 
-const attrs = useAttrs()
+const attributes = useAttrs()
 const popup = useTemplateRef<HTMLDivElement>('popup')
 const positioner = useTemplateRef<HTMLDivElement>('positioner')
-const currentPlacement = ref<Placement>(props.placement)
+const currentPlacement = ref<Placement>(placement)
 
 let frame = 0
 
 const getPosition = (anchorRect: DOMRect, popupRect: DOMRect): Position => {
   const positions: Record<Placement, Position> = {
     'bottom-start': {
-      blockStart: anchorRect.bottom + props.offset,
+      blockStart: anchorRect.bottom + offset,
       inlineStart: anchorRect.left,
     },
     'bottom-end': {
-      blockStart: anchorRect.bottom + props.offset,
+      blockStart: anchorRect.bottom + offset,
       inlineStart: anchorRect.right - popupRect.width,
     },
     'top-start': {
-      blockStart: anchorRect.top - popupRect.height - props.offset,
+      blockStart: anchorRect.top - popupRect.height - offset,
       inlineStart: anchorRect.left,
     },
     'top-end': {
-      blockStart: anchorRect.top - popupRect.height - props.offset,
+      blockStart: anchorRect.top - popupRect.height - offset,
       inlineStart: anchorRect.right - popupRect.width,
     },
   }
@@ -79,14 +75,13 @@ const getPosition = (anchorRect: DOMRect, popupRect: DOMRect): Position => {
 }
 
 const updatePosition = (): void => {
-  const anchor = props.anchor
   const element = positioner.value
 
   if (!anchor || !element) return
 
   const anchorRect = anchor.getBoundingClientRect()
 
-  if (props.parentWidth) {
+  if (parentWidth) {
     element.style.setProperty('--inline-size', `${anchorRect.width}px`)
   } else {
     element.style.removeProperty('--inline-size')
@@ -107,13 +102,13 @@ const requestPositionUpdate = (): void => {
   })
 }
 
-const containsTarget = (element: HTMLElement | null | undefined, target: EventTarget | null): boolean => {
+const isContainsTarget = (element: HTMLElement | null | undefined, target: EventTarget | null): boolean => {
   return target instanceof Node && Boolean(element?.contains(target))
 }
 
 const onDocumentPointerDown = (event: Event): void => {
-  if (containsTarget(popup.value, event.target)) return
-  if (containsTarget(props.anchor, event.target)) return
+  if (isContainsTarget(popup.value, event.target)) return
+  if (isContainsTarget(anchor, event.target)) return
 
   emit('close')
 }
@@ -144,29 +139,26 @@ const { start, stop } = useEventListeners(() => [
     },
   },
   {
-    target: globalThis.document,
+    target: document,
     type: 'pointerdown',
     listener: onDocumentPointerDown,
   },
   {
-    target: globalThis.document,
+    target: document,
     type: 'keydown',
     listener: onDocumentKeydown,
   },
 ])
 
 watch(
-  () => [props.open, props.anchor, props.placement, props.offset, props.parentWidth] as const,
+  () => [open, anchor, placement, offset, parentWidth] as const,
   async ([isOpen]) => {
     stop()
     cancelAnimationFrame(frame)
 
     if (!isOpen) return
-
-    currentPlacement.value = props.placement
-
+    currentPlacement.value = placement
     await nextTick()
-
     updatePosition()
     start()
   },
@@ -183,14 +175,16 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-.popup-positioner {
-  position: fixed;
-  inset-block-start: var(--inset-block-start, 0px);
-  inset-inline-start: var(--inset-inline-start, 0px);
-  inline-size: var(--inline-size, max-content);
-}
+@layer components {
+  .popup-positioner {
+    position: fixed;
+    inset-block-start: var(--inset-block-start, 0px);
+    inset-inline-start: var(--inset-inline-start, 0px);
+    inline-size: var(--inline-size, max-content);
+  }
 
-.popup {
-  inline-size: 100%;
+  .popup {
+    inline-size: 100%;
+  }
 }
 </style>

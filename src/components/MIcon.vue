@@ -26,9 +26,11 @@ defineExpose<Exposed>({
 </script>
 
 <style scoped>
-.icon {
-  color: var(--color, currentColor);
-  flex: 0 0 auto;
-  display: inline-block;
+@layer components {
+  .icon {
+    color: var(--color, currentColor);
+    flex: 0 0 auto;
+    display: inline-block;
+  }
 }
 </style>

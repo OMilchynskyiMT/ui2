@@ -321,7 +321,6 @@ const applyTypeahead = (key: string): void => {
     }
   }
 
-  // eslint-disable-next-line unicorn/no-top-level-assignment-in-function
   typeaheadTimer = setTimeout(clearTypeahead, TYPEAHEAD_RESET_TIMEOUT)
 }
 

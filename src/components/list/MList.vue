@@ -161,67 +161,69 @@ watch(() => activeValue, scrollActiveItemIntoView, { immediate: true, flush: 'po
 </script>
 
 <style scoped>
-.list {
-  --max-block-size: 16rem;
-  --item-min-block-size: calc(var(--input-font-size) * 3);
-  --item-padding-inline: var(--input-padding-inline);
+@layer components {
+  .list {
+    --max-block-size: 16rem;
+    --item-min-block-size: calc(var(--input-font-size) * 3);
+    --item-padding-inline: var(--input-padding-inline);
 
-  --list-bg: var(--surface-bg);
-  --item-opacity: 1;
-  --item-bg: transparent;
-  --item-bg-active: light-dark(
-    oklch(from var(--list-bg) calc(l - 0.033) c h),
-    oklch(from var(--list-bg) calc(l + 0.033) c h)
-  );
-  --item-color: inherit;
-  --item-color-selected: var(--link-color);
-  --group-color: oklch(from currentColor l c h / 0.64);
+    --list-bg: var(--surface-bg);
+    --item-opacity: 1;
+    --item-bg: transparent;
+    --item-bg-active: light-dark(
+      oklch(from var(--list-bg) calc(l - 0.033) c h),
+      oklch(from var(--list-bg) calc(l + 0.033) c h)
+    );
+    --item-color: inherit;
+    --item-color-selected: var(--link-color);
+    --group-color: oklch(from currentColor l c h / 0.64);
 
-  display: flex;
-  flex-direction: column;
-  max-block-size: var(--max-block-size);
-  overflow: auto;
-  background-color: var(--list-bg);
-  border-radius: inherit;
-
-  & > .group {
-    min-block-size: calc(var(--item-min-block-size) * 0.75);
     display: flex;
-    align-items: end;
-    padding-block-end: calc(var(--item-padding-inline) / 4);
-    padding-inline: calc(var(--item-padding-inline) + var(--list-level, 0) * 1rem) var(--item-padding-inline);
-    color: var(--group-color);
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-medium, 500);
-    user-select: none;
-  }
+    flex-direction: column;
+    max-block-size: var(--max-block-size);
+    overflow: auto;
+    background-color: var(--list-bg);
+    border-radius: inherit;
 
-  & > .item {
-    min-block-size: var(--item-min-block-size);
-    display: flex;
-    align-items: center;
-    padding-inline: calc(var(--item-padding-inline) + var(--list-level, 0) * 1rem) var(--item-padding-inline);
-    cursor: pointer;
-    user-select: none;
-    background-color: var(--item-bg);
-    color: var(--item-color);
-    opacity: var(--item-opacity);
-
-    transition-property: background-color, color, opacity;
-    transition-duration: var(--duration-sm);
-    transition-timing-function: var(--bezier-smooth);
-
-    &.active {
-      --item-bg: var(--item-bg-active);
+    & > .group {
+      min-block-size: calc(var(--item-min-block-size) * 0.75);
+      display: flex;
+      align-items: end;
+      padding-block-end: calc(var(--item-padding-inline) / 4);
+      padding-inline: calc(var(--item-padding-inline) + var(--list-level, 0) * 1rem) var(--item-padding-inline);
+      color: var(--group-color);
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-medium, 500);
+      user-select: none;
     }
 
-    &.selected {
-      --item-color: var(--item-color-selected);
-    }
+    & > .item {
+      min-block-size: var(--item-min-block-size);
+      display: flex;
+      align-items: center;
+      padding-inline: calc(var(--item-padding-inline) + var(--list-level, 0) * 1rem) var(--item-padding-inline);
+      cursor: pointer;
+      user-select: none;
+      background-color: var(--item-bg);
+      color: var(--item-color);
+      opacity: var(--item-opacity);
 
-    &.disabled {
-      --item-opacity: 0.5;
-      pointer-events: none;
+      transition-property: background-color, color, opacity;
+      transition-duration: var(--duration-sm);
+      transition-timing-function: var(--bezier-smooth);
+
+      &.active {
+        --item-bg: var(--item-bg-active);
+      }
+
+      &.selected {
+        --item-color: var(--item-color-selected);
+      }
+
+      &.disabled {
+        --item-opacity: 0.5;
+        pointer-events: none;
+      }
     }
   }
 }

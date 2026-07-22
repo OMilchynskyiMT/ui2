@@ -23,71 +23,73 @@ const {
 </script>
 
 <style>
-.m-page-transition {
-  --page-shift: 3rem;
-
-  position: relative;
-
-  &
-    > :is(
-      .page-forward-enter-active,
-      .page-forward-leave-active,
-      .page-back-enter-active,
-      .page-back-leave-active,
-      .page-fade-enter-active,
-      .page-fade-leave-active,
-      .page-enter-enter-active,
-      .page-enter-leave-active
-    ) {
-    transition-property: transform, opacity;
-    transition-duration: var(--page-transition-duration);
-    transition-timing-function: var(--bezier-smooth);
-    will-change: transform, opacity;
-  }
-
-  & > :is(.page-forward-enter-from, .page-back-leave-to) {
-    opacity: 0;
-    transform: translateX(var(--page-shift));
-  }
-
-  & > :is(.page-forward-leave-to, .page-back-enter-from) {
-    opacity: 0;
-    transform: translateX(calc(-1 * var(--page-shift)));
-  }
-
-  & > :is(.page-fade-enter-from, .page-fade-leave-to) {
-    opacity: 0;
-  }
-
-  & > .page-enter-enter-from {
-    opacity: 0;
-    transform: translateY(calc(var(--page-shift) * 0.25));
-  }
-
-  & > .page-enter-leave-to {
-    opacity: 0;
-    transform: translateY(calc(var(--page-shift) * -0.25));
-  }
-
-  & > :is(.page-forward-leave-active, .page-back-leave-active) {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
+@layer components {
   .m-page-transition {
-    --page-transition-duration: 1ms;
+    --page-shift: 3rem;
+
+    position: relative;
+
+    &
+      > :is(
+        .page-forward-enter-active,
+        .page-forward-leave-active,
+        .page-back-enter-active,
+        .page-back-leave-active,
+        .page-fade-enter-active,
+        .page-fade-leave-active,
+        .page-enter-enter-active,
+        .page-enter-leave-active
+      ) {
+      transition-property: transform, opacity;
+      transition-duration: var(--page-transition-duration);
+      transition-timing-function: var(--bezier-smooth);
+      will-change: transform, opacity;
+    }
+
+    & > :is(.page-forward-enter-from, .page-back-leave-to) {
+      opacity: 0;
+      transform: translateX(var(--page-shift));
+    }
+
+    & > :is(.page-forward-leave-to, .page-back-enter-from) {
+      opacity: 0;
+      transform: translateX(calc(-1 * var(--page-shift)));
+    }
+
+    & > :is(.page-fade-enter-from, .page-fade-leave-to) {
+      opacity: 0;
+    }
+
+    & > .page-enter-enter-from {
+      opacity: 0;
+      transform: translateY(calc(var(--page-shift) * 0.25));
+    }
+
+    & > .page-enter-leave-to {
+      opacity: 0;
+      transform: translateY(calc(var(--page-shift) * -0.25));
+    }
+
+    & > :is(.page-forward-leave-active, .page-back-leave-active) {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+    }
   }
 
-  .page-forward-enter-from,
-  .page-forward-leave-to,
-  .page-back-enter-from,
-  .page-back-leave-to,
-  .page-enter-enter-from,
-  .page-enter-leave-to {
-    transform: none;
+  @media (prefers-reduced-motion: reduce) {
+    .m-page-transition {
+      --page-transition-duration: 1ms;
+    }
+
+    .page-forward-enter-from,
+    .page-forward-leave-to,
+    .page-back-enter-from,
+    .page-back-leave-to,
+    .page-enter-enter-from,
+    .page-enter-leave-to {
+      transform: none;
+    }
   }
 }
 </style>

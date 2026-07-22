@@ -109,100 +109,102 @@ const onClick = async (option: MenuOption): Promise<void> => {
 </script>
 
 <style scoped>
-nav {
-  --option-gap-y: var(--space-xxs);
-  --option-bg: transparent;
-  --option-padding: var(--space-xs);
-  --subitems-max-height: 0px;
-  --subitems-opacity: 0;
+@layer components {
+  nav {
+    --option-gap-y: var(--space-xxs);
+    --option-bg: transparent;
+    --option-padding: var(--space-xs);
+    --subitems-max-height: 0px;
+    --subitems-opacity: 0;
 
-  position: relative;
-  display: flex;
-  row-gap: var(--option-gap-y);
-  flex-direction: column;
-  align-items: start;
-  justify-content: center;
-
-  & > .option {
-    width: 100%;
-    cursor: pointer;
-  }
-
-  & > .option > .inner,
-  & > .option > .items > .item {
     position: relative;
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    column-gap: var(--space-sm);
-    background-color: var(--option-bg);
-    padding: var(--option-padding);
-    border-radius: var(--radius-md);
-    user-select: none;
+    row-gap: var(--option-gap-y);
+    flex-direction: column;
+    align-items: start;
+    justify-content: center;
 
-    transition-property: background-color, color;
-    transition-duration: var(--duration-sm);
-    transition-timing-function: var(--bezier-smooth);
-
-    &:hover,
-    &.active {
-      --option-bg: oklch(from currentColor l c h / 0.05);
+    & > .option {
+      width: 100%;
+      cursor: pointer;
     }
 
-    & > :is(.icon, .arrow) {
-      flex-grow: 0;
-      flex-shrink: 0;
-      line-height: 1;
-      color: oklch(from currentColor l c h / 0.6);
+    & > .option > .inner,
+    & > .option > .items > .item {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      column-gap: var(--space-sm);
+      background-color: var(--option-bg);
+      padding: var(--option-padding);
+      border-radius: var(--radius-md);
+      user-select: none;
+
+      transition-property: background-color, color;
+      transition-duration: var(--duration-sm);
+      transition-timing-function: var(--bezier-smooth);
+
+      &:hover,
+      &.active {
+        --option-bg: oklch(from currentColor l c h / 0.05);
+      }
+
+      & > :is(.icon, .arrow) {
+        flex-grow: 0;
+        flex-shrink: 0;
+        line-height: 1;
+        color: oklch(from currentColor l c h / 0.6);
+      }
+
+      & > :is(.title) {
+        flex-grow: 1;
+        flex-shrink: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
     }
 
-    & > :is(.title) {
-      flex-grow: 1;
-      flex-shrink: 1;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+    & > .option > .items {
+      max-height: var(--subitems-max-height);
+      opacity: var(--subitems-opacity);
+      transition-property: max-height, opacity;
+      transition-duration: var(--duration-sm);
+      transition-timing-function: var(--bezier-smooth);
+
+      & > .item {
+        padding-inline-start: var(--space-xxl);
+      }
     }
-  }
 
-  & > .option > .items {
-    max-height: var(--subitems-max-height);
-    opacity: var(--subitems-opacity);
-    transition-property: max-height, opacity;
-    transition-duration: var(--duration-sm);
-    transition-timing-function: var(--bezier-smooth);
-
-    & > .item {
-      padding-inline-start: var(--space-xxl);
+    & > .option > .inner > .arrow {
+      transform: scaleY(var(--arrow-scale, 1));
+      transition: transform var(--duration-md) var(--bezier-smooth);
     }
-  }
 
-  & > .option > .inner > .arrow {
-    transform: scaleY(var(--arrow-scale, 1));
-    transition: transform var(--duration-md) var(--bezier-smooth);
-  }
+    & > .option.expanded {
+      --subitems-max-height: 1000px;
+      --subitems-opacity: 1;
+      --arrow-scale: -1;
+    }
 
-  & > .option.expanded {
-    --subitems-max-height: 1000px;
-    --subitems-opacity: 1;
-    --arrow-scale: -1;
-  }
+    & .item.active::before,
+    & > .option.group:not(.expanded):has(.item.active) > .inner::before {
+      content: '';
+      display: block;
+      position: absolute;
+      block-size: 65%;
+      inline-size: 0.25rem;
+      translate: calc(-4 * var(--space-xs)) 0%;
+      background-color: oklch(from currentColor l c h / 0.2);
+      border-radius: var(--radius-sm);
+    }
 
-  & .item.active::before,
-  & > .option.group:not(.expanded):has(.item.active) > .inner::before {
-    content: '';
-    display: block;
-    position: absolute;
-    block-size: 65%;
-    inline-size: 0.25rem;
-    translate: calc(-4 * var(--space-xs)) 0%;
-    background-color: oklch(from currentColor l c h / 0.2);
-    border-radius: var(--radius-sm);
-  }
-
-  & .item.active::before {
-    background-color: var(--link-color);
-    translate: calc(-1 * var(--space-xxl) - 2 * var(--space-xs)) 0%;
+    & .item.active::before {
+      background-color: var(--link-color);
+      translate: calc(-1 * var(--space-xxl) - 2 * var(--space-xs)) 0%;
+    }
   }
 }
 </style>

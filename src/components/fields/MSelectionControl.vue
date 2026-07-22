@@ -19,7 +19,7 @@
     <input
       :id="id"
       ref="input"
-      v-bind="inputAttrs"
+      v-bind="inputAttributes"
       :aria-describedby="describedBy"
       :aria-disabled="disabled"
       :aria-errormessage="hasError ? `${id}-error` : undefined"
@@ -106,18 +106,18 @@ const emit = defineEmits<{
 }>()
 
 const slots = useSlots()
-const attrs = useAttrs()
+const attributes = useAttrs()
 const inputReference = useTemplateRef<HTMLInputElement>('input')
 
 defineOptions({
   inheritAttrs: false,
 })
 
-const rootClass = computed(() => attrs.class)
-const rootStyle = computed(() => attrs.style)
+const rootClass = computed(() => attributes.class)
+const rootStyle = computed(() => attributes.style)
 
-const inputAttrs = computed(() => {
-  const { class: _class, style: _style, ...rest } = attrs
+const inputAttributes = computed(() => {
+  const { class: _class, style: _style, ...rest } = attributes
   return rest
 })
 
@@ -164,234 +164,236 @@ defineExpose<MSelectionControlExpose>({
 </script>
 
 <style scoped>
-.selection-control {
-  --control-color: var(--input-border-active-color);
-  --control-container-color: var(--input-border-color);
-  --control-container-hover-color: color-mix(in srgb, var(--control-container-color) 80%, currentColor);
-  --control-error-color: var(--input-border-error-color);
-  --control-mark-color: var(--surface-bg);
-  --control-text-color: var(--input-text-color);
-  --control-hint-color: var(--input-hint-color);
-  --control-error-text-color: var(--input-error-color);
-  --control-font-size: var(--input-font-size);
-  --control-details-font-size: var(--input-error-font-size);
-  --control-gap: var(--input-gap-x);
-  --control-size: 1.25rem;
-  --control-inline-size: var(--control-size);
-  --control-block-size: var(--control-size);
-  --control-radius: var(--radius-sm);
-  --control-mark-width: max(2px, calc(var(--control-size) * 0.15));
-  --control-align-offset: max(
-    0px,
-    calc((var(--control-font-size) * var(--line-height) - var(--control-block-size)) / 2)
-  );
-  --control-opacity: 1;
-  --control-cursor: pointer;
-  --control-transition-duration: var(--duration-md);
-  --control-transition-func: var(--bezier-magnetic);
-  --control-indicator-bg: var(--control-container-color);
+@layer components {
+  .selection-control {
+    --control-color: var(--input-border-active-color);
+    --control-container-color: var(--input-border-color);
+    --control-container-hover-color: color-mix(in srgb, var(--control-container-color) 80%, currentColor);
+    --control-error-color: var(--input-border-error-color);
+    --control-mark-color: var(--surface-bg);
+    --control-text-color: var(--input-text-color);
+    --control-hint-color: var(--input-hint-color);
+    --control-error-text-color: var(--input-error-color);
+    --control-font-size: var(--input-font-size);
+    --control-details-font-size: var(--input-error-font-size);
+    --control-gap: var(--input-gap-x);
+    --control-size: 1.25rem;
+    --control-inline-size: var(--control-size);
+    --control-block-size: var(--control-size);
+    --control-radius: var(--radius-sm);
+    --control-mark-width: max(2px, calc(var(--control-size) * 0.15));
+    --control-align-offset: max(
+      0px,
+      calc((var(--control-font-size) * var(--line-height) - var(--control-block-size)) / 2)
+    );
+    --control-opacity: 1;
+    --control-cursor: pointer;
+    --control-transition-duration: var(--duration-md);
+    --control-transition-func: var(--bezier-magnetic);
+    --control-indicator-bg: var(--control-container-color);
 
-  position: relative;
-  display: inline-grid;
-  grid-template-columns: var(--control-inline-size) minmax(0, 1fr);
-  grid-template-areas: 'indicator body';
-  align-items: start;
-  column-gap: var(--control-gap);
-  min-inline-size: 0;
-  color: var(--control-text-color);
-  font-size: var(--control-font-size);
-  line-height: var(--line-height);
-  cursor: var(--control-cursor);
-  opacity: var(--control-opacity);
-  user-select: none;
-  vertical-align: top;
-
-  & > .indicator {
-    grid-area: indicator;
     position: relative;
-    display: block;
-    inline-size: var(--control-inline-size);
-    block-size: var(--control-block-size);
-    margin-block-start: var(--control-align-offset);
-    background-color: var(--control-indicator-bg);
-    color: var(--control-color);
-    transition-property: background-color, color, box-shadow, transform;
-    transition-duration: var(--control-transition-duration);
-    transition-timing-function: var(--control-transition-func);
-    overflow: clip;
+    display: inline-grid;
+    grid-template-columns: var(--control-inline-size) minmax(0, 1fr);
+    grid-template-areas: 'indicator body';
+    align-items: start;
+    column-gap: var(--control-gap);
+    min-inline-size: 0;
+    color: var(--control-text-color);
+    font-size: var(--control-font-size);
+    line-height: var(--line-height);
+    cursor: var(--control-cursor);
+    opacity: var(--control-opacity);
+    user-select: none;
+    vertical-align: top;
 
-    &::after {
-      content: '';
-      position: absolute;
+    & > .indicator {
+      grid-area: indicator;
+      position: relative;
       display: block;
-      transition-property: inline-size, block-size, background-color, border-color, opacity, transform;
+      inline-size: var(--control-inline-size);
+      block-size: var(--control-block-size);
+      margin-block-start: var(--control-align-offset);
+      background-color: var(--control-indicator-bg);
+      color: var(--control-color);
+      transition-property: background-color, color, box-shadow, transform;
       transition-duration: var(--control-transition-duration);
       transition-timing-function: var(--control-transition-func);
-    }
-  }
-
-  & > .input {
-    position: absolute;
-    z-index: 1;
-    inset-block-start: var(--control-align-offset);
-    inset-inline-start: 0;
-    inline-size: var(--control-inline-size);
-    block-size: var(--control-block-size);
-    margin: 0;
-    opacity: 0;
-    cursor: inherit;
-  }
-
-  &.checkbox {
-    & > .indicator {
-      border-radius: var(--control-radius);
+      overflow: clip;
 
       &::after {
-        inset-block-start: 42%;
-        inset-inline-start: 50%;
-        inline-size: calc(var(--control-size) * 0.35);
-        block-size: calc(var(--control-size) * 0.65);
-        border-block-end: var(--control-mark-width) solid var(--control-mark-color);
-        border-inline-end: var(--control-mark-width) solid var(--control-mark-color);
-        opacity: 0;
-        transform: translate(-50%, -80%) rotate(45deg) scale(0.75);
+        content: '';
+        position: absolute;
+        display: block;
+        transition-property: inline-size, block-size, background-color, border-color, opacity, transform;
+        transition-duration: var(--control-transition-duration);
+        transition-timing-function: var(--control-transition-func);
       }
     }
 
-    &:has(.input:checked) > .indicator::after {
-      opacity: 1;
-      transform: translate(-50%, -50%) rotate(45deg) scale(1);
+    & > .input {
+      position: absolute;
+      z-index: 1;
+      inset-block-start: var(--control-align-offset);
+      inset-inline-start: 0;
+      inline-size: var(--control-inline-size);
+      block-size: var(--control-block-size);
+      margin: 0;
+      opacity: 0;
+      cursor: inherit;
     }
 
-    &:has(.input:indeterminate) > .indicator::after {
-      inset-block-start: 50%;
-      inset-inline-start: 50%;
-      inline-size: calc(var(--control-size) * 0.54);
-      block-size: var(--control-mark-width);
-      border: 0;
-      background-color: var(--control-mark-color);
-      opacity: 1;
-      transform: translate(-50%, -50%) scaleX(1);
-    }
-  }
+    &.checkbox {
+      & > .indicator {
+        border-radius: var(--control-radius);
 
-  &.radio {
-    --control-radius: var(--radius-full);
+        &::after {
+          inset-block-start: 42%;
+          inset-inline-start: 50%;
+          inline-size: calc(var(--control-size) * 0.35);
+          block-size: calc(var(--control-size) * 0.65);
+          border-block-end: var(--control-mark-width) solid var(--control-mark-color);
+          border-inline-end: var(--control-mark-width) solid var(--control-mark-color);
+          opacity: 0;
+          transform: translate(-50%, -80%) rotate(45deg) scale(0.75);
+        }
+      }
 
-    & > .indicator {
-      border-radius: var(--control-radius);
+      &:has(.input:checked) > .indicator::after {
+        opacity: 1;
+        transform: translate(-50%, -50%) rotate(45deg) scale(1);
+      }
 
-      &::after {
+      &:has(.input:indeterminate) > .indicator::after {
         inset-block-start: 50%;
         inset-inline-start: 50%;
-        inline-size: calc(var(--control-size) * 0.5);
-        block-size: calc(var(--control-size) * 0.5);
-        border-radius: inherit;
+        inline-size: calc(var(--control-size) * 0.54);
+        block-size: var(--control-mark-width);
+        border: 0;
         background-color: var(--control-mark-color);
-        opacity: 0;
-        transform: translate(-50%, -50%) scale(0.4);
+        opacity: 1;
+        transform: translate(-50%, -50%) scaleX(1);
       }
     }
 
-    &:has(.input:checked) > .indicator::after {
-      opacity: 1;
-      transform: translate(-50%, -50%) scale(1);
+    &.radio {
+      --control-radius: var(--radius-full);
+
+      & > .indicator {
+        border-radius: var(--control-radius);
+
+        &::after {
+          inset-block-start: 50%;
+          inset-inline-start: 50%;
+          inline-size: calc(var(--control-size) * 0.5);
+          block-size: calc(var(--control-size) * 0.5);
+          border-radius: inherit;
+          background-color: var(--control-mark-color);
+          opacity: 0;
+          transform: translate(-50%, -50%) scale(0.4);
+        }
+      }
+
+      &:has(.input:checked) > .indicator::after {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+      }
     }
-  }
 
-  &.toggle {
-    --control-size: calc(var(--input-font-size) * 1.5);
-    --control-height: var(--control-size);
-    --control-width: calc(var(--control-height) * 1.9);
-    --control-padding: var(--input-border-width);
-    --control-thumb-size: calc(var(--control-height) - var(--control-padding) * 2);
-    --control-inline-size: var(--control-width);
-    --control-block-size: var(--control-height);
-    --control-thumb-color: var(--surface-bg);
-    --control-thumb-off-color: var(--surface-bg);
-    --control-thumb-shadow: var(--shadow-xs);
+    &.toggle {
+      --control-size: calc(var(--input-font-size) * 1.5);
+      --control-height: var(--control-size);
+      --control-width: calc(var(--control-height) * 1.9);
+      --control-padding: var(--input-border-width);
+      --control-thumb-size: calc(var(--control-height) - var(--control-padding) * 2);
+      --control-inline-size: var(--control-width);
+      --control-block-size: var(--control-height);
+      --control-thumb-color: var(--surface-bg);
+      --control-thumb-off-color: var(--surface-bg);
+      --control-thumb-shadow: var(--shadow-xs);
 
-    & > .indicator {
-      border-radius: var(--radius-full);
-
-      &::after {
-        inset-block-start: var(--control-padding);
-        inset-inline-start: var(--control-padding);
-        inline-size: var(--control-thumb-size);
-        block-size: var(--control-thumb-size);
+      & > .indicator {
         border-radius: var(--radius-full);
-        background-color: var(--control-thumb-off-color);
-        box-shadow: var(--control-thumb-shadow);
-        transform: translateX(0);
+
+        &::after {
+          inset-block-start: var(--control-padding);
+          inset-inline-start: var(--control-padding);
+          inline-size: var(--control-thumb-size);
+          block-size: var(--control-thumb-size);
+          border-radius: var(--radius-full);
+          background-color: var(--control-thumb-off-color);
+          box-shadow: var(--control-thumb-shadow);
+          transform: translateX(0);
+        }
+      }
+
+      &:has(.input:checked) > .indicator::after {
+        background-color: var(--control-thumb-color);
+        transform: translateX(calc(var(--control-width) - var(--control-thumb-size) - var(--control-padding) * 2));
       }
     }
 
-    &:has(.input:checked) > .indicator::after {
-      background-color: var(--control-thumb-color);
-      transform: translateX(calc(var(--control-width) - var(--control-thumb-size) - var(--control-padding) * 2));
+    & > .body {
+      grid-area: body;
+      min-inline-size: 0;
+
+      & > .label,
+      & > .hint,
+      & > .error {
+        display: block;
+      }
+
+      & > .label {
+        color: var(--control-text-color);
+      }
+
+      & > .hint,
+      & > .error {
+        margin-block-start: calc(var(--control-font-size) * 0.25);
+        font-size: var(--control-details-font-size);
+        line-height: 1.25;
+      }
+
+      & > .hint {
+        color: var(--control-hint-color);
+      }
+
+      & > .error {
+        color: var(--control-error-text-color);
+      }
     }
-  }
 
-  & > .body {
-    grid-area: body;
-    min-inline-size: 0;
-
-    & > .label,
-    & > .hint,
-    & > .error {
-      display: block;
+    &.icon-only {
+      grid-template-columns: var(--control-inline-size);
+      grid-template-areas: 'indicator';
     }
 
-    & > .label {
-      color: var(--control-text-color);
+    &.invalid {
+      --control-color: var(--control-error-color);
     }
 
-    & > .hint,
-    & > .error {
-      margin-block-start: calc(var(--control-font-size) * 0.25);
-      font-size: var(--control-details-font-size);
-      line-height: 1.25;
+    &.disabled {
+      --control-opacity: 0.5;
+      --control-cursor: not-allowed;
     }
 
-    & > .hint {
-      color: var(--control-hint-color);
+    &.readonly {
+      --control-opacity: 0.75;
+      --control-cursor: default;
     }
 
-    & > .error {
-      color: var(--control-error-text-color);
+    &:where(:not(.disabled, .readonly)):hover {
+      --control-indicator-bg: var(--control-container-hover-color);
+      /* --control-indicator-bg: red; */
     }
-  }
 
-  &.icon-only {
-    grid-template-columns: var(--control-inline-size);
-    grid-template-areas: 'indicator';
-  }
+    &:has(.input:checked) {
+      --control-indicator-bg: var(--control-color);
+    }
 
-  &.invalid {
-    --control-color: var(--control-error-color);
-  }
-
-  &.disabled {
-    --control-opacity: 0.5;
-    --control-cursor: not-allowed;
-  }
-
-  &.readonly {
-    --control-opacity: 0.75;
-    --control-cursor: default;
-  }
-
-  &:where(:not(.disabled, .readonly)):hover {
-    --control-indicator-bg: var(--control-container-hover-color);
-    /* --control-indicator-bg: red; */
-  }
-
-  &:has(.input:checked) {
-    --control-indicator-bg: var(--control-color);
-  }
-
-  &:has(.input:indeterminate) {
-    --control-indicator-bg: oklch(from var(--control-color) l c h / 0.75);
+    &:has(.input:indeterminate) {
+      --control-indicator-bg: oklch(from var(--control-color) l c h / 0.75);
+    }
   }
 }
 </style>

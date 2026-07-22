@@ -22,7 +22,7 @@
     <input
       :id="id"
       ref="input"
-      v-bind="attrs"
+      v-bind="attributes"
       role="combobox"
       :aria-activedescendant="activeOptionId"
       :aria-controls="listId"
@@ -156,7 +156,7 @@ defineOptions({
 })
 
 const model = defineModel<V | null>({ required: true })
-const attrs = useAttrs()
+const attributes = useAttrs()
 const slots = useSlots()
 const frame = ref<MFieldFrameExpose>()
 const inputReference = useTemplateRef<HTMLInputElement>('input')
@@ -389,42 +389,46 @@ defineExpose<MComboboxExpose>({
 </script>
 
 <style scoped>
-input {
-  display: block;
-  min-inline-size: 0;
-  inline-size: 100%;
-  block-size: var(--input-height);
-  border: 0;
-  cursor: var(--cursor);
+@layer components {
+  input {
+    display: block;
+    min-inline-size: 0;
+    inline-size: 100%;
+    block-size: var(--input-height);
+    border: 0;
+    cursor: var(--cursor);
+  }
 }
 </style>
 
 <style>
-.popup.combobox-popup {
-  --bg: var(--surface-bg);
-  background-color: var(--bg);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
+@layer components {
+  .popup.combobox-popup {
+    --bg: var(--surface-bg);
+    background-color: var(--bg);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
 
-  & > .list {
-    --list-bg: var(--bg);
+    & > .list {
+      --list-bg: var(--bg);
 
-    & > .item {
-      justify-content: space-between;
-      overflow-x: hidden;
-      flex-wrap: nowrap;
-      gap: var(--input-gap-x);
+      & > .item {
+        justify-content: space-between;
+        overflow-x: hidden;
+        flex-wrap: nowrap;
+        gap: var(--input-gap-x);
 
-      & .title,
-      & .value {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
+        & .title,
+        & .value {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
 
-      & .value {
-        font-size: var(--font-size-sm);
-        color: oklch(from var(--input-label-color) l c h / 0.5);
+        & .value {
+          font-size: var(--font-size-sm);
+          color: oklch(from var(--input-label-color) l c h / 0.5);
+        }
       }
     }
   }

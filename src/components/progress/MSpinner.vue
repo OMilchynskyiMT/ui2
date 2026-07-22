@@ -51,99 +51,101 @@ const strokeDashOffset = computed(() => 100 - normalizedValue.value)
 </script>
 
 <style scoped>
-svg {
-  --size: var(--spinner-size, v-bind(size));
-  --font-size: var(--spinner-font-size, v-bind(fontSize));
-  --stroke-width: var(--spinner-stroke-width, v-bind(strokeWidth));
-  --animation-speed: var(--spinner-animation-speed, 1.1s);
-
-  position: relative;
-  inline-size: var(--size);
-  block-size: var(--size);
-  display: inline-grid;
-  place-items: center;
-
-  shape-rendering: geometricPrecision;
-
-  & > circle.track,
-  & > circle.progress {
-    stroke-width: var(--stroke-width);
-    cx: 50%;
-    cy: 50%;
-    fill: none;
-    stroke: currentColor;
-    stroke-linecap: square;
-  }
-
-  & > circle.track {
-    stroke: color-mix(in oklch, currentColor, transparent 90%);
-  }
-
-  & > circle.progress {
-    transform: rotate(-90deg);
-    transform-origin: center;
-    stroke-linecap: square;
-
-    transition-property: stroke-dashoffset, stroke-dasharray, stroke-width, transform;
-    transition-duration: var(--duration-lg);
-    transition-timing-function: var(--bezier-magnetic);
-  }
-
-  & > text {
-    font-size: var(--font-size);
-    opacity: var(--opacity, 1);
-    transition: opacity var(--duration-md);
-    dominant-baseline: central;
-    text-anchor: middle;
-    fill: currentColor;
-  }
-
-  &.indeterminate {
-    transition: none;
-
-    & > circle.progress {
-      animation:
-        spinner-rotate var(--animation-speed) linear infinite,
-        spinner-dash calc(var(--animation-speed) * 1.2) cubic-bezier(0.35, 0, 0.25, 1) infinite;
-    }
-    & > text {
-      --opacity: 0;
-    }
-  }
-}
-
-@keyframes spinner-rotate {
-  to {
-    transform: rotate(270deg);
-  }
-}
-
-@keyframes spinner-dash {
-  0% {
-    stroke-dasharray: 1 100;
-    stroke-dashoffset: 0;
-  }
-
-  50% {
-    stroke-dasharray: 68 100;
-    stroke-dashoffset: -22;
-  }
-
-  100% {
-    stroke-dasharray: 1 100;
-    stroke-dashoffset: -99;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
+@layer components {
   svg {
-    & > text {
-      transition: none;
+    --size: var(--spinner-size, v-bind(size));
+    --font-size: var(--spinner-font-size, v-bind(fontSize));
+    --stroke-width: var(--spinner-stroke-width, v-bind(strokeWidth));
+    --animation-speed: var(--spinner-animation-speed, 1.1s);
+
+    position: relative;
+    inline-size: var(--size);
+    block-size: var(--size);
+    display: inline-grid;
+    place-items: center;
+
+    shape-rendering: geometricPrecision;
+
+    & > circle.track,
+    & > circle.progress {
+      stroke-width: var(--stroke-width);
+      cx: 50%;
+      cy: 50%;
+      fill: none;
+      stroke: currentColor;
+      stroke-linecap: square;
+    }
+
+    & > circle.track {
+      stroke: color-mix(in oklch, currentColor, transparent 90%);
     }
 
     & > circle.progress {
-      animation: none;
+      transform: rotate(-90deg);
+      transform-origin: center;
+      stroke-linecap: square;
+
+      transition-property: stroke-dashoffset, stroke-dasharray, stroke-width, transform;
+      transition-duration: var(--duration-lg);
+      transition-timing-function: var(--bezier-magnetic);
+    }
+
+    & > text {
+      font-size: var(--font-size);
+      opacity: var(--opacity, 1);
+      transition: opacity var(--duration-md);
+      dominant-baseline: central;
+      text-anchor: middle;
+      fill: currentColor;
+    }
+
+    &.indeterminate {
       transition: none;
+
+      & > circle.progress {
+        animation:
+          spinner-rotate var(--animation-speed) linear infinite,
+          spinner-dash calc(var(--animation-speed) * 1.2) cubic-bezier(0.35, 0, 0.25, 1) infinite;
+      }
+      & > text {
+        --opacity: 0;
+      }
+    }
+  }
+
+  @keyframes spinner-rotate {
+    to {
+      transform: rotate(270deg);
+    }
+  }
+
+  @keyframes spinner-dash {
+    0% {
+      stroke-dasharray: 1 100;
+      stroke-dashoffset: 0;
+    }
+
+    50% {
+      stroke-dasharray: 68 100;
+      stroke-dashoffset: -22;
+    }
+
+    100% {
+      stroke-dasharray: 1 100;
+      stroke-dashoffset: -99;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    svg {
+      & > text {
+        transition: none;
+      }
+
+      & > circle.progress {
+        animation: none;
+        transition: none;
+      }
     }
   }
 }
