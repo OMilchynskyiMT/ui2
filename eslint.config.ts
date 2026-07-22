@@ -98,6 +98,12 @@ export default defineConfigWithVueTs(
       'simple-import-sort/exports': 'error',
     },
   },
+  {
+    files: ['**/*.vue'],
+    rules: {
+      'unicorn/no-top-level-assignment-in-function': 'off',
+    },
+  },
 
   eslintConfigPrettier
 )
