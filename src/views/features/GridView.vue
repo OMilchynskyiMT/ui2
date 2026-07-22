@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <MFormGrid :columns="2">
       <div v-for="i of blocks" :key="i" :style="`--bg: hsl(${(i * blocks) / 0.5}, 70%, 65%);`" class="card">
         lorem ipsum <br v-if="i % 3" />
@@ -30,8 +30,9 @@ const numberModel = ref(123)
 </script>
 
 <style scoped>
-div.outer {
-  margin-bottom: 2rem;
+div.container {
+  display: grid;
+  gap: 2rem;
 }
 
 .grid > div.card {

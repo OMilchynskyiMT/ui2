@@ -1,5 +1,5 @@
 <template>
-  <div :style="styles" class="outer">
+  <div :style="styles" class="grid-outer">
     <div class="grid"><slot /></div>
   </div>
 </template>
@@ -39,7 +39,7 @@ const styles = computed(() =>
 
 <style scoped>
 @layer components {
-  div.outer {
+  div.grid-outer {
     --row-gap: var(--space-xxl);
     --column-gap: var(--space-xxl);
 
@@ -51,10 +51,15 @@ const styles = computed(() =>
 
       display: grid;
       grid-template-columns: repeat(var(--grid-columns), minmax(0, 1fr));
-      place-items: start;
-      align-items: start;
-      justify-items: stretch;
+      align-items: stretch;
       gap: var(--row-gap) var(--column-gap);
+
+      & > * {
+        min-inline-size: 0;
+        grid-column: var(--grid-column, auto);
+        align-self: var(--grid-align, stretch);
+        justify-self: var(--grid-justify, stretch);
+      }
     }
 
     @container (min-width: container-token(--container-md)) {
@@ -74,6 +79,47 @@ const styles = computed(() =>
         --grid-columns: var(--columns-xl, var(--columns-lg, var(--columns-md, var(--columns-sm, 1))));
       }
     }
+  }
+}
+</style>
+
+<style>
+@layer components {
+  .grid-full {
+    --grid-column: 1 / -1;
+  }
+
+  .grid-align-start {
+    --grid-align: start;
+  }
+
+  .grid-align-center {
+    --grid-align: center;
+  }
+
+  .grid-align-end {
+    --grid-align: end;
+  }
+
+  .grid-justify-start {
+    --grid-justify: start;
+  }
+
+  .grid-justify-center {
+    --grid-justify: center;
+  }
+
+  .grid-justify-end {
+    --grid-justify: end;
+  }
+
+  .grid-justify-stretch {
+    --grid-justify: stretch;
+  }
+
+  .grid-center {
+    --grid-align: center;
+    --grid-justify: center;
   }
 }
 </style>
