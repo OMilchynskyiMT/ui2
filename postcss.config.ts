@@ -1,5 +1,5 @@
 import type { AcceptedPlugin, AtRule, Declaration, PluginCreator } from 'postcss'
-import { containerTokens } from './@postcss/container-tokens.ts'
+import { containerTokens } from './src/postcss/containerTokens.ts'
 
 const tokenPattern = /container-token\(\s*(--[\w-]+)\s*\)/g
 
