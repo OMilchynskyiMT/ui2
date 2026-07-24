@@ -82,7 +82,6 @@ const expandedItems = ref<string[]>(
     .filter(item => item.children?.some(subItem => checkActive?.(subItem)))
     .map(item => item.title)
 )
-console.log('expandedItems', expandedItems.value)
 
 const onClick = (item: MTreeMenuItem<V>): void => {
   if (isExpandable(item)) {
@@ -145,6 +144,7 @@ const onClick = (item: MTreeMenuItem<V>): void => {
         border-radius: var(--radius-sm);
         left: calc(-1 * var(--space-sm));
         background-color: var(--indicator-color);
+        transition: background-color var(--duration-md) var(--bezier-smooth);
       }
 
       &:is(:hover) {
