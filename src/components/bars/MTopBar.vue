@@ -34,7 +34,7 @@ import MBar from './MBar.vue'
   --height: calc(3rem + env(safe-area-inset-top));
   --sections-gap: var(--space-lg);
   --padding-inline: max(var(--space-md), env(safe-area-inset-left));
-  --bg: light-dark(var(--gray-50), var(--gray-900));
+  --bg: var(--surface-bg);
   border-bottom: 1px solid light-dark(var(--gray-200), var(--gray-700));
   isolation: isolate;
 }
