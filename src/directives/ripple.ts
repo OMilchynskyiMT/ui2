@@ -8,19 +8,17 @@ type RippleElement = HTMLElement & {
   __ripple__?: {
     options: RippleOptions
     cleanup: () => void
-    position: string
-    overflow: string
   }
 }
 
 const RIPPLE_CLASS = 'ripple'
 
-const createRipple = (element: RippleElement, event: PointerEvent, centered: boolean) => {
+const createRipple = (element: RippleElement, event: PointerEvent, isCentered: boolean) => {
   if (
     !element.__ripple__ ||
     element.__ripple__.options.disabled ||
-    element.ariaDisabled ||
-    globalThis.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+    element.ariaDisabled === 'true' ||
+    matchMedia('(prefers-reduced-motion: reduce)').matches ||
     event.button !== 0
   ) {
     return
@@ -30,8 +28,8 @@ const createRipple = (element: RippleElement, event: PointerEvent, centered: boo
   const size = Math.max(rect.width, rect.height) * 2
 
   const halfSize = size / 2
-  const x = centered ? rect.width / 2 - halfSize : event.clientX - rect.left - halfSize
-  const y = centered ? rect.height / 2 - halfSize : event.clientY - rect.top - halfSize
+  const x = (isCentered ? rect.width / 2 : event.clientX - rect.left) - halfSize
+  const y = (isCentered ? rect.height / 2 : event.clientY - rect.top) - halfSize
 
   const ripple = document.createElement('span')
 
@@ -43,6 +41,9 @@ const createRipple = (element: RippleElement, event: PointerEvent, centered: boo
   element.append(ripple)
 
   ripple.addEventListener('animationend', () => ripple.remove(), {
+    once: true,
+  })
+  ripple.addEventListener('animationcancel', () => ripple.remove(), {
     once: true,
   })
 }
@@ -62,8 +63,6 @@ export const ripple: Directive<RippleElement, RippleOptions | undefined> = {
       cleanup: () => {
         element.removeEventListener('pointerdown', onPointerDown)
       },
-      position: element.style.position,
-      overflow: element.style.overflow,
     }
   },
 
