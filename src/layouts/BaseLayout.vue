@@ -1,4 +1,10 @@
 <template>
-  <main><RouterView /></main>
-  <footer>footer</footer>
+  <MAppShell>
+    <template #footer>footer</template>
+    <RouterView />
+  </MAppShell>
 </template>
+
+<script lang="ts" setup>
+import MAppShell from '@/components/MAppShell.vue'
+</script>
