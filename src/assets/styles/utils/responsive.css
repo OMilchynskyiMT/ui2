@@ -1,0 +1,51 @@
+.u-hidden {
+  display: none;
+}
+
+@media (width < container-token(--container-sm)) {
+  .u-hidden-below-sm {
+    display: none;
+  }
+}
+
+@media (width >= container-token(--container-sm)) {
+  .u-hidden-above-sm {
+    display: none;
+  }
+}
+
+@media (width < container-token(--container-md)) {
+  .u-hidden-below-md {
+    display: none;
+  }
+}
+
+@media (width >= container-token(--container-md)) {
+  .u-hidden-above-md {
+    display: none;
+  }
+}
+
+@media (width < container-token(--container-lg)) {
+  .u-hidden-below-lg {
+    display: none;
+  }
+}
+
+@media (width >= container-token(--container-lg)) {
+  .u-hidden-above-lg {
+    display: none;
+  }
+}
+
+@media (width < container-token(--container-xl)) {
+  .u-hidden-below-xl {
+    display: none;
+  }
+}
+
+@media (width >= container-token(--container-xl)) {
+  .u-hidden-above-xl {
+    display: none;
+  }
+}
