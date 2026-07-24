@@ -32,8 +32,14 @@
       <aside aria-label="Main navigation" class="u-hidden-below-md">
         <Teleport :disabled="!isCompact" defer to="#compact-navigation > .surface">
           <MTreeMenu
-            :check-active="item => item.title === 'WAN'"
-            :items="menuOptions2"
+            :check-active="item => item.value.name === route.name"
+            :items="menuOptions"
+            :on-select="
+              item => {
+                router.push(item.value)
+                mainMenuDialog?.close()
+              }
+            "
             :style="{ '--padding': isCompact ? 'var(--space-xl)' : null }"
           />
         </Teleport>
@@ -63,7 +69,7 @@
 <script lang="ts" setup>
 import { onBeforeUnmount, onMounted, ref, useTemplateRef } from 'vue'
 import { CogIcon, LayoutDashboardIcon, MenuIcon, UserCog2Icon, XIcon } from '@lucide/vue'
-import { useRouter } from 'vue-router'
+import { type RouteLocation, useRoute, useRouter } from 'vue-router'
 
 import MBar from '@/components/bars/MBar.vue'
 import MTopBar from '@/components/bars/MTopBar.vue'
@@ -77,29 +83,30 @@ import { remToPixels, useViewportSizeListener } from '@/composables/useViewportS
 import { containerTokens } from '@/postcss/containerTokens'
 
 const router = useRouter()
+const route = useRoute()
 const mainMenuDialog = useTemplateRef<DialogExposed>('mainMenuDialog')
 const isCompact = ref(true)
 let stopResizeSubscription: (() => void) | undefined
 
-const menuOptions2: MTreeMenuItem<unknown>[] = [
-  { title: 'Dashboard', icon: LayoutDashboardIcon, value: router.resolve({ name: '' }) },
+const menuOptions: MTreeMenuItem<RouteLocation>[] = [
+  { title: 'Dashboard', icon: LayoutDashboardIcon, value: router.resolve({ name: 'dashboard' }) },
   {
     title: 'Setup',
     icon: CogIcon,
-    value: undefined,
+    value: router.resolve({ name: 'setup' }),
     children: [
-      { title: 'WAN', value: router.resolve({ name: '' }) },
-      { title: 'DHCP', value: router.resolve({ name: '' }) },
-      { title: 'SMTP', value: router.resolve({ name: '' }) },
+      { title: 'WAN', value: router.resolve({ name: 'wan' }) },
+      { title: 'DHCP', value: router.resolve({ name: 'dhcp' }) },
+      { title: 'SMTP', value: router.resolve({ name: 'smtp' }) },
     ],
   },
   {
     title: 'Administration',
     icon: UserCog2Icon,
-    value: undefined,
+    value: router.resolve({ name: 'administration' }),
     children: [
-      { title: 'Debug Options', value: router.resolve({ name: '' }) },
-      { title: 'Usage Policy', value: router.resolve({ name: '' }) },
+      { title: 'Debug Options', value: router.resolve({ name: 'debug-options' }) },
+      { title: 'Usage Policy', value: router.resolve({ name: 'usage-policy' }) },
     ],
   },
 ]

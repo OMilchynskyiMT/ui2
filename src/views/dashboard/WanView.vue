@@ -1,0 +1,1 @@
+<template>wan view</template>

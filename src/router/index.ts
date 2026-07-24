@@ -12,6 +12,43 @@ const router = createRouter({
           name: 'dashboard',
           component: () => import('@/views/dashboard/MainView.vue'),
         },
+        {
+          path: 'setup',
+          name: 'setup',
+          children: [
+            {
+              path: 'wan',
+              name: 'wan',
+              component: () => import('@/views/dashboard/WanView.vue'),
+            },
+            {
+              path: 'dhcp',
+              name: 'dhcp',
+              component: () => import('@/views/dashboard/DhcpView.vue'),
+            },
+            {
+              path: 'smtp',
+              name: 'smtp',
+              component: () => import('@/views/dashboard/SmtpView.vue'),
+            }
+          ],
+        },
+        {
+          path: 'administration',
+          name: 'administration',
+          children: [
+            {
+              path: 'debug-options',
+              name: 'debug-options',
+              component: () => import('@/views/dashboard/DebugOptionsView.vue'),
+            },
+            {
+              path: 'usage-policy',
+              name: 'usage-policy',
+              component: () => import('@/views/dashboard/UsagePolicyView.vue'),
+            }
+          ],
+        },
       ],
     },
     {
