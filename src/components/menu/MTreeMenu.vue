@@ -76,7 +76,13 @@ const {
   arrowSize = '1rem',
 } = defineProps<MTreeMenuProperties<V>>()
 
-const expandedItems = ref<string[]>([])
+const expandedItems = ref<string[]>(
+  items
+    .filter(isExpandable)
+    .filter(item => item.children?.some(subItem => checkActive?.(subItem)))
+    .map(item => item.title)
+)
+console.log('expandedItems', expandedItems.value)
 
 const onClick = (item: MTreeMenuItem<V>): void => {
   if (isExpandable(item)) {
