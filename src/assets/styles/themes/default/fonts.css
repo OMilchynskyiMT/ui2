@@ -4,7 +4,7 @@
     'Droid Sans', 'Helvetica Neue', sans-serif;
   --font-mono: 'SFMono-Regular', 'JetBrains Mono', Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
 
-  --font-size: 0.875rem;
+  --font-size: clamp(0.75rem, 1vw, 0.875rem);
   --font-size-xxs: calc(var(--font-size) * 0.625);
   --font-size-xs: calc(var(--font-size) * 0.75);
   --font-size-sm: calc(var(--font-size) * 0.875);

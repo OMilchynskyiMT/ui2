@@ -55,14 +55,14 @@
   --bezier-bounce: cubic-bezier(0.68, -0.55, 0.27, 1.55);
   --bezier-magnetic: cubic-bezier(0.175, 0.885, 0.32, 1.275);
 
-  --space-xxs: 0.125rem;
-  --space-xs: 0.25rem;
-  --space-sm: 0.5rem;
-  --space-md: 0.75rem;
-  --space-lg: 1rem;
-  --space-xl: 1.5rem;
-  --space-xxl: 2rem;
-  --space-3xl: 3rem;
+  --space-xxs: clamp(0.05rem, 0.125vw, 0.25rem);
+  --space-xs: clamp(0.25rem, 0.25vw, 0.5rem);
+  --space-sm: clamp(0.5rem, 0.5vw, 1rem);
+  --space-md: clamp(0.75rem, 0.75vw, 1.5rem);
+  --space-lg: clamp(1rem, 1vw, 2rem);
+  --space-xl: clamp(1.5rem, 1.5vw, 3rem);
+  --space-xxl: clamp(2rem, 2vw, 4rem);
+  --space-3xl: clamp(3rem, 3vw, 6rem);
 
   --input-height: calc(3.5 * var(--font-size));
   --input-gap-x: calc(var(--font-size) / 2);
