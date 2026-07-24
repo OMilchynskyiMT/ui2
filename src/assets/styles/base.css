@@ -6,6 +6,13 @@ body {
   color: var(--text-color);
 }
 
+code,
+pre,
+kbd {
+  font: var(--font-weight-normal) var(--font-size) var(--font-mono);
+  color: var(--text-color);
+}
+
 #app {
   min-height: 100vh;
   display: grid;
