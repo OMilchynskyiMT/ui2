@@ -17,6 +17,7 @@
 export type Exposed = {
   show: (isModal?: boolean) => void
   close: () => void
+  isVisible: () => boolean
 }
 </script>
 
@@ -136,6 +137,8 @@ const close = (): void => {
   scheduleClose()
 }
 
+const isVisible = (): boolean => dialog.value?.open ?? false
+
 const cancel = (event: Event): void => {
   emit('cancel', event)
   const prevented = event.defaultPrevented
@@ -163,7 +166,7 @@ const transitionend = (event: TransitionEvent): void => {
 
 onBeforeUnmount(clearCloseTimer)
 
-defineExpose<Exposed>({ show, close })
+defineExpose<Exposed>({ show, close, isVisible })
 </script>
 
 <style scoped>

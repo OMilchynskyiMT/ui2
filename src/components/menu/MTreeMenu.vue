@@ -114,6 +114,7 @@ const onClick = (item: MTreeMenuItem<V>): void => {
   & > li.item {
     display: grid;
     row-gap: var(--gap);
+    user-select: none;
 
     & > a {
       position: relative;
