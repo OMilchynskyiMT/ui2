@@ -9,12 +9,14 @@ body {
 #app {
   min-height: 100vh;
   display: grid;
+  container-type: inline-size;
+}
 
-  &:has(> main):has(> footer) {
-    grid-template-rows: 1fr auto;
-  }
+a {
+  --color: var(--link-color);
+  color: var(--color);
 
-  &:has(> header):has(> main):has(> footer) {
-    grid-template-rows: auto 1fr auto;
+  &:hover {
+    --color: var(--link-hover-color);
   }
 }
