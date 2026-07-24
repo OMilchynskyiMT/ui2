@@ -169,10 +169,18 @@ defineExpose<Exposed>({ show, close })
 <style scoped>
 @layer components {
   dialog {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
     margin: auto;
 
-    inline-size: min(100% - var(--space-xxl), var(--dialog-width, 32rem));
-    max-block-size: calc(100dvb - var(--space-xxl));
+    inline-size: var(--dialog-width, 32rem);
+    max-inline-size: var(--dialog-max-width, calc(100% - var(--outer-gap, var(--space-xxl))));
+
+    block-size: var(--dialog-height, fit-content);
+    max-block-size: var(--dialog-max-height, calc(100% - var(--outer-gap, var(--space-xxl))));
 
     color: inherit;
     background-color: transparent;
@@ -197,7 +205,7 @@ defineExpose<Exposed>({ show, close })
     }
 
     & > div.surface {
-      max-block-size: inherit;
+      block-size: 100%;
       overflow: auto;
       overscroll-behavior: contain;
 
