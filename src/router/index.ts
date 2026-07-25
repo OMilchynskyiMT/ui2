@@ -119,6 +119,11 @@ const router = createRouter({
               name: 'grid',
               component: () => import('@/views/features/GridView.vue'),
             },
+            {
+              path: 'table',
+              name: 'table',
+              component: () => import('@/views/features/TableView.vue'),
+            },
           ],
         },
       ],

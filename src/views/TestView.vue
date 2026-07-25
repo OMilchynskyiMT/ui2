@@ -43,6 +43,7 @@ const tabs = [
   { label: 'Dialogs', route: 'dialogs' },
   { label: 'Menu', route: 'menu' },
   { label: 'Grid', route: 'grid' },
+  { label: 'Table', route: 'table' },
 ]
 const $router = useRouter()
 const $route = useRoute()
