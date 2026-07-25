@@ -6,10 +6,7 @@
     </template>
 
     <template #trailing>
-      <MButton kind="neutral" variant="icon">
-        <MUserAvatar style="--accent: var(--purple-500)" />
-        admin
-      </MButton>
+      <slot name="trailing" />
     </template>
 
     <div class="product">
@@ -23,9 +20,6 @@
 </template>
 
 <script lang="ts" setup>
-import MButton from '../buttons/MButton.vue'
-import MUserAvatar from '../MUserAvatar.vue'
-
 import MBar from './MBar.vue'
 </script>
 

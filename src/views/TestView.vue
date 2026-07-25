@@ -26,8 +26,8 @@ import { BusFrontIcon, FormInputIcon, GlobeIcon } from '@lucide/vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import MIcon from '@/components/MIcon.vue'
-import TabBar from '@/components/tabs/TabBar.vue'
-import TabItem from '@/components/tabs/TabItem.vue'
+import TabBar from '@/components/tabs/MTabBar.vue'
+import TabItem from '@/components/tabs/MTabItem.vue'
 import { useTabNavigation } from '@/components/tabs/useTabNavigation'
 import PageTransition from '@/components/transitons/PageTransition.vue'
 
@@ -47,7 +47,7 @@ const tabs = [
 const $router = useRouter()
 const $route = useRoute()
 
-const { transtionName, goto } = useTabNavigation(
+const { transitionName: transtionName, goto } = useTabNavigation(
   tabs.filter(t => t.route !== undefined).map(t => t.route),
   $route.name?.toString()
 )
