@@ -6,9 +6,10 @@ const router = createRouter({
     {
       path: '/',
       component: () => import('@/layouts/DashboardLayout.vue'),
+      redirect: { name: 'dashboard' },
       children: [
         {
-          path: '',
+          path: 'dashboard',
           name: 'dashboard',
           component: () => import('@/views/dashboard/MainView.vue'),
         },
@@ -24,13 +25,31 @@ const router = createRouter({
             {
               path: 'dhcp',
               name: 'dhcp',
-              component: () => import('@/views/dashboard/DhcpView.vue'),
+              component: () => import('@/views/dashboard/dhcp/BaseView.vue'),
+              redirect: { name: 'dhcp-config' },
+              children: [
+                {
+                  path: 'configuration',
+                  name: 'dhcp-config',
+                  component: () => import('@/views/dashboard/dhcp/ConfigView.vue'),
+                },
+                {
+                  path: 'new-ipv4',
+                  name: 'dhcp-add',
+                  component: () => import('@/views/dashboard/dhcp/AddIpv4View.vue'),
+                },
+                {
+                  path: 'new-ipv6',
+                  name: 'dhcp-add-v6',
+                  component: () => import('@/views/dashboard/dhcp/AddIpv6View.vue'),
+                },
+              ],
             },
             {
               path: 'smtp',
               name: 'smtp',
               component: () => import('@/views/dashboard/SmtpView.vue'),
-            }
+            },
           ],
         },
         {
@@ -46,7 +65,7 @@ const router = createRouter({
               path: 'usage-policy',
               name: 'usage-policy',
               component: () => import('@/views/dashboard/UsagePolicyView.vue'),
-            }
+            },
           ],
         },
       ],
