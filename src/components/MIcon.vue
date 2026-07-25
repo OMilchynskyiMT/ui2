@@ -2,7 +2,6 @@
   <component
     :is="icon"
     :stroke-width="strokeWidth"
-    :style="{ '--size': size, '--color': color ?? 'currentColor' }"
     aria-hidden="true"
     class="icon"
   />
@@ -22,11 +21,11 @@ const { size = '1.25rem', strokeWidth = 2 } = defineProps<{
 <style scoped>
 @layer components {
   .icon {
-    color: var(--color, currentColor);
+    color: var(--color, v-bind(color));
     flex: 0 0 auto;
     display: inline-flex;
-    width: var(--size);
-    height: var(--size);
+    width: var(--size, v-bind(size));
+    height: var(--size, v-bind(size));
   }
 }
 </style>
