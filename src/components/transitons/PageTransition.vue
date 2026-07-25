@@ -28,6 +28,7 @@ const {
     --page-shift: 3rem;
 
     position: relative;
+    overflow: clip;
 
     &
       > :is(
