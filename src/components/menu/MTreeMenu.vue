@@ -176,7 +176,7 @@ const onClick = (item: MTreeMenuItem<V>): void => {
       }
     }
 
-    &:is(.active) > a {
+    &:not(.expandable):is(.active) > a {
       --item-bg: oklch(from var(--accent) l c h / 0.05);
       --item-cursor: default;
     }
