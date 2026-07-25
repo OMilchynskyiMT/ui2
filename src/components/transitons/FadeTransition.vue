@@ -1,5 +1,5 @@
 <template>
-  <Transition :appear="appear" :duration="duration" :name="name">
+  <Transition :appear="appear" :duration="duration" :mode="mode" :name="name">
     <slot />
   </Transition>
 </template>
@@ -9,14 +9,18 @@ export type TransitionName = 'fade'
 </script>
 
 <script lang="ts" setup>
+import type { TransitionProps } from 'vue';
+
 const {
   name = 'fade',
   duration = 160,
   appear = false,
+  mode = 'default',
 } = defineProps<{
   name?: TransitionName
   duration?: number
   appear?: boolean
+  mode?: TransitionProps['mode']
 }>()
 
 const cssDuration = `${duration}ms`
