@@ -1,28 +1,22 @@
 <template>
-  <component :is="icon" ref="icon" :size="size" :stroke-width="strokeWidth" aria-hidden="true" class="icon" />
+  <component
+    :is="icon"
+    :stroke-width="strokeWidth"
+    :style="{ '--size': size, '--color': color ?? 'currentColor' }"
+    aria-hidden="true"
+    class="icon"
+  />
 </template>
 
-<script lang="ts">
-export type Exposed = {
-  setColor: (color: string) => void
-}
-</script>
-
 <script lang="ts" setup>
-import { type Component, useTemplateRef } from 'vue'
+import { type Component } from 'vue'
 
-const { size = 24, strokeWidth = 2 } = defineProps<{
+const { size = '1.25rem', strokeWidth = 2 } = defineProps<{
   icon: Component
   size?: number | string
+  color?: string
   strokeWidth?: number | string
 }>()
-const iconReference = useTemplateRef<SVGElement>('icon')
-
-defineExpose<Exposed>({
-  setColor: (color: string) => {
-    iconReference.value?.style.setProperty('--color', color)
-  },
-})
 </script>
 
 <style scoped>
@@ -30,7 +24,9 @@ defineExpose<Exposed>({
   .icon {
     color: var(--color, currentColor);
     flex: 0 0 auto;
-    display: inline-block;
+    display: inline-flex;
+    width: var(--size);
+    height: var(--size);
   }
 }
 </style>
