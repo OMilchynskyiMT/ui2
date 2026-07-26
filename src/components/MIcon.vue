@@ -23,7 +23,6 @@ const { size = '1.25rem', strokeWidth = 2 } = defineProps<{
   .icon {
     color: var(--color, v-bind(color));
     flex: 0 0 auto;
-    display: inline-flex;
     width: var(--size, v-bind(size));
     height: var(--size, v-bind(size));
   }
