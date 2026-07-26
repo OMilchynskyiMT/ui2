@@ -16,7 +16,7 @@
         </template>
 
         <template #trailing>
-          <MButton aria-label="Save & Restart" kind="caution" variant="tonal">
+          <MButton aria-label="Save & Restart" kind="caution" variant="tonal" @click="saveAndApplyConfirm?.confirm">
             <MIcon :icon="SaveCheckIcon" />
             <span class="u-hidden-below-lg">Save & Apply</span>
           </MButton>
@@ -115,7 +115,7 @@
       <div class="menu user">
         <MBar>
           <template #leading>
-            <MUserAvatar size="2rem" />
+            <MUserAvatar :style="{ '--accent': 'var(--purple-500)' }" size="2rem" />
           </template>
 
           <div class="user">
@@ -126,6 +126,10 @@
         <MTreeMenu :items="userMenuOptions" :on-select="item => userMenuHandler(item.value)" icon-size="1.15rem" />
       </div>
     </MPopup>
+
+    <MConfirm ref="saveAndApplyConfirm" title="When in doubt, reboot">
+      Let's apply some advanced engineering magic: unplug it and plug it back in. Continue?
+    </MConfirm>
   </MAppShell>
 </template>
 
@@ -151,6 +155,7 @@ import { type RouteLocation, useRoute, useRouter } from 'vue-router'
 import MBar from '@/components/bars/MBar.vue'
 import MTopBar from '@/components/bars/MTopBar.vue'
 import MButton from '@/components/buttons/MButton.vue'
+import MConfirm, { type Exposed as ConfirmExposed } from '@/components/dialog/MConfirm.vue'
 import MDialog, { type Exposed as DialogExposed } from '@/components/dialog/MDialog.vue'
 import MAppShell from '@/components/MAppShell.vue'
 import MTreeMenu, { type MTreeMenuItem } from '@/components/menu/MTreeMenu.vue'
@@ -169,6 +174,7 @@ const commandsButton = useTemplateRef('commands-button')
 const commandMenuOpened = ref(false)
 const userMenuButton = useTemplateRef('user-menu-button')
 const userMenuOpened = ref(false)
+const saveAndApplyConfirm = useTemplateRef<ConfirmExposed>('saveAndApplyConfirm')
 let stopResizeSubscription: (() => void) | undefined
 
 const menuOptions: MTreeMenuItem<RouteLocation>[] = [
