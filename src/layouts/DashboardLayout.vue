@@ -259,7 +259,7 @@ onBeforeUnmount(() => {
   background-color: var(--surface-bg);
   padding: var(--space-md);
   border-radius: var(--radius-md);
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-lg);
   display: grid;
   gap: var(--space-md);
 
