@@ -21,7 +21,6 @@ const { active = false, disabled = false } = defineProps<{
     justify-content: center;
     padding-inline: var(--gap, calc(var(--tab-font-size) * 1));
 
-    will-change: color, opacity;
     transition-property: color, opacity;
     transition-duration: var(--duration-md);
     transition-timing-function: var(--bezier-smooth);
@@ -31,7 +30,7 @@ const { active = false, disabled = false } = defineProps<{
     gap: calc(var(--tab-font-size) / 2);
     overflow: hidden;
     text-overflow: ellipsis;
-    white-space: nowrap;
+    /* white-space: nowrap; */
     pointer-events: var(--pointer-events, auto);
     opacity: var(--opacity, 1);
 

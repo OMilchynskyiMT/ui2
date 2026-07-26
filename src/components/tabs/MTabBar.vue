@@ -76,7 +76,6 @@ onBeforeUnmount(() => {
       border-radius: var(--radius-full);
       width: var(--indicator-width, 0);
       transform: translateX(var(--indicator-x, 0));
-      will-change: transform, width;
       transition:
         transform var(--duration-lg) var(--bezier-magnetic),
         width var(--duration-md) var(--bezier-smooth);
