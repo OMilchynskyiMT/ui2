@@ -1,6 +1,10 @@
 html {
   overflow-y: scroll;
   scrollbar-gutter: stable;
+
+  &:has(dialog[open]) {
+    overflow: hidden;
+  }
 }
 
 body {
