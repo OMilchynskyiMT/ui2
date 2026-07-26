@@ -26,9 +26,32 @@ const {
 @layer components {
   .m-page-transition {
     --page-shift: 3rem;
+    --page-overflow-bleed: 1.5rem;
 
     position: relative;
-    overflow: clip;
+    display: grid;
+
+    & > * {
+      grid-area: 1 / 1;
+      min-inline-size: 0;
+      align-self: start;
+    }
+
+    &:has(
+      > :is(
+        .page-forward-enter-active,
+        .page-forward-leave-active,
+        .page-back-enter-active,
+        .page-back-leave-active,
+        .page-fade-enter-active,
+        .page-fade-leave-active,
+        .page-enter-enter-active,
+        .page-enter-leave-active
+      )
+    ) {
+      overflow: clip;
+      overflow-clip-margin: var(--page-overflow-bleed);
+    }
 
     &
       > :is(
@@ -69,12 +92,6 @@ const {
     & > .page-enter-leave-to {
       opacity: 0;
       transform: translateY(calc(var(--page-shift) * -0.25));
-    }
-
-    & > :is(.page-forward-leave-active, .page-back-leave-active) {
-      position: absolute;
-      inset: 0;
-      width: 100%;
     }
   }
 
