@@ -61,6 +61,17 @@ const emit = defineEmits<{
 <style scoped>
 @layer components {
   .chip {
+    --accent-color: currentColor;
+    --bg: transparent;
+    --font-size: var(--font-size-sm);
+    --border-width: 0;
+    --border-color: oklch(from var(--accent-color) l c h / 0.25);
+    --padding-inline: var(--space-sm);
+    --padding-block: var(--space-xs);
+    --gap-x: var(--space-xs);
+    --radius: var(--radius-md);
+    --font-size: var(--font-size-sm);
+
     position: relative;
     display: inline-flex;
     align-items: center;
@@ -68,16 +79,14 @@ const emit = defineEmits<{
     min-inline-size: 0;
     max-inline-size: 100%;
 
-    --accent-color: currentColor;
-    --font-size: var(--font-size-sm);
-    padding-inline: var(--padding-inline, var(--space-sm));
-    padding-block: var(--padding-block, 0);
-    column-gap: var(--gap-x, var(--space-xs));
-    border-radius: var(--radius, var(--radius-md));
+    padding-inline: var(--padding-inline);
+    padding-block: var(--padding-block);
+    column-gap: var(--gap-x);
+    border-radius: var(--radius);
     cursor: var(--cursor, default);
     font-size: var(--font-size);
-    border: var(--border-width, 0px) solid var(--border-color, var(--accent-color));
-    background-color: var(--bg, transparent);
+    border: var(--border-width) solid var(--border-color);
+    background-color: var(--bg);
     color: var(--color, var(--accent-color));
 
     & > :is(.button.close) {
@@ -155,7 +164,7 @@ const emit = defineEmits<{
       --accent-color: light-dark(var(--orange-400), var(--orange-600));
     }
     &[data-kind='success'] {
-      --accent-color: light-dark(var(--green-500), var(--green-500));
+      --accent-color: light-dark(var(--green-600), var(--green-500));
     }
     &[data-kind='neutral'] {
       --accent-color: light-dark(var(--gray-400), var(--gray-500));
