@@ -2,14 +2,14 @@
   <MTable
     v-model:sort="sort"
     :columns
+    :loading
     :rows
     caption="Users"
+    loading-label="Loading users..."
     mode="details"
     row-key="id"
     sticky-header
     style="--max-block-size: 30rem"
-    :loading
-    loading-label="Loading users..."
   >
     <template #cell-active="{ value }">
       {{ value ? 'Active' : 'Inactive' }}
@@ -20,7 +20,8 @@
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue'
 
-import MTable, { type TableColumn, type TableSort } from '@/components/table/MTable.vue'
+import type { TableColumn, TableSort } from '@/components/table/mtable.types'
+import MTable from '@/components/table/MTable.vue'
 
 type User = {
   id: number
@@ -78,6 +79,5 @@ onMounted(() => {
   setTimeout(() => {
     loading.value = false
   }, 3000)
-
 })
 </script>
