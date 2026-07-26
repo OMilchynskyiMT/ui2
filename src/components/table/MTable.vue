@@ -132,100 +132,15 @@
   </div>
 </template>
 
-<script lang="ts">
-import type { CSSProperties, VNode } from 'vue'
-
-export type TableLayout = 'auto' | 'fixed' | 'content'
-export type TableResponsiveMode = 'scroll' | 'details'
-export type TableCompactMode = boolean | 'auto'
-export type CellAlign = 'start' | 'center' | 'end'
-export type SortDirection = 'asc' | 'desc'
-export type TableColumnKey = string
-export type TableColumnType = 'text' | 'number' | 'date' | 'boolean' | 'actions'
-
-export type TableSort = {
-  column: TableColumnKey
-  direction: SortDirection
-}
-
-export type TableColumn<Row> = {
-  key: TableColumnKey
-  label: string
-  value?: keyof Row | ((row: Row, rowIndex: number) => unknown)
-  format?: (value: unknown, row: Row, rowIndex: number) => string | number
-
-  type?: TableColumnType
-  align?: CellAlign
-  headerAlign?: CellAlign
-
-  width?: string
-  minWidth?: string
-  maxWidth?: string
-
-  wrap?: boolean
-  compact?: 'keep' | 'details' | 'hide'
-
-  rowHeader?: boolean
-  sortable?: boolean
-}
-
-type TableProperties<Row> = {
-  columns: TableColumn<Row>[]
-  rows: Row[]
-  rowKey?: keyof Row | ((row: Row, rowIndex: number) => PropertyKey)
-
-  ariaLabel?: string
-  caption?: string
-  emptyLabel?: string
-  loading?: boolean
-  loadingLabel?: string
-
-  compact?: TableCompactMode
-  layout?: TableLayout
-  mode?: TableResponsiveMode
-  sort?: TableSort | null
-  stickyHeader?: boolean
-}
-
-type HeaderSlotProperties<Row> = {
-  column: TableColumn<Row>
-  sort: TableSort | null | undefined
-}
-
-type CellSlotProperties<Row> = {
-  column: TableColumn<Row>
-  row: Row
-  rowIndex: number
-  value: unknown
-}
-
-type DetailsSlotProperties<Row> = {
-  columns: TableColumn<Row>[]
-  row: Row
-  rowIndex: number
-}
-
-type TableSlots<Row> = {
-  caption?: () => VNode[]
-  empty?: () => VNode[]
-  loading?: () => VNode[]
-  details?: (properties: DetailsSlotProperties<Row>) => VNode[]
-} & {
-  [name: `header-${string}`]: ((properties: HeaderSlotProperties<Row>) => VNode[]) | undefined
-  [name: `cell-${string}`]: ((properties: CellSlotProperties<Row>) => VNode[]) | undefined
-  [name: `detail-${string}`]: ((properties: CellSlotProperties<Row>) => VNode[]) | undefined
-}
-
-export type { TableProperties, TableSlots }
-</script>
-
 <script generic="Row" lang="ts" setup>
-import { computed } from 'vue'
+import { computed, type CSSProperties } from 'vue'
 import { ChevronUpIcon } from '@lucide/vue'
 
 import MIcon from '../MIcon.vue'
 import MSpinner from '../progress/MSpinner.vue'
 import FadeTransition from '../transitons/FadeTransition.vue'
+
+import type { SortDirection, TableColumn, TableProperties, TableSlots, TableSort } from './mtable.types'
 
 const {
   columns,
@@ -235,7 +150,7 @@ const {
   caption,
   emptyLabel = 'No entries found',
   loading = false,
-  loadingLabel = 'Loading',
+  loadingLabel,
   compact = 'auto',
   layout = 'auto',
   mode = 'scroll',
@@ -350,9 +265,16 @@ div.table {
   --max-block-size: none;
   --bg: var(--surface-bg);
   --header-bg: var(--bg);
+
+  --cell-padding-block: var(--space-md);
+  --cell-padding-inline: var(--space-lg);
+
+  --border-width: 0px;
   --border-color: color-mix(in srgb, currentcolor 16%, transparent);
-  --cell-padding-block: var(--space-lg);
-  --cell-padding-inline: var(--space-xl);
+  --border-radius: var(--radius-xl);
+
+  --divider-width: 1px;
+  --divider-color: var(--border-color);
 
   min-inline-size: 0;
   container-type: inline-size;
@@ -361,12 +283,17 @@ div.table {
     max-block-size: var(--max-block-size);
     overflow-x: auto;
     overscroll-behavior-inline: contain;
+    box-shadow: var(--shadow-xs);
+
+    border: var(--border-width) solid var(--border-color);
+    border-radius: var(--border-radius);
+    background: var(--bg);
 
     & > table.content {
       border-spacing: 0;
-      background: var(--bg);
       color: inherit;
       text-align: start;
+      background: transparent;
 
       & > caption {
         padding-block: var(--cell-padding-block);
@@ -380,13 +307,17 @@ div.table {
   .cell {
     padding-block: var(--cell-padding-block);
     padding-inline: var(--cell-padding-inline);
-    border-block-end: 1px solid var(--border-color);
     vertical-align: middle;
   }
 
   .header-cell {
     background: var(--header-bg);
     font-weight: var(--font-weight-bold);
+    border-block-end: var(--divider-width) solid var(--divider-color);
+  }
+
+  tbody > tr:not(:first-child) > :is(.cell, .details-cell) {
+    border-block-start: var(--divider-width) solid var(--divider-color);
   }
 
   :is(.header-cell, .cell)[data-align='start'] {
@@ -481,7 +412,6 @@ div.table {
   .details-cell {
     padding-block: var(--cell-padding-block);
     padding-inline: var(--cell-padding-inline);
-    border-block-end: 1px solid var(--border-color);
   }
 
   .details-list {
