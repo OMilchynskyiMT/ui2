@@ -42,6 +42,10 @@ const styles = computed(() =>
   div.grid-outer {
     --row-gap: var(--space-xxl);
     --column-gap: var(--space-xxl);
+    --columns-sm: 1;
+    --columns-md: 2;
+    --columns-lg: 2;
+    --columns-xl: 4;
 
     max-inline-size: min(100%, var(--container-xl));
     container-type: inline-size;
