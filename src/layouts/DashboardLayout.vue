@@ -123,7 +123,7 @@
             <div class="role">Administrator</div>
           </div>
         </MBar>
-        <MTreeMenu :items="userMenuOptions" icon-size="1.15rem" />
+        <MTreeMenu :items="userMenuOptions" :on-select="item => userMenuHandler(item.value)" icon-size="1.15rem" />
       </div>
     </MPopup>
   </MAppShell>
@@ -208,6 +208,17 @@ const commandsOptions: MTreeMenuItem<string>[] = [
   { title: 'Restart BACnet services', icon: RefreshCcwDotIcon, value: 'restart-bacnet' },
 ]
 
+const userMenuHandler = (value: (typeof userMenuOptions)[number]['value']) => {
+  if (value !== 'switch-color-scheme') return
+  toggleScheme()
+  userMenuOpened.value = false
+}
+
+const toggleScheme = () => {
+  const mode: 'dark' | 'light' = document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light'
+  document.documentElement.dataset.theme = mode === 'dark' ? 'light' : 'dark'
+}
+
 onMounted(() => {
   stopResizeSubscription = useViewportSizeListener(({ width }) => {
     isCompact.value = width < remToPixels(Number.parseInt(containerTokens['--container-md']))
@@ -216,6 +227,7 @@ onMounted(() => {
     }
   })
 })
+
 onBeforeUnmount(() => {
   stopResizeSubscription?.()
 })

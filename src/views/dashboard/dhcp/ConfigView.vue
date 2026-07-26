@@ -36,6 +36,10 @@
         <MIcon v-else :icon="XIcon" :style="{ '--color': 'var(--red-500)' }" />
       </template>
 
+      <template #cell-raMode="{ value }">
+        <MChip kind="success">{{ value }}</MChip>
+      </template>
+
       <template #cell-actions>
         <MButton kind="neutral" variant="icon"><MIcon :icon="PencilIcon" /></MButton>
         <MButton kind="attention" variant="icon" @click="confirmDeleteDialog?.confirm">
@@ -56,6 +60,7 @@ import { CheckIcon, PencilIcon, TrashIcon, XIcon } from '@lucide/vue'
 
 import MButton from '@/components/buttons/MButton.vue'
 import MConfirm, { type Exposed as ConfirmExposed } from '@/components/dialog/MConfirm.vue'
+import MChip from '@/components/MChip.vue'
 import MIcon from '@/components/MIcon.vue'
 import type { TableColumn, TableSort } from '@/components/table/mtable.types'
 import MTable from '@/components/table/MTable.vue'
