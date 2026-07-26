@@ -37,11 +37,11 @@
   --shadow-lg-shape: 0 0.5rem 1rem;
   --shadow-xl-shape: 0 1rem 2rem;
 
-  --shadow-xs-opacity: 0.5;
-  --shadow-sm-opacity: 0.25;
-  --shadow-md-opacity: 0.225;
-  --shadow-lg-opacity: 0.25;
-  --shadow-xl-opacity: 0.25;
+  --shadow-xs-opacity: 0.125;
+  --shadow-sm-opacity: 0.1;
+  --shadow-md-opacity: 0.08;
+  --shadow-lg-opacity: 0.1;
+  --shadow-xl-opacity: 0.12;
 
   --shadow-xs: var(--shadow-xs-shape) oklch(from var(--black) l c h / var(--shadow-xs-opacity));
   --shadow-sm: var(--shadow-sm-shape) oklch(from var(--black) l c h / var(--shadow-sm-opacity));
