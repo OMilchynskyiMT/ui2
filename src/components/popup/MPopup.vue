@@ -27,6 +27,7 @@ import { nextTick, onUnmounted, ref, useAttrs, useTemplateRef, watch } from 'vue
 
 import PopupTransition from '@/components/transitons/PopupTransition.vue'
 
+import { useSnapToDevicePixel } from '@/composables/useDeviceHardwareHelpers'
 import { useEventListeners } from '@/composables/useEventListeners'
 
 type Position = {
@@ -74,15 +75,14 @@ const getPosition = (anchorRect: DOMRect, popupRect: DOMRect): Position => {
   return positions[currentPlacement.value]
 }
 
+const snap = useSnapToDevicePixel
 const updatePosition = (): void => {
   const element = positioner.value
-
   if (!anchor || !element) return
 
   const anchorRect = anchor.getBoundingClientRect()
-
   if (parentWidth) {
-    element.style.setProperty('--inline-size', `${anchorRect.width}px`)
+    element.style.setProperty('--inline-size', `${snap(anchorRect.width)}px`)
   } else {
     element.style.removeProperty('--inline-size')
   }
@@ -90,13 +90,12 @@ const updatePosition = (): void => {
   const popupRect = element.getBoundingClientRect()
   const { blockStart, inlineStart } = getPosition(anchorRect, popupRect)
 
-  element.style.setProperty('--inset-block-start', `${blockStart}px`)
-  element.style.setProperty('--inset-inline-start', `${inlineStart}px`)
+  element.style.setProperty('--inset-block-start', `${snap(blockStart)}px`)
+  element.style.setProperty('--inset-inline-start', `${snap(inlineStart)}px`)
 }
 
 const requestPositionUpdate = (): void => {
   cancelAnimationFrame(frame)
-
   frame = requestAnimationFrame(() => {
     updatePosition()
   })

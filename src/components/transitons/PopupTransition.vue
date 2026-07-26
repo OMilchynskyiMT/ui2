@@ -27,7 +27,7 @@ const cssDuration = `${duration}ms`
   .fade-y-enter-active,
   .fade-y-leave-active {
     will-change: transform, opacity;
-    transition-property: transform, opacity;
+    transition-property: translate, opacity;
     transition-duration: v-bind(cssDuration);
   }
 
@@ -42,13 +42,13 @@ const cssDuration = `${duration}ms`
   .fade-y-enter-from,
   .fade-y-leave-to {
     opacity: 0;
-    transform: translateY(var(--popup-translate-y, 0));
+    translate: 0 var(--popup-translate-y, 0);
   }
 
   .fade-y-enter-to,
   .fade-y-leave-from {
     opacity: 1;
-    transform: translateY(0);
+    translate: 0 0;
   }
 
   :is(.fade-y-enter-from, .fade-y-leave-to):is([data-placement='top-start'], [data-placement='top-end']) {
