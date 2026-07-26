@@ -172,12 +172,15 @@ defineExpose<Exposed>({ show, close, isVisible })
 <style scoped>
 @layer components {
   dialog {
+    --initial-translate: 0 calc(-1 * var(--space-md));
+
     position: fixed;
     top: 0;
     bottom: 0;
     left: 0;
     right: 0;
     margin: auto;
+    isolation: isolate;
 
     inline-size: var(--dialog-width, 32rem);
     max-inline-size: var(--dialog-max-width, calc(100% - var(--outer-gap, var(--space-xxl))));
@@ -189,22 +192,22 @@ defineExpose<Exposed>({ show, close, isVisible })
     background-color: transparent;
     opacity: 0;
     overflow: visible;
-    transform: scale(0.96) translateY(-0.75rem);
+    translate: var(--initial-translate);
     border-radius: var(--dialog-radius, var(--radius-md));
     box-shadow: var(--dialog-shadow, var(--shadow-md));
 
-    transition-property: opacity, transform;
+    transition-property: opacity, translate;
     transition-duration: var(--duration-md);
     transition-timing-function: var(--bezier-magnetic);
 
     &[data-phase='opened'] {
       opacity: 1;
-      transform: scale(1) translateY(0);
+      translate: 0 0;
     }
 
     &[data-phase='closing'] {
       opacity: 0;
-      transform: scale(0.96) translateY(-0.75rem);
+      translate: var(--initial-translate);
     }
 
     & > div.surface {
@@ -239,7 +242,7 @@ defineExpose<Exposed>({ show, close, isVisible })
   @starting-style {
     dialog[data-phase='opened'] {
       opacity: 0;
-      transform: scale(0.96) translateY(-0.75rem);
+      translate: var(--initial-translate);
     }
 
     dialog[data-phase='opened']::backdrop {
