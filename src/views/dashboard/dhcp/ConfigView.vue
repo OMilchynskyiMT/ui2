@@ -16,7 +16,9 @@
 
       <template #cell-actions>
         <MButton kind="neutral" variant="icon"><MIcon :icon="PencilIcon" /></MButton>
-        <MButton kind="caution" variant="icon"><MIcon :icon="TrashIcon" /></MButton>
+        <MButton kind="attention" variant="icon" @click="confirmDeleteDialog?.confirm">
+          <MIcon :icon="TrashIcon" />
+        </MButton>
       </template>
     </MTable>
 
@@ -36,17 +38,24 @@
 
       <template #cell-actions>
         <MButton kind="neutral" variant="icon"><MIcon :icon="PencilIcon" /></MButton>
-        <MButton kind="caution" variant="icon"><MIcon :icon="TrashIcon" /></MButton>
+        <MButton kind="attention" variant="icon" @click="confirmDeleteDialog?.confirm">
+          <MIcon :icon="TrashIcon" />
+        </MButton>
       </template>
     </MTable>
+
+    <MConfirm ref="confirm-delete-dialog" accept-text="Remove">
+      Are you sure you want to remove this DHCP server?
+    </MConfirm>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, useTemplateRef } from 'vue'
 import { CheckIcon, PencilIcon, TrashIcon, XIcon } from '@lucide/vue'
 
 import MButton from '@/components/buttons/MButton.vue'
+import MConfirm, { type Exposed as ConfirmExposed } from '@/components/dialog/MConfirm.vue'
 import MIcon from '@/components/MIcon.vue'
 import type { TableColumn, TableSort } from '@/components/table/mtable.types'
 import MTable from '@/components/table/MTable.vue'
@@ -122,6 +131,8 @@ const dhcpV6Rows: Dhcpv6[] = [
 const sortV4 = ref<TableSort | null>(null)
 const sortV6 = ref<TableSort | null>(null)
 const loading = ref(true)
+const confirmDeleteDialog = useTemplateRef<ConfirmExposed>('confirm-delete-dialog')
+
 onMounted(() => {
   setTimeout(() => {
     loading.value = false
