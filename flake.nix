@@ -31,6 +31,14 @@
           shellHook = ''
             echo "Node.js version: $(node --version)"
             echo "TypeScript version: $(tsc --version)"
+
+            echo "Configuring LAN firewall rule for port 5173..."
+            if doas nft add rule inet nixos-fw input ip saddr 192.168.1.0/24 tcp dport 5173 accept 2>/dev/null; then
+              echo "✓ Port 5173 opened for 192.168.1.0/24"
+              trap 'echo "Removing firewall rule..."; doas nft delete rule inet nixos-fw input ip saddr 192.168.1.0/24 tcp dport 5173 accept' EXIT
+            else
+              echo "✗ Failed to apply firewall rule. Did you cancel the password prompt?"
+            fi
           '';
         };
       }
