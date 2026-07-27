@@ -26,7 +26,6 @@ const cssDuration = `${duration}ms`
 @layer components {
   .fade-y-enter-active,
   .fade-y-leave-active {
-    will-change: transform, opacity;
     transition-property: translate, opacity;
     transition-duration: v-bind(cssDuration);
   }

@@ -67,7 +67,6 @@ const {
       transition-property: transform, opacity;
       transition-duration: var(--page-transition-duration);
       transition-timing-function: var(--bezier-smooth);
-      will-change: transform, opacity;
     }
 
     & > :is(.page-forward-enter-from, .page-back-leave-to) {

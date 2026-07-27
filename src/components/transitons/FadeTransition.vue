@@ -30,7 +30,6 @@ const cssDuration = `${duration}ms`
 @layer components {
   .fade-enter-active,
   .fade-leave-active {
-    will-change: opacity;
     transition-property: opacity;
     transition-duration: var(--duration, v-bind(cssDuration));
     transition-timing-function: var(--bezier-smooth);
