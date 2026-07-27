@@ -3,6 +3,7 @@
     <dialog
       ref="dialog"
       v-bind="getDialogAttributes()"
+      :data-fullscreen="fullscreen || undefined"
       :data-phase="phase"
       @cancel="cancel"
       @close="closed"
@@ -30,9 +31,14 @@ type Phase = 'closed' | 'opened' | 'closing'
 
 const attributes = useAttrs()
 
-const { persistent = false, teleportTo = '#modals' } = defineProps<{
+const {
+  persistent = false,
+  teleportTo = '#modals',
+  fullscreen = false,
+} = defineProps<{
   teleportTo?: TeleportProps['to']
   persistent?: boolean
+  fullscreen?: boolean
 }>()
 
 const emit = defineEmits<{
@@ -172,7 +178,9 @@ defineExpose<Exposed>({ show, close, isVisible })
 <style scoped>
 @layer components {
   dialog {
-    --initial-translate: 0 calc(-1 * var(--space-md));
+    --dialog-width: 32rem;
+    --initial-translate-y: calc(-1 * var(--space-md));
+    --outer-gap: var(--space-xxl);
 
     position: fixed;
     top: 0;
@@ -182,36 +190,42 @@ defineExpose<Exposed>({ show, close, isVisible })
     margin: auto;
     isolation: isolate;
 
-    inline-size: var(--dialog-width, 32rem);
-    max-inline-size: var(--dialog-max-width, calc(100% - var(--outer-gap, var(--space-xxl))));
-
-    block-size: var(--dialog-height, fit-content);
-    max-block-size: var(--dialog-max-height, calc(100% - var(--outer-gap, var(--space-xxl))));
+    inline-size: var(--dialog-width);
+    max-inline-size: calc(100vw - var(--outer-gap));
+    max-block-size: calc(100vh - var(--outer-gap));
 
     color: inherit;
     background-color: transparent;
     opacity: 0;
     overflow: visible;
-    translate: var(--initial-translate);
+    transform: translateY(var(--initial-translate-y));
     border-radius: var(--dialog-radius, var(--radius-md));
     box-shadow: var(--dialog-shadow, var(--shadow-md));
 
-    transition-property: opacity, translate;
+    transition-property: opacity, transform;
     transition-duration: var(--duration-md);
     transition-timing-function: var(--bezier-magnetic);
 
+    &[data-fullscreen] {
+      inline-size: 100%;
+      block-size: 100%;
+      max-inline-size: 100%;
+      max-block-size: 100%;
+      border-radius: 0;
+    }
+
     &[data-phase='opened'] {
       opacity: 1;
-      translate: 0 0;
+      transform: translateY(0);
     }
 
     &[data-phase='closing'] {
       opacity: 0;
-      translate: var(--initial-translate);
+      transform: translateY(var(--initial-translate-y));
     }
 
     & > div.surface {
-      block-size: 100%;
+      height: inherit;
       overflow: auto;
       overscroll-behavior: contain;
 
@@ -242,7 +256,7 @@ defineExpose<Exposed>({ show, close, isVisible })
   @starting-style {
     dialog[data-phase='opened'] {
       opacity: 0;
-      translate: var(--initial-translate);
+      transform: translateY(var(--initial-translate-y));
     }
 
     dialog[data-phase='opened']::backdrop {

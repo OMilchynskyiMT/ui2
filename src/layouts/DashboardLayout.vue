@@ -81,7 +81,7 @@
       id="compact-navigation"
       ref="mainMenuDialog"
       aria-label="Main navigation"
-      style="--dialog-width: 100%; --dialog-height: 100%; --outer-gap: 0"
+      fullscreen
     >
       <MBar style="--padding-inline: var(--space-md); --padding-block: var(--space-md)">
         <img src="/images/MT-logo.svg" style="max-inline-size: 180px" />
