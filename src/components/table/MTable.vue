@@ -53,80 +53,78 @@
           </tr>
         </thead>
 
-        <FadeTransition appear mode="out-in">
-          <tbody v-if="loading">
-            <tr>
-              <td :colspan="columnSpan" class="state loading">
-                <div class="loading">
-                  <slot name="loading">
-                    <MSpinner :stroke-width="4" indeterminate size="1.5rem" />
-                    <span>{{ loadingLabel }}</span>
-                  </slot>
-                </div>
-              </td>
-            </tr>
-          </tbody>
+        <tbody v-if="loading">
+          <tr>
+            <td :colspan="columnSpan" class="state loading">
+              <div class="loading">
+                <slot name="loading">
+                  <MSpinner :stroke-width="4" indeterminate size="1.5rem" />
+                  <span>{{ loadingLabel }}</span>
+                </slot>
+              </div>
+            </td>
+          </tr>
+        </tbody>
 
-          <tbody v-else-if="rows.length === 0">
-            <tr>
-              <td :colspan="columnSpan" class="state empty">
-                <slot name="empty">{{ emptyLabel }}</slot>
-              </td>
-            </tr>
-          </tbody>
+        <tbody v-else-if="rows.length === 0">
+          <tr>
+            <td :colspan="columnSpan" class="state empty">
+              <slot name="empty">{{ emptyLabel }}</slot>
+            </td>
+          </tr>
+        </tbody>
 
-          <tbody v-else>
-            <template v-for="(row, rowIndex) in rows" :key="getRowKey(row, rowIndex)">
-              <tr class="row">
-                <component
-                  :is="column.rowHeader ? 'th' : 'td'"
-                  v-for="column in columns"
-                  :key="column.key"
-                  :data-align="column.align ?? 'start'"
-                  :data-compact="column.compact ?? 'keep'"
-                  :data-type="column.type ?? 'text'"
-                  :data-wrap="column.wrap ?? true"
-                  :scope="column.rowHeader ? 'row' : undefined"
-                  :style="getColumnStyle(column)"
-                  class="cell"
+        <tbody v-else>
+          <template v-for="(row, rowIndex) in rows" :key="getRowKey(row, rowIndex)">
+            <tr class="row">
+              <component
+                :is="column.rowHeader ? 'th' : 'td'"
+                v-for="column in columns"
+                :key="column.key"
+                :data-align="column.align ?? 'start'"
+                :data-compact="column.compact ?? 'keep'"
+                :data-type="column.type ?? 'text'"
+                :data-wrap="column.wrap ?? true"
+                :scope="column.rowHeader ? 'row' : undefined"
+                :style="getColumnStyle(column)"
+                class="cell"
+              >
+                <slot
+                  :column="column"
+                  :name="getCellSlotName(column)"
+                  :row="row"
+                  :row-index="rowIndex"
+                  :value="getCellValue(row, rowIndex, column)"
                 >
-                  <slot
-                    :column="column"
-                    :name="getCellSlotName(column)"
-                    :row="row"
-                    :row-index="rowIndex"
-                    :value="getCellValue(row, rowIndex, column)"
-                  >
-                    {{ getCellText(row, rowIndex, column) }}
-                  </slot>
-                </component>
-              </tr>
+                  {{ getCellText(row, rowIndex, column) }}
+                </slot>
+              </component>
+            </tr>
 
-              <tr v-if="mode === 'details' && detailColumns.length > 0" class="details-row">
-                <td :colspan="columnSpan" class="details-cell">
-                  <slot :columns="detailColumns" :row="row" :row-index="rowIndex" name="details">
-                    <dl class="details-list">
-                      <div v-for="column in detailColumns" :key="column.key" class="details-item">
-                        <dt>{{ column.label }}</dt>
-                        <dd>
-                          <slot
-                            :column="column"
-                            :name="getDetailSlotName(column)"
-                            :row="row"
-                            :row-index="rowIndex"
-                            :value="getCellValue(row, rowIndex, column)"
-                          >
-                            {{ getCellText(row, rowIndex, column) }}
-                          </slot>
-                        </dd>
-                      </div>
-                    </dl>
-                  </slot>
-                </td>
-              </tr>
-            </template>
-          </tbody>
-        </FadeTransition>
+            <tr v-if="mode === 'details' && detailColumns.length > 0" class="details-row">
+              <td :colspan="columnSpan" class="details-cell">
+                <slot :columns="detailColumns" :row="row" :row-index="rowIndex" name="details">
+                  <dl class="details-list">
+                    <div v-for="column in detailColumns" :key="column.key" class="details-item">
+                      <dt>{{ column.label }}</dt>
+                      <dd>
+                        <slot
+                          :column="column"
+                          :name="getDetailSlotName(column)"
+                          :row="row"
+                          :row-index="rowIndex"
+                          :value="getCellValue(row, rowIndex, column)"
+                        >
+                          {{ getCellText(row, rowIndex, column) }}
+                        </slot>
+                      </dd>
+                    </div>
+                  </dl>
+                </slot>
+              </td>
+            </tr>
+          </template>
+        </tbody>
       </table>
     </div>
   </div>
@@ -138,7 +136,6 @@ import { ChevronUpIcon } from '@lucide/vue'
 
 import MIcon from '../MIcon.vue'
 import MSpinner from '../progress/MSpinner.vue'
-import FadeTransition from '../transitons/FadeTransition.vue'
 
 import type { SortDirection, TableColumn, TableProperties, TableSlots, TableSort } from './mtable.types'
 
