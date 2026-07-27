@@ -271,7 +271,7 @@ div.table {
 
   --border-width: 0px;
   --border-color: color-mix(in srgb, currentcolor 8%, transparent);
-  --border-radius: var(--radius-xl);
+  --border-radius: var(--radius-md);
 
   --divider-width: 1px;
   --divider-color: var(--border-color);
