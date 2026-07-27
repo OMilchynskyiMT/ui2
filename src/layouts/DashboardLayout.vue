@@ -127,8 +127,8 @@
       </div>
     </MPopup>
 
-    <MConfirm ref="saveAndApplyConfirm" title="When in doubt, reboot">
-      Let's apply some advanced engineering magic: unplug it and plug it back in. Continue?
+    <MConfirm ref="saveAndApplyConfirm">
+      Current configuration will be saved and applied. Continue?
     </MConfirm>
   </MAppShell>
 </template>

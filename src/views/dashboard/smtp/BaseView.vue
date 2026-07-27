@@ -1,9 +1,9 @@
 <template>
   <MFormGrid :columns="1">
     <MCaption>
-      DHCP Servers and DHCPv6/RA Configuration
+      SMTP Configuration
       <template #description>
-        Configure DHCP server that supplies network configuration information to devices on the network
+        Configure SMTP server and mail log settings to allow your device to send email messages
       </template>
     </MCaption>
 
@@ -12,7 +12,7 @@
         v-for="tab in tabs"
         :key="tab.title"
         :active="route.name === tab.route"
-        @click="goto(tab.route?.toString(), id => router.push({ name: id }))"
+        @click="goto(tab.route.toString(), id => router.push({ name: id }))"
       >
         <MIcon :icon="tab.icon" style="--color: var(--lime-500)" />
         {{ tab.title }}
@@ -28,7 +28,8 @@
 </template>
 
 <script lang="ts" setup>
-import { CogIcon, PlusIcon } from '@lucide/vue'
+import { NotebookTabsIcon } from '@lucide/vue'
+import { CogIcon } from '@lucide/vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import MFormGrid from '@/components/grid/MFormGrid.vue'
@@ -40,13 +41,12 @@ import { useTabNavigation } from '@/components/tabs/useTabNavigation'
 import PageTransition from '@/components/transitons/PageTransition.vue'
 
 const tabs = [
-  { title: 'DHCP Configuration', icon: CogIcon, route: 'dhcp-config' },
-  { title: 'Add IPv4 DHCP Server', icon: PlusIcon, route: 'dhcp-add' },
-  { title: 'Add DHCPv6/RA', icon: PlusIcon, route: 'dhcp-add-v6' },
+  { title: 'Settings', route: 'smtp-settings', icon: CogIcon },
+  { title: 'Mail Log', route: 'smtp-log', icon: NotebookTabsIcon },
 ]
 
-const router = useRouter()
 const route = useRoute()
+const router = useRouter()
 
 const { transitionName, goto } = useTabNavigation(
   tabs.map(t => t.route),

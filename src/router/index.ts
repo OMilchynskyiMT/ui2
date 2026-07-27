@@ -48,7 +48,20 @@ const router = createRouter({
             {
               path: 'smtp',
               name: 'smtp',
-              component: () => import('@/views/dashboard/SmtpView.vue'),
+              component: () => import('@/views/dashboard/smtp/BaseView.vue'),
+              redirect: { name: 'smtp-settings' },
+              children: [
+                {
+                  path: 'configuration',
+                  name: 'smtp-settings',
+                  component: () => import('@/views/dashboard/smtp/SettingsView.vue'),
+                },
+                {
+                  path: 'log',
+                  name: 'smtp-log',
+                  component: () => import('@/views/dashboard/smtp/LogView.vue'),
+                }
+              ],
             },
           ],
         },

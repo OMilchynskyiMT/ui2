@@ -299,6 +299,8 @@ div.table {
         padding-block: var(--cell-padding-block);
         padding-inline: var(--cell-padding-inline);
         text-align: start;
+        color: light-dark(var(--cyan-800), var(--cyan-300));
+        font-size: var(--font-size-lg);
       }
     }
   }
@@ -404,7 +406,11 @@ div.table {
       justify-content: center;
       align-items: center;
       gap: 1rem;
+    }
+
+    &:is(.loading, .empty) {
       color: oklch(from currentColor l c h / 0.5);
+      font-size: var(--font-size-sm);
     }
   }
 

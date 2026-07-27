@@ -150,7 +150,7 @@ onBeforeUnmount(() => {
     --border-color: var(--input-border-color);
     --transition-duration: var(--duration-md);
     --transition-func: var(--bezier-smooth);
-    --field-label-clearance: calc(var(--label-font-size-active) / 2);
+    --field-label-clearance: 0;
 
     --prefix-color: oklch(from var(--input-text-color) l c h / 0.5);
     --prefix-opacity: 0;

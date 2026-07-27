@@ -1,1 +1,0 @@
-<template>smtp view</template>
