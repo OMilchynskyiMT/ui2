@@ -12,15 +12,6 @@
           <slot name="caption">{{ caption }}</slot>
         </caption>
 
-        <colgroup v-if="columns.length > 0">
-          <col
-            v-for="column in columns"
-            :key="column.key"
-            :data-compact="column.compact ?? 'keep'"
-            :style="getColumnStyle(column)"
-          />
-        </colgroup>
-
         <thead v-if="columns.length > 0">
           <tr>
             <th
@@ -467,8 +458,8 @@ div.table {
   }
 
   &[data-mode='details'][data-compact='true'] {
-    :is(col, .header-cell, .cell)[data-compact='details'],
-    :is(col, .header-cell, .cell)[data-compact='hide'] {
+    :is(.header-cell, .cell)[data-compact='details'],
+    :is(.header-cell, .cell)[data-compact='hide'] {
       display: none;
     }
 
@@ -479,8 +470,8 @@ div.table {
 
   @container (inline-size < container-token(--container-md)) {
     &[data-mode='details'][data-compact='auto'] {
-      :is(col, .header-cell, .cell)[data-compact='details'],
-      :is(col, .header-cell, .cell)[data-compact='hide'] {
+      :is(.header-cell, .cell)[data-compact='details'],
+      :is(.header-cell, .cell)[data-compact='hide'] {
         display: none;
       }
 
