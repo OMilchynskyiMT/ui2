@@ -168,7 +168,7 @@ defineExpose<MSelectionControlExpose>({
   .selection-control {
     --control-color: var(--input-border-active-color);
     --control-container-color: var(--input-border-color);
-    --control-container-hover-color: color-mix(in srgb, var(--control-container-color) 80%, currentColor);
+    --control-container-hover-color: color-mix(in srgb, var(--control-container-color) 90%, currentColor);
     --control-error-color: var(--input-border-error-color);
     --control-mark-color: var(--surface-bg);
     --control-text-color: var(--input-text-color);
@@ -188,8 +188,8 @@ defineExpose<MSelectionControlExpose>({
     );
     --control-opacity: 1;
     --control-cursor: pointer;
-    --control-transition-duration: var(--duration-md);
-    --control-transition-func: var(--bezier-magnetic);
+    --control-transition-duration: var(--duration-lg);
+    --control-transition-func: var(--bezier-bounce);
     --control-indicator-bg: var(--control-container-color);
 
     position: relative;
@@ -211,21 +211,23 @@ defineExpose<MSelectionControlExpose>({
       grid-area: indicator;
       position: relative;
       display: block;
+      overflow: clip;
       inline-size: var(--control-inline-size);
       block-size: var(--control-block-size);
       margin-block-start: var(--control-align-offset);
       background-color: var(--control-indicator-bg);
       color: var(--control-color);
+
       transition-property: background-color, color, box-shadow, transform;
       transition-duration: var(--control-transition-duration);
       transition-timing-function: var(--control-transition-func);
-      overflow: clip;
 
       &::after {
         content: '';
         position: absolute;
         display: block;
-        transition-property: inline-size, block-size, background-color, border-color, opacity, transform;
+
+        transition-property: background-color, border-color, opacity, transform;
         transition-duration: var(--control-transition-duration);
         transition-timing-function: var(--control-transition-func);
       }
@@ -248,20 +250,20 @@ defineExpose<MSelectionControlExpose>({
         border-radius: var(--control-radius);
 
         &::after {
-          inset-block-start: 42%;
+          inset-block-start: 50%;
           inset-inline-start: 50%;
           inline-size: calc(var(--control-size) * 0.35);
-          block-size: calc(var(--control-size) * 0.65);
+          block-size: calc(var(--control-size) * 0.7);
           border-block-end: var(--control-mark-width) solid var(--control-mark-color);
           border-inline-end: var(--control-mark-width) solid var(--control-mark-color);
           opacity: 0;
-          transform: translate(-50%, -80%) rotate(45deg) scale(0.75);
+          transform: translate(-50%, -100%) rotate(90deg) scale(0.33);
         }
       }
 
       &:has(.input:checked) > .indicator::after {
         opacity: 1;
-        transform: translate(-50%, -50%) rotate(45deg) scale(1);
+        transform: translate(-50%, -60%) rotate(45deg) scale(1);
       }
 
       &:has(.input:indeterminate) > .indicator::after {
