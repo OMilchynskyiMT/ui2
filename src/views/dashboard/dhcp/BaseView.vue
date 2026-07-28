@@ -7,17 +7,11 @@
       </template>
     </MCaption>
 
-    <MTabBar>
-      <MTabItem
-        v-for="tab in tabs"
-        :key="tab.title"
-        :active="route.name === tab.route"
-        @click="goto(tab.route?.toString(), id => router.push({ name: id }))"
-      >
-        <MIcon :icon="tab.icon" style="--color: var(--lime-500)" />
-        {{ tab.title }}
-      </MTabItem>
-    </MTabBar>
+    <MTabs
+      :check-active="tab => route.name === tab.value"
+      :items="tabs"
+      :on-select="tab => tab.value && goto(tab.value, id => router.push({ name: id }))"
+    />
 
     <RouterView v-slot="{ Component }">
       <PageTransition :name="transitionName" appear>
@@ -32,24 +26,22 @@ import { CogIcon, PlusIcon } from '@lucide/vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import MFormGrid from '@/components/grid/MFormGrid.vue'
-import MIcon from '@/components/MIcon.vue'
 import MCaption from '@/components/section/MCaption.vue'
-import MTabBar from '@/components/tabs/MTabBar.vue'
-import MTabItem from '@/components/tabs/MTabItem.vue'
+import MTabs from '@/components/tabs/MTabs.vue'
 import { useTabNavigation } from '@/components/tabs/useTabNavigation'
 import PageTransition from '@/components/transitons/PageTransition.vue'
 
 const tabs = [
-  { title: 'DHCP Configuration', icon: CogIcon, route: 'dhcp-config' },
-  { title: 'Add IPv4 DHCP Server', icon: PlusIcon, route: 'dhcp-add' },
-  { title: 'Add DHCPv6/RA', icon: PlusIcon, route: 'dhcp-add-v6' },
+  { title: 'DHCP Configuration', icon: CogIcon, value: 'dhcp-config' },
+  { title: 'Add IPv4 DHCP Server', icon: PlusIcon, value: 'dhcp-add' },
+  { title: 'Add DHCPv6/RA', icon: PlusIcon, value: 'dhcp-add-v6' },
 ]
 
 const router = useRouter()
 const route = useRoute()
 
 const { transitionName, goto } = useTabNavigation(
-  tabs.map(t => t.route),
+  tabs.map(t => t.value),
   route.name
 )
 </script>
