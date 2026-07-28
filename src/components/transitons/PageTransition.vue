@@ -25,32 +25,25 @@ const {
 <style>
 @layer components {
   .m-page-transition {
-    --page-shift: 3rem;
-    --page-overflow-bleed: 1.5rem;
+    --page-shift: var(--space-xxl);
+    --page-overflow-bleed: calc(var(--page-shift) / 2);
 
     position: relative;
     display: grid;
+    overflow-x: clip;
+    overflow-y: visible;
+    overflow-clip-margin: var(--page-overflow-bleed);
 
     & > * {
+      --page-offset-x: 0px;
+      --page-offset-y: 0px;
+      --opacity: 1;
+
       grid-area: 1 / 1;
       min-inline-size: 0;
       align-self: start;
-    }
-
-    &:has(
-      > :is(
-        .page-forward-enter-active,
-        .page-forward-leave-active,
-        .page-back-enter-active,
-        .page-back-leave-active,
-        .page-fade-enter-active,
-        .page-fade-leave-active,
-        .page-enter-enter-active,
-        .page-enter-leave-active
-      )
-    ) {
-      overflow: clip;
-      overflow-clip-margin: var(--page-overflow-bleed);
+      opacity: var(--opacity);
+      transform: translate3d(var(--page-offset-x), var(--page-offset-y), 0);
     }
 
     &
@@ -69,43 +62,41 @@ const {
       transition-timing-function: var(--bezier-smooth);
     }
 
+    &
+      > :is(
+        .page-forward-enter-from,
+        .page-back-leave-to,
+        .page-forward-leave-to,
+        .page-back-enter-from,
+        .page-fade-enter-from,
+        .page-fade-leave-to,
+        .page-enter-enter-from,
+        .page-enter-leave-to,
+
+      ) {
+      --opacity: 0;
+    }
+
     & > :is(.page-forward-enter-from, .page-back-leave-to) {
-      opacity: 0;
-      transform: translateX(var(--page-shift));
+      --page-offset-x: var(--page-shift);
+      --page-offset-y: 0px;
     }
 
     & > :is(.page-forward-leave-to, .page-back-enter-from) {
-      opacity: 0;
-      transform: translateX(calc(-1 * var(--page-shift)));
+      --page-offset-x: calc(-1 * var(--page-shift));
+      --page-offset-y: 0px;
     }
 
-    & > :is(.page-fade-enter-from, .page-fade-leave-to) {
-      opacity: 0;
-    }
-
-    & > .page-enter-enter-from {
-      opacity: 0;
-      transform: translateY(calc(var(--page-shift) * 0.25));
-    }
-
-    & > .page-enter-leave-to {
-      opacity: 0;
-      transform: translateY(calc(var(--page-shift) * -0.25));
+    & > :is(.page-enter-enter-from, .page-enter-leave-to) {
+      --page-offset-x: 0px;
+      --page-offset-y: var(--page-shift);
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
     .m-page-transition {
+      --page-shift: 0px;
       --page-transition-duration: 1ms;
-    }
-
-    .page-forward-enter-from,
-    .page-forward-leave-to,
-    .page-back-enter-from,
-    .page-back-leave-to,
-    .page-enter-enter-from,
-    .page-enter-leave-to {
-      transform: none;
     }
   }
 }
