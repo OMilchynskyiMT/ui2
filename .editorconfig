@@ -11,7 +11,3 @@ trim_trailing_whitespace = true
 indent_size = 2
 indent_style = space
 max_line_length = 100
-
-[*.{vue,html,jsx,tsx}]
-insert_final_newline = false
-trim_final_newlines = true
