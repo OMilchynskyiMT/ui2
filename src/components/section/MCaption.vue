@@ -38,7 +38,7 @@ const { icon, hint } = defineProps<{
 
       & > div.description {
         font-size: var(--font-size-sm);
-        color: var(--gray-500);
+        color: var(--text-color-dimmed);
       }
     }
   }
