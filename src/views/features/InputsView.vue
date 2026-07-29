@@ -104,6 +104,12 @@
       <template #hint>Lorem ipsum dolor sit amet consectetur adipisicing elit</template>
     </MColor>
     <div>{{ colorModel }}</div>
+
+    <MTextarea v-model="textareaModel" auto-grow counter hint="Lorem ipsum dolor sit amet" label="Textarea">
+      <template #leading>
+        <MIcon :icon="MailPlusIcon" style="color: var(--green-500)" />
+      </template>
+    </MTextarea>
   </div>
 </template>
 
@@ -118,6 +124,7 @@ import MField from '@/components/fields/MField.vue'
 import MNumber from '@/components/fields/MNumber.vue'
 import MRadio from '@/components/fields/MRadio.vue'
 import MSelect from '@/components/fields/MSelect.vue'
+import MTextarea from '@/components/fields/MTextarea.vue'
 import MToggle from '@/components/fields/MToggle.vue'
 import type { ListItem, ListOption } from '@/components/list/MList.vue'
 import MIcon from '@/components/MIcon.vue'
@@ -132,6 +139,7 @@ const indeterminateModel = ref(false)
 const radioModel = ref('http')
 const toggleModel = ref(false)
 const colorModel = ref('#f59')
+const textareaModel = ref('')
 
 const comboOptions: ListItem<string>[] = [
   { value: '80' },
