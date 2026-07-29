@@ -22,7 +22,7 @@
       :id="id"
       ref="input"
       v-bind="attributes"
-      :aria-details="hint || slots.hint ? `${id}-hint` : undefined"
+      :aria-describedby="description"
       :aria-disabled="disabled"
       :aria-errormessage="isInvalid && (error || slots.error) ? `${id}-error` : undefined"
       :aria-invalid="isInvalid || undefined"
@@ -88,6 +88,13 @@ const model = defineModel<string>({ required: true })
 const inputReference = useTemplateRef<HTMLInputElement>('input')
 const isFocused = ref(false)
 const isInvalid = computed(() => invalid || Boolean(error || slots.error))
+const description = computed(() => {
+  const identifiers: string[] = []
+  if (isInvalid.value && (error || slots.error)) identifiers.push(`${id}-error`)
+  if (hint || slots.hint) identifiers.push(`${id}-hint`)
+
+  return identifiers.length > 0 ? identifiers.join(' ') : undefined
+})
 
 const focus = (options?: FocusOptions): void => {
   inputReference.value?.focus(options)
@@ -106,13 +113,14 @@ defineExpose<MFieldExpose>({
   select: () => inputReference.value?.select(),
 })
 
-const onFocus = ($event: FocusEvent): void => {
+const onFocus = (event: FocusEvent): void => {
   isFocused.value = true
-  emit('focus', $event)
+  emit('focus', event)
 }
-const onBlur = ($event: FocusEvent): void => {
+
+const onBlur = (event: FocusEvent): void => {
   isFocused.value = false
-  emit('blur', $event)
+  emit('blur', event)
 }
 
 const update = (event: Event): void => {

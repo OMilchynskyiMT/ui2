@@ -35,12 +35,18 @@
       </fieldset>
     </div>
 
-    <div v-if="slots.error || error" :id="`${id}-error`" class="error">
-      <slot name="error">{{ error }}</slot>
-    </div>
+    <div v-if="slots.error || error || slots.hint || hint || slots.counter" class="supporting">
+      <div v-if="slots.error || error || slots.hint || hint" class="messages">
+        <div v-if="slots.error || error" :id="`${id}-error`" class="error">
+          <slot name="error">{{ error }}</slot>
+        </div>
 
-    <div v-if="slots.hint || hint" :id="`${id}-hint`" class="hint">
-      <slot name="hint">{{ hint }}</slot>
+        <div v-if="slots.hint || hint" :id="`${id}-hint`" class="hint">
+          <slot name="hint">{{ hint }}</slot>
+        </div>
+      </div>
+
+      <div v-if="slots.counter" class="counter"><slot name="counter" /></div>
     </div>
   </div>
 </template>
@@ -76,6 +82,8 @@ const emit = defineEmits<{
 }>()
 const ready = ref(false)
 
+const fieldInteractiveSelector = `${interactiveSelector}, textarea`
+
 defineExpose<MFieldFrameExpose>({
   get field() {
     return fieldReference.value
@@ -89,7 +97,7 @@ const onPointerDown = (event: PointerEvent): void => {
   if (disabled || event.button !== 0) return
 
   const target = event.target
-  if (!(target instanceof Element) || target.closest(interactiveSelector)) return
+  if (!(target instanceof Element) || target.closest(fieldInteractiveSelector)) return
   if (event.pointerType === 'mouse') event.preventDefault()
 
   emit('request-focus')
@@ -107,7 +115,7 @@ const updateLabelInlineStart = (): void => {
     return
   }
 
-  const width = leadingReference.value?.getBoundingClientRect().width ?? 0
+  const width = leadingReference.value.getBoundingClientRect().width
   setLabelInlineStart(`calc(var(--input-gap-x) + ${width}px)`)
 }
 
@@ -151,6 +159,9 @@ onBeforeUnmount(() => {
     --transition-duration: var(--duration-md);
     --transition-func: var(--bezier-smooth);
     --field-label-clearance: 0;
+
+    --multiline-padding-block: calc(var(--input-padding-inline) * 0.75);
+    --multiline-label-block-start: calc(var(--multiline-padding-block) + var(--input-font-size) * 0.75);
 
     --prefix-color: oklch(from var(--input-text-color) l c h / 0.5);
     --prefix-opacity: 0;
@@ -216,6 +227,8 @@ onBeforeUnmount(() => {
       transform: translateY(-50%);
       transform-origin: left top;
 
+      overflow: visible;
+      max-inline-size: calc(100% - var(--input-padding-inline) * 2 - var(--label-inline-start));
       color: var(--label-color);
       font-size: var(--label-font-size);
       line-height: 1;
@@ -267,18 +280,53 @@ onBeforeUnmount(() => {
     }
   }
 
-  .field > div.hint,
-  .field > div.error {
+  .field > div.supporting {
+    display: flex;
+    align-items: flex-start;
+    column-gap: var(--input-gap-x);
+    min-inline-size: 0;
     font-size: calc(var(--input-font-size) * 0.875);
     line-height: 1.25;
+
+    & > .messages {
+      display: flex;
+      flex: 1 1 auto;
+      flex-direction: column;
+      row-gap: var(--field-gap-y);
+      min-inline-size: 0;
+
+      & > .hint {
+        color: var(--input-hint-color);
+      }
+
+      & > .error {
+        color: var(--input-error-color);
+      }
+    }
+
+    & > .counter {
+      flex: 0 0 auto;
+      margin-inline-start: auto;
+      color: var(--input-hint-color);
+      white-space: nowrap;
+    }
   }
 
-  .field > div.hint {
-    color: var(--input-hint-color);
-  }
+  .field:is(.multiline) {
+    & > div.container {
+      & > label {
+        inset-block-start: var(--multiline-label-block-start);
+      }
 
-  .field > div.error {
-    color: var(--input-error-color);
+      & > div.area {
+        align-items: flex-start;
+        padding-block: var(--multiline-padding-block);
+
+        & > .control {
+          align-items: flex-start;
+        }
+      }
+    }
   }
 
   .field:is(:hover):where(:not(.disabled, .readonly)) {
@@ -297,7 +345,7 @@ onBeforeUnmount(() => {
 
     & > div.container > fieldset > legend {
       --inline-size: 100%;
-      --padding-inline: calc(var(--input-padding-inline)/2);
+      --padding-inline: calc(var(--input-padding-inline) / 2);
     }
 
     & > div.container > label {
@@ -322,6 +370,7 @@ onBeforeUnmount(() => {
     --opacity: 0.5;
     --cursor: not-allowed;
     user-select: none;
+
     & > .container {
       pointer-events: none;
     }

@@ -188,8 +188,8 @@ defineExpose<MSelectionControlExpose>({
     );
     --control-opacity: 1;
     --control-cursor: pointer;
-    --control-transition-duration: var(--duration-lg);
-    --control-transition-func: var(--bezier-bounce);
+    --control-transition-duration: var(--duration-md);
+    --control-transition-func: var(--bezier-magnetic);
     --control-indicator-bg: var(--control-container-color);
 
     position: relative;
