@@ -105,11 +105,37 @@
     </MColor>
     <div>{{ colorModel }}</div>
 
-    <MTextarea v-model="textareaModel" auto-grow counter hint="Lorem ipsum dolor sit amet" label="Textarea">
+    <MTextarea v-model="textareaModel" counter hint="Lorem ipsum dolor sit amet" label="Textarea">
       <template #leading>
         <MIcon :icon="MailPlusIcon" style="color: var(--green-500)" />
       </template>
     </MTextarea>
+
+    <MTextarea v-model="textareaModel" auto-grow counter hint="Lorem ipsum dolor sit amet" label="Textarea auto grow">
+      <template #leading>
+        <MIcon :icon="MailPlusIcon" style="color: var(--green-500)" />
+      </template>
+    </MTextarea>
+
+    <MFileUpload
+      v-model="fileModel"
+      accept="image/*"
+      accept-text="Images only"
+      area-text="Drag and drop files here or click to upload"
+      hint="Lorem ipsum dolor sit amet"
+      label="File upload"
+      multiple
+    />
+    <MFileUpload
+      v-model="fileModel"
+      accept="image/*"
+      accept-text="Images only"
+      area-text="Drag and drop files here or click to upload"
+      hint="Lorem ipsum dolor sit amet"
+      label="File upload (area)"
+      multiple
+      variant="area"
+    />
   </div>
 </template>
 
@@ -121,6 +147,7 @@ import MCheckbox from '@/components/fields/MCheckbox.vue'
 import MColor from '@/components/fields/MColor.vue'
 import MCombobox from '@/components/fields/MCombobox.vue'
 import MField from '@/components/fields/MField.vue'
+import MFileUpload from '@/components/fields/MFileUpload.vue'
 import MNumber from '@/components/fields/MNumber.vue'
 import MRadio from '@/components/fields/MRadio.vue'
 import MSelect from '@/components/fields/MSelect.vue'
@@ -140,6 +167,7 @@ const radioModel = ref('http')
 const toggleModel = ref(false)
 const colorModel = ref('#f59')
 const textareaModel = ref('')
+const fileModel = ref<File[]>([])
 
 const comboOptions: ListItem<string>[] = [
   { value: '80' },
