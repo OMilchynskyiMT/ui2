@@ -53,7 +53,7 @@
           <a href="#">About</a>
           <a href="#">Contact Us</a>
         </div>
-        <div class="copyright">&copy; 1995-2026 <a href="#">Multi-Tech Systems, Inc</a>.</div>
+        <div class="copyright">&copy; 1995-2026 <a href="#">mt prototype</a>.</div>
       </div>
     </template>
 
