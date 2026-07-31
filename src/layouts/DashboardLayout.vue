@@ -84,7 +84,8 @@
       fullscreen
     >
       <MBar style="--padding-inline: var(--space-md); --padding-block: var(--space-md)">
-        <img src="/images/MT-logo.svg" style="max-inline-size: 180px" />
+        <img v-if="resolvedScheme === 'light'" src="/images/MT-logo.svg" width="180" />
+        <img v-else src="/images/MT-logo-light.svg" width="180" />
         <template #trailing>
           <MButton class="close-button" kind="caution" variant="icon" @click="mainMenuDialog?.close()">
             <MIcon :icon="XIcon" />
@@ -163,6 +164,7 @@ import MIcon from '@/components/MIcon.vue'
 import MUserAvatar from '@/components/MUserAvatar.vue'
 import MPopup from '@/components/popup/MPopup.vue'
 
+import { useColorScheme } from '@/composables/useColorScheme'
 import { remToPixels, useViewportSizeListener } from '@/composables/useViewportSizeListener'
 import { containerTokens } from '@/postcss/containerTokens'
 
@@ -176,6 +178,8 @@ const userMenuButton = useTemplateRef('user-menu-button')
 const userMenuOpened = ref(false)
 const saveAndApplyConfirm = useTemplateRef<ConfirmExposed>('saveAndApplyConfirm')
 let stopResizeSubscription: (() => void) | undefined
+
+const { toggleScheme, scheme: resolvedScheme } = useColorScheme()
 
 const menuOptions: MTreeMenuItem<RouteLocation>[] = [
   { title: 'Dashboard', icon: LayoutDashboardIcon, value: router.resolve({ name: 'dashboard' }) },
@@ -218,11 +222,6 @@ const userMenuHandler = (value: (typeof userMenuOptions)[number]['value']) => {
   if (value !== 'switch-color-scheme') return
   toggleScheme()
   userMenuOpened.value = false
-}
-
-const toggleScheme = () => {
-  const mode: 'dark' | 'light' = document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light'
-  document.documentElement.dataset.theme = mode === 'dark' ? 'light' : 'dark'
 }
 
 onMounted(() => {

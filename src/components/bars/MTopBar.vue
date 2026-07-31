@@ -1,7 +1,8 @@
 <template>
   <MBar>
     <template #leading>
-      <img class="u-hidden-below-md" src="/images/MT-logo.svg" style="max-inline-size: 180px" />
+      <img v-if="resolvedScheme === 'light'" src="/images/MT-logo.svg" class="u-hidden-below-md" width="180" />
+      <img v-else src="/images/MT-logo-light.svg" class="u-hidden-below-md" width="180" />
       <slot name="leading" />
     </template>
 
@@ -20,7 +21,14 @@
 </template>
 
 <script lang="ts" setup>
+import { watch } from 'vue'
+
+import { useColorScheme } from '../../composables/useColorScheme.ts'
+
 import MBar from './MBar.vue'
+
+const { scheme: resolvedScheme, rawScheme: scheme } = useColorScheme()
+watch(scheme, () => console.log('scheme change', resolvedScheme.value))
 </script>
 
 <style scoped>
