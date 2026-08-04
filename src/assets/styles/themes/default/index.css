@@ -15,6 +15,7 @@
   --text-color: light-dark(var(--gray-800), var(--gray-200));
   --text-color-dimmed: var(--gray-500);
   --error-text-color: light-dark(var(--red-600), var(--red-400));
+  --divider-color: color-mix(in oklch, var(--text-color) 12%, transparent);
 
   --link-color: light-dark(var(--blue-500), var(--blue-400));
   --link-hover-color: light-dark(var(--blue-600), var(--blue-500));

@@ -258,11 +258,10 @@ div.table {
   --cell-padding-inline: var(--space-lg);
 
   --border-width: 0px;
-  --border-color: color-mix(in srgb, currentcolor 8%, transparent);
+  --border-color: var(--divider-color);
   --border-radius: var(--radius-md);
 
   --divider-width: 1px;
-  --divider-color: var(--border-color);
 
   min-inline-size: 0;
   container-type: inline-size;
