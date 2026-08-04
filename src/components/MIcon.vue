@@ -1,10 +1,5 @@
 <template>
-  <component
-    :is="icon"
-    :stroke-width="strokeWidth"
-    aria-hidden="true"
-    class="icon"
-  />
+  <component :is="icon" :stroke-width="strokeWidth" aria-hidden="true" class="icon" />
 </template>
 
 <script lang="ts" setup>
@@ -21,10 +16,13 @@ const { size = '1.25rem', strokeWidth = 2 } = defineProps<{
 <style scoped>
 @layer components {
   .icon {
-    color: var(--color, v-bind(color));
+    --size: v-bind(size);
+    --color: v-bind(color);
+
+    color: var(--color);
     flex: 0 0 auto;
-    width: var(--size, v-bind(size));
-    height: var(--size, v-bind(size));
+    width: var(--size);
+    height: var(--size);
   }
 }
 </style>
