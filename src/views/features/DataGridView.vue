@@ -8,6 +8,15 @@
         <MIcon :icon="UserIcon" color="red" />
         <MCopyToClipboard :text="String(value)" style="--accent-color: var(--purple-500)">{{ value }}</MCopyToClipboard>
       </template>
+      <template #value-test4="{ value }">
+        <MSignalStrength
+          :level="Number(value) ?? 0"
+          :steps="5"
+          style="--color: var(--cyan-600)"
+          title="Lorem ipsum"
+        />
+        {{ value }}
+      </template>
     </MDataGrid>
   </MFormGrid>
 </template>
@@ -19,12 +28,13 @@ import MDataGrid from '@/components/grid/MDataGrid.vue'
 import MFormGrid from '@/components/grid/MFormGrid.vue'
 import MIcon from '@/components/MIcon.vue'
 import MCopyToClipboard from '@/components/misc/MCopyToClipboard.vue'
+import MSignalStrength from '@/components/misc/MSignalStrength.vue'
 
 const data = {
   test1: 'value1',
   testTwo: 'value2',
   someTestThree: 'value3',
-  test4: 'value4',
+  test4: 3,
 }
 
 const items = [
