@@ -1,7 +1,7 @@
 <template>
-  <div :id="id" ref="list" role="listbox" class="list">
+  <ul :id="id" ref="list" role="listbox" class="list">
     <template v-for="row in rows" :key="row.key">
-      <div
+      <li
         v-if="row.type === 'group'"
         role="group"
         :aria-label="row.group.title"
@@ -11,9 +11,9 @@
         <slot :group="row.group" :level="row.level" name="group">
           {{ row.group.title }}
         </slot>
-      </div>
+      </li>
 
-      <div
+      <li
         v-else
         :id="row.id"
         role="option"
@@ -35,9 +35,9 @@
         <slot :item="row.item" :level="row.level" name="item">
           {{ row.item.title || row.item.value }}
         </slot>
-      </div>
+      </li>
     </template>
-  </div>
+  </ul>
 </template>
 
 <script lang="ts">
