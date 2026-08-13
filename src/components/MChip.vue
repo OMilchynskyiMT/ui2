@@ -27,7 +27,7 @@ export type Kind = 'primary' | 'attention' | 'success' | 'neutral' | 'caution'
 export type Size = 'small' | 'medium' | 'large'
 
 export type Properties = {
-  tag?: 'div' | 'sup' | 'sub'
+  tag?: 'span' | 'sup' | 'sub'
   variant?: Variant
   kind?: Kind
   size?: Size
@@ -44,7 +44,7 @@ import MButton from './buttons/MButton.vue'
 
 const slots = useSlots()
 const {
-  tag = 'div',
+  tag = 'span',
   variant = 'outlined',
   kind = 'primary',
   size = 'medium',
@@ -67,7 +67,7 @@ const emit = defineEmits<{
     --border-width: 0;
     --border-color: oklch(from var(--accent-color) l c h / 0.25);
     --padding-inline: var(--space-sm);
-    --padding-block: var(--space-xs);
+    --padding-block: 0;
     --gap-x: var(--space-xs);
     --radius: var(--radius-md);
     --font-size: var(--font-size-sm);
