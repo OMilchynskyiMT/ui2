@@ -11,14 +11,10 @@
     :title="title"
     :type="type"
   >
-    <div class="area">
+    <span class="area">
       <slot name="default">{{ label ?? '' }}</slot>
-    </div>
-    <div class="progress">
-      <FadeTransition :duration="500" appear>
-        <MSpinner v-if="loading" :stroke-width="5" indeterminate />
-      </FadeTransition>
-    </div>
+    </span>
+    <MSpinner :stroke-width="5" class="progress" indeterminate />
   </button>
 </template>
 
@@ -42,7 +38,6 @@ export type Properties = {
 
 <script lang="ts" setup>
 import MSpinner from '@/components/progress/MSpinner.vue'
-import FadeTransition from '@/components/transitons/FadeTransition.vue'
 
 const {
   kind = 'primary',
@@ -78,6 +73,9 @@ const {
     --accent-color: transparent;
     --color: var(--input-text-color);
 
+    --spinner-scale: 1.25;
+    --spinner-opacity: 0;
+
     position: relative;
     overflow: hidden;
     display: inline-block;
@@ -90,7 +88,7 @@ const {
     padding-block: var(--padding-block);
     border: var(--border-width) solid var(--border-color);
     color: var(--color);
-    background-color: var(--bg);
+    background: var(--bg);
     font-size: var(--font-size);
     border-radius: var(--border-radius);
     opacity: var(--opacity);
@@ -102,45 +100,44 @@ const {
     transition-duration: var(--duration-md);
     transition-timing-function: var(--bezier-smooth);
 
-    & > div.area,
-    & > div.progress {
-      --duration: var(--duration-lg);
+    & > span.area {
+      --scale: 1;
+      --opacity: 1;
 
       block-size: 100%;
       display: flex;
       align-items: center;
       justify-content: center;
+      transform: scale(var(--scale));
+      column-gap: var(--input-gap-x);
+      opacity: var(--opacity);
+    }
 
+    & > :is(span.area, svg.progress) {
       transition-property: opacity, transform;
-      transition-duration: var(--duration);
+      transition-duration: var(--duration-lg);
       transition-timing-function: var(--bezier-bounce);
     }
 
-    & > div.area {
-      transform: scale(1);
-      column-gap: var(--input-gap-x);
-      opacity: 1;
-    }
+    & > svg.progress {
+      --spinner-size: calc(var(--font-size) * 1.5);
 
-    & > div.progress {
-      transform: scale(1.5);
+      transform: scale(var(--spinner-scale)) translate(-50%, -50%);
+      opacity: var(--spinner-opacity);
       position: absolute;
-      inset: 0;
-
-      & > svg {
-        --spinner-size: calc(var(--font-size) * 1.5);
-      }
+      top: 50%;
+      left: 50%;
     }
 
     &:is(.loading) {
+      --spinner-scale: 1;
+      --spinner-opacity: 1;
+
       pointer-events: none;
 
-      & > div.area {
-        transform: scale(0.85);
-        opacity: 0;
-      }
-      & > div.progress {
-        transform: scale(1);
+      & > span.area {
+        --scale: 0.85;
+        --opacity: 0;
       }
     }
 
