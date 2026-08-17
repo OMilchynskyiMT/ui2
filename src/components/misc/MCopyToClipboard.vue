@@ -10,10 +10,10 @@
     @click="copy"
   >
     <slot :copied />
-    <FadeTransition mode="out-in">
-      <MIcon v-if="copied" :icon="CheckIcon" stroke-width="3" />
-      <MIcon v-else :icon="CopyIcon" />
-    </FadeTransition>
+    <span class="icon-frame">
+      <MIcon :icon="CheckIcon" class="check" />
+      <MIcon :icon="CopyIcon" class="copy" />
+    </span>
   </button>
 </template>
 
@@ -41,7 +41,6 @@ import { onBeforeUnmount, ref, shallowRef } from 'vue'
 import { CheckIcon, CopyIcon } from '@lucide/vue'
 
 import MIcon from '../MIcon.vue'
-import FadeTransition from '../transitons/FadeTransition.vue'
 
 const { text, label = 'Copy', resetAfter = 2500, disabled = false, direction = 'ltr' } = defineProps<Properties>()
 
@@ -93,8 +92,10 @@ button.copy {
   --cover-width: 100%;
   --cover-height: 100%;
   --shadow-opacity: transparent;
+  --icon-size: 1rem;
 
   appearance: none;
+  -webkit-tap-highlight-color: var(--outline-bg);
   position: relative;
   display: inline-flex;
   min-inline-size: 0;
@@ -115,9 +116,32 @@ button.copy {
     opacity: var(--disabled-opacity);
   }
 
-  & > svg.icon {
-    --size: 1rem;
-    --color: var(--accent-color);
+  & > span.icon-frame {
+    flex: 0 0 var(--icon-size);
+    inline-size: var(--icon-size);
+    block-size: var(--icon-size);
+    display: grid;
+    place-items: center;
+    line-height: 0;
+
+    & > svg.icon {
+      --size: var(--icon-size);
+      --color: var(--accent-color);
+
+      grid-area: 1 / 1;
+
+      transition-property: stroke-opacity;
+      transition-duration: var(--duration-lg);
+      transition-timing-function: var(--bezier-smooth);
+    }
+
+    & > svg.icon.copy {
+      stroke-opacity: 1;
+    }
+
+    & > svg.icon.check {
+      stroke-opacity: 0;
+    }
   }
 
   &::after {
@@ -142,6 +166,22 @@ button.copy {
     --shadow-opacity: var(--shadow-md-opacity);
     --cover-width: calc(100% + var(--space-sm) * 2);
     --cover-height: calc(100% + var(--space-sm));
+
+    & > span.icon-frame {
+      & > svg.icon.copy {
+        stroke-opacity: 0;
+      }
+
+      & > svg.icon.check {
+        stroke-opacity: 1;
+      }
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &::after {
+      transition: none;
+    }
   }
 }
 </style>
