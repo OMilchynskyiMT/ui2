@@ -346,7 +346,11 @@ defineExpose<MSelectionControlExpose>({
       }
 
       & > .label {
+        min-inline-size: 0;
+        overflow: hidden;
         color: var(--control-text-color);
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
 
       & > .hint,

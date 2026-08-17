@@ -227,11 +227,11 @@ onBeforeUnmount(() => {
       transform: translateY(-50%);
       transform-origin: left top;
 
-      overflow: visible;
+      min-inline-size: 0;
       max-inline-size: calc(100% - var(--input-padding-inline) * 2 - var(--label-inline-start));
+      overflow: hidden;
       color: var(--label-color);
       font-size: var(--label-font-size);
-      line-height: 1;
 
       transition-property: inset-block-start, inset-inline-start, color, font-size, transform;
       transition-duration: var(--transition-duration);
