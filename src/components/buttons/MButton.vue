@@ -14,7 +14,9 @@
     <span class="area">
       <slot name="default">{{ label ?? '' }}</slot>
     </span>
-    <MSpinner :stroke-width="5" class="progress" indeterminate />
+    <span v-if="loading" class="progress">
+      <MSpinner :stroke-width="5" indeterminate />
+    </span>
   </button>
 </template>
 
@@ -73,9 +75,6 @@ const {
     --accent-color: transparent;
     --color: var(--input-text-color);
 
-    --spinner-scale: 1.25;
-    --spinner-opacity: 0;
-
     position: relative;
     overflow: hidden;
     display: inline-block;
@@ -113,26 +112,26 @@ const {
       opacity: var(--opacity);
     }
 
-    & > :is(span.area, svg.progress) {
+    & > span.area {
       transition-property: opacity, transform;
       transition-duration: var(--duration-lg);
       transition-timing-function: var(--bezier-bounce);
     }
 
-    & > svg.progress {
-      --spinner-size: calc(var(--font-size) * 1.5);
-
-      transform: scale(var(--spinner-scale)) translate(-50%, -50%);
-      opacity: var(--spinner-opacity);
+    & > span.progress {
       position: absolute;
-      top: 50%;
-      left: 50%;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      pointer-events: none;
+      animation: progress-enter var(--duration-lg) var(--bezier-bounce);
+
+      & > svg {
+        --spinner-size: calc(var(--font-size) * 1.5);
+      }
     }
 
     &:is(.loading) {
-      --spinner-scale: 1;
-      --spinner-opacity: 1;
-
       pointer-events: none;
 
       & > span.area {
@@ -214,6 +213,18 @@ const {
     &:is(:disabled, .disabled) {
       --opacity: 0.5;
       cursor: not-allowed;
+    }
+  }
+
+  @keyframes progress-enter {
+    from {
+      transform: scale(1.25);
+      opacity: 0;
+    }
+
+    to {
+      transform: scale(1);
+      opacity: 1;
     }
   }
 }
