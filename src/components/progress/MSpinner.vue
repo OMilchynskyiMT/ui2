@@ -100,12 +100,12 @@ const strokeDashOffset = computed(() => 100 - normalizedValue.value)
     }
 
     &.indeterminate {
+      animation: spinner-rotate var(--animation-speed) linear infinite;
+      transform-origin: center;
       transition: none;
 
       & > circle.progress {
-        animation:
-          spinner-rotate var(--animation-speed) linear infinite,
-          spinner-dash calc(var(--animation-speed) * 1.2) cubic-bezier(0.35, 0, 0.25, 1) infinite;
+        animation: spinner-dash calc(var(--animation-speed) * 1.2) cubic-bezier(0.4, 0, 0.2, 1) infinite;
       }
       & > text {
         --opacity: 0;
@@ -114,8 +114,12 @@ const strokeDashOffset = computed(() => 100 - normalizedValue.value)
   }
 
   @keyframes spinner-rotate {
+    from {
+      transform: rotate(0deg);
+    }
+
     to {
-      transform: rotate(270deg);
+      transform: rotate(360deg);
     }
   }
 
@@ -138,6 +142,8 @@ const strokeDashOffset = computed(() => 100 - normalizedValue.value)
 
   @media (prefers-reduced-motion: reduce) {
     svg {
+      animation: none;
+
       & > text {
         transition: none;
       }
