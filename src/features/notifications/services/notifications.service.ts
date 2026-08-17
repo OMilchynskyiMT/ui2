@@ -1,4 +1,4 @@
-import { readonly, ref } from 'vue'
+import { readonly, ref, useId } from 'vue'
 
 import type { Notification, NotificationInput, NotificationOptions, NotificationsPluginOptions } from '../model/types'
 
@@ -11,7 +11,7 @@ export function createNotificationsService(options: NotificationsPluginOptions =
     }
 
     const item: Notification = {
-      id: (input.id ??= crypto.randomUUID()),
+      id: (input.id ??= useId()),
       title: input.title,
       message: input.message,
       kind: input.kind,
@@ -25,7 +25,7 @@ export function createNotificationsService(options: NotificationsPluginOptions =
     }
 
     if (item.timeout && item.timeout > 0) {
-      globalThis.setTimeout(() => remove(item.id), item.timeout)
+      setTimeout(() => remove(item.id), item.timeout)
     }
 
     return item.id
