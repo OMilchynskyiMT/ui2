@@ -1,4 +1,3 @@
-/* eslint-disable unicorn/filename-case */
 import { expect, expectTypeOf, it, vi } from 'vitest'
 
 import { optional, Schema, types, withMessages } from '../index'

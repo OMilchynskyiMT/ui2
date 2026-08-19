@@ -72,6 +72,7 @@ export default defineConfigWithVueTs(
     files: ['src/**/__tests__/**/*.ts'],
     rules: {
       'unicorn/no-useless-undefined': 'off',
+      'unicorn/filename-case': 'off',
     },
   },
 
