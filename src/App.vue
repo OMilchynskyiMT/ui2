@@ -2,10 +2,10 @@
   <RouterView />
 
   <Teleport to="#notifications">
-    <NotificationsRoot />
+    <MNotifications />
   </Teleport>
 </template>
 
 <script lang="ts" setup>
-import { NotificationsRoot } from '@/features/notifications'
+import MNotifications from './features/notifications/MNotifications.vue'
 </script>

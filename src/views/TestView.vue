@@ -5,10 +5,10 @@
     :on-select="tab => tab.value && goto(tab.value, id => router.push({ name: id }))"
   />
 
-  <main style="padding: 3rem; overflow: clip">
+  <main style="padding: 3rem;">
     <RouterView v-slot="{ Component }">
       <PageTransition :name="transtionName" appear>
-        <component :is="Component" :key="$route.fullPath" />
+        <component :is="Component" :key="route.fullPath" />
       </PageTransition>
     </RouterView>
   </main>
@@ -21,8 +21,6 @@ import { useRoute, useRouter } from 'vue-router'
 import MTabs from '@/components/tabs/MTabs.vue'
 import { useTabNavigation } from '@/components/tabs/useTabNavigation'
 import PageTransition from '@/components/transitons/PageTransition.vue'
-
-import { useNotify } from '@/features/notifications'
 
 const tabs = [
   { icon: FormInputIcon, title: 'Inputs', value: 'inputs' },
@@ -37,6 +35,7 @@ const tabs = [
   { title: 'Table', value: 'table' },
   { title: 'Data Grid', value: 'data-grid' },
   { title: 'Notice', value: 'notice' },
+  { title: 'Notifications', value: 'notifications' },
 ]
 const router = useRouter()
 const route = useRoute()
@@ -45,7 +44,4 @@ const { transitionName: transtionName, goto } = useTabNavigation(
   tabs.filter(t => t.value !== undefined).map(t => t.value),
   route.name?.toString()
 )
-
-const { info } = useNotify()
-info('Test notification message', { timeout: 5000 })
 </script>
