@@ -36,6 +36,7 @@ const tabs = [
   { title: 'Grid', value: 'grid' },
   { title: 'Table', value: 'table' },
   { title: 'Data Grid', value: 'data-grid' },
+  { title: 'Notice', value: 'notice' },
 ]
 const router = useRouter()
 const route = useRoute()

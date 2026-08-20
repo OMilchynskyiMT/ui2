@@ -142,6 +142,11 @@ const router = createRouter({
               name: 'data-grid',
               component: () => import('@/views/features/DataGridView.vue'),
             },
+            {
+              path: 'notice',
+              name: 'notice',
+              component: () => import('@/views/features/NoticesView.vue'),
+            },
           ],
         },
       ],
