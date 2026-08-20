@@ -38,21 +38,23 @@ const retry = (): void => {
 </script>
 
 <style scoped>
-.state {
-  display: grid;
-  place-items: center;
+@layer components {
+  .state {
+    display: grid;
+    place-items: center;
 
-  inline-size: 100%;
-  min-block-size: var(--min-block-size, 8rem);
+    inline-size: 100%;
+    min-block-size: var(--min-block-size, 8rem);
 
-  &.error {
-    text-align: center;
+    &.error {
+      text-align: center;
 
-    .error-content {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: var(--space-xl);
+      .error-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: var(--space-xl);
+      }
     }
   }
 }

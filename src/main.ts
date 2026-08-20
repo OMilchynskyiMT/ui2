@@ -1,3 +1,5 @@
+import '@/assets/styles/index.css'
+
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 
@@ -6,7 +8,6 @@ import { ripple } from '@/directives/ripple'
 import { createNotificationsPlugin } from '@/features/notifications'
 import router from '@/router'
 
-import '@/assets/styles/index.css'
 
 const app = createApp(App)
 

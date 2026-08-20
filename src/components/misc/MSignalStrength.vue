@@ -92,23 +92,25 @@ const getBarY = (index: number): number => {
 </script>
 
 <style scoped>
-.signal-strength {
-  --size: 1.25rem;
-  --level-opacity: 0.2;
+@layer components {
+  .signal-strength {
+    --size: 1.25rem;
+    --level-opacity: 0.2;
 
-  display: block;
-  block-size: var(--size);
-  inline-size: auto;
-  overflow: visible;
-  color: var(--color, inherit);
+    display: block;
+    block-size: var(--size);
+    inline-size: auto;
+    overflow: visible;
+    color: var(--color, inherit);
 
-  .indicator {
-    fill: currentColor;
-    opacity: var(--level-opacity);
-    transition: opacity var(--duration-lg) var(--bezier-smooth);
+    .indicator {
+      fill: currentColor;
+      opacity: var(--level-opacity);
+      transition: opacity var(--duration-lg) var(--bezier-smooth);
 
-    &.active {
-      --level-opacity: 1;
+      &.active {
+        --level-opacity: 1;
+      }
     }
   }
 }
