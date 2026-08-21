@@ -182,7 +182,7 @@ const {
       --accent-color: light-dark(var(--blue-500), var(--blue-500));
     }
     &:is([data-kind='attention']) {
-      --accent-color: light-dark(var(--orange-400), var(--orange-600));
+      --accent-color: light-dark(var(--orange-500), var(--orange-600));
     }
     &:is([data-kind='success']) {
       --accent-color: light-dark(var(--green-500), var(--green-500));
@@ -191,7 +191,7 @@ const {
       --accent-color: light-dark(var(--gray-500), var(--gray-600));
     }
     &:is([data-kind='caution']) {
-      --accent-color: light-dark(var(--red-400), var(--red-500));
+      --accent-color: light-dark(var(--red-500), var(--red-500));
     }
 
     &:not(:disabled, .disabled, [data-variant='icon']) {
