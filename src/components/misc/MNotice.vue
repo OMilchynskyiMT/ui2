@@ -18,7 +18,7 @@
 
 <script lang="ts" setup>
 import { type Component, computed, useSlots } from 'vue'
-import { AlertTriangleIcon, InfoIcon, LightbulbIcon, MessageSquareWarningIcon } from '@lucide/vue'
+import { AlertTriangleIcon, InfoIcon, LightbulbIcon, OctagonXIcon } from '@lucide/vue'
 
 import MIcon from '../MIcon.vue'
 
@@ -40,7 +40,7 @@ const actualIcon = computed((): Component => {
       return AlertTriangleIcon
     }
     case 'danger': {
-      return MessageSquareWarningIcon
+      return OctagonXIcon
     }
     default: {
       return LightbulbIcon
