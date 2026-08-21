@@ -1,5 +1,5 @@
 <template>
-  <MAppShell>
+  <MShell>
     <template #header>
       <MTopBar>
         <template #leading>
@@ -77,12 +77,7 @@
       <main><RouterView /></main>
     </div>
 
-    <MDialog
-      id="compact-navigation"
-      ref="mainMenuDialog"
-      aria-label="Main navigation"
-      fullscreen
-    >
+    <MDialog id="compact-navigation" ref="mainMenuDialog" aria-label="Main navigation" fullscreen>
       <MBar style="--padding-inline: var(--space-md); --padding-block: var(--space-md)">
         <img v-if="resolvedScheme === 'light'" src="/images/MT-logo.svg" width="180" />
         <img v-else src="/images/MT-logo-light.svg" width="180" />
@@ -128,10 +123,8 @@
       </div>
     </MPopup>
 
-    <MConfirm ref="saveAndApplyConfirm">
-      Current configuration will be saved and applied. Continue?
-    </MConfirm>
-  </MAppShell>
+    <MConfirm ref="saveAndApplyConfirm"> Current configuration will be saved and applied. Continue? </MConfirm>
+  </MShell>
 </template>
 
 <script lang="ts" setup>
@@ -153,12 +146,12 @@ import {
 } from '@lucide/vue'
 import { type RouteLocation, useRoute, useRouter } from 'vue-router'
 
+import MShell from '@/components/application/MShell.vue'
 import MBar from '@/components/bars/MBar.vue'
 import MTopBar from '@/components/bars/MTopBar.vue'
 import MButton from '@/components/buttons/MButton.vue'
 import MConfirm, { type Exposed as ConfirmExposed } from '@/components/dialog/MConfirm.vue'
 import MDialog, { type Exposed as DialogExposed } from '@/components/dialog/MDialog.vue'
-import MAppShell from '@/components/MAppShell.vue'
 import MTreeMenu, { type MTreeMenuItem } from '@/components/menu/MTreeMenu.vue'
 import MIcon from '@/components/MIcon.vue'
 import MUserAvatar from '@/components/MUserAvatar.vue'

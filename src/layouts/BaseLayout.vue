@@ -1,10 +1,10 @@
 <template>
-  <MAppShell>
+  <MShell>
     <template #footer>footer</template>
     <RouterView />
-  </MAppShell>
+  </MShell>
 </template>
 
 <script lang="ts" setup>
-import MAppShell from '@/components/MAppShell.vue'
+import MShell from '@/components/application/MShell.vue'
 </script>
