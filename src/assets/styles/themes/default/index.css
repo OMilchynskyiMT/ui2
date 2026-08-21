@@ -25,6 +25,8 @@
   --duration-md: 0.15s;
   --duration-lg: 0.3s;
   --duration-xl: 0.5s;
+  --duration-xxl: 1s;
+  --duration-3xl: 1.5s;
 
   --radius-sm: 0.125rem;
   --radius-md: 0.25rem;
