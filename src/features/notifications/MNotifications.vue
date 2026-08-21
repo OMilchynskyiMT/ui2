@@ -16,6 +16,13 @@
             <MIcon :icon="XIcon" />
           </MButton>
         </div>
+
+        <div
+          v-if="item.timeout"
+          :key="`${item.id}-${item.expiresAt ?? 0}`"
+          :style="timeoutStyle(item)"
+          class="progress"
+        />
       </div>
     </div>
   </TransitionGroup>
@@ -28,9 +35,20 @@ import type { Component } from 'vue'
 import MButton from '@/components/buttons/MButton.vue'
 import MIcon from '@/components/MIcon.vue'
 
-import { useNotifications } from '.'
+import { type Notification, useNotifications } from '.'
 
 const { latests, remove } = useNotifications()
+const timeoutStyle = (item: Notification): Record<string, string> => {
+  if (!item.timeout) return {}
+
+  const remaining = item.timeoutRemaining ?? item.timeout
+  const progress = Math.min(1, Math.max(0, remaining / item.timeout))
+
+  return {
+    '--timeout-duration': `${remaining}ms`,
+    '--timeout-progress': String(progress),
+  }
+}
 </script>
 
 <style scoped>
@@ -41,6 +59,7 @@ const { latests, remove } = useNotifications()
     --x-icon-size: 1rem;
     --x-icon-color: var(--gray-500);
     --icon-size: 1.4rem;
+    --progress-width: 1px;
 
     position: fixed;
     inset: var(--space-lg);
@@ -66,24 +85,7 @@ const { latests, remove } = useNotifications()
         transition-property: grid-template-rows, margin-block-end;
         transition-duration: var(--duration-md);
         transition-timing-function: var(--bezier-smooth);
-      }
 
-      &.notification-enter-from,
-      &.notification-leave-to {
-        grid-template-rows: minmax(0, 0fr);
-        margin-block-end: 0;
-      }
-
-      &.notification-leave-active {
-        z-index: 1;
-
-        & > div.notification {
-          pointer-events: none;
-        }
-      }
-
-      &.notification-enter-active,
-      &.notification-leave-active {
         & > div.notification {
           transition-property: opacity, transform;
           transition-duration: var(--duration-md);
@@ -93,9 +95,20 @@ const { latests, remove } = useNotifications()
 
       &.notification-enter-from,
       &.notification-leave-to {
+        grid-template-rows: minmax(0, 0fr);
+        margin-block-end: 0;
+
         & > div.notification {
           opacity: 0;
           transform: translateX(0.5rem);
+        }
+      }
+
+      &.notification-leave-active {
+        z-index: 1;
+
+        & > div.notification {
+          pointer-events: none;
         }
       }
 
@@ -170,6 +183,59 @@ const { latests, remove } = useNotifications()
           & svg.icon {
             --size: var(--x-icon-size);
             --color: var(--x-icon-color);
+          }
+        }
+
+        & > div.progress {
+          grid-column: 1 / -1;
+
+          block-size: var(--progress-width);
+          overflow: hidden;
+          border-radius: var(--progress-width);
+          background: color-mix(var(--accent) 10%, transparent);
+
+          &::after {
+            content: '';
+
+            display: block;
+            inline-size: 100%;
+            block-size: 100%;
+
+            background: var(--accent);
+
+            transform: scaleX(var(--timeout-progress));
+            transform-origin: left center;
+
+            animation: notification-timeout var(--timeout-duration) linear forwards;
+          }
+        }
+      }
+    }
+  }
+
+  @keyframes notification-timeout {
+    from {
+      transform: scaleX(var(--timeout-progress));
+    }
+
+    to {
+      transform: scaleX(0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    div.notifications {
+      & > div.item {
+        & > div.notification {
+          & > div.progress {
+            &::after {
+              animation: none;
+            }
+          }
+
+          &.notification-enter-active,
+          &.notification-leave-active {
+            transition: none;
           }
         }
       }
