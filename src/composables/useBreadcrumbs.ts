@@ -2,7 +2,7 @@ import { computed, type ComputedRef } from 'vue'
 import { type RouteLocationRaw, type RouteRecordNormalized, useRoute, useRouter } from 'vue-router'
 
 import type { MBreadcrumbItem } from '@/lib/components/navigation/MBreadcrumbs.vue'
-import type { BreadcrumbLabel, BreadcrumbMetadata, BreadcrumbTarget } from '@/router/router.types'
+import type { BreadcrumbMetadata, BreadcrumbTarget, RouteMetadataValue } from '@/router/router.types'
 
 export type RouterBreadcrumbItem = MBreadcrumbItem<RouteLocationRaw>
 
@@ -10,7 +10,7 @@ export type UseBreadcrumbs = {
   breadcrumbs: ComputedRef<RouterBreadcrumbItem[]>
 }
 
-const resolveLabel = (label: BreadcrumbLabel, route: ReturnType<typeof useRoute>): string | undefined => {
+const resolveLabel = (label: RouteMetadataValue<string>, route: ReturnType<typeof useRoute>): string | undefined => {
   return typeof label === 'function' ? label(route) : label
 }
 

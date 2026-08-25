@@ -5,13 +5,12 @@ import { createPinia } from 'pinia'
 
 import App from '@/App.vue'
 import { ripple } from '@/directives/ripple'
-import router from '@/router'
-
+import { createAppRouter } from '@/router'
 
 const app = createApp(App)
 
 app.use(createPinia())
-app.use(router)
+app.use(createAppRouter())
 
 app.directive('ripple', ripple)
 
