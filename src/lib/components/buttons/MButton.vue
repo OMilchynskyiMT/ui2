@@ -8,7 +8,7 @@
     :data-tone="tone"
     :data-variant="variant"
     :disabled="disabled || loading || undefined"
-    :tabindex="disabled ? -1 : undefined"
+    :tabindex="disabled || loading ? -1 : undefined"
     :title="title"
     :type="type"
   >
@@ -134,7 +134,9 @@ const {
     }
 
     &:is(.loading) {
+      --opacity: 1;
       pointer-events: none;
+      cursor: wait;
 
       & > span.area {
         --scale: 0.85;
@@ -196,7 +198,7 @@ const {
       }
     }
 
-    &:is(:disabled, .disabled) {
+    &:is(:disabled, .disabled):not(.loading) {
       --opacity: 0.5;
       cursor: not-allowed;
     }
