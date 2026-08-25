@@ -1,10 +1,10 @@
 <template>
   <MPopover
     :anchor="anchor"
-    class="tooltip-popover"
     :offset="offset"
     :open="open"
     :placement="placement"
+    class="tooltip-popover"
     @dismiss="close"
   >
     <div :id="id" role="tooltip" class="tooltip">
@@ -108,11 +108,11 @@ const updateDescription = (element: HTMLElement, add: boolean): void => {
     ids.delete(id)
   }
 
-  if (ids.size === 0) {
-    element.removeAttribute('aria-describedby')
-  } else {
+  if (ids.size > 0) {
     element.setAttribute('aria-describedby', [...ids].join(' '))
+    return
   }
+  element.removeAttribute('aria-describedby')
 }
 
 let describedElement: HTMLElement | null = null
@@ -144,9 +144,9 @@ onBeforeUnmount(() => {
 })
 </script>
 
-<style scoped>
+<style>
 @layer components {
-  :deep(.popover.tooltip-popover) {
+  .popover.tooltip-popover {
     max-inline-size: min(20rem, calc(100vw - 2rem));
     padding: var(--space-xs) var(--space-sm);
     border-radius: var(--radius-md);

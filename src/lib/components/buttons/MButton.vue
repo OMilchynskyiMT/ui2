@@ -1,12 +1,13 @@
 <template>
   <button
     v-ripple="{ disabled: !ripple || disabled || loading }"
-    :aria-disabled="disabled || undefined"
+    :aria-busy="loading || undefined"
+    :aria-disabled="disabled || loading || undefined"
     :class="['button', { disabled, loading }]"
-    :data-tone="tone"
     :data-size="size"
+    :data-tone="tone"
     :data-variant="variant"
-    :disabled="disabled || undefined"
+    :disabled="disabled || loading || undefined"
     :tabindex="disabled ? -1 : undefined"
     :title="title"
     :type="type"
@@ -178,7 +179,6 @@ const {
         oklch(from var(--accent-color) calc(l + 0.33) c h)
       );
     }
-
 
     &:not(:disabled, .disabled, [data-variant='icon']) {
       &:not([data-variant='text']):is(:focus) {

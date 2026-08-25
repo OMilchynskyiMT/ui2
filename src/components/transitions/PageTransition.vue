@@ -43,6 +43,13 @@ const {
       transform: translate3d(var(--page-offset-x), var(--page-offset-y), 0);
     }
 
+    &:has(
+      > :is(.page-forward-enter-active, .page-forward-leave-active, .page-back-enter-active, .page-back-leave-active)
+    ) {
+      overflow-x: clip;
+      overflow-y: visible;
+    }
+
     &
       > :is(
         .page-forward-enter-active,
@@ -54,7 +61,6 @@ const {
         .page-enter-enter-active,
         .page-enter-leave-active
       ) {
-      overflow-x: clip;
       transition-property: transform, opacity;
       transition-duration: var(--page-transition-duration);
       transition-timing-function: var(--bezier-smooth);
