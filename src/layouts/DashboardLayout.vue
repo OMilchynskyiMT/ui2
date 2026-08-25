@@ -21,29 +21,45 @@
             <span class="u-hidden-below-lg">Save & Apply</span>
           </MButton>
 
-          <MButton
-            ref="commands-button"
-            :aria-expanded="commandMenuOpened"
-            aria-haspopup="menu"
+          <MMenuButton
+            :items="commandsOptions"
+            menu-aria-label="Commands"
+            :menu-style="{ '--menu-icon-color': 'var(--lime-600)' }"
+            :offset="10"
+            placement="bottom-end"
             tone="neutral"
             variant="icon"
-            @click="commandMenuOpened = !commandMenuOpened"
           >
             <MIcon :icon="SquareTerminalIcon" style="--color: var(--lime-600)" />
             <span class="u-hidden-below-lg">Commands</span>
-          </MButton>
+          </MMenuButton>
 
-          <MButton
-            ref="user-menu-button"
-            :aria-expanded="userMenuOpened"
-            aria-haspopup="menu"
+          <MMenuButton
+            :items="userMenuOptions"
+            menu-aria-label="User actions"
+            :menu-style="{ '--menu-icon-color': 'var(--blue-500)' }"
+            :offset="10"
+            placement="bottom-end"
             tone="neutral"
             variant="icon"
-            @click="userMenuOpened = !userMenuOpened"
+            @select="userMenuHandler($event.value)"
           >
             <MUserAvatar size="1rem" style="--accent: var(--purple-500)" />
             <span class="u-hidden-below-lg">admin</span>
-          </MButton>
+
+            <template #menu-header>
+              <MBar style="--sections-gap: 1rem">
+                <template #leading>
+                  <MUserAvatar :style="{ '--accent': 'var(--purple-500)' }" size="2rem" />
+                </template>
+
+                <div class="user">
+                  <div class="username">admin</div>
+                  <div class="role">Administrator</div>
+                </div>
+              </MBar>
+            </template>
+          </MMenuButton>
         </template>
       </MTopBar>
     </template>
@@ -85,39 +101,6 @@
       </MBar>
     </MDialog>
 
-    <MMenu
-      v-model:open="commandMenuOpened"
-      :anchor="commandsButton?.$el ?? null"
-      :items="commandsOptions"
-      :offset="10"
-      aria-label="Commands"
-      placement="bottom-end"
-      style="--menu-icon-color: var(--lime-600)"
-    />
-
-    <MMenu
-      v-model:open="userMenuOpened"
-      :anchor="userMenuButton?.$el ?? null"
-      :items="userMenuOptions"
-      :offset="10"
-      aria-label="User actions"
-      placement="bottom-end"
-      style="--menu-icon-color: var(--blue-500)"
-      @select="userMenuHandler($event.value)"
-    >
-      <template #header>
-        <MBar style="--sections-gap: 1rem">
-          <template #leading>
-            <MUserAvatar :style="{ '--accent': 'var(--purple-500)' }" size="2rem" />
-          </template>
-
-          <div class="user">
-            <div class="username">admin</div>
-            <div class="role">Administrator</div>
-          </div>
-        </MBar>
-      </template>
-    </MMenu>
 
     <MConfirmDialog ref="saveAndApplyConfirm">
       Current configuration will be saved and applied. Continue?
@@ -154,16 +137,13 @@ import MBar from '@/lib/components/bars/MBar.vue'
 import MButton from '@/lib/components/buttons/MButton.vue'
 import MConfirmDialog, { type Exposed as ConfirmExposed } from '@/lib/components/dialog/MConfirmDialog.vue'
 import MDialog, { type Exposed as DialogExposed } from '@/lib/components/dialog/MDialog.vue'
-import MMenu, { type MMenuItem } from '@/lib/components/menu/MMenu.vue'
+import MMenuButton from '@/lib/components/menu/MMenuButton.vue'
+import type { MMenuItem } from '@/lib/components/menu/MMenu.vue'
 import MIcon from '@/lib/components/MIcon.vue'
 import { containerTokens } from '@/postcss/containerTokens'
 
 const mainMenuDialog = useTemplateRef<DialogExposed>('mainMenuDialog')
 const isCompact = ref(true)
-const commandsButton = useTemplateRef<InstanceType<typeof MButton>>('commands-button')
-const commandMenuOpened = ref(false)
-const userMenuButton = useTemplateRef<InstanceType<typeof MButton>>('user-menu-button')
-const userMenuOpened = ref(false)
 const saveAndApplyConfirm = useTemplateRef<ConfirmExposed>('saveAndApplyConfirm')
 let stopResizeSubscription: (() => void) | undefined
 

@@ -12,36 +12,43 @@ const router = createRouter({
           path: 'dashboard',
           name: 'dashboard',
           component: () => import('@/views/dashboard/MainView.vue'),
+          meta: { breadcrumb: 'Dashboard' },
         },
         {
           path: 'setup',
           name: 'setup',
+          meta: { breadcrumb: { label: 'Setup', to: false } },
           children: [
             {
               path: 'wan',
               name: 'wan',
               component: () => import('@/views/dashboard/WanView.vue'),
+              meta: { breadcrumb: 'WAN' },
             },
             {
               path: 'dhcp',
               name: 'dhcp',
               component: () => import('@/views/dashboard/dhcp/BaseView.vue'),
               redirect: { name: 'dhcp-config' },
+              meta: { breadcrumb: 'DHCP' },
               children: [
                 {
                   path: 'configuration',
                   name: 'dhcp-config',
                   component: () => import('@/views/dashboard/dhcp/ConfigView.vue'),
+                  meta: { breadcrumb: 'Configuration' },
                 },
                 {
                   path: 'new-ipv4',
                   name: 'dhcp-add',
                   component: () => import('@/views/dashboard/dhcp/AddIpv4View.vue'),
+                  meta: { breadcrumb: 'New IPv4' },
                 },
                 {
                   path: 'new-ipv6',
                   name: 'dhcp-add-v6',
                   component: () => import('@/views/dashboard/dhcp/AddIpv6View.vue'),
+                  meta: { breadcrumb: 'New IPv6' },
                 },
               ],
             },
@@ -50,17 +57,20 @@ const router = createRouter({
               name: 'smtp',
               component: () => import('@/views/dashboard/smtp/BaseView.vue'),
               redirect: { name: 'smtp-settings' },
+              meta: { breadcrumb: 'SMTP' },
               children: [
                 {
                   path: 'configuration',
                   name: 'smtp-settings',
                   component: () => import('@/views/dashboard/smtp/SettingsView.vue'),
+                  meta: { breadcrumb: 'Configuration' },
                 },
                 {
                   path: 'log',
                   name: 'smtp-log',
                   component: () => import('@/views/dashboard/smtp/LogView.vue'),
-                }
+                  meta: { breadcrumb: 'Log' },
+                },
               ],
             },
           ],
@@ -68,16 +78,19 @@ const router = createRouter({
         {
           path: 'administration',
           name: 'administration',
+          meta: { breadcrumb: { label: 'Administration', to: false } },
           children: [
             {
               path: 'debug-options',
               name: 'debug-options',
               component: () => import('@/views/dashboard/DebugOptionsView.vue'),
+              meta: { breadcrumb: 'Debug Options' },
             },
             {
               path: 'usage-policy',
               name: 'usage-policy',
               component: () => import('@/views/dashboard/UsagePolicyView.vue'),
+              meta: { breadcrumb: 'Usage Policy' },
             },
           ],
         },
@@ -86,6 +99,7 @@ const router = createRouter({
     {
       path: '/features',
       component: () => import('@/layouts/BaseLayout.vue'),
+      meta: { breadcrumb: 'Features' },
       children: [
         {
           path: '',
@@ -151,6 +165,12 @@ const router = createRouter({
               path: 'notifications',
               name: 'notifications',
               component: () => import('@/views/features/NotificationsView.vue'),
+            },
+            {
+              path: 'navigation',
+              name: 'navigation',
+              component: () => import('@/views/features/NavigationView.vue'),
+              meta: { breadcrumb: 'Navigation' },
             },
           ],
         },

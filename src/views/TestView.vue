@@ -39,6 +39,7 @@ const tabs: MTabItem<string>[] = [
   { title: 'Property List', value: 'property-list' },
   { title: 'Alerts', value: 'alerts' },
   { title: 'Notifications', value: 'notifications' },
+  { title: 'Navigation', value: 'navigation' },
 ]
 
 const router = useRouter()
