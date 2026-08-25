@@ -103,6 +103,12 @@ export default defineConfigWithVueTs(
       'unicorn/no-top-level-assignment-in-function': 'off',
     },
   },
+  {
+    files: ['@types/**/*.d.ts'],
+    rules: {
+      '@typescript-eslint/consistent-type-definitions': 'off',
+    }
+  },
 
   eslintConfigPrettier
 )
