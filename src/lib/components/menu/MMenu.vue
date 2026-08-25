@@ -14,6 +14,7 @@
       ref="menu"
       role="menu"
       :aria-label="ariaLabel"
+      :aria-labelledby="ariaLabelledby"
       :style="{ '--icon-size': iconSize }"
       class="menu-list"
       @keydown="onKeydown"
@@ -59,6 +60,8 @@ export type MMenuProperties<V> = {
   offset?: number
   iconSize?: string
   ariaLabel?: string
+  ariaLabelledby?: string
+  initialFocus?: 'first' | 'last'
 }
 </script>
 
@@ -76,6 +79,8 @@ const {
   offset = 0,
   iconSize = '1.15rem',
   ariaLabel,
+  ariaLabelledby,
+  initialFocus = 'first',
 } = defineProps<MMenuProperties<V>>()
 
 const emit = defineEmits<{
@@ -188,7 +193,7 @@ const onKeydown = (event: KeyboardEvent): void => {
 
   if (event.key === 'Home') {
     event.preventDefault()
-    focusEdge('first')
+    focusEdge(initialFocus)
     return
   }
 
@@ -220,7 +225,7 @@ watch(
     }
 
     await nextTick()
-    focusEdge('first')
+    focusEdge(initialFocus)
   },
   { immediate: true }
 )
