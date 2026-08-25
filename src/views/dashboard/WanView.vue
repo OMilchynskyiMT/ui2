@@ -6,7 +6,7 @@
       <MCard>
         <MFormGrid :columns="2">
           <div>Mode</div>
-          <div><MChip kind="success" size="large">FAILOVER</MChip></div>
+          <div><MChip tone="success" size="large">FAILOVER</MChip></div>
         </MFormGrid>
       </MCard>
 
@@ -16,13 +16,13 @@
         </template>
 
         <template #cell-actions>
-          <MButton kind="neutral" variant="icon">
+          <MButton tone="neutral" variant="icon">
             <MIcon :icon="PencilIcon" />
           </MButton>
         </template>
 
         <template #cell-type="{ value }">
-          <MChip kind="primary">{{ value }}</MChip>
+          <MChip tone="primary">{{ value }}</MChip>
         </template>
 
         <template #cell-status="{ value }">
@@ -37,14 +37,14 @@
 <script lang="ts" setup>
 import { CheckIcon, GripVerticalIcon, PencilIcon, XIcon } from '@lucide/vue'
 
-import MButton from '@/components/buttons/MButton.vue'
-import MFormGrid from '@/components/grid/MFormGrid.vue'
-import MChip from '@/components/MChip.vue'
-import MIcon from '@/components/MIcon.vue'
-import MCard from '@/components/section/MCard.vue'
-import MSectionHeader from '@/components/section/MSectionHeader.vue'
-import type { TableColumn } from '@/components/table/mtable.types'
-import MTable from '@/components/table/MTable.vue'
+import MButton from '@/lib/components/buttons/MButton.vue'
+import MFormGrid from '@/lib/components/grid/MFormGrid.vue'
+import MChip from '@/lib/components/MChip.vue'
+import MIcon from '@/lib/components/MIcon.vue'
+import MCard from '@/lib/components/section/MCard.vue'
+import MSectionHeader from '@/lib/components/section/MSectionHeader.vue'
+import type { TableColumn } from '@/lib/components/table/mtable.types'
+import MTable from '@/lib/components/table/MTable.vue'
 
 type Wan = {
   status: boolean

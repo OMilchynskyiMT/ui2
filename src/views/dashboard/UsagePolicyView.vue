@@ -33,12 +33,12 @@ import { ref } from 'vue'
 import { CheckIcon } from '@lucide/vue'
 import { ScaleIcon } from '@lucide/vue'
 
-import MButton from '@/components/buttons/MButton.vue'
-import MTextarea from '@/components/fields/MTextarea.vue'
-import MFormGrid from '@/components/grid/MFormGrid.vue'
-import MIcon from '@/components/MIcon.vue'
-import MCard from '@/components/section/MCard.vue'
-import MSectionHeader from '@/components/section/MSectionHeader.vue'
+import MButton from '@/lib/components/buttons/MButton.vue'
+import MTextarea from '@/lib/components/fields/MTextarea.vue'
+import MFormGrid from '@/lib/components/grid/MFormGrid.vue'
+import MIcon from '@/lib/components/MIcon.vue'
+import MCard from '@/lib/components/section/MCard.vue'
+import MSectionHeader from '@/lib/components/section/MSectionHeader.vue'
 
 const usagePolicy =
   ref(`This system is for the use of authorized users only. Individuals using this system without authority, or in excess of their authority, are subject to having all their activities on this system monitored and recorded by system personnel.

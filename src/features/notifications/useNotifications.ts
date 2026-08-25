@@ -10,9 +10,9 @@ const timeoutHandles = new Map<string, ReturnType<typeof setTimeout>>()
 
 const VISIBLE_ITEMS = 5
 
-type PushOptions = Omit<NotificationOptions, 'kind'> & {
+type PushOptions = Omit<NotificationOptions, 'tone'> & {
   message: string
-  kind: Notification['kind']
+  tone: Notification['tone']
 }
 
 const latests = computed((): Notification[] => {
@@ -102,7 +102,7 @@ const error = (message: string, options?: NotificationOptions): string => {
   return push({
     ...options,
     message,
-    kind: 'error',
+    tone: 'danger',
     icon: options?.icon ?? OctagonXIcon,
   })
 }
@@ -111,7 +111,7 @@ const warning = (message: string, options?: NotificationOptions): string => {
   return push({
     ...options,
     message,
-    kind: 'warning',
+    tone: 'warning',
     icon: options?.icon ?? TriangleAlertIcon,
   })
 }
@@ -120,7 +120,7 @@ const info = (message: string, options?: NotificationOptions): string => {
   return push({
     ...options,
     message,
-    kind: 'info',
+    tone: 'info',
     icon: options?.icon ?? LightbulbIcon,
   })
 }
@@ -129,7 +129,7 @@ const success = (message: string, options?: NotificationOptions): string => {
   return push({
     ...options,
     message,
-    kind: 'success',
+    tone: 'success',
     icon: options?.icon ?? CheckIcon,
   })
 }
@@ -138,7 +138,7 @@ const notify = (message: string, options?: NotificationOptions): string => {
   return push({
     ...options,
     message,
-    kind: options?.kind ?? 'neutral',
+    tone: options?.tone ?? 'neutral',
   })
 }
 

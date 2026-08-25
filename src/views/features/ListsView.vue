@@ -8,7 +8,7 @@
       </template>
     </MListbox>
 
-    <h1 style="grid-column: 1 / span 2">Popups</h1>
+    <h1 style="grid-column: 1 / span 2">Popovers</h1>
 
     <div style="display: flex; gap: 5rem">
       <button id="p-top-start" @click="showPopup(getbyId('p-top-start'), 'top-start')">Top Start</button>
@@ -17,24 +17,25 @@
       <button id="p-bottom-end" @click="showPopup(getbyId('p-bottom-end'), 'bottom-end')">Bottom End</button>
     </div>
 
-    <MPopup
+    <MPopover
       :anchor="popupAnchor"
       :open="popupShow"
       :placement="popupPosition"
       style="box-shadow: 0 0 1rem rgba(0, 0, 0, 0.2); border-radius: 1rem;"
       :offset="10"
-      @close="popupShow = false"
+      @dismiss="popupShow = false"
     >
       <MListbox :active-value="active" :items="items" :selected-value="selected" @select="selected = $event.value" />
-    </MPopup>
+    </MPopover>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue'
 
-import MListbox, { type ListItem } from '@/components/list/MListbox.vue'
-import MPopup, { type Placement } from '@/components/popup/MPopup.vue'
+import type { ListItem } from '@/lib/components/list/listbox.types'
+import MListbox from '@/lib/components/list/MListbox.vue'
+import MPopover, { type OverlayPlacement } from '@/lib/components/overlay/MPopover.vue'
 
 const selected = ref()
 const active = ref()
@@ -46,11 +47,11 @@ const items = ref<ListItem<string>[]>([
 ])
 const popupShow = ref(false)
 const popupAnchor = ref<HTMLElement | null>(null)
-const popupPosition = ref<Placement>('bottom-start')
+const popupPosition = ref<OverlayPlacement>('bottom-start')
 
 const getbyId = (id: string): HTMLElement | null => document.querySelector(`#${id}`)
 
-const showPopup = (anchor: HTMLElement | null, position: Placement) => {
+const showPopup = (anchor: HTMLElement | null, position: OverlayPlacement) => {
   popupAnchor.value = anchor
   popupPosition.value = position
   popupShow.value = true

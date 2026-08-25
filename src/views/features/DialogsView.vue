@@ -48,13 +48,13 @@
 import { computed, reactive, ref, useTemplateRef } from 'vue'
 import { UserPlusIcon } from '@lucide/vue'
 
-import MConfirmDialog, { type Exposed as ConfirmExposed } from '@/components/dialog/MConfirmDialog.vue'
-import MDialog, { type Exposed } from '@/components/dialog/MDialog.vue'
-import MFormDialog, { type Exposed as FormExposed } from '@/components/dialog/MFormDialog.vue'
-import MCheckbox from '@/components/fields/MCheckbox.vue'
-import MSwitch from '@/components/fields/MSwitch.vue'
-import MTextField from '@/components/fields/MTextField.vue'
-import MIcon from '@/components/MIcon.vue'
+import MConfirmDialog, { type Exposed as ConfirmExposed } from '@/lib/components/dialog/MConfirmDialog.vue'
+import MDialog, { type Exposed } from '@/lib/components/dialog/MDialog.vue'
+import MFormDialog, { type Exposed as FormExposed } from '@/lib/components/dialog/MFormDialog.vue'
+import MCheckbox from '@/lib/components/fields/MCheckbox.vue'
+import MSwitch from '@/lib/components/fields/MSwitch.vue'
+import MTextField from '@/lib/components/fields/MTextField.vue'
+import MIcon from '@/lib/components/MIcon.vue'
 
 const d1 = useTemplateRef<Exposed>('d1')
 const c1 = useTemplateRef<ConfirmExposed>('c1')

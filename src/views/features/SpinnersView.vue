@@ -57,9 +57,9 @@
 <script lang="ts" setup>
 import { onUnmounted, ref } from 'vue'
 
-import MCircularProgress from '@/components/progress/MCircularProgress.vue'
-import MProgressBar from '@/components/progress/MProgressBar.vue'
-import MSpinner from '@/components/progress/MSpinner.vue'
+import MCircularProgress from '@/lib/components/progress/MCircularProgress.vue'
+import MProgressBar from '@/lib/components/progress/MProgressBar.vue'
+import MSpinner from '@/lib/components/progress/MSpinner.vue'
 
 const progress = ref(0)
 

@@ -20,6 +20,13 @@
   --link-color: light-dark(var(--blue-500), var(--blue-400));
   --link-hover-color: light-dark(var(--blue-600), var(--blue-500));
 
+  --tone-neutral: light-dark(var(--gray-500), var(--gray-500));
+  --tone-primary: light-dark(var(--blue-500), var(--blue-400));
+  --tone-info: light-dark(var(--cyan-600), var(--cyan-500));
+  --tone-success: light-dark(var(--green-600), var(--green-500));
+  --tone-warning: light-dark(var(--orange-500), var(--orange-600));
+  --tone-danger: light-dark(var(--red-500), var(--red-500));
+
   --duration-xs: 0.05s;
   --duration-sm: 0.1s;
   --duration-md: 0.15s;
@@ -105,4 +112,28 @@
   --container-md: container-token(--container-md);
   --container-lg: container-token(--container-lg);
   --container-xl: container-token(--container-xl);
+}
+
+:where([data-tone='neutral']) {
+  --tone-color: var(--tone-neutral);
+}
+
+:where([data-tone='primary']) {
+  --tone-color: var(--tone-primary);
+}
+
+:where([data-tone='info']) {
+  --tone-color: var(--tone-info);
+}
+
+:where([data-tone='success']) {
+  --tone-color: var(--tone-success);
+}
+
+:where([data-tone='warning']) {
+  --tone-color: var(--tone-warning);
+}
+
+:where([data-tone='danger']) {
+  --tone-color: var(--tone-danger);
 }

@@ -9,30 +9,30 @@
         notify('Notify message', {
           title: 'Custom notification',
           icon: ClockCheckIcon,
-          kind: 'success',
+          tone: 'success',
         })
       "
     >
       Custom
     </MButton>
 
-    <MButton kind="caution" @click.prevent="error('Notificaton with timeout', { timeout: 2000 })">
+    <MButton tone="danger" @click.prevent="error('Notificaton with timeout', { timeout: 2000 })">
       Error with timeout
     </MButton>
     <MButton
-      kind="attention"
+      tone="warning"
       @click.prevent="warning('Notificaton with timeout', { timeout: 3000, title: 'And title' })"
     >
       Warning with timeout
     </MButton>
     <MButton
-      kind="success"
+      tone="success"
       @click.prevent="success('Notificaton with timeout', { timeout: 4000, icon: ClockCheckIcon })"
     >
       Success with timeout
     </MButton>
     <MButton
-      kind="primary"
+      tone="info"
       @click.prevent="info('Notificaton with timeout', { timeout: 5000, title: 'And title', icon: ClockCheckIcon })"
     >
       Info with timeout
@@ -43,8 +43,7 @@
 <script lang="ts" setup>
 import { ClockCheckIcon } from '@lucide/vue'
 
-import MButton from '@/components/buttons/MButton.vue'
-
+import MButton from '@/lib/components/buttons/MButton.vue'
 import { useNotifications } from '@/features/notifications'
 
 const { error, warning, success, info, notify } = useNotifications()

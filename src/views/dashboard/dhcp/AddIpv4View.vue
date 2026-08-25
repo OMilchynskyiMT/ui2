@@ -51,13 +51,13 @@
 import { ref } from 'vue'
 import { CheckIcon } from '@lucide/vue'
 
-import MButton from '@/components/buttons/MButton.vue'
-import MSelect from '@/components/fields/MSelect.vue'
-import MSwitch from '@/components/fields/MSwitch.vue'
-import MTextField from '@/components/fields/MTextField.vue'
-import MFormGrid from '@/components/grid/MFormGrid.vue'
-import MIcon from '@/components/MIcon.vue'
-import MCard from '@/components/section/MCard.vue'
+import MButton from '@/lib/components/buttons/MButton.vue'
+import MSelect from '@/lib/components/fields/MSelect.vue'
+import MSwitch from '@/lib/components/fields/MSwitch.vue'
+import MTextField from '@/lib/components/fields/MTextField.vue'
+import MFormGrid from '@/lib/components/grid/MFormGrid.vue'
+import MIcon from '@/lib/components/MIcon.vue'
+import MCard from '@/lib/components/section/MCard.vue'
 
 const form = ref<{
   status: boolean

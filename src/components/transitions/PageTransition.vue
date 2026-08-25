@@ -26,13 +26,10 @@ const {
 @layer components {
   .m-page-transition {
     --page-shift: var(--space-xxl);
-    --page-overflow-bleed: calc(var(--page-shift) / 2);
 
     position: relative;
     display: grid;
-    overflow-x: clip;
-    overflow-y: visible;
-    overflow-clip-margin: var(--page-overflow-bleed);
+    overflow: visible;
 
     & > * {
       --page-offset-x: 0px;
@@ -57,6 +54,7 @@ const {
         .page-enter-enter-active,
         .page-enter-leave-active
       ) {
+      overflow-x: clip;
       transition-property: transform, opacity;
       transition-duration: var(--page-transition-duration);
       transition-timing-function: var(--bezier-smooth);
@@ -71,8 +69,7 @@ const {
         .page-fade-enter-from,
         .page-fade-leave-to,
         .page-enter-enter-from,
-        .page-enter-leave-to,
-
+        .page-enter-leave-to
       ) {
       --opacity: 0;
     }

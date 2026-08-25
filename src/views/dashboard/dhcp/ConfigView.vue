@@ -15,8 +15,8 @@
       </template>
 
       <template #cell-actions>
-        <MButton kind="neutral" variant="icon"><MIcon :icon="PencilIcon" /></MButton>
-        <MButton kind="attention" variant="icon" @click="confirmDeleteDialog?.confirm">
+        <MButton tone="neutral" variant="icon"><MIcon :icon="PencilIcon" /></MButton>
+        <MButton tone="warning" variant="icon" @click="confirmDeleteDialog?.confirm">
           <MIcon :icon="TrashIcon" />
         </MButton>
       </template>
@@ -37,12 +37,12 @@
       </template>
 
       <template #cell-raMode="{ value }">
-        <MChip kind="success">{{ value }}</MChip>
+        <MChip tone="success">{{ value }}</MChip>
       </template>
 
       <template #cell-actions>
-        <MButton kind="neutral" variant="icon"><MIcon :icon="PencilIcon" /></MButton>
-        <MButton kind="attention" variant="icon" @click="confirmDeleteDialog?.confirm">
+        <MButton tone="neutral" variant="icon"><MIcon :icon="PencilIcon" /></MButton>
+        <MButton tone="warning" variant="icon" @click="confirmDeleteDialog?.confirm">
           <MIcon :icon="TrashIcon" />
         </MButton>
       </template>
@@ -58,12 +58,12 @@
 import { onMounted, ref, useTemplateRef } from 'vue'
 import { CheckIcon, PencilIcon, TrashIcon, XIcon } from '@lucide/vue'
 
-import MButton from '@/components/buttons/MButton.vue'
-import MConfirmDialog, { type Exposed as ConfirmExposed } from '@/components/dialog/MConfirmDialog.vue'
-import MChip from '@/components/MChip.vue'
-import MIcon from '@/components/MIcon.vue'
-import type { TableColumn, TableSort } from '@/components/table/mtable.types'
-import MTable from '@/components/table/MTable.vue'
+import MButton from '@/lib/components/buttons/MButton.vue'
+import MConfirmDialog, { type Exposed as ConfirmExposed } from '@/lib/components/dialog/MConfirmDialog.vue'
+import MChip from '@/lib/components/MChip.vue'
+import MIcon from '@/lib/components/MIcon.vue'
+import type { TableColumn, TableSort } from '@/lib/components/table/mtable.types'
+import MTable from '@/lib/components/table/MTable.vue'
 
 type DhcpV4 = {
   status: boolean

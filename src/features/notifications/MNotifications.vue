@@ -1,7 +1,7 @@
 <template>
   <TransitionGroup appear class="notifications" name="notification" tag="div">
     <div v-for="item in latests" :key="item.id" class="item">
-      <div :class="['notification', item.kind]">
+      <div :data-tone="item.tone" class="notification">
         <div v-if="item.icon" class="icon">
           <MIcon :icon="item.icon as Component" />
         </div>
@@ -12,7 +12,7 @@
         </div>
 
         <div class="close">
-          <MButton kind="neutral" variant="icon" @click.prevent="remove(item.id)">
+          <MButton tone="neutral" variant="icon" @click.prevent="remove(item.id)">
             <MIcon :icon="XIcon" />
           </MButton>
         </div>
@@ -32,8 +32,8 @@
 import { XIcon } from '@lucide/vue'
 import type { Component } from 'vue'
 
-import MButton from '@/components/buttons/MButton.vue'
-import MIcon from '@/components/MIcon.vue'
+import MButton from '@/lib/components/buttons/MButton.vue'
+import MIcon from '@/lib/components/MIcon.vue'
 
 import { type Notification, useNotifications } from '.'
 
@@ -134,28 +134,13 @@ const timeoutStyle = (item: Notification): Record<string, string> => {
 
         pointer-events: auto;
 
-        &.success {
-          --accent: var(--green-500);
-        }
-
-        &.error {
-          --accent: var(--red-500);
-        }
-
-        &.warning {
-          --accent: var(--orange-500);
-        }
-
-        &.info {
-          --accent: var(--blue-500);
-        }
-
-        &.neutral {
-          --accent: var(--text-color);
-        }
-
-        &:is(.success, .error, .warning, .info) {
+        &[data-tone]:not([data-tone='neutral']) {
+          --accent: var(--tone-color);
           --border-width: 5px;
+        }
+
+        &[data-tone='neutral'] {
+          --accent: var(--tone-color);
         }
 
         & > div.content {

@@ -138,14 +138,14 @@ const router = createRouter({
               component: () => import('@/views/features/TableView.vue'),
             },
             {
-              path: 'data-grid',
-              name: 'data-grid',
-              component: () => import('@/views/features/DataGridView.vue'),
+              path: 'property-list',
+              name: 'property-list',
+              component: () => import('@/views/features/PropertyListView.vue'),
             },
             {
-              path: 'notice',
-              name: 'notice',
-              component: () => import('@/views/features/NoticesView.vue'),
+              path: 'alerts',
+              name: 'alerts',
+              component: () => import('@/views/features/AlertsView.vue'),
             },
             {
               path: 'notifications',

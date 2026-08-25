@@ -20,9 +20,9 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 
-import MNumber from '@/components/fields/MNumber.vue'
-import MSwitch from '@/components/fields/MSwitch.vue'
-import MFormGrid from '@/components/grid/MFormGrid.vue'
+import MNumber from '@/lib/components/fields/MNumber.vue'
+import MSwitch from '@/lib/components/fields/MSwitch.vue'
+import MFormGrid from '@/lib/components/grid/MFormGrid.vue'
 
 const blocks = 10
 const toggle = ref(false)

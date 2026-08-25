@@ -1,2 +1,2 @@
-export type { Notification, NotificationKind } from './types.ts'
+export type { Notification, NotificationOptions } from './types.ts'
 export { useNotifications } from './useNotifications.ts'

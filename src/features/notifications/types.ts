@@ -1,11 +1,11 @@
-import type { Component } from "vue"
+import type { Component } from 'vue'
 
-export type NotificationKind = "success" | "info" | "warning" | "error" | 'neutral'
+import type { FeedbackTone } from '@/lib/components/component.types'
 
 export type NotificationOptions = {
   id?: string
   title?: string
-  kind?: NotificationKind
+  tone?: FeedbackTone
   timeout?: number
   icon?: Component
 }
@@ -14,7 +14,7 @@ export type Notification = {
   id: string
   title?: string
   message: string
-  kind: NotificationKind
+  tone: FeedbackTone
   timeout?: number
 
   // Runtime timeout state

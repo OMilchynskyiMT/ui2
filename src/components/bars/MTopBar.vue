@@ -21,14 +21,10 @@
 </template>
 
 <script lang="ts" setup>
-import { watch } from 'vue'
+import { useColorScheme } from '@/composables/useColorScheme'
+import MBar from '@/lib/components/bars/MBar.vue'
 
-import { useColorScheme } from '../../composables/useColorScheme.ts'
-
-import MBar from './MBar.vue'
-
-const { scheme: resolvedScheme, rawScheme: scheme } = useColorScheme()
-watch(scheme, () => console.log('scheme change', resolvedScheme.value))
+const { scheme: resolvedScheme } = useColorScheme()
 </script>
 
 <style scoped>

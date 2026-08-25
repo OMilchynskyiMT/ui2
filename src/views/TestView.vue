@@ -1,47 +1,50 @@
 <template>
   <MTabs
-    :check-active="tab => tab.value === route.name"
     :items="tabs"
-    :on-select="tab => tab.value && goto(tab.value, id => router.push({ name: id }))"
-  />
-
-  <main style="padding: 3rem;">
-    <RouterView v-slot="{ Component }">
-      <PageTransition :name="transtionName" appear>
-        <component :is="Component" :key="route.fullPath" />
-      </PageTransition>
-    </RouterView>
-  </main>
+    :model-value="route.name?.toString() ?? ''"
+    aria-label="Component examples"
+    @update:model-value="goto($event, id => router.push({ name: id }))"
+  >
+    <template #panel>
+      <main style="padding: 3rem">
+        <RouterView v-slot="{ Component }">
+          <PageTransition :name="transitionName" appear>
+            <component :is="Component" :key="route.fullPath" />
+          </PageTransition>
+        </RouterView>
+      </main>
+    </template>
+  </MTabs>
 </template>
 
 <script lang="ts" setup>
 import { BusFrontIcon, FormInputIcon, GlobeIcon } from '@lucide/vue'
 import { useRoute, useRouter } from 'vue-router'
 
-import MTabs from '@/components/tabs/MTabs.vue'
-import { useTabNavigation } from '@/components/tabs/useTabNavigation'
+import MTabs, { type MTabItem } from '@/lib/components/tabs/MTabs.vue'
 import PageTransition from '@/components/transitions/PageTransition.vue'
+import { useTabNavigation } from '@/composables/useTabNavigation'
 
-const tabs = [
+const tabs: MTabItem<string>[] = [
   { icon: FormInputIcon, title: 'Inputs', value: 'inputs' },
   { icon: BusFrontIcon, title: 'Buttons', value: 'buttons' },
   { icon: GlobeIcon, title: 'Spinner & Progress', value: 'spinners' },
-  { icon: GlobeIcon, title: 'Tab four', disabled: true },
+  { icon: GlobeIcon, title: 'Tab four', value: 'disabled', disabled: true },
   { title: 'Lists', value: 'lists' },
   { title: 'Chips', value: 'chips' },
   { title: 'Dialogs', value: 'dialogs' },
   { title: 'Menu', value: 'menu' },
   { title: 'Grid', value: 'grid' },
   { title: 'Table', value: 'table' },
-  { title: 'Data Grid', value: 'data-grid' },
-  { title: 'Notice', value: 'notice' },
+  { title: 'Property List', value: 'property-list' },
+  { title: 'Alerts', value: 'alerts' },
   { title: 'Notifications', value: 'notifications' },
 ]
+
 const router = useRouter()
 const route = useRoute()
-
-const { transitionName: transtionName, goto } = useTabNavigation(
-  tabs.filter(t => t.value !== undefined).map(t => t.value),
-  route.name?.toString()
+const { transitionName, goto } = useTabNavigation(
+  tabs.filter(tab => !tab.disabled).map(tab => tab.value),
+  () => route.name?.toString()
 )
 </script>

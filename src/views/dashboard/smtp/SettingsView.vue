@@ -46,7 +46,7 @@
           <MTextField v-model="form.auth.email" label="Email" />
 
           <div class="grid-align-center">
-            <MButton kind="primary" variant="tonal">
+            <MButton tone="primary" variant="tonal">
               <MIcon :icon="MailCheckIcon" />
               Send Test Email
             </MButton>
@@ -66,7 +66,7 @@
     </MCard>
 
     <div class="actions">
-      <MButton kind="primary">
+      <MButton tone="primary">
         <MIcon :icon="CheckIcon" />
         Save
       </MButton>
@@ -78,15 +78,15 @@
 import { ref } from 'vue'
 import { CheckIcon, LockIcon, MailCheckIcon, UserIcon } from '@lucide/vue'
 
-import MButton from '@/components/buttons/MButton.vue'
-import MCheckbox from '@/components/fields/MCheckbox.vue'
-import MNumber from '@/components/fields/MNumber.vue'
-import MSwitch from '@/components/fields/MSwitch.vue'
-import MTextField from '@/components/fields/MTextField.vue'
-import MFormGrid from '@/components/grid/MFormGrid.vue'
-import MIcon from '@/components/MIcon.vue'
-import MCard from '@/components/section/MCard.vue'
-import MSectionHeader from '@/components/section/MSectionHeader.vue'
+import MButton from '@/lib/components/buttons/MButton.vue'
+import MCheckbox from '@/lib/components/fields/MCheckbox.vue'
+import MNumber from '@/lib/components/fields/MNumber.vue'
+import MSwitch from '@/lib/components/fields/MSwitch.vue'
+import MTextField from '@/lib/components/fields/MTextField.vue'
+import MFormGrid from '@/lib/components/grid/MFormGrid.vue'
+import MIcon from '@/lib/components/MIcon.vue'
+import MCard from '@/lib/components/section/MCard.vue'
+import MSectionHeader from '@/lib/components/section/MSectionHeader.vue'
 
 const form = ref<{
   status: boolean

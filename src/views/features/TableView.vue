@@ -20,8 +20,8 @@
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue'
 
-import type { TableColumn, TableSort } from '@/components/table/mtable.types'
-import MTable from '@/components/table/MTable.vue'
+import type { TableColumn, TableSort } from '@/lib/components/table/mtable.types'
+import MTable from '@/lib/components/table/MTable.vue'
 
 type User = {
   id: number

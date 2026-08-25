@@ -6,8 +6,8 @@
           <MButton
             aria-label="Open navigation"
             class="u-hidden-above-md"
-            kind="neutral"
             style="--padding-inline: 0.5rem"
+            tone="neutral"
             variant="text"
             @click="mainMenuDialog?.show()"
           >
@@ -16,28 +16,30 @@
         </template>
 
         <template #trailing>
-          <MButton aria-label="Save & Restart" kind="caution" variant="tonal" @click="saveAndApplyConfirm?.confirm">
+          <MButton aria-label="Save & Restart" tone="danger" variant="tonal" @click="saveAndApplyConfirm?.confirm">
             <MIcon :icon="SaveCheckIcon" />
             <span class="u-hidden-below-lg">Save & Apply</span>
           </MButton>
+
           <MButton
             ref="commands-button"
             :aria-expanded="commandMenuOpened"
             aria-haspopup="menu"
-            kind="neutral"
+            tone="neutral"
             variant="icon"
-            @click="commandMenuOpened = true"
+            @click="commandMenuOpened = !commandMenuOpened"
           >
             <MIcon :icon="SquareTerminalIcon" style="--color: var(--lime-600)" />
             <span class="u-hidden-below-lg">Commands</span>
           </MButton>
+
           <MButton
             ref="user-menu-button"
             :aria-expanded="userMenuOpened"
             aria-haspopup="menu"
-            kind="neutral"
+            tone="neutral"
             variant="icon"
-            @click="userMenuOpened = true"
+            @click="userMenuOpened = !userMenuOpened"
           >
             <MUserAvatar size="1rem" style="--accent: var(--purple-500)" />
             <span class="u-hidden-below-lg">admin</span>
@@ -60,16 +62,10 @@
     <div class="content">
       <aside aria-label="Main navigation" class="u-hidden-below-md">
         <Teleport :disabled="!isCompact" defer to="#compact-navigation > .surface">
-          <MTreeMenu
-            :check-active="item => item.value.name === route.name || route.fullPath.startsWith(item.value.fullPath)"
-            :items="menuOptions"
-            :on-select="
-              item => {
-                router.push(item.value)
-                mainMenuDialog?.close()
-              }
-            "
+          <MNavigationTree
+            :items="navigationOptions"
             :style="{ '--padding': isCompact ? 'var(--space-xs) var(--space-xl)' : null }"
+            @navigate="mainMenuDialog?.close()"
           />
         </Teleport>
       </aside>
@@ -82,34 +78,35 @@
         <img v-if="resolvedScheme === 'light'" src="/images/MT-logo.svg" width="180" />
         <img v-else src="/images/MT-logo-light.svg" width="180" />
         <template #trailing>
-          <MButton class="close-button" kind="caution" variant="icon" @click="mainMenuDialog?.close()">
+          <MButton class="close-button" tone="danger" variant="icon" @click="mainMenuDialog?.close()">
             <MIcon :icon="XIcon" />
           </MButton>
         </template>
       </MBar>
     </MDialog>
 
-    <MPopup
-      :anchor="commandsButton?.$el"
+    <MMenu
+      v-model:open="commandMenuOpened"
+      :anchor="commandsButton?.$el ?? null"
+      :items="commandsOptions"
       :offset="10"
-      :open="commandMenuOpened"
+      aria-label="Commands"
       placement="bottom-end"
-      @close="commandMenuOpened = false"
-    >
-      <div class="menu commands">
-        <MTreeMenu :items="commandsOptions" icon-size="1.15rem" />
-      </div>
-    </MPopup>
+      style="--menu-icon-color: var(--lime-600)"
+    />
 
-    <MPopup
-      :anchor="userMenuButton?.$el"
+    <MMenu
+      v-model:open="userMenuOpened"
+      :anchor="userMenuButton?.$el ?? null"
+      :items="userMenuOptions"
       :offset="10"
-      :open="userMenuOpened"
+      aria-label="User actions"
       placement="bottom-end"
-      @close="userMenuOpened = false"
+      style="--menu-icon-color: var(--blue-500)"
+      @select="userMenuHandler($event.value)"
     >
-      <div class="menu user">
-        <MBar>
+      <template #header>
+        <MBar style="--sections-gap: 1rem">
           <template #leading>
             <MUserAvatar :style="{ '--accent': 'var(--purple-500)' }" size="2rem" />
           </template>
@@ -119,9 +116,8 @@
             <div class="role">Administrator</div>
           </div>
         </MBar>
-        <MTreeMenu :items="userMenuOptions" :on-select="item => userMenuHandler(item.value)" icon-size="1.15rem" />
-      </div>
-    </MPopup>
+      </template>
+    </MMenu>
 
     <MConfirmDialog ref="saveAndApplyConfirm">
       Current configuration will be saved and applied. Continue?
@@ -146,66 +142,61 @@ import {
   UserKeyIcon,
   XIcon,
 } from '@lucide/vue'
-import { type RouteLocation, useRoute, useRouter } from 'vue-router'
 
 import MShell from '@/components/application/MShell.vue'
-import MBar from '@/components/bars/MBar.vue'
 import MTopBar from '@/components/bars/MTopBar.vue'
-import MButton from '@/components/buttons/MButton.vue'
-import MConfirmDialog, { type Exposed as ConfirmExposed } from '@/components/dialog/MConfirmDialog.vue'
-import MDialog, { type Exposed as DialogExposed } from '@/components/dialog/MDialog.vue'
-import MTreeMenu, { type MTreeMenuItem } from '@/components/menu/MTreeMenu.vue'
-import MIcon from '@/components/MIcon.vue'
 import MUserAvatar from '@/components/MUserAvatar.vue'
-import MPopup from '@/components/popup/MPopup.vue'
+import MNavigationTree, { type MNavigationTreeItem } from '@/components/navigation/MNavigationTree.vue'
 
 import { useColorScheme } from '@/composables/useColorScheme'
 import { remToPixels, useViewportSizeListener } from '@/composables/useViewportSizeListener'
+import MBar from '@/lib/components/bars/MBar.vue'
+import MButton from '@/lib/components/buttons/MButton.vue'
+import MConfirmDialog, { type Exposed as ConfirmExposed } from '@/lib/components/dialog/MConfirmDialog.vue'
+import MDialog, { type Exposed as DialogExposed } from '@/lib/components/dialog/MDialog.vue'
+import MMenu, { type MMenuItem } from '@/lib/components/menu/MMenu.vue'
+import MIcon from '@/lib/components/MIcon.vue'
 import { containerTokens } from '@/postcss/containerTokens'
 
-const router = useRouter()
-const route = useRoute()
 const mainMenuDialog = useTemplateRef<DialogExposed>('mainMenuDialog')
 const isCompact = ref(true)
-const commandsButton = useTemplateRef('commands-button')
+const commandsButton = useTemplateRef<InstanceType<typeof MButton>>('commands-button')
 const commandMenuOpened = ref(false)
-const userMenuButton = useTemplateRef('user-menu-button')
+const userMenuButton = useTemplateRef<InstanceType<typeof MButton>>('user-menu-button')
 const userMenuOpened = ref(false)
 const saveAndApplyConfirm = useTemplateRef<ConfirmExposed>('saveAndApplyConfirm')
 let stopResizeSubscription: (() => void) | undefined
 
 const { toggleScheme, scheme: resolvedScheme } = useColorScheme()
 
-const menuOptions: MTreeMenuItem<RouteLocation>[] = [
-  { title: 'Dashboard', icon: LayoutDashboardIcon, value: router.resolve({ name: 'dashboard' }) },
+const navigationOptions: MNavigationTreeItem[] = [
+  { title: 'Dashboard', icon: LayoutDashboardIcon, to: { name: 'dashboard' } },
   {
     title: 'Setup',
     icon: CogIcon,
-    value: router.resolve({ name: 'setup' }),
     children: [
-      { title: 'WAN', value: router.resolve({ name: 'wan' }) },
-      { title: 'DHCP', value: router.resolve({ name: 'dhcp' }) },
-      { title: 'SMTP', value: router.resolve({ name: 'smtp' }) },
+      { title: 'WAN', to: { name: 'wan' } },
+      { title: 'DHCP', to: { name: 'dhcp' } },
+      { title: 'SMTP', to: { name: 'smtp' } },
     ],
   },
   {
     title: 'Administration',
     icon: UserCog2Icon,
-    value: router.resolve({ name: 'administration' }),
     children: [
-      { title: 'Debug Options', value: router.resolve({ name: 'debug-options' }) },
-      { title: 'Usage Policy', value: router.resolve({ name: 'usage-policy' }) },
+      { title: 'Debug Options', to: { name: 'debug-options' } },
+      { title: 'Usage Policy', to: { name: 'usage-policy' } },
     ],
   },
 ]
 
-const userMenuOptions: MTreeMenuItem<string>[] = [
+const userMenuOptions: MMenuItem<string>[] = [
   { title: 'Change password', icon: UserKeyIcon, value: 'change-password' },
   { title: 'Switch color scheme', icon: PaletteIcon, value: 'switch-color-scheme' },
   { title: 'Logout', icon: LogOutIcon, value: 'logout' },
 ]
 
-const commandsOptions: MTreeMenuItem<string>[] = [
+const commandsOptions: MMenuItem<string>[] = [
   { title: 'Save changes', icon: SaveIcon, value: 'save' },
   { title: 'Revert changes', icon: Undo2Icon, value: 'revert' },
   { title: 'Restart device', icon: RefreshCcwDotIcon, value: 'restart' },
@@ -213,17 +204,16 @@ const commandsOptions: MTreeMenuItem<string>[] = [
   { title: 'Restart BACnet services', icon: RefreshCcwDotIcon, value: 'restart-bacnet' },
 ]
 
-const userMenuHandler = (value: (typeof userMenuOptions)[number]['value']) => {
+const userMenuHandler = (value: string): void => {
   if (value !== 'switch-color-scheme') return
   toggleScheme()
-  userMenuOpened.value = false
 }
 
 onMounted(() => {
   stopResizeSubscription = useViewportSizeListener(({ width }) => {
     isCompact.value = width < remToPixels(Number.parseInt(containerTokens['--container-md']))
     if (!isCompact.value && mainMenuDialog.value?.isVisible()) {
-      mainMenuDialog.value?.close()
+      mainMenuDialog.value.close()
     }
   })
 })
@@ -267,18 +257,7 @@ onBeforeUnmount(() => {
   }
 }
 
-.menu {
-  background-color: var(--surface-bg);
-  padding: var(--space-md);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-lg);
-  display: grid;
-  gap: var(--space-md);
-
-  & > .bar {
-    --sections-gap: 1rem;
-  }
-
+.user {
   .username {
     font-weight: var(--font-weight-bold);
   }
@@ -286,14 +265,6 @@ onBeforeUnmount(() => {
   .role {
     font-size: var(--font-size-sm);
     color: var(--gray-500);
-  }
-
-  &.commands > .tree-menu {
-    --icon-color: var(--lime-600);
-  }
-
-  &.user > .tree-menu {
-    --icon-color: var(--blue-500);
   }
 }
 </style>

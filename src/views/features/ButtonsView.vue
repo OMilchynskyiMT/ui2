@@ -2,11 +2,11 @@
   <main>
     <section>
       <h2>Regular buttons</h2>
-      <div v-for="variant in ['outlined', 'filled', 'text', 'tonal', 'icon']" :key="variant" class="container">
-        <div v-for="kind in ['primary', 'attention', 'success', 'neutral', 'caution']" :key="kind">
-          <MButton :kind="kind" :variant="variant">
+      <div v-for="variant in variants" :key="variant" class="container">
+        <div v-for="tone in tones" :key="tone">
+          <MButton :tone="tone" :variant="variant">
             <MIcon :icon="UserIcon" size="1rem" />
-            {{ kind }}
+            {{ tone }}
           </MButton>
         </div>
       </div>
@@ -15,9 +15,9 @@
     <section>
       <h2>Disabled</h2>
 
-      <div v-for="variant in ['outlined', 'filled', 'text', 'tonal']" :key="variant" class="container">
-        <div v-for="kind in ['primary', 'attention', 'success', 'neutral', 'caution']" :key="kind">
-          <MButton :kind="kind" :variant="variant" disabled @click="() => console.debug('click')">{{ kind }}</MButton>
+      <div v-for="variant in regularVariants" :key="variant" class="container">
+        <div v-for="tone in tones" :key="tone">
+          <MButton :tone="tone" :variant="variant" disabled @click="() => console.debug('click')">{{ tone }}</MButton>
         </div>
       </div>
     </section>
@@ -25,9 +25,9 @@
     <section>
       <h2>Loading</h2>
 
-      <div v-for="variant in ['outlined', 'filled', 'text', 'tonal']" :key="variant" class="container">
-        <div v-for="kind in ['primary', 'attention', 'success', 'neutral', 'caution']" :key="kind">
-          <MButton :kind="kind" :variant="variant" loading>{{ kind }}</MButton>
+      <div v-for="variant in regularVariants" :key="variant" class="container">
+        <div v-for="tone in tones" :key="tone">
+          <MButton :tone="tone" :variant="variant" loading>{{ tone }}</MButton>
         </div>
       </div>
     </section>
@@ -35,9 +35,9 @@
     <section>
       <h2>Sizes</h2>
 
-      <div v-for="variant in ['outlined', 'filled', 'text', 'tonal']" :key="variant" class="container">
-        <div v-for="size in ['small', 'medium', 'large']" :key="size">
-          <MButton :size="size" :variant="variant" kind="primary">{{ size }}</MButton>
+      <div v-for="variant in regularVariants" :key="variant" class="container">
+        <div v-for="size in sizes" :key="size">
+          <MButton :size="size" :variant="variant" tone="primary">{{ size }}</MButton>
         </div>
       </div>
     </section>
@@ -45,11 +45,11 @@
     <section>
       <h2>Interactive</h2>
 
-      <div v-for="variant in ['outlined', 'filled', 'text', 'tonal']" :key="variant" class="container">
-        <div v-for="kind in ['primary', 'attention', 'success', 'neutral', 'caution']" :key="kind">
-          <MButton :kind="kind" :loading="loading" :variant="variant" @click="setLoading">
+      <div v-for="variant in regularVariants" :key="variant" class="container">
+        <div v-for="tone in tones" :key="tone">
+          <MButton :tone="tone" :loading="loading" :variant="variant" @click="setLoading">
             <MIcon :icon="UserIcon" size="1rem" />
-            {{ kind }}
+            {{ tone }}
           </MButton>
         </div>
       </div>
@@ -61,8 +61,14 @@
 import { ref } from 'vue'
 import { UserIcon } from '@lucide/vue'
 
-import MButton from '@/components/buttons/MButton.vue'
-import MIcon from '@/components/MIcon.vue'
+import MButton, { type Size, type Variant } from '@/lib/components/buttons/MButton.vue'
+import type { ComponentTone } from '@/lib/components/component.types'
+import MIcon from '@/lib/components/MIcon.vue'
+
+const variants: Variant[] = ['outlined', 'filled', 'text', 'tonal', 'icon']
+const regularVariants: Variant[] = ['outlined', 'filled', 'text', 'tonal']
+const tones: ComponentTone[] = ['primary', 'info', 'success', 'warning', 'danger', 'neutral']
+const sizes: Size[] = ['small', 'medium', 'large']
 
 const loading = ref(false)
 
