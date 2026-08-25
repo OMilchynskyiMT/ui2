@@ -1,5 +1,5 @@
 <template>
-  <div :class="['notice', type]">
+  <div :class="['alert', type]">
     <div v-if="slots.icon || icon" aria-hidden="true" class="icon">
       <slot name="icon">
         <MIcon :icon="actualIcon" />
@@ -51,7 +51,7 @@ const actualIcon = computed((): Component => {
 
 <style scoped>
 @layer components {
-  .notice {
+  .alert {
     --border-width: 1px;
     --icon-size: 24px;
     --accent: light-dark(var(--gray-600), var(--gray-400));

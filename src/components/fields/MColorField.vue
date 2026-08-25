@@ -1,5 +1,5 @@
 <template>
-  <MField v-model="model" :invalid="!isHexColorValid(model)">
+  <MTextField v-model="model" :invalid="!isHexColorValid(model)">
     <template v-for="name in Object.keys(slots).filter(name => !reservedSlots.includes(name))" #[name]>
       <slot :name="name" />
     </template>
@@ -8,7 +8,7 @@
       <input ref="colorInput" v-model="model" type="color" />
       <button @click="colorInput?.click()"><MIcon ref="paletteIcon" :icon="PaletteIcon" /></button>
     </template>
-  </MField>
+  </MTextField>
 </template>
 
 <script lang="ts">
@@ -25,7 +25,7 @@ import { PaletteIcon } from '@lucide/vue'
 
 import MIcon from '@/components/MIcon.vue'
 
-import MField from './MField.vue'
+import MTextField from './MTextField.vue'
 
 const slots = useSlots()
 const model = defineModel<string>({ required: true })

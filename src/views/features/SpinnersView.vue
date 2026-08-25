@@ -2,10 +2,9 @@
   <div style="display: grid; gap: 2rem">
     <h2>Spinner</h2>
     <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(5rem, 1fr))">
-      <MSpinner
+      <MCircularProgress
         v-for="size in ['1rem', '1.5rem', '2rem', '2.5rem', '3rem', '4rem', '5rem']"
         :key="size"
-        :indeterminate="false"
         :size="size"
         :stroke-width="5"
         :value="progressValue"
@@ -14,10 +13,9 @@
     </div>
 
     <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(5rem, 1fr))">
-      <MSpinner
+      <MCircularProgress
         v-for="size in ['1rem', '1.5rem', '2rem', '2.5rem', '3rem', '4rem', '5rem']"
         :key="size"
-        :indeterminate="false"
         :size="size"
         :stroke-width="10"
         :value="progress"
@@ -31,14 +29,13 @@
         :key="size"
         :size="size"
         :stroke-width="3"
-        indeterminate
         style="color: var(--green-500)"
       />
     </div>
 
     <h2>Linear progress bars</h2>
-    <MLinear :max="150" :value="72" style="--accent: var(--cyan-500)" />
-    <MLinear
+    <MProgressBar :max="150" :value="72" style="--accent: var(--cyan-500)" />
+    <MProgressBar
       :value="90"
       style="
         --accent: linear-gradient(
@@ -52,15 +49,16 @@
         --height: 0.5rem;
       "
     />
-    <MLinear />
-    <MLinear :value="[28, 14, 5, 20]" style="--accent: var(--purple-500); --height: 1rem" />
+    <MProgressBar />
+    <MProgressBar :value="[28, 14, 5, 20]" style="--accent: var(--purple-500); --height: 1rem" />
   </div>
 </template>
 
 <script lang="ts" setup>
 import { onUnmounted, ref } from 'vue'
 
-import MLinear from '@/components/progress/MLinear.vue'
+import MCircularProgress from '@/components/progress/MCircularProgress.vue'
+import MProgressBar from '@/components/progress/MProgressBar.vue'
 import MSpinner from '@/components/progress/MSpinner.vue'
 
 const progress = ref(0)

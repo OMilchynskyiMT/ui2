@@ -2,17 +2,17 @@
   <MFormGrid :columns="1">
     <MCard>
       <MFormGrid :columns="1">
-        <MCaption>Server Configuration</MCaption>
+        <MSectionHeader>Server Configuration</MSectionHeader>
 
         <MFormGrid :columns="{ small: 1, medium: 2, extraLarge: 4 }">
-          <MToggle
+          <MSwitch
             v-model="form.status"
             class="grid-full"
             hint="Enable SMTP to allow your device to send email messages"
             label="Enabled"
           />
 
-          <MField v-model="form.server" label="Server" />
+          <MTextField v-model="form.server" label="Server" />
           <MNumber v-model="form.port" label="Port" />
 
           <MCheckbox v-model="form.tls" hint="Enable or disable SSL/TLS for secured connections." label="TLS" />
@@ -32,18 +32,18 @@
 
     <MCard>
       <MFormGrid :columns="1">
-        <MCaption>Authentication</MCaption>
+        <MSectionHeader>Authentication</MSectionHeader>
 
         <MFormGrid :columns="{ small: 1, medium: 2, extraLarge: 4 }">
-          <MToggle v-model="form.auth.enabled" class="grid-full" label="Enabled" />
+          <MSwitch v-model="form.auth.enabled" class="grid-full" label="Enabled" />
 
-          <MField v-model="form.auth.username" label="Username">
+          <MTextField v-model="form.auth.username" label="Username">
             <template #leading><MIcon :icon="UserIcon" /></template>
-          </MField>
-          <MField v-model="form.auth.password" label="Password" type="password">
+          </MTextField>
+          <MTextField v-model="form.auth.password" label="Password" type="password">
             <template #leading><MIcon :icon="LockIcon" /></template>
-          </MField>
-          <MField v-model="form.auth.email" label="Email" />
+          </MTextField>
+          <MTextField v-model="form.auth.email" label="Email" />
 
           <div class="grid-align-center">
             <MButton kind="primary" variant="tonal">
@@ -57,7 +57,7 @@
 
     <MCard>
       <MFormGrid :columns="1">
-        <MCaption>Mail Log Settings</MCaption>
+        <MSectionHeader>Mail Log Settings</MSectionHeader>
 
         <MFormGrid :columns="{ small: 1, medium: 2, extraLarge: 4 }">
           <MNumber v-model="form.maillog.entriesToKeep" label="Entries to keep" />
@@ -80,13 +80,13 @@ import { CheckIcon, LockIcon, MailCheckIcon, UserIcon } from '@lucide/vue'
 
 import MButton from '@/components/buttons/MButton.vue'
 import MCheckbox from '@/components/fields/MCheckbox.vue'
-import MField from '@/components/fields/MField.vue'
 import MNumber from '@/components/fields/MNumber.vue'
-import MToggle from '@/components/fields/MToggle.vue'
+import MSwitch from '@/components/fields/MSwitch.vue'
+import MTextField from '@/components/fields/MTextField.vue'
 import MFormGrid from '@/components/grid/MFormGrid.vue'
 import MIcon from '@/components/MIcon.vue'
-import MCaption from '@/components/section/MCaption.vue'
 import MCard from '@/components/section/MCard.vue'
+import MSectionHeader from '@/components/section/MSectionHeader.vue'
 
 const form = ref<{
   status: boolean

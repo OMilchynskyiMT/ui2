@@ -1,5 +1,5 @@
 <template>
-  <dl class="data-grid">
+  <dl class="property-list">
     <div v-for="item in items" :key="item.field" class="item">
       <dt :title="item.hint ?? undefined" class="field">
         <slot :field="item.field" :name="`field-${item.field}`" :value="data[item.field]">
@@ -62,7 +62,7 @@ const internalFormatField = (field: string): string => {
 </script>
 
 <style scoped>
-.data-grid {
+.property-list {
   --field-size: min(12rem, 38%);
   --column-gap: var(--space-md);
   --row-gap: var(--space-md);

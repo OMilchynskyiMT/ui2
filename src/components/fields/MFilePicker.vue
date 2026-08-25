@@ -13,7 +13,7 @@
     @focusin="onFocusIn"
     @focusout="onFocusOut"
   >
-    <MFieldFrame
+    <FieldFrame
       :id="id"
       :class="['file-frame', `file-frame-${variant}`]"
       :disabled="disabled"
@@ -137,7 +137,7 @@
       <template v-for="slot in ['label', 'error', 'hint', 'counter'].filter(s => slots[s])" #[slot]>
         <slot :name="slot" />
       </template>
-    </MFieldFrame>
+    </FieldFrame>
 
     <input
       :id="`${id}-native`"
@@ -157,8 +157,8 @@
 </template>
 
 <script lang="ts">
-export type MFileUploadVariant = 'field' | 'area'
-export type MFileUploadChangeSource = 'picker' | 'drop' | 'clear' | 'remove'
+export type MFilePickerVariant = 'field' | 'area'
+export type MFilePickerChangeSource = 'picker' | 'drop' | 'clear' | 'remove'
 export type MFileRejectionReason = 'accept' | 'multiple'
 
 export type MFileRejection = {
@@ -166,7 +166,7 @@ export type MFileRejection = {
   reason: MFileRejectionReason
 }
 
-export type MFileUploadExpose = {
+export type MFilePickerExpose = {
   browse: () => void
   clear: () => void
   focus: (options?: FocusOptions) => void
@@ -179,12 +179,12 @@ import { FileUpIcon, XIcon } from '@lucide/vue'
 
 import MIcon from '../MIcon.vue'
 
+import FieldFrame from './FieldFrame.vue'
 import { type MFieldProperties } from './mfield.shared'
-import MFieldFrame from './MFieldFrame.vue'
 
 type Properties = Omit<MFieldProperties, 'id' | 'focused' | 'populated' | 'multiline' | 'prefix' | 'suffix'> & {
   id?: string
-  variant?: MFileUploadVariant
+  variant?: MFilePickerVariant
   accept?: string
   multiple?: boolean
   name?: string
@@ -232,7 +232,7 @@ const isDragging = ref(false)
 const dragDepth = ref(0)
 
 const emit = defineEmits<{
-  change: [files: File[], source: MFileUploadChangeSource, event?: Event]
+  change: [files: File[], source: MFilePickerChangeSource, event?: Event]
   reject: [rejections: MFileRejection[], source: 'picker' | 'drop', event: Event]
   cancel: [event: Event]
 }>()
@@ -320,7 +320,7 @@ const syncNativeFiles = (files: File[]): void => {
   }
 }
 
-const commit = (files: File[], source: MFileUploadChangeSource, event?: Event): void => {
+const commit = (files: File[], source: MFilePickerChangeSource, event?: Event): void => {
   model.value = files
   syncNativeFiles(files)
   emit('change', files, source, event)
@@ -444,7 +444,7 @@ const onFocusOut = (event: FocusEvent): void => {
   isFocused.value = false
 }
 
-defineExpose<MFileUploadExpose>({
+defineExpose<MFilePickerExpose>({
   browse,
   clear,
   focus: options => controlReference.value?.focus(options),

@@ -8,7 +8,7 @@
     </MFormGrid>
 
     <MFormGrid :columns="{ small: 2, medium: 3, large: 4, extraLarge: 5 }">
-      <MToggle v-for="i of blocks" :key="i" v-model="toggle" :label="`Toggle ${i}`" />
+      <MSwitch v-for="i of blocks" :key="i" v-model="toggle" :label="`Toggle ${i}`" />
     </MFormGrid>
 
     <MFormGrid style="--columns-md: 2; --columns-lg: 3; --columns-xl: 4">
@@ -21,7 +21,7 @@
 import { ref } from 'vue'
 
 import MNumber from '@/components/fields/MNumber.vue'
-import MToggle from '@/components/fields/MToggle.vue'
+import MSwitch from '@/components/fields/MSwitch.vue'
 import MFormGrid from '@/components/grid/MFormGrid.vue'
 
 const blocks = 10

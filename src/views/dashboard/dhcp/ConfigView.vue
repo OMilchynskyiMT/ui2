@@ -48,9 +48,9 @@
       </template>
     </MTable>
 
-    <MConfirm ref="confirm-delete-dialog" accept-text="Remove">
+    <MConfirmDialog ref="confirm-delete-dialog" accept-text="Remove">
       Are you sure you want to remove this DHCP server?
-    </MConfirm>
+    </MConfirmDialog>
   </div>
 </template>
 
@@ -59,7 +59,7 @@ import { onMounted, ref, useTemplateRef } from 'vue'
 import { CheckIcon, PencilIcon, TrashIcon, XIcon } from '@lucide/vue'
 
 import MButton from '@/components/buttons/MButton.vue'
-import MConfirm, { type Exposed as ConfirmExposed } from '@/components/dialog/MConfirm.vue'
+import MConfirmDialog, { type Exposed as ConfirmExposed } from '@/components/dialog/MConfirmDialog.vue'
 import MChip from '@/components/MChip.vue'
 import MIcon from '@/components/MIcon.vue'
 import type { TableColumn, TableSort } from '@/components/table/mtable.types'

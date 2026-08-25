@@ -1,5 +1,5 @@
 <template>
-  <MSelectionControl
+  <SelectionControl
     :id="id"
     ref="control"
     v-bind="attributes"
@@ -29,13 +29,13 @@
     <template v-if="slots.hint" #hint>
       <slot name="hint" />
     </template>
-  </MSelectionControl>
+  </SelectionControl>
 </template>
 
 <script lang="ts">
-import type { MSelectionControlExpose } from './MSelectionControl.vue'
+import type { SelectionControlExpose } from './SelectionControl.vue'
 
-export type MToggleProperties = {
+export type MSwitchProperties = {
   id?: string
   label?: string
   hint?: string
@@ -46,13 +46,13 @@ export type MToggleProperties = {
   readonly?: boolean
 }
 
-export type MToggleExpose = MSelectionControlExpose
+export type MSwitchExpose = SelectionControlExpose
 </script>
 
 <script lang="ts" setup>
 import { ref, useAttrs, useId, useSlots } from 'vue'
 
-import MSelectionControl from './MSelectionControl.vue'
+import SelectionControl from './SelectionControl.vue'
 
 const {
   id = useId(),
@@ -63,7 +63,7 @@ const {
   invalid = false,
   disabled = false,
   readonly = false,
-} = defineProps<MToggleProperties>()
+} = defineProps<MSwitchProperties>()
 
 const emit = defineEmits<{
   change: [event: Event]
@@ -74,7 +74,7 @@ const emit = defineEmits<{
 const model = defineModel<boolean>({ required: true })
 const attributes = useAttrs()
 const slots = useSlots()
-const control = ref<MSelectionControlExpose>()
+const control = ref<SelectionControlExpose>()
 
 const onChange = (event: Event): void => {
   model.value = (event.currentTarget as HTMLInputElement).checked
@@ -85,7 +85,7 @@ defineOptions({
   inheritAttrs: false,
 })
 
-defineExpose<MToggleExpose>({
+defineExpose<MSwitchExpose>({
   focus: (options?: FocusOptions) => control.value?.focus(options),
   blur: () => control.value?.blur(),
 })

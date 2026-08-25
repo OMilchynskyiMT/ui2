@@ -1,12 +1,12 @@
 <template>
   <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; max-width: 60vw">
-    <MField v-model="inputModel" label="Regular text field" title="Test title" />
-    <MField v-model="inputModel" label="with prefix and suffix" prefix="$" suffix=".00" />
+    <MTextField v-model="inputModel" label="Regular text field" title="Test title" />
+    <MTextField v-model="inputModel" label="with prefix and suffix" prefix="$" suffix=".00" />
 
-    <MField v-model="inputModel" disabled label="Disabled" />
-    <MField v-model="inputModel" label="Read Only" readonly />
+    <MTextField v-model="inputModel" disabled label="Disabled" />
+    <MTextField v-model="inputModel" label="Read Only" readonly />
 
-    <MField v-model="inputModel" label="With error and hint" prefix="$" suffix=".00">
+    <MTextField v-model="inputModel" label="With error and hint" prefix="$" suffix=".00">
       <template #leading>
         <MIcon :icon="MailPlusIcon" style="color: var(--green-500)" />
       </template>
@@ -16,19 +16,19 @@
         officia?
       </template>
       <template #error> Lorem ipsum dolor sit amet consectetur adipisicing elit. </template>
-    </MField>
+    </MTextField>
 
-    <MField v-model="inputModel" label="with spinner" placeholder="Loading...">
+    <MTextField v-model="inputModel" label="with spinner" placeholder="Loading...">
       <template #leading>
         <MIcon :icon="MailPlusIcon" />
       </template>
       <template #trailing>
-        <MSpinner :stroke-width="5" indeterminate size="1.5rem" style="color: var(--blue-300)" />
+        <MSpinner :stroke-width="5" size="1.5rem" style="color: var(--blue-300)" />
       </template>
       <template #hint>
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste veritatis laborum amet quasi esse praesentium
       </template>
-    </MField>
+    </MTextField>
 
     <MNumber v-model="numberModel" :max="10" :min="5" clamp-on-blur label="Number field x>5<10 with clamp" />
     <MNumber v-model="numberModel" label="Number field #2" placeholder="Numbers only" />
@@ -91,8 +91,8 @@
     </section>
 
     <section style="grid-column: 1 / span 2; display: flex; gap: 2rem">
-      <MToggle v-model="toggleModel" label="Toggle" />
-      <MToggle
+      <MSwitch v-model="toggleModel" label="Toggle" />
+      <MSwitch
         v-model="toggleModel"
         hint="Custom color"
         label="Custom toggle"
@@ -100,9 +100,9 @@
       />
     </section>
 
-    <MColor v-model="colorModel" label="Color Picker" suffix="hex">
+    <MColorField v-model="colorModel" label="Color Picker" suffix="hex">
       <template #hint>Lorem ipsum dolor sit amet consectetur adipisicing elit</template>
-    </MColor>
+    </MColorField>
     <div>{{ colorModel }}</div>
 
     <MTextarea v-model="textareaModel" counter hint="Lorem ipsum dolor sit amet" label="Textarea">
@@ -117,7 +117,7 @@
       </template>
     </MTextarea>
 
-    <MFileUpload
+    <MFilePicker
       v-model="fileModel"
       accept="image/*"
       accept-text="Images only"
@@ -126,7 +126,7 @@
       label="File upload"
       multiple
     />
-    <MFileUpload
+    <MFilePicker
       v-model="fileModel"
       accept="image/*"
       accept-text="Images only"
@@ -144,16 +144,16 @@ import { ref } from 'vue'
 import { EthernetPortIcon, MailPlusIcon } from '@lucide/vue'
 
 import MCheckbox from '@/components/fields/MCheckbox.vue'
-import MColor from '@/components/fields/MColor.vue'
+import MColorField from '@/components/fields/MColorField.vue'
 import MCombobox from '@/components/fields/MCombobox.vue'
-import MField from '@/components/fields/MField.vue'
-import MFileUpload from '@/components/fields/MFileUpload.vue'
+import MFilePicker from '@/components/fields/MFilePicker.vue'
 import MNumber from '@/components/fields/MNumber.vue'
 import MRadio from '@/components/fields/MRadio.vue'
 import MSelect from '@/components/fields/MSelect.vue'
+import MSwitch from '@/components/fields/MSwitch.vue'
 import MTextarea from '@/components/fields/MTextarea.vue'
-import MToggle from '@/components/fields/MToggle.vue'
-import type { ListItem, ListOption } from '@/components/list/MList.vue'
+import MTextField from '@/components/fields/MTextField.vue'
+import type { ListItem, ListOption } from '@/components/list/MListbox.vue'
 import MIcon from '@/components/MIcon.vue'
 import MSpinner from '@/components/progress/MSpinner.vue'
 

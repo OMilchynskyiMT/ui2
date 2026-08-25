@@ -1,5 +1,5 @@
 <template>
-  <MSelectionControl
+  <SelectionControl
     :id="id"
     ref="control"
     v-bind="attributes"
@@ -29,11 +29,11 @@
     <template v-if="slots.hint" #hint>
       <slot name="hint" />
     </template>
-  </MSelectionControl>
+  </SelectionControl>
 </template>
 
 <script lang="ts">
-import type { MSelectionControlExpose } from './MSelectionControl.vue'
+import type { SelectionControlExpose } from './SelectionControl.vue'
 
 export type MCheckboxProperties = {
   id?: string
@@ -47,13 +47,13 @@ export type MCheckboxProperties = {
   indeterminate?: boolean
 }
 
-export type MCheckboxExpose = MSelectionControlExpose
+export type MCheckboxExpose = SelectionControlExpose
 </script>
 
 <script lang="ts" setup>
 import { ref, useAttrs, useId, useSlots } from 'vue'
 
-import MSelectionControl from './MSelectionControl.vue'
+import SelectionControl from './SelectionControl.vue'
 
 const {
   id = useId(),
@@ -76,7 +76,7 @@ const emit = defineEmits<{
 const model = defineModel<boolean>({ required: true })
 const attributes = useAttrs()
 const slots = useSlots()
-const control = ref<MSelectionControlExpose>()
+const control = ref<SelectionControlExpose>()
 
 const onChange = (event: Event): void => {
   model.value = (event.currentTarget as HTMLInputElement).checked

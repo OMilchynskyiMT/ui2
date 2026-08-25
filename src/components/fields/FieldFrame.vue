@@ -52,7 +52,7 @@
 </template>
 
 <script lang="ts">
-export type MFieldFrameExpose = {
+export type FieldFrameExpose = {
   field: HTMLDivElement | null
   container: HTMLDivElement | null
 }
@@ -84,7 +84,7 @@ const ready = ref(false)
 
 const fieldInteractiveSelector = `${interactiveSelector}, textarea`
 
-defineExpose<MFieldFrameExpose>({
+defineExpose<FieldFrameExpose>({
   get field() {
     return fieldReference.value
   },

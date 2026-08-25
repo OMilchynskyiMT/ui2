@@ -2,7 +2,7 @@
   <MFormGrid :columns="1">
     <MCard>
       <MFormGrid :columns="{ small: 1, medium: 2, extraLarge: 4 }">
-        <MToggle
+        <MSwitch
           v-model="form.status"
           class="grid-full"
           hint="Check to configure this device as a DHCPv6/RA server for the LAN"
@@ -25,7 +25,7 @@
           hint="Select the Router Advertisement server mode, SLAAC only or Stateless DHCP"
         />
 
-        <MField
+        <MTextField
           v-model="form.leaseTime"
           hint="Preferred IPv6 address lease time set in days, hours, minutes. 00-00-00 is an infinite lease time"
           label="Lease Time"
@@ -47,9 +47,9 @@ import { ref } from 'vue'
 import { CheckIcon } from '@lucide/vue'
 
 import MButton from '@/components/buttons/MButton.vue'
-import MField from '@/components/fields/MField.vue'
 import MSelect from '@/components/fields/MSelect.vue'
-import MToggle from '@/components/fields/MToggle.vue'
+import MSwitch from '@/components/fields/MSwitch.vue'
+import MTextField from '@/components/fields/MTextField.vue'
 import MFormGrid from '@/components/grid/MFormGrid.vue'
 import MIcon from '@/components/MIcon.vue'
 import MCard from '@/components/section/MCard.vue'

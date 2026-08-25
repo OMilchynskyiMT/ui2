@@ -1,6 +1,6 @@
 import { ref } from 'vue'
 
-import type { TransitionName } from '../transitons/PageTransition.vue'
+import type { TransitionName } from '../transitions/PageTransition.vue'
 
 export const useTabNavigation = <T>(ids: T[], currentId?: T) => {
   const transitionName = ref<TransitionName>('page-enter')

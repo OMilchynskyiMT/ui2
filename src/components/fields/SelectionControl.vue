@@ -56,12 +56,12 @@
 </template>
 
 <script lang="ts">
-export type MSelectionControlVariant = 'checkbox' | 'radio' | 'toggle'
+export type SelectionControlVariant = 'checkbox' | 'radio' | 'toggle'
 
-export type MSelectionControlProperties = {
+export type SelectionControlProperties = {
   id?: string
   type: 'checkbox' | 'radio'
-  variant: MSelectionControlVariant
+  variant: SelectionControlVariant
   checked?: boolean
   disabled?: boolean
   readonly?: boolean
@@ -75,7 +75,7 @@ export type MSelectionControlProperties = {
   value?: string
 }
 
-export type MSelectionControlExpose = {
+export type SelectionControlExpose = {
   focus: (options?: FocusOptions) => void
   blur: () => void
 }
@@ -97,7 +97,7 @@ const {
   title,
   role,
   value,
-} = defineProps<MSelectionControlProperties>()
+} = defineProps<SelectionControlProperties>()
 
 const emit = defineEmits<{
   change: [event: Event]
@@ -157,7 +157,7 @@ const onChange = (event: Event): void => {
   emit('change', event)
 }
 
-defineExpose<MSelectionControlExpose>({
+defineExpose<SelectionControlExpose>({
   focus: (options?: FocusOptions) => inputReference.value?.focus(options),
   blur: () => inputReference.value?.blur(),
 })

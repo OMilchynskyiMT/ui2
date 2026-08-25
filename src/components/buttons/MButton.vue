@@ -15,7 +15,7 @@
       <slot name="default">{{ label ?? '' }}</slot>
     </span>
     <span v-if="loading" class="progress">
-      <MSpinner :stroke-width="5" indeterminate />
+      <MSpinner :stroke-width="5" />
     </span>
   </button>
 </template>

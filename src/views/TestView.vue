@@ -20,7 +20,7 @@ import { useRoute, useRouter } from 'vue-router'
 
 import MTabs from '@/components/tabs/MTabs.vue'
 import { useTabNavigation } from '@/components/tabs/useTabNavigation'
-import PageTransition from '@/components/transitons/PageTransition.vue'
+import PageTransition from '@/components/transitions/PageTransition.vue'
 
 const tabs = [
   { icon: FormInputIcon, title: 'Inputs', value: 'inputs' },

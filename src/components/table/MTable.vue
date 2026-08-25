@@ -49,7 +49,7 @@
             <td :colspan="columnSpan" class="state loading">
               <div class="loading">
                 <slot name="loading">
-                  <MSpinner :stroke-width="4" indeterminate size="1.5rem" />
+                  <MSpinner :stroke-width="4" size="1.5rem" />
                   <span>{{ loadingLabel }}</span>
                 </slot>
               </div>

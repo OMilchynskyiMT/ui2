@@ -1,5 +1,5 @@
 <template>
-  <MFieldFrame
+  <FieldFrame
     :id="id"
     :disabled="disabled"
     :error="error"
@@ -37,7 +37,7 @@
       @focus="onFocus"
       @input="onInput"
     />
-  </MFieldFrame>
+  </FieldFrame>
 </template>
 
 <script lang="ts">
@@ -51,8 +51,8 @@ export type MFieldExpose = {
 <script lang="ts" setup>
 import { computed, ref, useAttrs, useId, useSlots, useTemplateRef } from 'vue'
 
+import FieldFrame from './FieldFrame.vue'
 import { type MFieldProperties } from './mfield.shared'
-import MFieldFrame from './MFieldFrame.vue'
 
 type Properties = Omit<MFieldProperties, 'id' | 'focused' | 'populated' | 'multiline'> & {
   id?: string

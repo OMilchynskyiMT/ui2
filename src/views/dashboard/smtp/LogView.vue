@@ -1,6 +1,6 @@
 <template>
   <MFormGrid :columns="1">
-    <MCaption>
+    <MSectionHeader>
       Mail Log
       <template #actions>
         <MButton kind="neutral" size="small" variant="tonal">
@@ -12,7 +12,7 @@
           Purge
         </MButton>
       </template>
-    </MCaption>
+    </MSectionHeader>
     <MTable v-model:sort="sort" :columns :rows="[]" />
   </MFormGrid>
 </template>
@@ -24,7 +24,7 @@ import { RefreshCwIcon, TrashIcon } from '@lucide/vue'
 import MButton from '@/components/buttons/MButton.vue'
 import MFormGrid from '@/components/grid/MFormGrid.vue'
 import MIcon from '@/components/MIcon.vue'
-import MCaption from '@/components/section/MCaption.vue'
+import MSectionHeader from '@/components/section/MSectionHeader.vue'
 import { type TableColumn, type TableSort } from '@/components/table/mtable.types'
 import MTable from '@/components/table/MTable.vue'
 

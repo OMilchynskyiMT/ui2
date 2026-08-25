@@ -1,11 +1,11 @@
 <template>
   <MFormGrid :columns="1">
-    <MCaption>
+    <MSectionHeader>
       DHCP Servers and DHCPv6/RA Configuration
       <template #description>
         Configure DHCP server that supplies network configuration information to devices on the network
       </template>
-    </MCaption>
+    </MSectionHeader>
 
     <MTabs
       :check-active="tab => route.name === tab.value"
@@ -26,10 +26,10 @@ import { CogIcon, PlusIcon } from '@lucide/vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import MFormGrid from '@/components/grid/MFormGrid.vue'
-import MCaption from '@/components/section/MCaption.vue'
+import MSectionHeader from '@/components/section/MSectionHeader.vue'
 import MTabs from '@/components/tabs/MTabs.vue'
 import { useTabNavigation } from '@/components/tabs/useTabNavigation'
-import PageTransition from '@/components/transitons/PageTransition.vue'
+import PageTransition from '@/components/transitions/PageTransition.vue'
 
 const tabs = [
   { title: 'DHCP Configuration', icon: CogIcon, value: 'dhcp-config' },

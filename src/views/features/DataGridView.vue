@@ -1,12 +1,12 @@
 <template>
   <MFormGrid :columns="2">
-    <MDataGrid :data :items empty-value="+">
+    <MPropertyList :data :items empty-value="+">
       <template #value-test1="{ value }">
-        <MCopyToClipboard :text="String(value)" direction="rtl">{{ value }}</MCopyToClipboard>
+        <MCopyButton :text="String(value)" direction="rtl">{{ value }}</MCopyButton>
       </template>
       <template #value-someTestThree="{ value }">
         <MIcon :icon="UserIcon" color="red" />
-        <MCopyToClipboard :text="String(value)" style="--accent-color: var(--purple-500)">{{ value }}</MCopyToClipboard>
+        <MCopyButton :text="String(value)" style="--accent-color: var(--purple-500)">{{ value }}</MCopyButton>
       </template>
       <template #value-test4="{ value }">
         <MSignalStrength
@@ -17,17 +17,17 @@
         />
         {{ value }}
       </template>
-    </MDataGrid>
+    </MPropertyList>
   </MFormGrid>
 </template>
 
 <script lang="ts" setup>
 import { UserIcon } from '@lucide/vue'
 
-import MDataGrid from '@/components/grid/MDataGrid.vue'
 import MFormGrid from '@/components/grid/MFormGrid.vue'
+import MPropertyList from '@/components/list/MPropertyList.vue'
 import MIcon from '@/components/MIcon.vue'
-import MCopyToClipboard from '@/components/misc/MCopyToClipboard.vue'
+import MCopyButton from '@/components/misc/MCopyButton.vue'
 import MSignalStrength from '@/components/misc/MSignalStrength.vue'
 
 const data = {

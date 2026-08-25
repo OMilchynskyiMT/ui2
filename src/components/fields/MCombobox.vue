@@ -1,5 +1,5 @@
 <template>
-  <MFieldFrame
+  <FieldFrame
     :id="id"
     ref="frame"
     :disabled="disabled"
@@ -47,7 +47,7 @@
     />
 
     <MPopup :anchor="popupAnchor" :offset="2" :open="isOpen" class="combobox-popup" parent-width @close="close">
-      <MList
+      <MListbox
         :id="listId"
         :active-value="activeValue"
         :items="visibleOptions"
@@ -67,16 +67,14 @@
             <div v-if="item.title" class="value">{{ item.value }}</div>
           </slot>
         </template>
-      </MList>
+      </MListbox>
     </MPopup>
-  </MFieldFrame>
+  </FieldFrame>
 </template>
 
 <script lang="ts">
-import type { ListOption as MListOption } from '@/components/list/MList.vue'
-
 import type { MFieldProperties } from './mfield.shared'
-import type { MFieldExpose } from './MField.vue'
+import type { MFieldExpose } from './MTextField.vue'
 
 export type ComboboxModel = string | number | null
 
@@ -85,11 +83,11 @@ export type MComboboxProperties<V extends string | number> = Omit<
   'id' | 'focused' | 'populated' | 'multiline'
 > & {
   id?: string
-  options: MListOption<V>[]
+  options: ListOption<V>[]
   filterable?: boolean
   openOnFocus?: boolean
   placeholder?: string
-  matcher?: (item: MListOption<V>, query?: string) => boolean
+  matcher?: (item: ListOption<V>, query?: string) => boolean
 } & CustomComboboxProperties<V>
 
 // NOTE: `allowCustom = true` requires forced `createCustomValue` handler
@@ -109,16 +107,16 @@ export type MComboboxExpose = MFieldExpose
 <script generic="V extends string | number" lang="ts" setup>
 import { computed, nextTick, ref, useAttrs, useId, useSlots, useTemplateRef, watch } from 'vue'
 
-import MList, {
+import MListbox, {
   flattenListItems,
   getListOptionId,
   isListGroup,
   type ListItem,
   type ListOption,
-} from '@/components/list/MList.vue'
+} from '@/components/list/MListbox.vue'
 import MPopup from '@/components/popup/MPopup.vue'
 
-import MFieldFrame, { type MFieldFrameExpose } from './MFieldFrame.vue'
+import FieldFrame, { type FieldFrameExpose } from './FieldFrame.vue'
 
 const reservedSlots = ['default', 'group', 'item']
 
@@ -139,7 +137,7 @@ const {
   hint = '',
   invalid = false,
   placeholder = '',
-  matcher = (item: MListOption<V>, query?: string) =>
+  matcher = (item: ListOption<V>, query?: string) =>
     !query || Object.values(item).join(' ').toLowerCase().includes(query.toLowerCase()),
 } = defineProps<MComboboxProperties<V>>()
 
@@ -158,7 +156,7 @@ defineOptions({
 const model = defineModel<V | null>({ required: true })
 const attributes = useAttrs()
 const slots = useSlots()
-const frame = ref<MFieldFrameExpose>()
+const frame = ref<FieldFrameExpose>()
 const inputReference = useTemplateRef<HTMLInputElement>('input')
 const isFocused = ref(false)
 const isOpen = ref(false)

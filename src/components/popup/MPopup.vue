@@ -25,7 +25,7 @@ export type Properties = {
 <script lang="ts" setup>
 import { nextTick, onUnmounted, ref, useAttrs, useTemplateRef, watch } from 'vue'
 
-import PopupTransition from '@/components/transitons/PopupTransition.vue'
+import PopupTransition from '@/components/transitions/PopupTransition.vue'
 
 import { useSnapToDevicePixel } from '@/composables/useDeviceHardwareHelpers'
 import { useEventListeners } from '@/composables/useEventListeners'

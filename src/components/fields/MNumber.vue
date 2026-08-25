@@ -1,5 +1,5 @@
 <template>
-  <MField
+  <MTextField
     :id="id"
     ref="field"
     v-model="text"
@@ -25,7 +25,7 @@
     <template v-for="name in Object.keys(slots)" #[name]>
       <slot :name="name" />
     </template>
-  </MField>
+  </MTextField>
 </template>
 
 <script lang="ts">
@@ -64,7 +64,7 @@ export const parseNumberText = (value: string): ParseResult => {
 import { computed, ref, useAttrs, useId, useSlots, watch } from 'vue'
 
 import type { MFieldProperties } from './mfield.shared'
-import MField, { type MFieldExpose } from './MField.vue'
+import MTextField, { type MFieldExpose } from './MTextField.vue'
 
 defineOptions({
   inheritAttrs: false,

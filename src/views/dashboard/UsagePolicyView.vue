@@ -1,6 +1,6 @@
 <template>
   <MFormGrid :columns="1">
-    <MCaption>Usage Policy</MCaption>
+    <MSectionHeader>Usage Policy</MSectionHeader>
 
     <MFormGrid :columns="1">
       <MCard>
@@ -37,8 +37,8 @@ import MButton from '@/components/buttons/MButton.vue'
 import MTextarea from '@/components/fields/MTextarea.vue'
 import MFormGrid from '@/components/grid/MFormGrid.vue'
 import MIcon from '@/components/MIcon.vue'
-import MCaption from '@/components/section/MCaption.vue'
 import MCard from '@/components/section/MCard.vue'
+import MSectionHeader from '@/components/section/MSectionHeader.vue'
 
 const usagePolicy =
   ref(`This system is for the use of authorized users only. Individuals using this system without authority, or in excess of their authority, are subject to having all their activities on this system monitored and recorded by system personnel.

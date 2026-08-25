@@ -1,5 +1,5 @@
 <template>
-  <MSelectionControl
+  <SelectionControl
     :id="id"
     ref="control"
     v-bind="attributes"
@@ -29,11 +29,11 @@
     <template v-if="slots.hint" #hint>
       <slot name="hint" />
     </template>
-  </MSelectionControl>
+  </SelectionControl>
 </template>
 
 <script lang="ts">
-import type { MSelectionControlExpose } from './MSelectionControl.vue'
+import type { SelectionControlExpose } from './SelectionControl.vue'
 
 export type RadioValue = string | number | boolean
 
@@ -49,13 +49,13 @@ export type MRadioProperties<V extends RadioValue> = {
   readonly?: boolean
 }
 
-export type MRadioExpose = MSelectionControlExpose
+export type MRadioExpose = SelectionControlExpose
 </script>
 
 <script generic="V extends RadioValue" lang="ts" setup>
 import { computed, ref, useAttrs, useId, useSlots } from 'vue'
 
-import MSelectionControl from './MSelectionControl.vue'
+import SelectionControl from './SelectionControl.vue'
 
 const {
   id = useId(),
@@ -78,7 +78,7 @@ const emit = defineEmits<{
 const model = defineModel<V>({ required: true })
 const attributes = useAttrs()
 const slots = useSlots()
-const control = ref<MSelectionControlExpose>()
+const control = ref<SelectionControlExpose>()
 
 const checked = computed(() => model.value === value)
 const nativeValue = computed(() => String(value))

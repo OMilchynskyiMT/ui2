@@ -1,12 +1,12 @@
 <template>
   <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem">
-    <MList :active-value="active" :items="items" :selected-value="selected" @select="selected = $event.value" />
-    <MList :active-value="active" :items="items" :selected-value="selected" @select="selected = $event.value">
+    <MListbox :active-value="active" :items="items" :selected-value="selected" @select="selected = $event.value" />
+    <MListbox :active-value="active" :items="items" :selected-value="selected" @select="selected = $event.value">
       <template #item="{ item }">
         <strong>{{ item.title }}</strong>
         <div>{{ item.value }}</div>
       </template>
-    </MList>
+    </MListbox>
 
     <h1 style="grid-column: 1 / span 2">Popups</h1>
 
@@ -25,7 +25,7 @@
       :offset="10"
       @close="popupShow = false"
     >
-      <MList :active-value="active" :items="items" :selected-value="selected" @select="selected = $event.value" />
+      <MListbox :active-value="active" :items="items" :selected-value="selected" @select="selected = $event.value" />
     </MPopup>
   </div>
 </template>
@@ -33,7 +33,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 
-import MList, { type ListItem } from '@/components/list/MList.vue'
+import MListbox, { type ListItem } from '@/components/list/MListbox.vue'
 import MPopup, { type Placement } from '@/components/popup/MPopup.vue'
 
 const selected = ref()

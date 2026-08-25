@@ -123,7 +123,9 @@
       </div>
     </MPopup>
 
-    <MConfirm ref="saveAndApplyConfirm"> Current configuration will be saved and applied. Continue? </MConfirm>
+    <MConfirmDialog ref="saveAndApplyConfirm">
+      Current configuration will be saved and applied. Continue?
+    </MConfirmDialog>
   </MShell>
 </template>
 
@@ -150,7 +152,7 @@ import MShell from '@/components/application/MShell.vue'
 import MBar from '@/components/bars/MBar.vue'
 import MTopBar from '@/components/bars/MTopBar.vue'
 import MButton from '@/components/buttons/MButton.vue'
-import MConfirm, { type Exposed as ConfirmExposed } from '@/components/dialog/MConfirm.vue'
+import MConfirmDialog, { type Exposed as ConfirmExposed } from '@/components/dialog/MConfirmDialog.vue'
 import MDialog, { type Exposed as DialogExposed } from '@/components/dialog/MDialog.vue'
 import MTreeMenu, { type MTreeMenuItem } from '@/components/menu/MTreeMenu.vue'
 import MIcon from '@/components/MIcon.vue'

@@ -11,11 +11,11 @@
       <button @click="d1?.close()">Close</button>
     </MDialog>
 
-    <MConfirm ref="c1" title="confirmation title (optional)">
+    <MConfirmDialog ref="c1" title="confirmation title (optional)">
       Lorem, ipsum dolor sit amet consectetur adipisicing elit. Voluptatum, blanditiis quibusdam dignissimos corporis
       error velit pariatur quae nobis aspernatur officiis quidem eius soluta optio ducimus ullam doloremque tempora,
       quod nesciunt.
-    </MConfirm>
+    </MConfirmDialog>
 
     <MFormDialog
       ref="f1"
@@ -36,9 +36,9 @@
         </div>
       </template>
 
-      <MField v-model="form.name" label="Name" required />
-      <MField v-model="form.email" label="Email" required type="email" />
-      <MToggle v-model="simulateFailure" label="Simulate API error" />
+      <MTextField v-model="form.name" label="Name" required />
+      <MTextField v-model="form.email" label="Email" required type="email" />
+      <MSwitch v-model="simulateFailure" label="Simulate API error" />
       <MCheckbox v-model="keepOpen" label="Return false and keep dialog open" />
     </MFormDialog>
   </div>
@@ -48,12 +48,12 @@
 import { computed, reactive, ref, useTemplateRef } from 'vue'
 import { UserPlusIcon } from '@lucide/vue'
 
-import MConfirm, { type Exposed as ConfirmExposed } from '@/components/dialog/MConfirm.vue'
+import MConfirmDialog, { type Exposed as ConfirmExposed } from '@/components/dialog/MConfirmDialog.vue'
 import MDialog, { type Exposed } from '@/components/dialog/MDialog.vue'
 import MFormDialog, { type Exposed as FormExposed } from '@/components/dialog/MFormDialog.vue'
 import MCheckbox from '@/components/fields/MCheckbox.vue'
-import MField from '@/components/fields/MField.vue'
-import MToggle from '@/components/fields/MToggle.vue'
+import MSwitch from '@/components/fields/MSwitch.vue'
+import MTextField from '@/components/fields/MTextField.vue'
 import MIcon from '@/components/MIcon.vue'
 
 const d1 = useTemplateRef<Exposed>('d1')
@@ -73,7 +73,7 @@ const canSubmit = computed(() => {
 })
 
 const wait = (ms: number): Promise<void> => {
-  return new Promise(resolve => globalThis.setTimeout(resolve, ms))
+  return new Promise(resolve => setTimeout(resolve, ms))
 }
 
 const log = (message: string): void => {

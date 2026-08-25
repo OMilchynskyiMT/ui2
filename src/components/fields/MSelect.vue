@@ -1,5 +1,5 @@
 <template>
-  <MFieldFrame
+  <FieldFrame
     :id="id"
     ref="frame"
     :disabled="disabled"
@@ -56,7 +56,7 @@
     </button>
 
     <MPopup :anchor="popupAnchor" :offset="2" :open="isOpen" class="select-popup" parent-width @close="close">
-      <MList
+      <MListbox
         :id="listId"
         :active-value="activeValue"
         :items="options"
@@ -76,13 +76,13 @@
             <div v-if="item.title" class="value">{{ item.value }}</div>
           </slot>
         </template>
-      </MList>
+      </MListbox>
     </MPopup>
-  </MFieldFrame>
+  </FieldFrame>
 </template>
 
 <script lang="ts">
-import type { ListItem, ListOption } from '@/components/list/MList.vue'
+import type { ListItem, ListOption } from '@/components/list/MListbox.vue'
 
 import type { MFieldProperties } from './mfield.shared'
 
@@ -111,12 +111,12 @@ export const TYPEAHEAD_RESET_TIMEOUT = 700
 import { computed, nextTick, onBeforeUnmount, ref, useAttrs, useId, useSlots, useTemplateRef } from 'vue'
 import { ChevronDownIcon } from '@lucide/vue'
 
-import MList, { flattenListItems, getListOptionId, type ListItem as MListItem } from '@/components/list/MList.vue'
+import MListbox, { flattenListItems, getListOptionId } from '@/components/list/MListbox.vue'
 import MPopup from '@/components/popup/MPopup.vue'
 
 import MIcon from '../MIcon.vue'
 
-import MFieldFrame, { type MFieldFrameExpose } from './MFieldFrame.vue'
+import FieldFrame, { type FieldFrameExpose } from './FieldFrame.vue'
 
 defineOptions({
   inheritAttrs: false,
@@ -151,7 +151,7 @@ const emit = defineEmits<{
 const model = defineModel<V | null>({ required: true })
 const attributes = useAttrs()
 const slots = useSlots()
-const frame = ref<MFieldFrameExpose>()
+const frame = ref<FieldFrameExpose>()
 const triggerReference = useTemplateRef<HTMLButtonElement>('trigger')
 const isFocused = ref(false)
 const isOpen = ref(false)
@@ -196,7 +196,7 @@ const hiddenInputName = computed(() => {
 
 const hiddenInputValue = computed(() => (model.value == null ? '' : String(model.value)))
 
-const getItemText = (item: MListItem<V>): string => {
+const getItemText = (item: ListItem<V>): string => {
   return item.title ?? String(item.value)
 }
 
