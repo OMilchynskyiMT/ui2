@@ -112,6 +112,8 @@
   --container-md: container-token(--container-md);
   --container-lg: container-token(--container-lg);
   --container-xl: container-token(--container-xl);
+
+  --touch-target-min: 2.75rem;
 }
 
 :where([data-tone='neutral']) {

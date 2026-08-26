@@ -21,17 +21,17 @@
 </template>
 
 <script lang="ts" setup>
-import { useColorScheme } from '@/composables/useColorScheme'
 import MBar from '@/lib/components/bars/MBar.vue'
+import { useColorScheme } from '@/composables/useColorScheme'
 
 const { scheme: resolvedScheme } = useColorScheme()
 </script>
 
 <style scoped>
 .bar {
-  --height: calc(3rem + env(safe-area-inset-top));
+  --height: calc(3rem + var(--safe-area-top));
   --sections-gap: var(--space-lg);
-  --padding-inline: max(var(--space-md), env(safe-area-inset-left));
+  --padding-inline: max(var(--space-md), var(--safe-area-left), var(--safe-area-right));
   --bg: var(--surface-bg);
   border-bottom: 1px solid light-dark(var(--gray-200), var(--gray-700));
   isolation: isolate;

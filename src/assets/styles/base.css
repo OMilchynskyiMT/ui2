@@ -1,3 +1,10 @@
+:root {
+  --safe-area-top: env(safe-area-inset-top, 0px);
+  --safe-area-right: env(safe-area-inset-right, 0px);
+  --safe-area-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-area-left: env(safe-area-inset-left, 0px);
+}
+
 html {
   overflow-y: scroll;
   scrollbar-gutter: stable;
@@ -8,7 +15,7 @@ html {
 }
 
 body {
-  min-height: 100vh;
+  min-height: 100dvh;
   font: var(--font-weight-normal) var(--font-size) var(--font-sans);
   line-height: var(--line-height);
   background-color: var(--bg);
@@ -23,7 +30,7 @@ kbd {
 }
 
 #app {
-  min-height: 100vh;
+  min-height: 100dvh;
   display: grid;
   container-type: inline-size;
 }

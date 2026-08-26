@@ -192,7 +192,7 @@ defineExpose<Exposed>({ show, close, isVisible })
 
     inline-size: var(--dialog-width);
     max-inline-size: calc(100vw - var(--outer-gap));
-    max-block-size: calc(100vh - var(--outer-gap));
+    max-block-size: calc(100dvh - var(--outer-gap));
 
     color: inherit;
     background-color: transparent;
@@ -204,7 +204,7 @@ defineExpose<Exposed>({ show, close, isVisible })
 
     transition-property: opacity, transform;
     transition-duration: var(--duration-md);
-    transition-timing-function: var(--bezier-magnetic);
+    transition-timing-function: var(--bezier-smooth);
 
     &[data-fullscreen] {
       inline-size: 100%;

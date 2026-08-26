@@ -158,7 +158,7 @@ onBeforeUnmount(() => {
     --border-color: var(--input-border-color);
     --transition-duration: var(--duration-md);
     --transition-func: var(--bezier-smooth);
-    --field-label-clearance: 0;
+    --field-label-clearance: calc(var(--label-font-size-active) * 0.75);
 
     --multiline-padding-block: calc(var(--input-padding-inline) * 0.75);
     --multiline-label-block-start: calc(var(--multiline-padding-block) + var(--input-font-size) * 0.75);
@@ -218,13 +218,14 @@ onBeforeUnmount(() => {
       text-overflow: ellipsis;
       pointer-events: none;
       user-select: none;
+      line-height: 1.25;
     }
 
     & > label {
       position: absolute;
       inset-block-start: 50%;
       inset-inline-start: calc(var(--input-padding-inline) + var(--label-inline-start));
-      transform: translateY(-50%);
+      transform: translateY(calc(-50% + var(--input-border-width) / 2));
       transform-origin: left top;
 
       min-inline-size: 0;
