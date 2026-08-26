@@ -1,5 +1,5 @@
 <template>
-  <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+  <div style="display: flex; gap: 1rem; flex-wrap: wrap">
     <MButton @click.prevent="error('Error message')">Error</MButton>
     <MButton @click.prevent="warning('Warning message')">Warning</MButton>
     <MButton @click.prevent="success('Success message')">Success</MButton>
@@ -21,7 +21,12 @@
     </MButton>
     <MButton
       tone="warning"
-      @click.prevent="warning('Notificaton with timeout', { timeout: 3000, title: 'And title' })"
+      @click.prevent="
+        warning(
+          'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus placeat sint saepe magni quibusdam! Temporibus modi accusamus aliquam, in velit omnis doloremque sit consequuntur repudiandae aliquid sapiente, unde illo praesentium.',
+          { timeout: 3000, title: 'And title' }
+        )
+      "
     >
       Warning with timeout
     </MButton>

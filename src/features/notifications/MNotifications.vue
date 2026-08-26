@@ -12,8 +12,14 @@
         </div>
 
         <div class="close">
-          <MButton tone="neutral" variant="icon" @click.prevent="remove(item.id)">
-            <MIcon :icon="XIcon" />
+          <MButton
+            aria-label="Dismiss notification"
+            size="small"
+            tone="neutral"
+            variant="icon"
+            @click.prevent="remove(item.id)"
+          >
+            <MIcon :icon="XIcon" size="1rem" />
           </MButton>
         </div>
 
@@ -58,7 +64,7 @@ const timeoutStyle = (item: Notification): Record<string, string> => {
     --border-width: 0px;
     --x-icon-size: 1rem;
     --x-icon-color: var(--gray-500);
-    --icon-size: 1.4rem;
+    --icon-size: 24px;
     --progress-width: 1px;
 
     position: fixed;
@@ -116,16 +122,18 @@ const timeoutStyle = (item: Notification): Record<string, string> => {
         --accent: var(--surface-bg);
         --border-width: 0px;
 
+        position: relative;
+        overflow: clip;
+
         align-self: start;
         min-block-size: 0;
 
-        display: grid;
-        grid-template-columns: auto 1fr auto;
-        align-items: start;
-        gap: var(--space-sm);
+        display: flex;
+        align-items: center;
+        column-gap: var(--space-md);
 
         border-left: var(--border-width) solid var(--accent);
-        padding: var(--space-sm) var(--space-md);
+        padding: var(--space-sm) var(--space-sm) var(--space-sm) var(--space-md);
 
         background-color: color-mix(var(--surface-bg) 90%, transparent);
         backdrop-filter: blur(3px);
@@ -144,17 +152,27 @@ const timeoutStyle = (item: Notification): Record<string, string> => {
         }
 
         & > div.content {
-          min-block-size: var(--icon-size);
+          min-inline-size: 0;
+          flex: 1 1 auto;
 
           display: grid;
           gap: var(--space-xxs);
-          justify-content: center;
+
+          & > h4 {
+            line-height: var(--icon-size);
+          }
+        }
+
+        & > div.icon,
+        & > div.close {
+          place-self: flex-start;
+          flex: 0 0 auto;
+
+          display: grid;
+          place-items: center;
         }
 
         & > div.icon {
-          display: grid;
-          align-items: center;
-
           & svg.icon {
             --size: var(--icon-size);
             --color: var(--accent);
@@ -162,9 +180,8 @@ const timeoutStyle = (item: Notification): Record<string, string> => {
         }
 
         & > div.close > button {
-          --padding-inline: var(--space-xxs);
-          --padding-block: var(--space-xxs);
-
+          --padding-inline: var(--space-xs);
+          --padding-block: var(--space-xs);
           & svg.icon {
             --size: var(--x-icon-size);
             --color: var(--x-icon-color);
@@ -172,11 +189,12 @@ const timeoutStyle = (item: Notification): Record<string, string> => {
         }
 
         & > div.progress {
-          grid-column: 1 / -1;
+          position: absolute;
+          inset-inline: 0;
+          inset-block-end: 0;
 
           block-size: var(--progress-width);
           overflow: hidden;
-          border-radius: var(--progress-width);
           background: color-mix(var(--accent) 10%, transparent);
 
           &::after {
