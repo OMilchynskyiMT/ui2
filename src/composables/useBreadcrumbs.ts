@@ -2,7 +2,7 @@ import { computed, type ComputedRef } from 'vue'
 import { type RouteLocationRaw, type RouteRecordNormalized, useRoute, useRouter } from 'vue-router'
 
 import type { MBreadcrumbItem } from '@/lib/components/navigation/MBreadcrumbs.vue'
-import type { BreadcrumbMetadata, BreadcrumbTarget, RouteMetadataValue } from '@/router/router.types'
+import type { BreadcrumbMetadata, BreadcrumbTarget, RouteMetadataValue } from '@/router/types'
 
 export type RouterBreadcrumbItem = MBreadcrumbItem<RouteLocationRaw>
 
