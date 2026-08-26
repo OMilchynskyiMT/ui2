@@ -30,7 +30,6 @@
       :aria-disabled="disabled"
       :aria-errormessage="isInvalid && (error || slots.error) ? `${id}-error` : undefined"
       :aria-expanded="isOpen"
-      aria-haspopup="listbox"
       :aria-invalid="isInvalid || undefined"
       :aria-readonly="readonly"
       :disabled="disabled"
@@ -38,6 +37,7 @@
       :readonly="readonly"
       :value="text"
       aria-autocomplete="list"
+      aria-haspopup="listbox"
       type="text"
       @blur="onBlur"
       @change="onChange"
@@ -48,10 +48,10 @@
 
     <MPopover
       :anchor="popupAnchor"
-      class="combobox-popup"
-      match-anchor-width
       :offset="2"
       :open="isOpen"
+      class="combobox-popup"
+      match-anchor-width
       @dismiss="close"
     >
       <MListbox
@@ -186,17 +186,11 @@ const filterOptions = (items: readonly ListOption<V>[], query: string): ListOpti
 }
 
 const visibleOptions = computed(() => filterOptions(options, text.value))
-const {
-  activeValue,
-  enabledItems,
-  activeItem,
-  syncActiveValue,
-  moveActiveValue,
-  getActiveOptionId,
-} = useSelectionNavigation(
-  () => visibleOptions.value,
-  () => model.value
-)
+const { activeValue, enabledItems, activeItem, syncActiveValue, moveActiveValue, getActiveOptionId } =
+  useSelectionNavigation(
+    () => visibleOptions.value,
+    () => model.value
+  )
 const activeOptionId = computed(() => (isOpen.value ? getActiveOptionId(listId) : undefined))
 
 const setTextFromModel = (): void => {
@@ -298,15 +292,21 @@ const onKeydown = (event: KeyboardEvent): void => {
 
   if (event.key === 'ArrowDown') {
     event.preventDefault()
-    if (!isOpen.value) open()
-    else moveActiveValue(1)
+    if (isOpen.value) {
+      moveActiveValue(1)
+    } else {
+      open()
+    }
     return
   }
 
   if (event.key === 'ArrowUp') {
     event.preventDefault()
-    if (!isOpen.value) open()
-    else moveActiveValue(-1)
+    if (isOpen.value) {
+      moveActiveValue(-1)
+    } else {
+      open()
+    }
     return
   }
 
@@ -360,7 +360,7 @@ defineExpose<MComboboxExpose>({
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-sm);
 
-    & > .list {
+    & > .listbox-scroll {
       --list-bg: var(--bg);
 
       & .item {

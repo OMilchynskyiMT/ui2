@@ -10,32 +10,34 @@
   >
     <slot name="header" />
 
-    <ul
-      ref="menu"
-      role="menu"
-      :aria-label="ariaLabel"
-      :aria-labelledby="ariaLabelledby"
-      :style="{ '--icon-size': iconSize }"
-      class="menu-list"
-      @keydown="onKeydown"
-    >
-      <li v-for="(item, index) in items" :key="`${index}-${item.title}`" role="none">
-        <button
-          :ref="element => setItemReference(element, index)"
-          role="menuitem"
-          :aria-disabled="item.disabled || undefined"
-          :disabled="item.disabled"
-          :title="item.hint"
-          type="button"
-          @click="selectItem(item)"
-          @focus="activeIndex = index"
-          @pointerenter="focusItem(index)"
-        >
-          <MIcon v-if="item.icon" :icon="item.icon" :size="iconSize" class="item-icon" />
-          <span class="title">{{ item.title }}</span>
-        </button>
-      </li>
-    </ul>
+    <MScrollArea class="menu-scroll" fade-edges>
+      <ul
+        ref="menu"
+        role="menu"
+        :aria-label="ariaLabel"
+        :aria-labelledby="ariaLabelledby"
+        :style="{ '--icon-size': iconSize }"
+        class="menu-list"
+        @keydown="onKeydown"
+      >
+        <li v-for="(item, index) in items" :key="`${index}-${item.title}`" role="none">
+          <button
+            :ref="element => setItemReference(element, index)"
+            role="menuitem"
+            :aria-disabled="item.disabled || undefined"
+            :disabled="item.disabled"
+            :title="item.hint"
+            type="button"
+            @click="selectItem(item)"
+            @focus="activeIndex = index"
+            @pointerenter="focusItem(index)"
+          >
+            <MIcon v-if="item.icon" :icon="item.icon" :size="iconSize" class="item-icon" />
+            <span class="title">{{ item.title }}</span>
+          </button>
+        </li>
+      </ul>
+    </MScrollArea>
   </MPopover>
 </template>
 
@@ -68,6 +70,7 @@ export type MMenuProperties<V> = {
 <script generic="V" lang="ts" setup>
 import { type ComponentPublicInstance, nextTick, onBeforeUnmount, ref, useAttrs, watch } from 'vue'
 
+import MScrollArea from '../layout/MScrollArea.vue'
 import MIcon from '../MIcon.vue'
 import MPopover, { type PopoverDismissReason } from '../overlay/MPopover.vue'
 
@@ -236,28 +239,33 @@ onBeforeUnmount(clearTypeahead)
 <style>
 @layer components {
   .popover.menu-popover {
-    display: grid;
+    display: flex;
+    flex-direction: column;
     gap: var(--space-md);
     padding: var(--space-sm);
     max-block-size: var(--overlay-available-block-size, 24rem);
-    overflow: hidden;
+    overflow: clip;
   }
 }
 </style>
 
 <style scoped>
 @layer components {
+  .menu-scroll {
+    min-block-size: 0;
+    flex: 1 1 auto;
+    --scroll-area-fade-color: var(--popover-bg, var(--surface-bg));
+  }
+
   .menu-list {
     --accent: light-dark(var(--gray-600), var(--gray-400));
     --item-gap: var(--space-sm);
     --item-padding-inline: var(--space-sm);
     --item-padding-block: var(--space-sm);
 
-    min-block-size: 0;
     min-inline-size: 12rem;
     display: grid;
     gap: var(--space-xxs);
-    overflow: auto;
 
     & > li > button {
       --item-bg: transparent;

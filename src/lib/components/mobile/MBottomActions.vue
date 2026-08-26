@@ -40,17 +40,13 @@ const { adaptive = false, sticky = true } = defineProps<MBottomActionsProperties
         z-index: var(--bottom-actions-z-index, 10);
 
         margin-inline: var(--bottom-actions-margin-inline, 0);
-        padding:
-          var(--bottom-actions-padding-block, var(--space-md))
+        padding: var(--bottom-actions-padding-block, var(--space-md))
           max(var(--bottom-actions-padding-inline, var(--space-md)), var(--safe-area-right))
           max(var(--bottom-actions-padding-block, var(--space-md)), var(--safe-area-bottom))
           max(var(--bottom-actions-padding-inline, var(--space-md)), var(--safe-area-left));
         border: var(--bottom-actions-border-width, 0px) solid var(--bottom-actions-border-color, var(--divider-color));
         border-radius: var(--bottom-actions-radius, var(--radius-md));
-        background-color: var(
-          --bottom-actions-bg,
-          color-mix(in oklch, var(--surface-bg) 92%, transparent)
-        );
+        background-color: var(--bottom-actions-bg, color-mix(in oklch, var(--surface-bg) 92%, transparent));
         backdrop-filter: var(--bottom-actions-backdrop-filter, blur(0.5rem));
       }
 

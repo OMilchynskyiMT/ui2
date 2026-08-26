@@ -39,9 +39,11 @@
         </slot>
       </header>
 
-      <div class="content">
-        <slot :close="close" />
-      </div>
+      <MScrollArea class="content" fade-edges>
+        <div class="content-layout">
+          <slot :close="close" />
+        </div>
+      </MScrollArea>
 
       <footer v-if="slots.actions" class="footer">
         <MBottomActions :adaptive="actionsAdaptive" :sticky="false">
@@ -81,6 +83,7 @@ import { useVisualViewport } from '@/composables/useVisualViewport'
 
 import MButton from '../buttons/MButton.vue'
 import MDialog, { type Exposed as DialogExposed } from '../dialog/MDialog.vue'
+import MScrollArea from '../layout/MScrollArea.vue'
 import MIcon from '../MIcon.vue'
 import MBottomActions from './MBottomActions.vue'
 
@@ -152,7 +155,7 @@ defineExpose<MBottomSheetExposed>({ show, close, isVisible })
 
     & > .surface {
       max-block-size: inherit;
-      overflow: hidden;
+      overflow: clip;
     }
   }
 }
@@ -161,9 +164,11 @@ defineExpose<MBottomSheetExposed>({ show, close, isVisible })
 <style scoped>
 @layer components {
   .sheet {
+    min-block-size: 0;
+    max-block-size: inherit;
     display: grid;
     grid-template-rows: auto minmax(0, 1fr) auto;
-    max-block-size: inherit;
+    overflow: clip;
     background-color: var(--bottom-sheet-bg, var(--surface-bg));
 
     & > .header {
@@ -200,12 +205,14 @@ defineExpose<MBottomSheetExposed>({ show, close, isVisible })
 
     & > .content {
       min-block-size: 0;
-      overflow: auto;
-      overscroll-behavior: contain;
-      padding: var(--bottom-sheet-content-padding-block, var(--space-lg))
-        max(var(--bottom-sheet-content-padding-inline, var(--space-md)), var(--safe-area-right))
-        var(--bottom-sheet-content-padding-block, var(--space-lg))
-        max(var(--bottom-sheet-content-padding-inline, var(--space-md)), var(--safe-area-left));
+      --scroll-area-fade-color: var(--bottom-sheet-bg, var(--surface-bg));
+
+      & .content-layout {
+        padding: var(--bottom-sheet-content-padding-block, var(--space-lg))
+          max(var(--bottom-sheet-content-padding-inline, var(--space-md)), var(--safe-area-right))
+          var(--bottom-sheet-content-padding-block, var(--space-lg))
+          max(var(--bottom-sheet-content-padding-inline, var(--space-md)), var(--safe-area-left));
+      }
     }
 
     & > .footer {

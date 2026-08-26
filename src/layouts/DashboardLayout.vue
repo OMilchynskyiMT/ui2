@@ -77,7 +77,7 @@
 
     <div class="content">
       <aside aria-label="Main navigation" class="u-hidden-below-md">
-        <Teleport :disabled="!isCompact" defer to="#compact-navigation > .surface">
+        <Teleport :disabled="!isCompact" defer to="#compact-navigation-content">
           <MNavigationTree
             :items="navigationOptions"
             :style="{ '--padding': isCompact ? 'var(--space-xs) var(--space-xl)' : null }"
@@ -90,15 +90,21 @@
     </div>
 
     <MDialog id="compact-navigation" ref="mainMenuDialog" aria-label="Main navigation" fullscreen>
-      <MBar style="--padding-inline: var(--space-md); --padding-block: var(--space-md)">
-        <img v-if="resolvedScheme === 'light'" src="/images/MT-logo.svg" width="180" />
-        <img v-else src="/images/MT-logo-light.svg" width="180" />
-        <template #trailing>
-          <MButton class="close-button" tone="danger" variant="icon" @click="mainMenuDialog?.close()">
-            <MIcon :icon="XIcon" />
-          </MButton>
-        </template>
-      </MBar>
+      <div class="compact-navigation">
+        <MBar style="--padding-inline: var(--space-md); --padding-block: var(--space-md)">
+          <img v-if="resolvedScheme === 'light'" src="/images/MT-logo.svg" width="180" />
+          <img v-else src="/images/MT-logo-light.svg" width="180" />
+          <template #trailing>
+            <MButton class="close-button" tone="danger" variant="icon" @click="mainMenuDialog?.close()">
+              <MIcon :icon="XIcon" />
+            </MButton>
+          </template>
+        </MBar>
+
+        <MScrollArea class="compact-navigation-scroll" fade-edges>
+          <div id="compact-navigation-content" />
+        </MScrollArea>
+      </div>
     </MDialog>
 
 
@@ -137,6 +143,7 @@ import MBar from '@/lib/components/bars/MBar.vue'
 import MButton from '@/lib/components/buttons/MButton.vue'
 import MConfirmDialog, { type Exposed as ConfirmExposed } from '@/lib/components/dialog/MConfirmDialog.vue'
 import MDialog, { type Exposed as DialogExposed } from '@/lib/components/dialog/MDialog.vue'
+import MScrollArea from '@/lib/components/layout/MScrollArea.vue'
 import MMenuButton from '@/lib/components/menu/MMenuButton.vue'
 import type { MMenuItem } from '@/lib/components/menu/MMenu.vue'
 import MIcon from '@/lib/components/MIcon.vue'
@@ -234,6 +241,20 @@ onBeforeUnmount(() => {
 @media (width >= container-token(--container-md)) {
   .content {
     grid-template-columns: auto minmax(0, 1fr);
+  }
+}
+
+.compact-navigation {
+  min-block-size: 0;
+  block-size: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: clip;
+
+  & > .compact-navigation-scroll {
+    min-block-size: 0;
+    flex: 1 1 auto;
+    --scroll-area-fade-color: var(--dialog-bg, var(--bg));
   }
 }
 

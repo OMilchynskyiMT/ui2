@@ -4,7 +4,6 @@
     v-bind="{ style: attributes.style, class: attributes.class }"
     :aria-labelledby="title ? headerId : undefined"
     :persistent="persistent || submitting"
-    class="m-form-dialog"
     @cancel="cancelled"
     @close="closed"
   >
@@ -15,9 +14,11 @@
         </h2>
       </header>
 
-      <div class="content">
-        <slot :cancel="cancel" :close="close" :submit="submitForm" :submitting="submitting" />
-      </div>
+      <MScrollArea class="content" fade-edges>
+        <div class="content-layout">
+          <slot :cancel="cancel" :close="close" :submit="submitForm" :submitting="submitting" />
+        </div>
+      </MScrollArea>
 
       <footer class="actions">
         <slot :cancel="cancel" :close="close" :submit="submitForm" :submitting="submitting" name="actions">
@@ -57,8 +58,8 @@ import { ref, useAttrs, useId, useTemplateRef } from 'vue'
 import { CheckIcon, XIcon } from '@lucide/vue'
 
 import MButton from '../buttons/MButton.vue'
+import MScrollArea from '../layout/MScrollArea.vue'
 import MIcon from '../MIcon.vue'
-
 import type { Exposed as DialogExposed } from './MDialog.vue'
 import MDialog from './MDialog.vue'
 
@@ -158,10 +159,12 @@ defineExpose<Exposed>({
 <style scoped>
 @layer components {
   .form {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: var(--form-gap, var(--space-xxl));
+    min-block-size: 0;
     max-block-size: inherit;
+    display: flex;
+    flex-direction: column;
+    gap: var(--form-gap, var(--space-xxl));
+    overflow: clip;
     padding: var(--form-padding, var(--space-xxl));
 
     .title {
@@ -170,11 +173,19 @@ defineExpose<Exposed>({
     }
 
     .content {
-      display: grid;
-      gap: var(--form-content-gap, var(--space-xxl));
       min-block-size: 0;
-      overflow: auto;
-      overscroll-behavior: contain;
+      flex: 1 1 auto;
+      --scroll-area-fade-color: var(--dialog-bg, var(--bg));
+
+      & .content-layout {
+        display: grid;
+        gap: var(--form-content-gap, var(--space-xxl));
+      }
+    }
+
+    & > header,
+    .actions {
+      flex: 0 0 auto;
     }
 
     .actions {

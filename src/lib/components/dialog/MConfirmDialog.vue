@@ -6,32 +6,32 @@
     @close="closed"
     @closing="closing"
   >
-    <form @submit.prevent="accept">
-      <div class="content">
-        <header v-if="slots.title || title">
-          <h2 :id="headerId">
-            <slot name="title">{{ title }}</slot>
-          </h2>
-        </header>
+    <form class="confirm" @submit.prevent="accept">
+      <header v-if="slots.title || title">
+        <h2 :id="headerId">
+          <slot name="title">{{ title }}</slot>
+        </h2>
+      </header>
 
-        <div v-if="slots.default || message" :id="messageId" :style="{ '--icon-size': iconSize }" class="message">
+      <MScrollArea v-if="slots.default || message" class="message-scroll" fade-edges>
+        <div :id="messageId" :style="{ '--icon-size': iconSize }" class="message">
           <MIcon :icon="icon" :size="iconSize" class="message-icon" />
           <div>
             <slot>{{ message }}</slot>
           </div>
         </div>
+      </MScrollArea>
 
-        <footer class="actions">
-          <MButton tone="neutral" variant="tonal" @click="decline">
-            <MIcon :icon="XIcon" :size="actionIconSize" />
-            <span>{{ declineText }}</span>
-          </MButton>
-          <MButton tone="primary" type="submit" variant="outlined">
-            <MIcon :icon="CheckIcon" :size="actionIconSize" />
-            <span>{{ acceptText }}</span>
-          </MButton>
-        </footer>
-      </div>
+      <footer class="actions">
+        <MButton tone="neutral" variant="tonal" @click="decline">
+          <MIcon :icon="XIcon" :size="actionIconSize" />
+          <span>{{ declineText }}</span>
+        </MButton>
+        <MButton tone="primary" type="submit" variant="outlined">
+          <MIcon :icon="CheckIcon" :size="actionIconSize" />
+          <span>{{ acceptText }}</span>
+        </MButton>
+      </footer>
     </form>
   </MDialog>
 </template>
@@ -69,8 +69,8 @@ import { onBeforeUnmount, useId, useSlots, useTemplateRef } from 'vue'
 import { CheckIcon, MessageSquareWarningIcon, XIcon } from '@lucide/vue'
 
 import MButton from '../buttons/MButton.vue'
+import MScrollArea from '../layout/MScrollArea.vue'
 import MIcon from '../MIcon.vue'
-
 import MDialog, { type Exposed as DialogExposed } from './MDialog.vue'
 
 let pending: PendingConfirmation | undefined
@@ -133,12 +133,19 @@ onBeforeUnmount(() => settle(false))
 
 <style scoped>
 @layer components {
-  div.content {
-    position: relative;
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
+  .confirm {
+    min-block-size: 0;
+    max-block-size: inherit;
+    display: flex;
+    flex-direction: column;
     gap: var(--gap, var(--space-xxl));
+    overflow: clip;
     padding: var(--padding, var(--space-xxl));
+
+    & > header,
+    & > footer.actions {
+      flex: 0 0 auto;
+    }
 
     & > header {
       &,
@@ -147,27 +154,33 @@ onBeforeUnmount(() => settle(false))
       }
     }
 
+    & > .message-scroll {
+      min-block-size: 0;
+      flex: 1 1 auto;
+      --scroll-area-fade-color: var(--dialog-bg, var(--bg));
+
+      & .message {
+        display: grid;
+        grid-template-columns: var(--icon-size) minmax(0, 1fr);
+        gap: var(--gap, var(--space-xxl));
+
+        & > .message-icon {
+          --color: var(--icon-color, var(--orange-400));
+        }
+
+        & > div {
+          min-inline-size: 0;
+          overflow-wrap: anywhere;
+          font-size: var(--font-size-md);
+        }
+      }
+    }
+
     & > footer.actions {
       display: flex;
       flex-wrap: wrap;
       flex-direction: row-reverse;
       gap: var(--actions-gap, var(--space-lg));
-    }
-
-    & > div.message {
-      display: grid;
-      grid-template-columns: var(--icon-size) minmax(0, 1fr);
-      gap: var(--gap, var(--space-xxl));
-
-      & > .message-icon {
-        --color: var(--icon-color, var(--orange-400));
-      }
-
-      & > div {
-        min-inline-size: 0;
-        overflow-wrap: anywhere;
-        font-size: var(--font-size-md);
-      }
     }
   }
 }

@@ -1,66 +1,68 @@
 <template>
-  <ul :id="id" ref="list" role="listbox" class="list">
-    <template v-for="(option, optionIndex) in items" :key="getOptionKey(option, optionIndex)">
-      <li v-if="isListGroup(option)" role="group" :aria-labelledby="getGroupLabelId(optionIndex)" class="group">
-        <div :id="getGroupLabelId(optionIndex)" class="group-label">
-          <slot :group="option" :level="0" name="group">
-            {{ option.title }}
-          </slot>
-        </div>
-
-        <ul role="presentation" class="group-items">
-          <li
-            v-for="item in option.items"
-            :id="getOptionId(item)"
-            :key="item.value"
-            role="option"
-            :aria-disabled="item.disabled || undefined"
-            :aria-selected="item.value === selectedValue"
-            :class="[
-              'item',
-              {
-                active: item.value === activeValue,
-                selected: item.value === selectedValue,
-                disabled: item.disabled,
-              },
-            ]"
-            :style="getLevelStyle(1)"
-            @click="onSelect(item)"
-            @pointerdown.prevent
-            @pointerenter="onHover(item)"
-          >
-            <slot :item="item" :level="1" name="item">
-              {{ getListItemText(item) }}
+  <MScrollArea class="listbox-scroll" fade-edges>
+    <ul :id="id" ref="list" role="listbox" class="list">
+      <template v-for="(option, optionIndex) in items" :key="getOptionKey(option, optionIndex)">
+        <li v-if="isListGroup(option)" role="group" :aria-labelledby="getGroupLabelId(optionIndex)" class="group">
+          <div :id="getGroupLabelId(optionIndex)" class="group-label">
+            <slot :group="option" :level="0" name="group">
+              {{ option.title }}
             </slot>
-          </li>
-        </ul>
-      </li>
+          </div>
 
-      <li
-        v-else
-        :id="getOptionId(option)"
-        role="option"
-        :aria-disabled="option.disabled || undefined"
-        :aria-selected="option.value === selectedValue"
-        :class="[
-          'item',
-          {
-            active: option.value === activeValue,
-            selected: option.value === selectedValue,
-            disabled: option.disabled,
-          },
-        ]"
-        :style="getLevelStyle(0)"
-        @click="onSelect(option)"
-        @pointerdown.prevent
-        @pointerenter="onHover(option)"
-      >
-        <slot :item="option" :level="0" name="item">
-          {{ getListItemText(option) }}
-        </slot>
-      </li>
-    </template>
-  </ul>
+          <ul role="presentation" class="group-items">
+            <li
+              v-for="item in option.items"
+              :id="getOptionId(item)"
+              :key="item.value"
+              role="option"
+              :aria-disabled="item.disabled || undefined"
+              :aria-selected="item.value === selectedValue"
+              :class="[
+                'item',
+                {
+                  active: item.value === activeValue,
+                  selected: item.value === selectedValue,
+                  disabled: item.disabled,
+                },
+              ]"
+              :style="getLevelStyle(1)"
+              @click="onSelect(item)"
+              @pointerdown.prevent
+              @pointerenter="onHover(item)"
+            >
+              <slot :item="item" :level="1" name="item">
+                {{ getListItemText(item) }}
+              </slot>
+            </li>
+          </ul>
+        </li>
+
+        <li
+          v-else
+          :id="getOptionId(option)"
+          role="option"
+          :aria-disabled="option.disabled || undefined"
+          :aria-selected="option.value === selectedValue"
+          :class="[
+            'item',
+            {
+              active: option.value === activeValue,
+              selected: option.value === selectedValue,
+              disabled: option.disabled,
+            },
+          ]"
+          :style="getLevelStyle(0)"
+          @click="onSelect(option)"
+          @pointerdown.prevent
+          @pointerenter="onHover(option)"
+        >
+          <slot :item="option" :level="0" name="item">
+            {{ getListItemText(option) }}
+          </slot>
+        </li>
+      </template>
+    </ul>
+  </MScrollArea>
 </template>
 
 <script lang="ts">
@@ -77,6 +79,7 @@ export type MListboxProperties<V> = {
 <script generic="V extends string | number" lang="ts" setup>
 import { computed, nextTick, useId, useTemplateRef, watch } from 'vue'
 
+import MScrollArea from '../layout/MScrollArea.vue'
 import { flattenListItems, getListboxOptionId, getListItemText, isListGroup } from './listbox.shared'
 
 const { id = useId(), items, activeValue, selectedValue } = defineProps<MListboxProperties<V>>()
@@ -123,12 +126,20 @@ watch(() => activeValue, scrollActiveItemIntoView, { immediate: true, flush: 'po
 
 <style scoped>
 @layer components {
-  .list {
+  .listbox-scroll {
     --max-block-size: min(16rem, var(--overlay-available-block-size, 16rem));
+    --list-bg: var(--surface-bg);
+
+    max-block-size: var(--max-block-size);
+    border-radius: inherit;
+    background-color: var(--list-bg);
+    --scroll-area-fade-color: var(--list-bg);
+  }
+
+  .list {
     --item-min-block-size: calc(var(--input-font-size) * 3);
     --item-padding-inline: var(--input-padding-inline);
 
-    --list-bg: var(--surface-bg);
     --item-opacity: 1;
     --item-bg: transparent;
     --item-bg-active: light-dark(
@@ -144,8 +155,6 @@ watch(() => activeValue, scrollActiveItemIntoView, { immediate: true, flush: 'po
     margin: 0;
     padding: 0;
     list-style: none;
-    max-block-size: var(--max-block-size);
-    overflow: auto;
     background-color: var(--list-bg);
     border-radius: inherit;
 

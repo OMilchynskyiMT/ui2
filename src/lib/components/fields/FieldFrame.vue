@@ -158,7 +158,7 @@ onBeforeUnmount(() => {
     --border-color: var(--input-border-color);
     --transition-duration: var(--duration-md);
     --transition-func: var(--bezier-smooth);
-    --field-label-clearance: calc(var(--label-font-size-active) * 0.75);
+    --field-label-clearance: calc(var(--label-font-size-active) / 2 - var(--input-border-width) / 2);
 
     --multiline-padding-block: calc(var(--input-padding-inline) * 0.75);
     --multiline-label-block-start: calc(var(--multiline-padding-block) + var(--input-font-size) * 0.75);

@@ -9,7 +9,9 @@
       @close="closed"
       @transitionend.self="transitionend"
     >
-      <div class="surface"><slot /></div>
+      <div class="surface">
+        <slot />
+      </div>
     </dialog>
   </Teleport>
 </template>
@@ -225,9 +227,12 @@ defineExpose<Exposed>({ show, close, isVisible })
     }
 
     & > div.surface {
-      height: inherit;
-      overflow: auto;
-      overscroll-behavior: contain;
+      min-block-size: 0;
+      block-size: inherit;
+      max-block-size: inherit;
+      display: flex;
+      flex-direction: column;
+      overflow: clip;
 
       border-radius: inherit;
       background-color: var(--dialog-bg, var(--bg));

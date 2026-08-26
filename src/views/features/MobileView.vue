@@ -57,8 +57,19 @@
     </section>
 
     <section>
-      <MSectionHeader description="Reactive browser Visual Viewport measurements"> Visual viewport </MSectionHeader>
+      <MSectionHeader description="Reusable vertical scrolling with edge fades and stable scrollbar layout">
+        Scroll area
+      </MSectionHeader>
 
+      <MScrollArea class="scroll-demo" fade-edges>
+        <div class="scroll-demo-content">
+          <div v-for="item in scrollItems" :key="item">Scrollable item {{ item }}</div>
+        </div>
+      </MScrollArea>
+    </section>
+
+    <section>
+      <MSectionHeader description="Reactive browser Visual Viewport measurements"> Visual viewport </MSectionHeader>
       <MPropertyList :data="viewportData" :items="viewportItems" />
     </section>
   </div>
@@ -70,6 +81,7 @@ import { CheckIcon, PanelBottomOpenIcon } from '@lucide/vue'
 
 import MButton from '@/lib/components/buttons/MButton.vue'
 import MTextField from '@/lib/components/fields/MTextField.vue'
+import MScrollArea from '@/lib/components/layout/MScrollArea.vue'
 import MPropertyList, { type Item as PropertyListItem } from '@/lib/components/list/MPropertyList.vue'
 import MIcon from '@/lib/components/MIcon.vue'
 import MBottomActions from '@/lib/components/mobile/MBottomActions.vue'
@@ -80,6 +92,7 @@ import { useVisualViewport } from '@/composables/useVisualViewport'
 
 const bottomSheet = useTemplateRef<MBottomSheetExposed>('bottomSheet')
 const viewport = useVisualViewport()
+const scrollItems = Array.from({ length: 18 }, (_, index) => index + 1)
 
 const sheetForm = reactive({
   hostname: 'gateway.local',
@@ -136,6 +149,28 @@ const viewportData = computed(() => ({
   & > .hint {
     color: var(--text-color-dimmed);
     font-size: var(--font-size-sm);
+  }
+}
+
+.scroll-demo {
+  inline-size: 100%;
+  max-block-size: 14rem;
+  border: 1px solid var(--divider-color);
+  border-radius: var(--radius-lg);
+  background-color: var(--surface-bg);
+  --scroll-area-fade-color: var(--surface-bg);
+}
+
+.scroll-demo-content {
+  display: grid;
+
+  & > div {
+    padding: var(--space-sm) var(--space-md);
+    border-block-end: 1px solid var(--divider-color);
+
+    &:last-child {
+      border-block-end: 0;
+    }
   }
 }
 </style>

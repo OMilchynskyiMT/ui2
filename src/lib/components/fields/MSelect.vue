@@ -397,7 +397,7 @@ defineExpose<MSelectExpose>({
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
 
-  & > .list {
+  & > .listbox-scroll {
     --list-bg: var(--bg);
 
     & .item {
