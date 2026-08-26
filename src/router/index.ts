@@ -175,6 +175,12 @@ const routes: RouterOptions['routes'] = [
             component: () => import('@/views/features/NavigationView.vue'),
             meta: { breadcrumb: 'Navigation' },
           },
+          {
+            path: 'mobile',
+            name: 'mobile',
+            component: () => import('@/views/features/MobileView.vue'),
+            meta: { breadcrumb: 'Mobile', title: 'Mobile Components' },
+          },
         ],
       },
     ],

@@ -22,9 +22,9 @@
       </MCard>
     </MFormGrid>
 
-    <div class="actions">
+    <MBottomActions adaptive>
       <MButton><MIcon :icon="CheckIcon" /> Save </MButton>
-    </div>
+    </MBottomActions>
   </MFormGrid>
 </template>
 
@@ -36,6 +36,7 @@ import { ScaleIcon } from '@lucide/vue'
 import MButton from '@/lib/components/buttons/MButton.vue'
 import MTextarea from '@/lib/components/fields/MTextarea.vue'
 import MFormGrid from '@/lib/components/grid/MFormGrid.vue'
+import MBottomActions from '@/lib/components/mobile/MBottomActions.vue'
 import MIcon from '@/lib/components/MIcon.vue'
 import MCard from '@/lib/components/section/MCard.vue'
 import MSectionHeader from '@/lib/components/section/MSectionHeader.vue'

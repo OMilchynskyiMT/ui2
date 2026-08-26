@@ -6,7 +6,7 @@
     @update:model-value="goto($event, id => router.push({ name: id }))"
   >
     <template #panel>
-      <main style="padding: 3rem">
+      <main class="demo-content">
         <RouterView v-slot="{ Component }">
           <PageTransition :name="transitionName" appear>
             <component :is="Component" :key="route.fullPath" />
@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts" setup>
-import { BusFrontIcon, FormInputIcon, GlobeIcon } from '@lucide/vue'
+import { BusFrontIcon, FormInputIcon, GlobeIcon, SmartphoneIcon } from '@lucide/vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import MTabs, { type MTabItem } from '@/lib/components/tabs/MTabs.vue'
@@ -40,6 +40,7 @@ const tabs: MTabItem<string>[] = [
   { title: 'Alerts', value: 'alerts' },
   { title: 'Notifications', value: 'notifications' },
   { title: 'Navigation', value: 'navigation' },
+  { icon: SmartphoneIcon, title: 'Mobile', value: 'mobile' },
 ]
 
 const router = useRouter()
@@ -49,3 +50,24 @@ const { transitionName, goto } = useTabNavigation(
   () => route.name?.toString()
 )
 </script>
+
+<style scoped>
+.demo-content {
+  min-inline-size: 0;
+  padding:
+    var(--space-xl)
+    max(var(--space-xl), var(--safe-area-right))
+    var(--space-xl)
+    max(var(--space-xl), var(--safe-area-left));
+}
+
+@media (width < container-token(--container-sm)) {
+  .demo-content {
+    padding:
+      var(--space-md)
+      max(var(--space-md), var(--safe-area-right))
+      var(--space-md)
+      max(var(--space-md), var(--safe-area-left));
+  }
+}
+</style>

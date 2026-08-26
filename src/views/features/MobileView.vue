@@ -1,0 +1,141 @@
+<template>
+  <div class="mobile-examples">
+    <section>
+      <MSectionHeader description="Responsive action rows with mobile safe-area handling">
+        Bottom actions
+      </MSectionHeader>
+
+      <MCard class="actions-demo">
+        <p>
+          Resize the viewport below the small breakpoint. The action area becomes sticky and can expand its actions when
+          <code>adaptive</code> is enabled.
+        </p>
+
+        <MBottomActions adaptive>
+          <MButton tone="neutral" variant="tonal">Cancel</MButton>
+          <MButton tone="primary">
+            <MIcon :icon="CheckIcon" size="1rem" />
+            Save changes
+          </MButton>
+        </MBottomActions>
+      </MCard>
+    </section>
+
+    <section>
+      <MSectionHeader description="Modal mobile surface built on the common dialog infrastructure">
+        Bottom sheet
+      </MSectionHeader>
+
+      <MButton tone="primary" variant="tonal" @click="bottomSheet?.show()">
+        <MIcon :icon="PanelBottomOpenIcon" size="1rem" />
+        Open bottom sheet
+      </MButton>
+
+      <MBottomSheet
+        ref="bottomSheet"
+        description="The sheet keeps its header and actions outside the scrolling content region."
+        title="Connection settings"
+      >
+        <div class="sheet-form">
+          <MTextField v-model="sheetForm.hostname" label="Hostname" />
+          <MTextField v-model="sheetForm.username" label="Username" />
+          <MTextField v-model="sheetForm.password" label="Password" type="password" />
+
+          <p class="hint">
+            Focus a field on a phone to see the Visual Viewport values update while the software keyboard is open.
+          </p>
+        </div>
+
+        <template #actions="{ close }">
+          <MButton tone="neutral" variant="tonal" @click="close">Cancel</MButton>
+          <MButton tone="primary" @click="close">
+            <MIcon :icon="CheckIcon" size="1rem" />
+            Apply
+          </MButton>
+        </template>
+      </MBottomSheet>
+    </section>
+
+    <section>
+      <MSectionHeader description="Reactive browser Visual Viewport measurements"> Visual viewport </MSectionHeader>
+
+      <MPropertyList :data="viewportData" :items="viewportItems" />
+    </section>
+  </div>
+</template>
+
+<script lang="ts" setup>
+import { computed, reactive, useTemplateRef } from 'vue'
+import { CheckIcon, PanelBottomOpenIcon } from '@lucide/vue'
+
+import MButton from '@/lib/components/buttons/MButton.vue'
+import MTextField from '@/lib/components/fields/MTextField.vue'
+import MPropertyList, { type Item as PropertyListItem } from '@/lib/components/list/MPropertyList.vue'
+import MIcon from '@/lib/components/MIcon.vue'
+import MBottomActions from '@/lib/components/mobile/MBottomActions.vue'
+import MBottomSheet, { type MBottomSheetExposed } from '@/lib/components/mobile/MBottomSheet.vue'
+import MCard from '@/lib/components/section/MCard.vue'
+import MSectionHeader from '@/lib/components/section/MSectionHeader.vue'
+import { useVisualViewport } from '@/composables/useVisualViewport'
+
+const bottomSheet = useTemplateRef<MBottomSheetExposed>('bottomSheet')
+const viewport = useVisualViewport()
+
+const sheetForm = reactive({
+  hostname: 'gateway.local',
+  username: 'admin',
+  password: '',
+})
+
+const formatPixels = (value: number): string => `${Math.round(value)}px`
+
+const viewportItems: PropertyListItem[] = [
+  { field: 'supported', label: 'VisualViewport API' },
+  { field: 'size', label: 'Visible size' },
+  { field: 'offset', label: 'Offset' },
+  { field: 'scale', label: 'Scale' },
+]
+
+const viewportData = computed(() => ({
+  supported: viewport.supported.value ? 'Supported' : 'Fallback',
+  size: `${formatPixels(viewport.width.value)} × ${formatPixels(viewport.height.value)}`,
+  offset: `${formatPixels(viewport.offsetLeft.value)}, ${formatPixels(viewport.offsetTop.value)}`,
+  scale: viewport.scale.value.toFixed(2),
+}))
+</script>
+
+<style scoped>
+.mobile-examples {
+  display: grid;
+  gap: var(--space-xxl);
+
+  & > section {
+    min-inline-size: 0;
+    display: grid;
+    justify-items: start;
+    gap: var(--space-md);
+    inline-size: min(100%, 52rem);
+  }
+}
+
+.actions-demo {
+  inline-size: 100%;
+  display: grid;
+  gap: var(--space-xl);
+  padding: var(--space-lg);
+
+  & > p {
+    color: var(--text-color-dimmed);
+  }
+}
+
+.sheet-form {
+  display: grid;
+  gap: var(--space-lg);
+
+  & > .hint {
+    color: var(--text-color-dimmed);
+    font-size: var(--font-size-sm);
+  }
+}
+</style>

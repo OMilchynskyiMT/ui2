@@ -65,12 +65,12 @@
       </MFormGrid>
     </MCard>
 
-    <div class="actions">
+    <MBottomActions adaptive>
       <MButton tone="primary">
         <MIcon :icon="CheckIcon" />
         Save
       </MButton>
-    </div>
+    </MBottomActions>
   </MFormGrid>
 </template>
 
@@ -84,6 +84,7 @@ import MNumber from '@/lib/components/fields/MNumber.vue'
 import MSwitch from '@/lib/components/fields/MSwitch.vue'
 import MTextField from '@/lib/components/fields/MTextField.vue'
 import MFormGrid from '@/lib/components/grid/MFormGrid.vue'
+import MBottomActions from '@/lib/components/mobile/MBottomActions.vue'
 import MIcon from '@/lib/components/MIcon.vue'
 import MCard from '@/lib/components/section/MCard.vue'
 import MSectionHeader from '@/lib/components/section/MSectionHeader.vue'
