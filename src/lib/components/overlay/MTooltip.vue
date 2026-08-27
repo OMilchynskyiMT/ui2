@@ -129,7 +129,6 @@ watch(
     describedElement = null
 
     if (!nextAnchor || isDisabled) return
-
     describedElement = nextAnchor
     updateDescription(nextAnchor, true)
     start()
@@ -147,7 +146,7 @@ onBeforeUnmount(() => {
 <style>
 @layer components {
   .popover.tooltip-popover {
-    max-inline-size: min(20rem, calc(100vw - 2rem));
+    max-inline-size: min(20rem, calc(100dvw - 2rem));
     padding: var(--space-xs) var(--space-sm);
     border-radius: var(--radius-md);
     background-color: light-dark(var(--gray-900), var(--gray-100));

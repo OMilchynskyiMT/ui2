@@ -22,6 +22,19 @@
     </section>
 
     <section>
+      <MSectionHeader description="Measured action overflow without viewport breakpoints">
+        Adaptive actions
+      </MSectionHeader>
+
+      <MCard class="adaptive-actions-demo">
+        <p>
+          The highest-priority actions remain visible while actions that no longer fit move into the overflow menu.
+        </p>
+        <MAdaptiveActions :items="adaptiveActions" aria-label="Example adaptive actions" />
+      </MCard>
+    </section>
+
+    <section>
       <MSectionHeader description="Modal mobile surface built on the common dialog infrastructure">
         Bottom sheet
       </MSectionHeader>
@@ -77,10 +90,19 @@
 
 <script lang="ts" setup>
 import { computed, reactive, useTemplateRef } from 'vue'
-import { CheckIcon, PanelBottomOpenIcon } from '@lucide/vue'
+import {
+  CheckIcon,
+  CopyIcon,
+  DownloadIcon,
+  PanelBottomOpenIcon,
+  RefreshCwIcon,
+  SettingsIcon,
+  TrashIcon,
+} from '@lucide/vue'
 
 import MButton from '@/lib/components/buttons/MButton.vue'
 import MTextField from '@/lib/components/fields/MTextField.vue'
+import MAdaptiveActions, { type MAdaptiveAction } from '@/lib/components/layout/MAdaptiveActions.vue'
 import MScrollArea from '@/lib/components/layout/MScrollArea.vue'
 import MPropertyList, { type Item as PropertyListItem } from '@/lib/components/list/MPropertyList.vue'
 import MIcon from '@/lib/components/MIcon.vue'
@@ -93,6 +115,14 @@ import { useVisualViewport } from '@/composables/useVisualViewport'
 const bottomSheet = useTemplateRef<MBottomSheetExposed>('bottomSheet')
 const viewport = useVisualViewport()
 const scrollItems = Array.from({ length: 18 }, (_, index) => index + 1)
+
+const adaptiveActions: MAdaptiveAction<string>[] = [
+  { label: 'Refresh', value: 'refresh', icon: RefreshCwIcon, priority: 2, tone: 'primary', variant: 'tonal' },
+  { label: 'Settings', value: 'settings', icon: SettingsIcon, priority: 1, tone: 'neutral', variant: 'tonal' },
+  { label: 'Duplicate', value: 'duplicate', icon: CopyIcon, tone: 'neutral', variant: 'tonal' },
+  { label: 'Export', value: 'export', icon: DownloadIcon, tone: 'neutral', variant: 'tonal' },
+  { label: 'Delete', value: 'delete', icon: TrashIcon, tone: 'danger', variant: 'tonal' },
+]
 
 const sheetForm = reactive({
   hostname: 'gateway.local',
@@ -131,7 +161,8 @@ const viewportData = computed(() => ({
   }
 }
 
-.actions-demo {
+.actions-demo,
+.adaptive-actions-demo {
   inline-size: 100%;
   display: grid;
   gap: var(--space-xl);

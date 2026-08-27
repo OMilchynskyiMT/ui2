@@ -16,7 +16,7 @@ const slots = useSlots()
 .shell {
   display: grid;
   grid-template-rows: 1fr;
-  min-height: 100dvh;
+  min-block-size: 100dvh;
   container-type: inline-size;
 
   &:has(> header) {

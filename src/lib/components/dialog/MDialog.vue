@@ -70,7 +70,6 @@ const clearCloseTimer = (): void => {
 
 const parseCssTime = (value: string): number => {
   const trimmed = value.trim()
-  // eslint-disable-next-line unicorn/prefer-number-coercion
   const amount = Number.parseFloat(trimmed)
   if (Number.isNaN(amount)) return 0
 
@@ -182,19 +181,23 @@ defineExpose<Exposed>({ show, close, isVisible })
   dialog {
     --dialog-width: 32rem;
     --initial-translate-y: calc(-1 * var(--space-md));
-    --outer-gap: var(--space-xxl);
+    --outer-margin: var(--space-lg);
 
     position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
+    inset-block-start: max(var(--outer-margin), var(--safe-area-top));
+    inset-block-end: max(var(--outer-margin), var(--safe-area-bottom));
+    inset-inline-start: max(var(--outer-margin), var(--safe-area-left));
+    inset-inline-end: max(var(--outer-margin), var(--safe-area-right));
     margin: auto;
     isolation: isolate;
 
     inline-size: var(--dialog-width);
-    max-inline-size: calc(100vw - var(--outer-gap));
-    max-block-size: calc(100dvh - var(--outer-gap));
+    max-inline-size: calc(
+      100dvw - max(var(--outer-margin), var(--safe-area-left)) - max(var(--outer-margin), var(--safe-area-right))
+    );
+    max-block-size: calc(
+      100dvh - max(var(--outer-margin), var(--safe-area-top)) - max(var(--outer-margin), var(--safe-area-bottom))
+    );
 
     color: inherit;
     background-color: transparent;
@@ -209,10 +212,11 @@ defineExpose<Exposed>({ show, close, isVisible })
     transition-timing-function: var(--bezier-smooth);
 
     &[data-fullscreen] {
-      inline-size: 100%;
-      block-size: 100%;
-      max-inline-size: 100%;
-      max-block-size: 100%;
+      inset: 0;
+      inline-size: 100dvw;
+      block-size: 100dvh;
+      max-inline-size: 100dvw;
+      max-block-size: 100dvh;
       border-radius: 0;
     }
 

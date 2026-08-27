@@ -95,6 +95,7 @@ export default defineConfigWithVueTs(
         },
       ],
       'simple-import-sort/exports': 'error',
+      'unicorn/prefer-number-coercion': 'off',
     },
   },
   {

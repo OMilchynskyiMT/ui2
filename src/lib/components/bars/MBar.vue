@@ -31,8 +31,10 @@ const { as = 'div' } = defineProps<{
   inline-size: 100%;
   min-block-size: var(--height);
   min-inline-size: 0;
-  padding-inline: var(--padding-inline);
-  padding-block: var(--padding-block);
+  padding-block-start: var(--padding-block-start, var(--padding-block));
+  padding-block-end: var(--padding-block-end, var(--padding-block));
+  padding-inline-start: var(--padding-inline-start, var(--padding-inline));
+  padding-inline-end: var(--padding-inline-end, var(--padding-inline));
 
   background: var(--bg);
   color: var(--color);

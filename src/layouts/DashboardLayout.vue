@@ -23,9 +23,9 @@
 
           <MMenuButton
             :items="commandsOptions"
-            menu-aria-label="Commands"
             :menu-style="{ '--menu-icon-color': 'var(--lime-600)' }"
             :offset="10"
+            menu-aria-label="Commands"
             placement="bottom-end"
             tone="neutral"
             variant="icon"
@@ -36,9 +36,9 @@
 
           <MMenuButton
             :items="userMenuOptions"
-            menu-aria-label="User actions"
             :menu-style="{ '--menu-icon-color': 'var(--blue-500)' }"
             :offset="10"
+            menu-aria-label="User actions"
             placement="bottom-end"
             tone="neutral"
             variant="icon"
@@ -79,8 +79,8 @@
       <aside aria-label="Main navigation" class="u-hidden-below-md">
         <Teleport :disabled="!isCompact" defer to="#compact-navigation-content">
           <MNavigationTree
+            :class="{ 'compact-navigation-tree': isCompact }"
             :items="navigationOptions"
-            :style="{ '--padding': isCompact ? 'var(--space-xs) var(--space-xl)' : null }"
             @navigate="mainMenuDialog?.close()"
           />
         </Teleport>
@@ -91,7 +91,7 @@
 
     <MDialog id="compact-navigation" ref="mainMenuDialog" aria-label="Main navigation" fullscreen>
       <div class="compact-navigation">
-        <MBar style="--padding-inline: var(--space-md); --padding-block: var(--space-md)">
+        <MBar class="compact-navigation-header">
           <img v-if="resolvedScheme === 'light'" src="/images/MT-logo.svg" width="180" />
           <img v-else src="/images/MT-logo-light.svg" width="180" />
           <template #trailing>
@@ -106,7 +106,6 @@
         </MScrollArea>
       </div>
     </MDialog>
-
 
     <MConfirmDialog ref="saveAndApplyConfirm">
       Current configuration will be saved and applied. Continue?
@@ -132,21 +131,20 @@ import {
   XIcon,
 } from '@lucide/vue'
 
-import MShell from '@/components/application/MShell.vue'
-import MTopBar from '@/components/bars/MTopBar.vue'
-import MUserAvatar from '@/components/MUserAvatar.vue'
-import MNavigationTree, { type MNavigationTreeItem } from '@/components/navigation/MNavigationTree.vue'
-
-import { useColorScheme } from '@/composables/useColorScheme'
-import { remToPixels, useViewportSizeListener } from '@/composables/useViewportSizeListener'
 import MBar from '@/lib/components/bars/MBar.vue'
 import MButton from '@/lib/components/buttons/MButton.vue'
 import MConfirmDialog, { type Exposed as ConfirmExposed } from '@/lib/components/dialog/MConfirmDialog.vue'
 import MDialog, { type Exposed as DialogExposed } from '@/lib/components/dialog/MDialog.vue'
 import MScrollArea from '@/lib/components/layout/MScrollArea.vue'
-import MMenuButton from '@/lib/components/menu/MMenuButton.vue'
 import type { MMenuItem } from '@/lib/components/menu/MMenu.vue'
+import MMenuButton from '@/lib/components/menu/MMenuButton.vue'
 import MIcon from '@/lib/components/MIcon.vue'
+import MShell from '@/components/application/MShell.vue'
+import MTopBar from '@/components/bars/MTopBar.vue'
+import MUserAvatar from '@/components/MUserAvatar.vue'
+import MNavigationTree, { type MNavigationTreeItem } from '@/components/navigation/MNavigationTree.vue'
+import { useColorScheme } from '@/composables/useColorScheme'
+import { remToPixels, useViewportSizeListener } from '@/composables/useViewportSizeListener'
 import { containerTokens } from '@/postcss/containerTokens'
 
 const mainMenuDialog = useTemplateRef<DialogExposed>('mainMenuDialog')
@@ -212,6 +210,9 @@ onBeforeUnmount(() => {
 
 <style scoped>
 .footer-inner {
+  padding-inline-start: var(--safe-area-left);
+  padding-inline-end: var(--safe-area-right);
+  padding-block-end: var(--safe-area-bottom);
   font-size: var(--font-size-sm);
 
   & > div.copyright {
@@ -231,7 +232,10 @@ onBeforeUnmount(() => {
   grid-template-columns: 1fr;
   gap: var(--space-xxl);
   min-height: 100%;
-  padding: var(--space-xxl);
+  padding-block-start: var(--space-xxl);
+  padding-block-end: var(--space-xxl);
+  padding-inline-start: max(var(--space-xxl), var(--safe-area-left));
+  padding-inline-end: max(var(--space-xxl), var(--safe-area-right));
 
   & > aside {
     width: min(25vw, 22rem);
@@ -242,6 +246,18 @@ onBeforeUnmount(() => {
   .content {
     grid-template-columns: auto minmax(0, 1fr);
   }
+}
+
+.compact-navigation-header {
+  --padding-block-start: max(var(--space-md), var(--safe-area-top));
+  --padding-block-end: var(--space-md);
+  --padding-inline-start: max(var(--space-md), var(--safe-area-left));
+  --padding-inline-end: max(var(--space-md), var(--safe-area-right));
+}
+
+.compact-navigation-tree {
+  --padding: var(--space-xs) max(var(--space-xl), var(--safe-area-right)) max(var(--space-xl), var(--safe-area-bottom))
+    max(var(--space-xl), var(--safe-area-left));
 }
 
 .compact-navigation {

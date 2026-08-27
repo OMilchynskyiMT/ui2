@@ -1,5 +1,5 @@
 <template>
-  <MBar>
+  <MBar class="top-bar">
     <template #leading>
       <img v-if="resolvedScheme === 'light'" src="/images/MT-logo.svg" class="u-hidden-below-md" width="180" />
       <img v-else src="/images/MT-logo-light.svg" class="u-hidden-below-md" width="180" />
@@ -28,10 +28,12 @@ const { scheme: resolvedScheme } = useColorScheme()
 </script>
 
 <style scoped>
-.bar {
+.top-bar {
   --height: calc(3rem + var(--safe-area-top));
   --sections-gap: var(--space-lg);
-  --padding-inline: max(var(--space-md), var(--safe-area-left), var(--safe-area-right));
+  --padding-block-start: var(--safe-area-top);
+  --padding-inline-start: max(var(--space-md), var(--safe-area-left));
+  --padding-inline-end: max(var(--space-md), var(--safe-area-right));
   --bg: var(--surface-bg);
   border-bottom: 1px solid light-dark(var(--gray-200), var(--gray-700));
   isolation: isolate;

@@ -6,7 +6,7 @@
     :data-sticky-header="stickyHeader || undefined"
     class="table"
   >
-    <div class="viewport">
+    <MScrollArea axis="both" class="scroll" overscroll="contain" scrollbar-gutter="auto">
       <table :aria-busy="loading || undefined" :aria-label="ariaLabel" class="content">
         <caption v-if="caption || slots.caption">
           <slot name="caption">{{ caption }}</slot>
@@ -117,7 +117,7 @@
           </template>
         </tbody>
       </table>
-    </div>
+    </MScrollArea>
   </div>
 </template>
 
@@ -125,9 +125,9 @@
 import { computed, type CSSProperties } from 'vue'
 import { ChevronUpIcon } from '@lucide/vue'
 
+import MScrollArea from '../layout/MScrollArea.vue'
 import MIcon from '../MIcon.vue'
 import MSpinner from '../progress/MSpinner.vue'
-
 import type { SortDirection, TableColumn, TableProperties, TableSlots, TableSort } from './mtable.types'
 
 const {
@@ -151,7 +151,6 @@ const emit = defineEmits<{
 }>()
 
 const slots = defineSlots<TableSlots<Row>>()
-
 const columnSpan = computed(() => Math.max(columns.length, 1))
 const detailColumns = computed(() => columns.filter(column => column.compact === 'details'))
 
@@ -266,17 +265,15 @@ div.table {
   min-inline-size: 0;
   container-type: inline-size;
 
-  & > div.viewport {
+  & > .scroll {
     max-block-size: var(--max-block-size);
-    overflow-x: auto;
-    overscroll-behavior-inline: contain;
     box-shadow: var(--shadow-xs);
 
     border: var(--border-width) solid var(--border-color);
     border-radius: var(--border-radius);
     background: var(--bg);
 
-    & > table.content {
+    & table.content {
       border-spacing: 0;
       color: inherit;
       text-align: start;
@@ -431,24 +428,22 @@ div.table {
     }
   }
 
-  &[data-layout='auto'] > div.viewport > table.content {
+  &[data-layout='auto'] > .scroll table.content {
     inline-size: 100%;
     table-layout: auto;
   }
 
-  &[data-layout='fixed'] > div.viewport > table.content {
+  &[data-layout='fixed'] > .scroll table.content {
     inline-size: 100%;
     table-layout: fixed;
   }
 
-  &[data-layout='content'] > div.viewport > table.content {
+  &[data-layout='content'] > .scroll table.content {
     inline-size: max-content;
     min-inline-size: 100%;
   }
 
-  &[data-sticky-header] > div.viewport {
-    overflow-y: auto;
-
+  &[data-sticky-header] > .scroll {
     .header-cell {
       position: sticky;
       inset-block-start: 0;

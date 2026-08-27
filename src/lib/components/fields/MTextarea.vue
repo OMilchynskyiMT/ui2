@@ -29,6 +29,7 @@
       :id="id"
       ref="textarea"
       v-bind="attributes"
+      v-resize="onResize"
       :aria-describedby="description"
       :aria-disabled="disabled"
       :aria-errormessage="isInvalid && (error || slots.error) ? `${id}-error` : undefined"
@@ -59,18 +60,7 @@ export type MTextareaExpose = {
 </script>
 
 <script lang="ts" setup>
-import {
-  computed,
-  nextTick,
-  onBeforeUnmount,
-  onMounted,
-  ref,
-  useAttrs,
-  useId,
-  useSlots,
-  useTemplateRef,
-  watch,
-} from 'vue'
+import { computed, nextTick, onMounted, ref, useAttrs, useId, useSlots, useTemplateRef, watch } from 'vue'
 
 import FieldFrame from './FieldFrame.vue'
 import { type MFieldProperties } from './mfield.shared'
@@ -194,20 +184,16 @@ const onChange = (event: Event): void => {
 }
 
 let observedInlineSize = 0
-let resizeObserver: ResizeObserver | undefined
+const onResize = (entry: ResizeObserverEntry): void => {
+  const inlineSize = entry.contentRect.width
+  if (inlineSize === observedInlineSize) return
+
+  observedInlineSize = inlineSize
+  updateBlockSize()
+}
+
 onMounted(() => {
   void nextTick(updateBlockSize)
-
-  if (textareaReference.value) {
-    resizeObserver = new ResizeObserver(entries => {
-      const inlineSize = entries[0]?.contentRect.width ?? 0
-      if (inlineSize === observedInlineSize) return
-
-      observedInlineSize = inlineSize
-      updateBlockSize()
-    })
-    resizeObserver.observe(textareaReference.value)
-  }
 })
 
 watch(
@@ -220,10 +206,6 @@ watch(
 )
 
 watch([() => autoGrow, () => rows], () => void nextTick(updateBlockSize), { flush: 'post' })
-
-onBeforeUnmount(() => {
-  resizeObserver?.disconnect()
-})
 </script>
 
 <style scoped>

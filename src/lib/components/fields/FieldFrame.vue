@@ -17,7 +17,9 @@
   >
     <div ref="container" class="container" @pointerdown="onPointerDown">
       <div class="area">
-        <div v-if="slots.leading" ref="leading" class="leading"><slot name="leading" /></div>
+        <div v-if="slots.leading" ref="leading" v-resize="updateLabelInlineStart" class="leading">
+          <slot name="leading" />
+        </div>
         <div v-if="prefix" class="prefix">{{ prefix }}</div>
         <div class="control"><slot /></div>
         <div v-if="suffix" class="suffix">{{ suffix }}</div>
@@ -59,7 +61,7 @@ export type FieldFrameExpose = {
 </script>
 
 <script lang="ts" setup>
-import { onBeforeUnmount, onMounted, ref, useSlots, useTemplateRef } from 'vue'
+import { onMounted, ref, useSlots, useTemplateRef } from 'vue'
 
 import { interactiveSelector, type MFieldProperties } from './mfield.shared'
 
@@ -119,23 +121,12 @@ const updateLabelInlineStart = (): void => {
   setLabelInlineStart(`calc(var(--input-gap-x) + ${width}px)`)
 }
 
-let leadingObserver: ResizeObserver | undefined
 onMounted(() => {
   updateLabelInlineStart()
-
-  if (leadingReference.value) {
-    leadingObserver = new ResizeObserver(updateLabelInlineStart)
-    leadingObserver.observe(leadingReference.value)
-  }
-
   requestAnimationFrame(() => {
     ready.value = true
     emit('ready')
   })
-})
-
-onBeforeUnmount(() => {
-  leadingObserver?.disconnect()
 })
 </script>
 
@@ -153,7 +144,7 @@ onBeforeUnmount(() => {
     --field-gap-y: calc(var(--input-font-size) / 4);
     --label-color: var(--input-label-color);
     --label-font-size: var(--input-font-size);
-    --label-font-size-active: calc(var(--input-font-size) * 0.875);
+    --label-font-size-active: var(--font-size-sm);
     --label-inline-start: 0px;
     --border-color: var(--input-border-color);
     --transition-duration: var(--duration-md);
@@ -197,12 +188,13 @@ onBeforeUnmount(() => {
       transition: border-color var(--transition-duration) var(--transition-func);
 
       & > legend {
-        --inline-size: 0.01px;
-        --padding-inline: 0;
+        --legend-inline-size: 0.01px;
+        --legend-padding-inline: 0;
+
         block-size: 0;
         margin-inline-start: calc(var(--input-padding-inline) / 2 - var(--input-border-width));
-        padding-inline: var(--padding-inline);
-        max-inline-size: var(--inline-size);
+        padding-inline: var(--legend-padding-inline);
+        max-inline-size: var(--legend-inline-size);
         visibility: hidden;
         font-size: var(--label-font-size-active);
 
@@ -345,8 +337,8 @@ onBeforeUnmount(() => {
     --label-font-size: calc(var(--input-font-size) * 0.875);
 
     & > div.container > fieldset > legend {
-      --inline-size: 100%;
-      --padding-inline: calc(var(--input-padding-inline) / 2);
+      --legend-inline-size: 100%;
+      --legend-padding-inline: calc(var(--input-padding-inline) / 2);
     }
 
     & > div.container > label {

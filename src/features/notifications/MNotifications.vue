@@ -68,7 +68,10 @@ const timeoutStyle = (item: Notification): Record<string, string> => {
     --progress-width: 1px;
 
     position: fixed;
-    inset: var(--space-lg);
+    inset-block-start: max(var(--space-lg), var(--safe-area-top));
+    inset-block-end: max(var(--space-lg), var(--safe-area-bottom));
+    inset-inline-start: max(var(--space-lg), var(--safe-area-left));
+    inset-inline-end: max(var(--space-lg), var(--safe-area-right));
     z-index: 1000;
 
     display: flex;

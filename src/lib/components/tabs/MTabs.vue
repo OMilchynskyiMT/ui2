@@ -2,6 +2,7 @@
   <div
     :id="id"
     ref="tablist"
+    v-resize="updateIndicatorStyle"
     role="tablist"
     :aria-label="ariaLabel"
     class="tabs"
@@ -11,6 +12,7 @@
       v-for="(tab, index) in items"
       :id="getTabId(index)"
       :key="tab.value"
+      v-resize="updateIndicatorStyle"
       v-ripple="{ disabled: tab.disabled ?? false }"
       role="tab"
       :aria-controls="slots.panel ? panelId : undefined"
@@ -32,13 +34,7 @@
     <span ref="indicator" aria-hidden="true" class="indicator" />
   </div>
 
-  <div
-    v-if="slots.panel"
-    :id="panelId"
-    role="tabpanel"
-    :aria-labelledby="activeTabId"
-    class="tab-panel"
-  >
+  <div v-if="slots.panel" :id="panelId" role="tabpanel" :aria-labelledby="activeTabId" class="tab-panel">
     <slot :tab="activeTab" name="panel" />
   </div>
 </template>
@@ -62,16 +58,11 @@ export type MTabsProperties<Value extends string | number> = {
 </script>
 
 <script generic="Value extends string | number" lang="ts" setup>
-import { computed, nextTick, onBeforeUnmount, onMounted, ref, useId, useSlots, useTemplateRef, watch } from 'vue'
+import { computed, nextTick, onMounted, ref, useId, useSlots, useTemplateRef, watch } from 'vue'
 
 import MIcon from '../MIcon.vue'
 
-const {
-  id = useId(),
-  items,
-  activation = 'automatic',
-  ariaLabel,
-} = defineProps<MTabsProperties<Value>>()
+const { id = useId(), items, activation = 'automatic', ariaLabel } = defineProps<MTabsProperties<Value>>()
 
 const emit = defineEmits<{
   change: [tab: MTabItem<Value>]
@@ -83,7 +74,6 @@ const tablistReference = useTemplateRef<HTMLDivElement>('tablist')
 const indicatorReference = useTemplateRef<HTMLSpanElement>('indicator')
 const focusedIndex = ref(-1)
 const panelId = `${id}-panel`
-let resizeObserver: ResizeObserver | undefined
 
 const getTabId = (index: number): string => `${id}-tab-${index}`
 const enabledIndexes = (): number[] => items.flatMap((tab, index) => (tab.disabled ? [] : [index]))
@@ -196,28 +186,13 @@ const updateIndicatorStyle = (): void => {
   indicator.style.setProperty('--indicator-width', `${activeRect.width}px`)
 }
 
-const observeTabs = (): void => {
-  resizeObserver?.disconnect()
-  resizeObserver = new ResizeObserver(updateIndicatorStyle)
-
-  if (tablistReference.value) resizeObserver.observe(tablistReference.value)
-  for (const tab of tablistReference.value?.querySelectorAll('.tab') ?? []) {
-    resizeObserver.observe(tab)
-  }
-}
-
 const syncIndicator = async (): Promise<void> => {
   await nextTick()
-  observeTabs()
   updateIndicatorStyle()
 }
 
 onMounted(syncIndicator)
 watch(() => [model.value, items] as const, syncIndicator, { flush: 'post' })
-
-onBeforeUnmount(() => {
-  resizeObserver?.disconnect()
-})
 </script>
 
 <style scoped>

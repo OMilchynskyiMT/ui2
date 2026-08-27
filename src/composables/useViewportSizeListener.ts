@@ -12,9 +12,7 @@ export const getViewportSize = (): ViewportSize => {
 }
 
 export const getRootFontSize = (): number => {
-  // eslint-disable-next-line unicorn/prefer-number-coercion
   const value = Number.parseFloat(getComputedStyle(document.documentElement).fontSize)
-
   if (!Number.isFinite(value)) {
     throw new TypeError('Unable to resolve the root font size')
   }

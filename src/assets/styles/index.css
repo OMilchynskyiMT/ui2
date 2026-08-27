@@ -2,6 +2,7 @@
 
 @import 'normalize.css' layer(normalize);
 
+@import 'variables.css' layer(base);
 @import 'base.css' layer(base);
 
 @import 'themes/default/index.css' layer(theme);

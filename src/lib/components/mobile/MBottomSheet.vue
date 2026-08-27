@@ -137,10 +137,11 @@ defineExpose<MBottomSheetExposed>({ show, close, isVisible })
   dialog.bottom-sheet {
     --dialog-width: min(100%, var(--bottom-sheet-width, 42rem));
     --initial-translate-y: 100%;
-    --outer-gap: 0;
+    --outer-margin: 0px;
 
     inset-block-start: auto;
     inset-block-end: var(--bottom-sheet-visual-inset-bottom, 0px);
+    inset-inline: 0;
     margin-block: 0;
     margin-inline: auto;
 

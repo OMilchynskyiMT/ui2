@@ -18,7 +18,7 @@ html {
 
 body {
   margin: 0;
-  min-block-size: 100vh;
+  min-block-size: 100dvh;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
 }
