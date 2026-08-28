@@ -10,7 +10,7 @@
   >
     <slot name="header" />
 
-    <MScrollArea class="menu-scroll" fade-edges>
+    <MScrollArea class="menu-scroll" fade-edges overscroll="contain">
       <ul
         ref="menu"
         role="menu"
@@ -196,7 +196,7 @@ const onKeydown = (event: KeyboardEvent): void => {
 
   if (event.key === 'Home') {
     event.preventDefault()
-    focusEdge(initialFocus)
+    focusEdge('first')
     return
   }
 

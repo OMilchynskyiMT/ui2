@@ -31,7 +31,7 @@ import { LockKeyholeOpenIcon } from '@lucide/vue'
 
 import MButton from '@/lib/components/buttons/MButton.vue'
 import type { FeedbackTone } from '@/lib/components/component.types'
-import MAlert from '@/lib/components/feedback/MAlert.vue'
+import MAlert from '@/lib/components/status/MAlert.vue'
 import MIcon from '@/lib/components/MIcon.vue'
 
 const tones: FeedbackTone[] = ['neutral', 'info', 'success', 'warning', 'danger']

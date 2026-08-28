@@ -13,7 +13,7 @@
         </h2>
       </header>
 
-      <MScrollArea v-if="slots.default || message" class="message-scroll" fade-edges>
+      <MScrollArea v-if="slots.default || message" class="message-scroll" fade-edges overscroll="contain">
         <div :id="messageId" :style="{ '--icon-size': iconSize }" class="message">
           <MIcon :icon="icon" :size="iconSize" class="message-icon" />
           <div>
@@ -65,8 +65,10 @@ type PendingConfirmation = {
 </script>
 
 <script lang="ts" setup>
-import { onBeforeUnmount, useId, useSlots, useTemplateRef } from 'vue'
+import { onBeforeUnmount, useSlots, useTemplateRef } from 'vue'
 import { CheckIcon, MessageSquareWarningIcon, XIcon } from '@lucide/vue'
+
+import { useId } from '@/composables/useId'
 
 import MButton from '../buttons/MButton.vue'
 import MScrollArea from '../layout/MScrollArea.vue'

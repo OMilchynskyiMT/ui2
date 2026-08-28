@@ -7,7 +7,7 @@
 
       <MCard class="actions-demo">
         <p>
-          Resize the viewport below the small breakpoint. The action area becomes sticky and can expand its actions when
+          Resize the viewport below the medium breakpoint. The action area becomes sticky and can expand its actions when
           <code>adaptive</code> is enabled.
         </p>
 
@@ -106,8 +106,8 @@ import MAdaptiveActions, { type MAdaptiveAction } from '@/lib/components/layout/
 import MScrollArea from '@/lib/components/layout/MScrollArea.vue'
 import MPropertyList, { type Item as PropertyListItem } from '@/lib/components/list/MPropertyList.vue'
 import MIcon from '@/lib/components/MIcon.vue'
-import MBottomActions from '@/lib/components/mobile/MBottomActions.vue'
-import MBottomSheet, { type MBottomSheetExposed } from '@/lib/components/mobile/MBottomSheet.vue'
+import MBottomActions from '@/lib/components/layout/MBottomActions.vue'
+import MBottomSheet, { type MBottomSheetExposed } from '@/lib/components/dialog/MBottomSheet.vue'
 import MCard from '@/lib/components/section/MCard.vue'
 import MSectionHeader from '@/lib/components/section/MSectionHeader.vue'
 import { useVisualViewport } from '@/composables/useVisualViewport'

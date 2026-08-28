@@ -51,7 +51,9 @@ export type MCheckboxExpose = SelectionControlExpose
 </script>
 
 <script lang="ts" setup>
-import { ref, useAttrs, useId, useSlots } from 'vue'
+import { ref, useAttrs, useSlots } from 'vue'
+
+import { useId } from '@/composables/useId'
 
 import SelectionControl from './SelectionControl.vue'
 

@@ -95,7 +95,7 @@ const actualIcon = computed((): Component => {
     }
 
     > .content {
-      min-width: 0;
+      min-inline-size: 0;
     }
 
     > .actions {

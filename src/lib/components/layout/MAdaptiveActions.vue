@@ -236,8 +236,9 @@ watch(
 )
 
 watch(
-  overflowedActions,
-  actions => {
+  [overflowedActions, ready],
+  ([actions, isReady]) => {
+    if (!isReady) return
     if (actions.length === 0) overflowOpen.value = false
     emit('overflow-change', actions)
   },

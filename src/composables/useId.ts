@@ -1,7 +1,5 @@
-import { ref } from "vue"
+import { ref } from 'vue'
 
-const id = ref(0)
+const nextId = ref(0)
 
-export const useId = (prefix?: string): string => {
-  return `${prefix ?? ''}${id.value++}`
-}
+export const useId = (prefix = 'm-id-'): string => `${prefix}${nextId.value++}`

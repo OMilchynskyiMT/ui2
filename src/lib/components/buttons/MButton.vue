@@ -71,7 +71,6 @@ const {
     --bg-hover: transparent;
     --bg-active: transparent;
     --shadow: 0 0 0 transparent;
-    --outline-width: 0px;
     --outline-color: transparent;
     --opacity: 1;
     --accent-color: var(--tone-color);
@@ -112,9 +111,6 @@ const {
       transform: scale(var(--scale));
       column-gap: var(--input-gap-x);
       opacity: var(--opacity);
-    }
-
-    & > span.area {
       transition-property: opacity, transform;
       transition-duration: var(--duration-lg);
       transition-timing-function: var(--bezier-bounce);

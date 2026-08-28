@@ -60,7 +60,9 @@ export type MTextareaExpose = {
 </script>
 
 <script lang="ts" setup>
-import { computed, nextTick, onMounted, ref, useAttrs, useId, useSlots, useTemplateRef, watch } from 'vue'
+import { computed, nextTick, onMounted, ref, useAttrs, useSlots, useTemplateRef, watch } from 'vue'
+
+import { useId } from '@/composables/useId'
 
 import FieldFrame from './FieldFrame.vue'
 import { type MFieldProperties } from './mfield.shared'

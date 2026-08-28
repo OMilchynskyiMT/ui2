@@ -29,7 +29,7 @@
       role="combobox"
       :aria-activedescendant="activeOptionId"
       :aria-controls="listId"
-      :aria-details="hint || slots.hint ? `${id}-hint` : undefined"
+      :aria-describedby="description"
       :aria-disabled="disabled"
       :aria-errormessage="isInvalid && (error || slots.error) ? `${id}-error` : undefined"
       :aria-expanded="isOpen"
@@ -107,8 +107,10 @@ export const TYPEAHEAD_RESET_TIMEOUT = 700
 </script>
 
 <script generic="V extends string | number" lang="ts" setup>
-import { computed, nextTick, onBeforeUnmount, ref, useAttrs, useId, useSlots, useTemplateRef } from 'vue'
+import { computed, nextTick, onBeforeUnmount, ref, useAttrs, useSlots, useTemplateRef } from 'vue'
 import { ChevronDownIcon } from '@lucide/vue'
+
+import { useId } from '@/composables/useId'
 
 import { getListItemText } from '../list/listbox.shared'
 import MListbox from '../list/MListbox.vue'
@@ -179,6 +181,13 @@ const triggerAttributes = computed(() => {
 })
 const activeOptionId = computed(() => (isOpen.value ? getActiveOptionId(listId) : undefined))
 const isInvalid = computed(() => invalid || Boolean(error || slots.error))
+const description = computed(() => {
+  const identifiers: string[] = []
+  if (isInvalid.value && (error || slots.error)) identifiers.push(`${id}-error`)
+  if (hint || slots.hint) identifiers.push(`${id}-hint`)
+
+  return identifiers.length > 0 ? identifiers.join(' ') : undefined
+})
 const isPopulated = computed(() => Boolean(selectedItem.value) || model.value != null || placeholder.trim() !== '')
 const hiddenInputName = computed(() => {
   const name = attributes.name

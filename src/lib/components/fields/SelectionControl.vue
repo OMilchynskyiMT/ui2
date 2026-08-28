@@ -82,7 +82,9 @@ export type SelectionControlExpose = {
 </script>
 
 <script lang="ts" setup>
-import { computed, useAttrs, useId, useSlots, useTemplateRef, watchEffect } from 'vue'
+import { computed, useAttrs, useSlots, useTemplateRef, watchEffect } from 'vue'
+
+import { useId } from '@/composables/useId'
 
 const {
   id = useId(),
@@ -227,7 +229,7 @@ defineExpose<SelectionControlExpose>({
         position: absolute;
         display: block;
 
-        transition-property: background-color, border-color, opacity, transform;
+        transition-property: inset-inline-start, background-color, border-color, opacity, transform;
         transition-duration: var(--control-transition-duration);
         transition-timing-function: var(--control-transition-func);
       }
@@ -325,13 +327,13 @@ defineExpose<SelectionControlExpose>({
           border-radius: var(--radius-full);
           background-color: var(--control-thumb-off-color);
           box-shadow: var(--control-thumb-shadow);
-          transform: translateX(0);
+          transform: none;
         }
       }
 
       &:has(.input:checked) > .indicator::after {
         background-color: var(--control-thumb-color);
-        transform: translateX(calc(var(--control-width) - var(--control-thumb-size) - var(--control-padding) * 2));
+        inset-inline-start: calc(100% - var(--control-thumb-size) - var(--control-padding));
       }
     }
 
@@ -390,7 +392,6 @@ defineExpose<SelectionControlExpose>({
 
     &:where(:not(.disabled, .readonly)):hover {
       --control-indicator-bg: var(--control-container-hover-color);
-      /* --control-indicator-bg: red; */
     }
 
     &:has(.input:checked) {

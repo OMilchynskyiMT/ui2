@@ -6,7 +6,9 @@
 
     <template #leading>
       <input ref="colorInput" v-model="model" type="color" />
-      <button @click="colorInput?.click()"><MIcon ref="paletteIcon" :icon="PaletteIcon" /></button>
+      <button aria-label="Choose color" class="color-picker" type="button" @click="colorInput?.click()">
+        <MIcon :icon="PaletteIcon" />
+      </button>
     </template>
   </MTextField>
 </template>
@@ -37,24 +39,23 @@ const colorInput = useTemplateRef<HTMLInputElement>('colorInput')
   .field {
     --target-color: v-bind(model);
 
-    & .leading {
-      & button {
-        background-color: var(--target-color);
-        padding: var(--input-border-width);
-        display: inline-flex;
-        place-items: center;
-        border-radius: var(--input-border-radius);
-
-        & .icon {
-          --color: contrast-color(var(--target-color));
-          cursor: pointer;
-        }
-      }
-    }
-
     input[type='color'] {
       position: absolute;
       visibility: hidden;
+    }
+  }
+
+  .color-picker {
+    display: inline-grid;
+    place-items: center;
+    padding: var(--input-border-width);
+    border: 0;
+    border-radius: var(--input-border-radius);
+    background-color: var(--target-color);
+    cursor: pointer;
+
+    & > .icon {
+      --color: contrast-color(var(--target-color));
     }
   }
 }

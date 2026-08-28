@@ -46,7 +46,7 @@ defineOptions({ inheritAttrs: false })
 const {
   axis = 'block',
   fadeEdges = false,
-  overscroll = 'contain',
+  overscroll = 'auto',
   scrollbarGutter,
 } = defineProps<MScrollAreaProperties>()
 

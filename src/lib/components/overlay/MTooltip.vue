@@ -27,9 +27,10 @@ export type MTooltipProperties = {
 </script>
 
 <script lang="ts" setup>
-import { onBeforeUnmount, ref, useId, watch } from 'vue'
+import { onBeforeUnmount, ref, watch } from 'vue'
 
 import { useEventListeners } from '@/composables/useEventListeners'
+import { useId } from '@/composables/useId'
 
 import MPopover from './MPopover.vue'
 

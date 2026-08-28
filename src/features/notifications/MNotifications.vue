@@ -138,7 +138,7 @@ const timeoutStyle = (item: Notification): Record<string, string> => {
         border-left: var(--border-width) solid var(--accent);
         padding: var(--space-sm) var(--space-sm) var(--space-sm) var(--space-md);
 
-        background-color: color-mix(var(--surface-bg) 90%, transparent);
+        background-color: color-mix(in oklch, var(--surface-bg) 90%, transparent);
         backdrop-filter: blur(3px);
         box-shadow: var(--shadow-sm);
         border-radius: var(--radius-md);
@@ -198,7 +198,7 @@ const timeoutStyle = (item: Notification): Record<string, string> => {
 
           block-size: var(--progress-width);
           overflow: hidden;
-          background: color-mix(var(--accent) 10%, transparent);
+          background: color-mix(in oklch, var(--accent) 10%, transparent);
 
           &::after {
             content: '';
@@ -230,20 +230,18 @@ const timeoutStyle = (item: Notification): Record<string, string> => {
   }
 
   @media (prefers-reduced-motion: reduce) {
-    div.notifications {
-      & > div.item {
-        & > div.notification {
-          & > div.progress {
-            &::after {
-              animation: none;
-            }
-          }
+    div.notifications > div.item {
+      &.notification-enter-active,
+      &.notification-leave-active {
+        transition: none;
 
-          &.notification-enter-active,
-          &.notification-leave-active {
-            transition: none;
-          }
+        & > div.notification {
+          transition: none;
         }
+      }
+
+      & > div.notification > div.progress::after {
+        animation: none;
       }
     }
   }

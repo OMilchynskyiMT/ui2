@@ -26,7 +26,7 @@
       role="combobox"
       :aria-activedescendant="activeOptionId"
       :aria-controls="listId"
-      :aria-details="hint || slots.hint ? `${id}-hint` : undefined"
+      :aria-describedby="description"
       :aria-disabled="disabled"
       :aria-errormessage="isInvalid && (error || slots.error) ? `${id}-error` : undefined"
       :aria-expanded="isOpen"
@@ -111,7 +111,9 @@ export type MComboboxExpose = MFieldExpose
 </script>
 
 <script generic="V extends string | number" lang="ts" setup>
-import { computed, nextTick, ref, useAttrs, useId, useSlots, useTemplateRef, watch } from 'vue'
+import { computed, nextTick, ref, useAttrs, useSlots, useTemplateRef, watch } from 'vue'
+
+import { useId } from '@/composables/useId'
 
 import { flattenListItems, getListItemText, isListGroup } from '../list/listbox.shared'
 import type { ListItem, ListOption } from '../list/listbox.types'
@@ -169,6 +171,13 @@ const popupAnchor = computed(() => frame.value?.container ?? null)
 const allItems = computed(() => flattenListItems(options))
 const selectedItem = computed(() => allItems.value.find(item => item.value === model.value))
 const isInvalid = computed(() => invalid || Boolean(error || slots.error))
+const description = computed(() => {
+  const identifiers: string[] = []
+  if (isInvalid.value && (error || slots.error)) identifiers.push(`${id}-error`)
+  if (hint || slots.hint) identifiers.push(`${id}-hint`)
+
+  return identifiers.length > 0 ? identifiers.join(' ') : undefined
+})
 
 const isOptionMatched = (item: ListItem<V>, query: string): boolean => {
   return !filterable || matcher(item, query)

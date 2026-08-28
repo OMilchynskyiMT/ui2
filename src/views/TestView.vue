@@ -28,7 +28,7 @@ import { useTabNavigation } from '@/composables/useTabNavigation'
 const tabs: MTabItem<string>[] = [
   { icon: FormInputIcon, title: 'Inputs', value: 'inputs' },
   { icon: BusFrontIcon, title: 'Buttons', value: 'buttons' },
-  { icon: GlobeIcon, title: 'Spinner & Progress', value: 'spinners' },
+  { icon: GlobeIcon, title: 'Loading & Progress', value: 'spinners' },
   { icon: GlobeIcon, title: 'Tab four', value: 'disabled', disabled: true },
   { title: 'Lists', value: 'lists' },
   { title: 'Chips', value: 'chips' },

@@ -6,7 +6,7 @@
     :data-sticky-header="stickyHeader || undefined"
     class="table"
   >
-    <MScrollArea axis="both" class="scroll" overscroll="contain" scrollbar-gutter="auto">
+    <MScrollArea axis="both" class="scroll" scrollbar-gutter="auto">
       <table :aria-busy="loading || undefined" :aria-label="ariaLabel" class="content">
         <caption v-if="caption || slots.caption">
           <slot name="caption">{{ caption }}</slot>
@@ -138,7 +138,7 @@ const {
   caption,
   emptyLabel = 'No entries found',
   loading = false,
-  loadingLabel,
+  loadingLabel = 'Loading…',
   compact = 'auto',
   layout = 'auto',
   mode = 'scroll',
@@ -376,7 +376,7 @@ div.table {
       opacity: 0.65;
     }
 
-    &[data-direction='asc'] > .sort-indicator {
+    &[data-direction='desc'] > .sort-indicator {
       transform: scaleY(-1);
     }
   }

@@ -6,6 +6,7 @@
     :persistent="persistent || submitting"
     @cancel="cancelled"
     @close="closed"
+    @show="emit('show')"
   >
     <form ref="form" class="form" novalidate @reset.prevent="cancel" @submit.prevent="submitForm">
       <header v-if="$slots.title || title">
@@ -14,7 +15,7 @@
         </h2>
       </header>
 
-      <MScrollArea class="content" fade-edges>
+      <MScrollArea class="content" fade-edges overscroll="contain">
         <div class="content-layout">
           <slot :cancel="cancel" :close="close" :submit="submitForm" :submitting="submitting" />
         </div>
@@ -22,7 +23,7 @@
 
       <footer class="actions">
         <slot :cancel="cancel" :close="close" :submit="submitForm" :submitting="submitting" name="actions">
-          <MButton :disabled="submitting" tone="neutral" type="reset" variant="tonal" @click="cancel">
+          <MButton :disabled="submitting" tone="neutral" type="reset" variant="tonal">
             <MIcon :icon="XIcon" size="1rem" />
             {{ cancelText }}
           </MButton>
@@ -54,8 +55,10 @@ type SubmitResult = boolean | void
 </script>
 
 <script lang="ts" setup>
-import { ref, useAttrs, useId, useTemplateRef } from 'vue'
+import { ref, useAttrs, useTemplateRef } from 'vue'
 import { CheckIcon, XIcon } from '@lucide/vue'
+
+import { useId } from '@/composables/useId'
 
 import MButton from '../buttons/MButton.vue'
 import MScrollArea from '../layout/MScrollArea.vue'
@@ -101,7 +104,6 @@ const submitting = ref(false)
 
 const show = (): void => {
   dialog.value?.show()
-  emit('show')
 }
 
 const close = (): void => {

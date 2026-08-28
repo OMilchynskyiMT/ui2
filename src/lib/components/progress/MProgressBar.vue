@@ -54,7 +54,7 @@ const summarizeValue = computed((): number | undefined => {
     --accent: var(--blue-500);
     --height: 0.25rem;
     --radius: max(1px, var(--height) / 2);
-    --progress-bg: color-mix(var(--accent) 20%, transparent);
+    --progress-bg: color-mix(in oklch, var(--accent) 20%, transparent);
 
     position: relative;
     width: 100%;

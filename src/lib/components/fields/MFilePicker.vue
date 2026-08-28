@@ -174,11 +174,12 @@ export type MFilePickerExpose = {
 </script>
 
 <script lang="ts" setup>
-import { computed, onMounted, ref, useAttrs, useId, useSlots, useTemplateRef, watch } from 'vue'
+import { computed, onMounted, ref, useAttrs, useSlots, useTemplateRef, watch } from 'vue'
 import { FileUpIcon, XIcon } from '@lucide/vue'
 
-import MIcon from '../MIcon.vue'
+import { useId } from '@/composables/useId'
 
+import MIcon from '../MIcon.vue'
 import FieldFrame from './FieldFrame.vue'
 import { type MFieldProperties } from './mfield.shared'
 
@@ -237,7 +238,6 @@ const emit = defineEmits<{
   cancel: [event: Event]
 }>()
 
-// TODO: move into composable component
 const formatSize = (size: number): string => {
   if (size < 1024) return `${size} B`
 

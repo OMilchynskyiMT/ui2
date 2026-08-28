@@ -1,12 +1,12 @@
 <template>
   <component :is="tag" :data-tone="tone" :data-size="size" :data-variant="variant" :title="title" class="chip">
-    <div v-if="slots.leading"><slot name="leading" /></div>
-    <main>
+    <span v-if="slots.leading" class="leading"><slot name="leading" /></span>
+    <span class="main">
       <span class="label">
         <slot name="default">{{ label ?? '' }}</slot>
       </span>
-    </main>
-    <div v-if="slots.trailing"><slot name="trailing" /></div>
+    </span>
+    <span v-if="slots.trailing" class="trailing"><slot name="trailing" /></span>
 
     <MButton
       v-if="closable"
@@ -64,7 +64,6 @@ const emit = defineEmits<{
   .chip {
     --accent-color: var(--tone-color);
     --bg: transparent;
-    --font-size: var(--font-size-sm);
     --border-width: 0;
     --border-color: oklch(from var(--accent-color) l c h / 0.25);
     --padding-inline: var(--space-sm);
@@ -97,18 +96,18 @@ const emit = defineEmits<{
       --color: currentColor;
     }
 
-    & > :is(div, main) {
+    & > :is(.leading, .main, .trailing) {
       block-size: 100%;
       display: flex;
       align-items: center;
       justify-content: center;
     }
 
-    & > div {
+    & > :is(.leading, .trailing) {
       flex: 0 0 auto;
     }
 
-    & > main {
+    & > .main {
       flex: 1 1 auto;
       min-inline-size: 0;
 
@@ -154,10 +153,6 @@ const emit = defineEmits<{
     &[data-variant='tonal'] {
       --bg: oklch(from var(--accent-color) l c h / 0.2);
     }
-    /* &[data-variant='text'] { */
-    /*   --color: var(--accent-color); */
-    /* } */
-
   }
 }
 </style>

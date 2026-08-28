@@ -28,7 +28,7 @@ const { adaptive = false, sticky = true } = defineProps<MBottomActionsProperties
     gap: var(--bottom-actions-gap, var(--space-sm));
   }
 
-  @media (width < container-token(--container-sm)) {
+  @media (width < container-token(--container-md)) {
     .bottom-actions {
       & > :deep(*) {
         min-block-size: var(--touch-target-min);

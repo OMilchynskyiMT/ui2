@@ -1,5 +1,5 @@
 <template>
-  <MScrollArea class="listbox-scroll" fade-edges>
+  <MScrollArea class="listbox-scroll" fade-edges overscroll="contain">
     <ul :id="id" ref="list" role="listbox" class="list">
       <template v-for="(option, optionIndex) in items" :key="getOptionKey(option, optionIndex)">
         <li v-if="isListGroup(option)" role="group" :aria-labelledby="getGroupLabelId(optionIndex)" class="group">
@@ -77,7 +77,9 @@ export type MListboxProperties<V> = {
 </script>
 
 <script generic="V extends string | number" lang="ts" setup>
-import { computed, nextTick, useId, useTemplateRef, watch } from 'vue'
+import { computed, nextTick, useTemplateRef, watch } from 'vue'
+
+import { useId } from '@/composables/useId'
 
 import MScrollArea from '../layout/MScrollArea.vue'
 import { flattenListItems, getListboxOptionId, getListItemText, isListGroup } from './listbox.shared'

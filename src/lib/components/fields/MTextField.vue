@@ -49,7 +49,9 @@ export type MFieldExpose = {
 </script>
 
 <script lang="ts" setup>
-import { computed, ref, useAttrs, useId, useSlots, useTemplateRef } from 'vue'
+import { computed, ref, useAttrs, useSlots, useTemplateRef } from 'vue'
+
+import { useId } from '@/composables/useId'
 
 import FieldFrame from './FieldFrame.vue'
 import { type MFieldProperties } from './mfield.shared'

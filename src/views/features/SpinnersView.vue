@@ -1,6 +1,6 @@
 <template>
   <div style="display: grid; gap: 2rem">
-    <h2>Spinner</h2>
+    <h2>Circular progress & spinner</h2>
     <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(5rem, 1fr))">
       <MCircularProgress
         v-for="size in ['1rem', '1.5rem', '2rem', '2.5rem', '3rem', '4rem', '5rem']"
@@ -51,6 +51,25 @@
     />
     <MProgressBar />
     <MProgressBar :value="[28, 14, 5, 20]" style="--accent: var(--purple-500); --height: 1rem" />
+
+    <h2>Skeleton</h2>
+    <div class="skeleton-example">
+      <div class="skeleton-heading">
+        <MSkeleton block-size="3rem" variant="circle" />
+        <div class="skeleton-lines">
+          <MSkeleton inline-size="11rem" variant="text" />
+          <MSkeleton inline-size="7rem" variant="text" />
+        </div>
+      </div>
+
+      <MSkeleton block-size="8rem" />
+
+      <div class="skeleton-lines">
+        <MSkeleton variant="text" />
+        <MSkeleton inline-size="86%" variant="text" />
+        <MSkeleton inline-size="62%" variant="text" />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -60,6 +79,7 @@ import { onUnmounted, ref } from 'vue'
 import MCircularProgress from '@/lib/components/progress/MCircularProgress.vue'
 import MProgressBar from '@/lib/components/progress/MProgressBar.vue'
 import MSpinner from '@/lib/components/progress/MSpinner.vue'
+import MSkeleton from '@/lib/components/status/MSkeleton.vue'
 
 const progress = ref(0)
 
@@ -82,3 +102,23 @@ onUnmounted(() => {
   clearInterval(progressInterval)
 })
 </script>
+
+<style scoped>
+.skeleton-example {
+  display: grid;
+  gap: var(--space-lg);
+  inline-size: min(100%, 36rem);
+}
+
+.skeleton-heading {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.skeleton-lines {
+  display: grid;
+  gap: var(--space-sm);
+}
+</style>

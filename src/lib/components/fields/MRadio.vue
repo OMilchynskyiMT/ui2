@@ -53,7 +53,9 @@ export type MRadioExpose = SelectionControlExpose
 </script>
 
 <script generic="V extends RadioValue" lang="ts" setup>
-import { computed, ref, useAttrs, useId, useSlots } from 'vue'
+import { computed, ref, useAttrs, useSlots } from 'vue'
+
+import { useId } from '@/composables/useId'
 
 import SelectionControl from './SelectionControl.vue'
 

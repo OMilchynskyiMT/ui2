@@ -4,8 +4,6 @@
     ref="field"
     v-model="text"
     v-bind="attributes"
-    :aria-valuemax="max"
-    :aria-valuemin="min"
     :disabled="disabled"
     :error="error"
     :hint="hint"
@@ -61,7 +59,9 @@ export const parseNumberText = (value: string): ParseResult => {
 </script>
 
 <script lang="ts" setup>
-import { computed, ref, useAttrs, useId, useSlots, watch } from 'vue'
+import { computed, ref, useAttrs, useSlots, watch } from 'vue'
+
+import { useId } from '@/composables/useId'
 
 import type { MFieldProperties } from './mfield.shared'
 import MTextField, { type MFieldExpose } from './MTextField.vue'

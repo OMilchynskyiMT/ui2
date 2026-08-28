@@ -58,7 +58,9 @@ export type MTabsProperties<Value extends string | number> = {
 </script>
 
 <script generic="Value extends string | number" lang="ts" setup>
-import { computed, nextTick, onMounted, ref, useId, useSlots, useTemplateRef, watch } from 'vue'
+import { computed, nextTick, onMounted, ref, useSlots, useTemplateRef, watch } from 'vue'
+
+import { useId } from '@/composables/useId'
 
 import MIcon from '../MIcon.vue'
 

@@ -39,7 +39,7 @@
         </slot>
       </header>
 
-      <MScrollArea class="content" fade-edges>
+      <MScrollArea class="content" fade-edges overscroll="contain">
         <div class="content-layout">
           <slot :close="close" />
         </div>
@@ -76,16 +76,17 @@ export type MBottomSheetExposed = {
 </script>
 
 <script lang="ts" setup>
-import { computed, useAttrs, useId, useSlots, useTemplateRef } from 'vue'
+import { computed, useAttrs, useSlots, useTemplateRef } from 'vue'
 import { XIcon } from '@lucide/vue'
 
+import { useId } from '@/composables/useId'
 import { useVisualViewport } from '@/composables/useVisualViewport'
 
 import MButton from '../buttons/MButton.vue'
-import MDialog, { type Exposed as DialogExposed } from '../dialog/MDialog.vue'
+import MBottomActions from '../layout/MBottomActions.vue'
 import MScrollArea from '../layout/MScrollArea.vue'
 import MIcon from '../MIcon.vue'
-import MBottomActions from './MBottomActions.vue'
+import MDialog, { type Exposed as DialogExposed } from './MDialog.vue'
 
 defineOptions({ inheritAttrs: false })
 

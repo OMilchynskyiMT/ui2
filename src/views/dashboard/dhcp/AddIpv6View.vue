@@ -51,7 +51,7 @@ import MSelect from '@/lib/components/fields/MSelect.vue'
 import MSwitch from '@/lib/components/fields/MSwitch.vue'
 import MTextField from '@/lib/components/fields/MTextField.vue'
 import MFormGrid from '@/lib/components/grid/MFormGrid.vue'
-import MBottomActions from '@/lib/components/mobile/MBottomActions.vue'
+import MBottomActions from '@/lib/components/layout/MBottomActions.vue'
 import MIcon from '@/lib/components/MIcon.vue'
 import MCard from '@/lib/components/section/MCard.vue'
 

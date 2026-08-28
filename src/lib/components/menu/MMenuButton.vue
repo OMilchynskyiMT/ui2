@@ -74,7 +74,9 @@ export type MMenuButtonExposed = {
 </script>
 
 <script generic="V" lang="ts" setup>
-import { computed, ref, useAttrs, useId, useTemplateRef, watch } from 'vue'
+import { computed, ref, useAttrs, useTemplateRef, watch } from 'vue'
+
+import { useId } from '@/composables/useId'
 
 import MButton from '../buttons/MButton.vue'
 import MMenu, { type MMenuItem } from './MMenu.vue'
