@@ -16,6 +16,7 @@ import type {
   ValueSchemaNode,
 } from './types'
 
+export { useValidation, type ValidationSchema } from './useValidation'
 export { email, inRange, matches, maxLength, minLength, oneOf } from './validators/string'
 
 const emptyValues: ReadonlySet<unknown> = new Set([undefined, null, ''])
