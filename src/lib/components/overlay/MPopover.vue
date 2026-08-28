@@ -120,7 +120,7 @@ onBeforeUnmount(stop)
   .anchored-overlay.popover-enter-active,
   .anchored-overlay.popover-leave-active {
     transition-property: translate, opacity;
-    transition-duration: 160ms;
+    transition-duration: var(--duration-md);
   }
 
   .anchored-overlay.popover-enter-active {

@@ -17,10 +17,15 @@
       <h2>Size: small</h2>
       <div class="content">
         <div v-for="{ tone, variant } in all()" :key="`${tone}-${variant}`">
-          123<MChip tag="sup" :tone="tone" :variant="variant" size="small">
-            123
-          </MChip>
+          123<MChip :tone="tone" :variant="variant" size="small" tag="sup"> 123 </MChip>
         </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Badges</h2>
+      <div class="content">
+        <div v-for="tone in tones" :key="`badge-${tone}`">Notifications <MBadge :label="3" :tone="tone" /></div>
       </div>
     </section>
 
@@ -43,6 +48,7 @@
 import { LockOpenIcon, UserIcon } from '@lucide/vue'
 
 import type { ComponentTone } from '@/lib/components/component.types'
+import MBadge from '@/lib/components/MBadge.vue'
 import MChip, { type Variant } from '@/lib/components/MChip.vue'
 import MIcon from '@/lib/components/MIcon.vue'
 

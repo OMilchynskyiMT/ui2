@@ -117,6 +117,17 @@
       </template>
     </MTextarea>
 
+    <MTextField
+      v-model="validationModel.email"
+      :error="validation.errors.value.email?.at(0)"
+      label="Validated email"
+      @input="validation.clear()"
+    >
+      <template #trailing>
+        <MButton size="small" tone="warning" variant="tonal" @click="validation.validate">Validate</MButton>
+      </template>
+    </MTextField>
+
     <MFilePicker
       v-model="fileModel"
       accept="image/*"
@@ -140,9 +151,10 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { reactive, ref } from 'vue'
 import { EthernetPortIcon, MailPlusIcon } from '@lucide/vue'
 
+import MButton from '@/lib/components/buttons/MButton.vue'
 import MCheckbox from '@/lib/components/fields/MCheckbox.vue'
 import MColorField from '@/lib/components/fields/MColorField.vue'
 import MCombobox from '@/lib/components/fields/MCombobox.vue'
@@ -156,6 +168,7 @@ import MTextField from '@/lib/components/fields/MTextField.vue'
 import type { ListItem, ListOption } from '@/lib/components/list/listbox.types'
 import MIcon from '@/lib/components/MIcon.vue'
 import MSpinner from '@/lib/components/progress/MSpinner.vue'
+import { email, Schema, types, useValidation } from '@/features/validation'
 
 const inputModel = ref('')
 const numberModel = ref<number | null>(null)
@@ -168,6 +181,19 @@ const toggleModel = ref(false)
 const colorModel = ref('#f59')
 const textareaModel = ref('')
 const fileModel = ref<File[]>([])
+
+type ValidationDemo = {
+  email: string
+}
+
+const validationModel = reactive<ValidationDemo>({
+  email: '',
+})
+const validationType = types.object<ValidationDemo>({
+  email: types.string(email()),
+})
+const validationSchema = new Schema(validationType)
+const validation = useValidation(validationSchema, validationModel)
 
 const comboOptions: ListItem<string>[] = [
   { value: '80' },
@@ -203,11 +229,3 @@ const selectOptions: ListOption<string>[] = [
   },
 ]
 </script>
-
-<style scoped>
-.selection-demo {
-  display: flex;
-  flex-direction: column;
-  gap: calc(var(--input-gap-x) * 1.5);
-}
-</style>

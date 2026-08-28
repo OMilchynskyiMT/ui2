@@ -14,19 +14,27 @@
     </slot>
   </div>
 
+  <div v-else-if="empty" class="state empty">
+    <slot name="empty">
+      <MEmptyState title="No data" />
+    </slot>
+  </div>
+
   <slot v-else />
 </template>
 
 <script lang="ts" setup>
 import MButton from '../buttons/MButton.vue'
 import MSpinner from '../progress/MSpinner.vue'
+import MEmptyState from './MEmptyState.vue'
 
 type Properties = {
   loading?: boolean
   error?: unknown
+  empty?: boolean
 }
 
-const { loading = false, error } = defineProps<Properties>()
+const { loading = false, error, empty = false } = defineProps<Properties>()
 
 const emit = defineEmits<{
   retry: []

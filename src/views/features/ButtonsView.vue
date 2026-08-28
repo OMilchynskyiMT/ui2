@@ -43,11 +43,19 @@
     </section>
 
     <section>
+      <h2>Tooltip</h2>
+      <div class="container">
+        <span ref="tooltipAnchor" class="tooltip-anchor" tabindex="0">Hover or focus</span>
+        <MTooltip :anchor="tooltipAnchor" text="Tooltip attached to an external anchor" />
+      </div>
+    </section>
+
+    <section>
       <h2>Interactive</h2>
 
       <div v-for="variant in regularVariants" :key="variant" class="container">
         <div v-for="tone in tones" :key="tone">
-          <MButton :tone="tone" :loading="loading" :variant="variant" @click="setLoading">
+          <MButton :loading="loading" :tone="tone" :variant="variant" @click="setLoading">
             <MIcon :icon="UserIcon" size="1rem" />
             {{ tone }}
           </MButton>
@@ -58,12 +66,13 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { ref, useTemplateRef } from 'vue'
 import { UserIcon } from '@lucide/vue'
 
 import MButton, { type Size, type Variant } from '@/lib/components/buttons/MButton.vue'
 import type { ComponentTone } from '@/lib/components/component.types'
 import MIcon from '@/lib/components/MIcon.vue'
+import MTooltip from '@/lib/components/overlay/MTooltip.vue'
 
 const variants: Variant[] = ['outlined', 'filled', 'text', 'tonal', 'icon']
 const regularVariants: Variant[] = ['outlined', 'filled', 'text', 'tonal']
@@ -71,6 +80,7 @@ const tones: ComponentTone[] = ['primary', 'info', 'success', 'warning', 'danger
 const sizes: Size[] = ['small', 'medium', 'large']
 
 const loading = ref(false)
+const tooltipAnchor = useTemplateRef<HTMLSpanElement>('tooltipAnchor')
 
 const setLoading = (): void => {
   loading.value = true
@@ -96,5 +106,13 @@ main {
       gap: 2rem;
     }
   }
+}
+
+.tooltip-anchor {
+  inline-size: max-content;
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--divider-color);
+  border-radius: var(--radius-md);
+  cursor: help;
 }
 </style>

@@ -7,7 +7,8 @@
 
       <MCard class="actions-demo">
         <p>
-          Resize the viewport below the medium breakpoint. The action area becomes sticky and can expand its actions when
+          Resize the viewport below the medium breakpoint. The action area becomes sticky and can expand its actions
+          when
           <code>adaptive</code> is enabled.
         </p>
 
@@ -27,9 +28,7 @@
       </MSectionHeader>
 
       <MCard class="adaptive-actions-demo">
-        <p>
-          The highest-priority actions remain visible while actions that no longer fit move into the overflow menu.
-        </p>
+        <p>The highest-priority actions remain visible while actions that no longer fit move into the overflow menu.</p>
         <MAdaptiveActions :items="adaptiveActions" aria-label="Example adaptive actions" />
       </MCard>
     </section>
@@ -101,13 +100,13 @@ import {
 } from '@lucide/vue'
 
 import MButton from '@/lib/components/buttons/MButton.vue'
+import MBottomSheet, { type MBottomSheetExposed } from '@/lib/components/dialog/MBottomSheet.vue'
 import MTextField from '@/lib/components/fields/MTextField.vue'
 import MAdaptiveActions, { type MAdaptiveAction } from '@/lib/components/layout/MAdaptiveActions.vue'
+import MBottomActions from '@/lib/components/layout/MBottomActions.vue'
 import MScrollArea from '@/lib/components/layout/MScrollArea.vue'
 import MPropertyList, { type Item as PropertyListItem } from '@/lib/components/list/MPropertyList.vue'
 import MIcon from '@/lib/components/MIcon.vue'
-import MBottomActions from '@/lib/components/layout/MBottomActions.vue'
-import MBottomSheet, { type MBottomSheetExposed } from '@/lib/components/dialog/MBottomSheet.vue'
 import MCard from '@/lib/components/section/MCard.vue'
 import MSectionHeader from '@/lib/components/section/MSectionHeader.vue'
 import { useVisualViewport } from '@/composables/useVisualViewport'

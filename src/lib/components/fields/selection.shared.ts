@@ -1,4 +1,4 @@
-import { computed, shallowRef, toValue, type MaybeRefOrGetter } from 'vue'
+import { computed, type MaybeRefOrGetter, shallowRef, toValue } from 'vue'
 
 import { flattenListItems, getListboxOptionId } from '../list/listbox.shared'
 import type { ListItem, ListOption } from '../list/listbox.types'
