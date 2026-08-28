@@ -116,6 +116,18 @@
   --touch-target-min: 2.75rem;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-xs: 0s;
+    --duration-sm: 0s;
+    --duration-md: 0s;
+    --duration-lg: 0s;
+    --duration-xl: 0s;
+    --duration-xxl: 0s;
+    --duration-3xl: 0s;
+  }
+}
+
 :where([data-tone='neutral']) {
   --tone-color: var(--tone-neutral);
 }
