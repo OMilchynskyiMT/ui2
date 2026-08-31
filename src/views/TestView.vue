@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts" setup>
-import { BusFrontIcon, FormInputIcon, GlobeIcon, SmartphoneIcon } from '@lucide/vue'
+import { BusFrontIcon, ChartBarIcon, FormInputIcon, GlobeIcon, SmartphoneIcon } from '@lucide/vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import MTabs, { type MTabItem } from '@/lib/components/tabs/MTabs.vue'
@@ -41,6 +41,7 @@ const tabs: MTabItem<string>[] = [
   { title: 'Notifications', value: 'notifications' },
   { title: 'Navigation', value: 'navigation' },
   { icon: SmartphoneIcon, title: 'Mobile', value: 'mobile' },
+  { icon: ChartBarIcon, title: 'Charts', value: 'bar-chart' },
 ]
 
 const router = useRouter()
@@ -54,19 +55,13 @@ const { transitionName, goto } = useTabNavigation(
 <style scoped>
 .demo-content {
   min-inline-size: 0;
-  padding:
-    var(--space-xl)
-    max(var(--space-xl), var(--safe-area-right))
-    var(--space-xl)
+  padding: var(--space-xl) max(var(--space-xl), var(--safe-area-right)) var(--space-xl)
     max(var(--space-xl), var(--safe-area-left));
 }
 
 @media (width < container-token(--container-sm)) {
   .demo-content {
-    padding:
-      var(--space-md)
-      max(var(--space-md), var(--safe-area-right))
-      var(--space-md)
+    padding: var(--space-md) max(var(--space-md), var(--safe-area-right)) var(--space-md)
       max(var(--space-md), var(--safe-area-left));
   }
 }

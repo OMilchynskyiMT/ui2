@@ -181,6 +181,12 @@ const routes: RouterOptions['routes'] = [
             component: () => import('@/views/features/MobileView.vue'),
             meta: { breadcrumb: 'Mobile', title: 'Mobile Components' },
           },
+          {
+            path: 'bar-chart',
+            name: 'bar-chart',
+            component: () => import('@/views/features/ChartsView.vue'),
+            meta: { title: 'Bar Chart' },
+          },
         ],
       },
     ],
