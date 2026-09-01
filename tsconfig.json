@@ -3,8 +3,7 @@
   "extends": "@vue/tsconfig/tsconfig.dom.json",
   "include": [
     "@types/*",
-    "src/**/*",
-    "src/**/*.vue"
+    "src/**/*"
   ],
   "exclude": [
     "src/**/__tests__/*"
