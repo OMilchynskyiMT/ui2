@@ -1,9 +1,8 @@
 import type { RouteLocationNormalizedLoaded, RouteRecordNormalized } from 'vue-router'
 
-import type { RouteMetadataValue } from './types'
+import { usePageMeta } from '@/composables/usePageMeta'
 
-const APPLICATION_TITLE = 'MT-test-UI2'
-const APPLICATION_TITLE_SEPARATOR = '·'
+import type { RouteMetadataValue } from './types'
 
 const resolveValue = (
   value: RouteMetadataValue<string> | undefined,
@@ -25,27 +24,11 @@ const findMetadata = (
   return undefined
 }
 
-const setMeta = (name: string, content: string | undefined): void => {
-  const selector = `meta[name="${name}"]`
-  const existing = document.head.querySelector<HTMLMetaElement>(selector)
-
-  if (!content) {
-    existing?.remove()
-    return
-  }
-
-  const element = existing ?? document.createElement('meta')
-  element.name = name
-  element.content = content
-
-  if (!existing) {
-    document.head.append(element)
-  }
-}
-
 export const applyPageMetadata = (route: RouteLocationNormalizedLoaded): void => {
-  const title = findMetadata(route, record => record.meta.title)
-  const description = findMetadata(route, record => record.meta.description)
-  document.title = title ? `${title} ${APPLICATION_TITLE_SEPARATOR} ${APPLICATION_TITLE}` : APPLICATION_TITLE
-  setMeta('description', description)
+  const pageTitle = findMetadata(route, record => record.meta.title)
+  const pageDescription = findMetadata(route, record => record.meta.description)
+
+  const { title, description } = usePageMeta()
+  title.value = pageTitle ?? ''
+  if (pageDescription) description.value = pageDescription
 }
