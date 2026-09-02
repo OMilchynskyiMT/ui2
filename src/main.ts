@@ -1,7 +1,6 @@
 import '@/assets/styles/index.css'
 
 import { createApp } from 'vue'
-import { createPinia } from 'pinia'
 
 import App from '@/App.vue'
 import { createResizeDirective } from '@/directives/resize'
@@ -10,7 +9,6 @@ import { createAppRouter } from '@/router'
 
 const app = createApp(App)
 
-app.use(createPinia())
 app.use(createAppRouter())
 
 app.directive('resize', createResizeDirective())
