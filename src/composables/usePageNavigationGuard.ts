@@ -21,7 +21,7 @@ export type PageNavigationGuardOptions = {
  */
 export const usePageNavigationGuard = (dirty: MaybeRefOrGetter<boolean>, options: PageNavigationGuardOptions) => {
   let confirmation: Promise<boolean> | undefined
-  let wasBeforeUnloadAttached = false
+  let isBeforeUnloadAttached = false
 
   const canLeave = async (): Promise<boolean> => {
     if (!toValue(dirty)) return true
@@ -45,7 +45,7 @@ export const usePageNavigationGuard = (dirty: MaybeRefOrGetter<boolean>, options
 
   const setBeforeUnload = (isEnabled: boolean): void => {
     if (typeof window === 'undefined') return
-    if (isEnabled === wasBeforeUnloadAttached) return
+    if (isEnabled === isBeforeUnloadAttached) return
 
     if (isEnabled) {
       window.addEventListener('beforeunload', handleBeforeUnload)
@@ -53,7 +53,7 @@ export const usePageNavigationGuard = (dirty: MaybeRefOrGetter<boolean>, options
       window.removeEventListener('beforeunload', handleBeforeUnload)
     }
 
-    wasBeforeUnloadAttached = isEnabled
+    isBeforeUnloadAttached = isEnabled
   }
 
   onBeforeRouteLeave(() => canLeave())
