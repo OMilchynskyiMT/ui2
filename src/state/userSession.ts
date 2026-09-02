@@ -1,26 +1,29 @@
-import { shallowRef } from 'vue'
+import { ref } from 'vue'
 
-import type { Permission, UserRole } from './user'
+import type { User } from '@/models/user/user'
 
 export const SESSION_STORAGE_KEY = 'session'
 
-export type UserSession = {
-  readonly user: string
-  readonly role: UserRole
-  readonly isRemote: boolean
-  readonly permissions: Permission[]
-}
+export type UserSession = User
 
-const user = shallowRef<UserSession>()
+const user = ref<UserSession>()
+const isExpired = ref(false)
 
 const set = (session: UserSession): void => {
   user.value = session
+  isExpired.value = false
   localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(session))
 }
 
 const remove = (): void => {
   user.value = undefined
+  isExpired.value = false
   localStorage.removeItem(SESSION_STORAGE_KEY)
+}
+
+const expire = (): void => {
+  remove()
+  isExpired.value = true
 }
 
 const restore = (): void => {
@@ -41,6 +44,8 @@ const isActive = (): boolean => {
 export const useUserSession = () => ({
   set,
   remove,
+  expire,
   restore,
   isActive,
+  isExpired,
 })

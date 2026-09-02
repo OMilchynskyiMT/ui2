@@ -290,6 +290,3 @@ export type PermissionKey =
   | 'wifi'
 
 export type Permission = Record<PermissionKey, PermissionValue>
-
-export type SystemUserRole = 'admin' | 'user' | 'guest'
-export type UserRole = SystemUserRole | (string & {})
