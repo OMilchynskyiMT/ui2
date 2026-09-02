@@ -1,10 +1,10 @@
 export { createAxiosTransport } from './axios/createAxiosTransport'
 export { createHttpClient } from './createHttpClient'
-export type {
+export {
   HttpError,
-  HttpErrorKind,
+  type HttpErrorKind,
   HttpTransportError,
-  HttpTransportErrorKind,
+  type HttpTransportErrorKind,
   isHttpError,
   isHttpTransportError,
 } from './errors'
