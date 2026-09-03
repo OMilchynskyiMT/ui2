@@ -13,19 +13,12 @@ export type User = {
 }
 
 export type SignInErrorReason = 'invalid-credentials' | 'session-conflict' | 'maximum-users'
-export class SignInError extends Error {
-  readonly reason: SignInErrorReason
-  override readonly cause: unknown
 
-  constructor(reason: SignInErrorReason, message: string, cause: unknown) {
-    super(message)
-    this.name = 'SignInError'
-    this.reason = reason
-    this.cause = cause
-  }
-}
+export type SignInResult =
+  | { readonly ok: true; readonly user: User }
+  | { readonly ok: false; readonly reason: SignInErrorReason; message?: string }
 
-const signIn = async (username: string, password: string): Promise<User> => {
+const signIn = async (username: string, password: string): Promise<SignInResult> => {
   try {
     const data = await requestSignIn(username, password)
 
@@ -38,20 +31,20 @@ const signIn = async (username: string, password: string): Promise<User> => {
 
     useUserSession().set(user)
 
-    return user
+    return { ok: true, user }
   } catch (error) {
     if (isApiError(error)) {
       if (error.code === 409) {
         if (error.message.includes('maximum authorized users reached')) {
-          throw new SignInError('maximum-users', 'Maximum number of users reached', error)
+          return { ok: false, reason: 'maximum-users' }
         }
-        throw new SignInError('session-conflict', 'Another user is already logged in', error)
+        return { ok: false, reason: 'session-conflict' }
       }
       if (error.code === 401 && error.message.includes('no user role permissions are present')) {
-        throw new SignInError('invalid-credentials', error.message, error)
+        return { ok: false, reason: 'invalid-credentials', message: error.message }
       }
       if ([401, 403].includes(error.code)) {
-        throw new SignInError('invalid-credentials', 'Invalid username or password', error)
+        return { ok: false, reason: 'invalid-credentials' }
       }
     }
 
