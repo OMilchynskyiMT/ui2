@@ -1,5 +1,10 @@
 import { isApiError } from '@/api/errors'
-import { changePassword as requestChangePassword, signIn as requestSignIn, signOut as requestSignOut } from '@/api/user'
+import {
+  changePassword as requestChangePassword,
+  commissioning as requestCommissioning,
+  signIn as requestSignIn,
+  signOut as requestSignOut,
+} from '@/api/user'
 import { useUserSession } from '@/state/userSession'
 
 export type SystemUserRole = 'admin' | 'user' | 'guest'
@@ -58,7 +63,6 @@ const signOut = async (username: string, password: string): Promise<void> => {
 }
 
 export type ChangePasswordResult = { readonly ok: true } | { readonly ok: false; message: string }
-
 const changePassword = async (
   username: string,
   currentPassword: string,
@@ -71,10 +75,20 @@ const changePassword = async (
   return { ok: true }
 }
 
+export type CommissioningResult = { readonly ok: true } | { readonly ok: false; message: string }
+const commissioning = async (username: string, password: string): Promise<CommissioningResult> => {
+  const response = await requestCommissioning(username, password)
+  if (!response.aasDone) {
+    return { ok: false, message: response.aasMsg }
+  }
+  return { ok: true }
+}
+
 export const useUser = () => {
   return {
     signIn,
     signOut,
     changePassword,
+    commissioning,
   }
 }

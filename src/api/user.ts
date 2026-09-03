@@ -78,3 +78,33 @@ export const changePassword = async (
 
   return response
 }
+
+const sendCommissioningRequest = async (request: PamRequest): Promise<PamResponse> => {
+  const { data } = await http.post<PamResponse>('/api/commissioning', {
+    json: request,
+  })
+
+  return data
+}
+
+export const commissioning = async (username: string, password: string): Promise<PamResponse> => {
+  let response = await sendCommissioningRequest({ username })
+
+  if (response.aasMsg.includes('New password')) {
+    response = await sendCommissioningRequest({
+      username,
+      aasID: response.aasID,
+      aasAnswer: password,
+    })
+  }
+
+  if (response.aasMsg.includes('Retype new password')) {
+    response = await sendCommissioningRequest({
+      username,
+      aasID: response.aasID,
+      aasAnswer: password,
+    })
+  }
+
+  return response
+}
