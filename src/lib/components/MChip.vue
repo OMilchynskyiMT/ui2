@@ -1,5 +1,5 @@
 <template>
-  <component :is="tag" :data-tone="tone" :data-size="size" :data-variant="variant" :title="title" class="chip">
+  <component :is="tag" :data-size="size" :data-tone="tone" :data-variant="variant" :title="title" class="chip">
     <span v-if="slots.leading" class="leading"><slot name="leading" /></span>
     <span class="main">
       <span class="label">
@@ -10,11 +10,12 @@
 
     <MButton
       v-if="closable"
+      aria-label="Close"
       class="close"
-      tone="neutral"
       label="✕"
       size="small"
       title="Close"
+      tone="neutral"
       variant="icon"
       @click.prevent="emit('close')"
     />
