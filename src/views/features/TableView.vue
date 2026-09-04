@@ -32,13 +32,9 @@ type User = {
 }
 
 const rows: User[] = [
-  {
-    id: 1,
-    name: 'John Smith',
-    email: 'john@example.com',
-    active: true,
-    createdAt: '2026-07-25',
-  },
+  { id: 1, name: 'John Smith', email: 'john@example.com', active: true, createdAt: '2026-07-25' },
+  { id: 2, name: 'Alice Walker', email: 'alice@example.com', active: false, createdAt: '2026-08-03' },
+  { id: 3, name: 'Bob Stone', email: 'bob@example.com', active: true, createdAt: '2026-06-18' },
 ]
 
 const columns: TableColumn<User>[] = [
@@ -56,12 +52,15 @@ const columns: TableColumn<User>[] = [
     value: 'email',
     compact: 'details',
     minWidth: '16rem',
+    sortable: true,
   },
   {
     key: 'active',
     label: 'Status',
     value: 'active',
     compact: 'keep',
+    type: 'boolean',
+    sortable: true,
   },
   {
     key: 'createdAt',
@@ -69,6 +68,7 @@ const columns: TableColumn<User>[] = [
     value: 'createdAt',
     type: 'date',
     align: 'end',
+    sortable: true,
     compact: 'details',
   },
 ]

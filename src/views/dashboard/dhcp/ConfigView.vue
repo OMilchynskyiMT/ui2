@@ -15,8 +15,10 @@
       </template>
 
       <template #cell-actions>
-        <MButton tone="neutral" variant="icon"><MIcon :icon="PencilIcon" /></MButton>
-        <MButton tone="warning" variant="icon" @click="confirmDeleteDialog?.confirm">
+        <MButton aria-label="Edit DHCP server" tone="neutral" variant="icon">
+          <MIcon :icon="PencilIcon" />
+        </MButton>
+        <MButton aria-label="Remove DHCP server" tone="warning" variant="icon" @click="confirmDeleteDialog?.confirm">
           <MIcon :icon="TrashIcon" />
         </MButton>
       </template>
@@ -41,8 +43,10 @@
       </template>
 
       <template #cell-actions>
-        <MButton tone="neutral" variant="icon"><MIcon :icon="PencilIcon" /></MButton>
-        <MButton tone="warning" variant="icon" @click="confirmDeleteDialog?.confirm">
+        <MButton aria-label="Edit DHCP server" tone="neutral" variant="icon">
+          <MIcon :icon="PencilIcon" />
+        </MButton>
+        <MButton aria-label="Remove DHCP server" tone="warning" variant="icon" @click="confirmDeleteDialog?.confirm">
           <MIcon :icon="TrashIcon" />
         </MButton>
       </template>

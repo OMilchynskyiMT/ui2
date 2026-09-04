@@ -40,9 +40,7 @@
           <MTextField v-model="form.auth.username" label="Username">
             <template #leading><MIcon :icon="UserIcon" /></template>
           </MTextField>
-          <MTextField v-model="form.auth.password" label="Password" type="password">
-            <template #leading><MIcon :icon="LockIcon" /></template>
-          </MTextField>
+          <MPasswordField v-model="form.auth.password" label="Password" />
           <MTextField v-model="form.auth.email" label="Email" />
 
           <div class="grid-align-center">
@@ -76,11 +74,12 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue'
-import { CheckIcon, LockIcon, MailCheckIcon, UserIcon } from '@lucide/vue'
+import { CheckIcon, MailCheckIcon, UserIcon } from '@lucide/vue'
 
 import MButton from '@/lib/components/buttons/MButton.vue'
 import MCheckbox from '@/lib/components/fields/MCheckbox.vue'
 import MNumber from '@/lib/components/fields/MNumber.vue'
+import MPasswordField from '@/lib/components/fields/MPasswordField.vue'
 import MSwitch from '@/lib/components/fields/MSwitch.vue'
 import MTextField from '@/lib/components/fields/MTextField.vue'
 import MFormGrid from '@/lib/components/grid/MFormGrid.vue'

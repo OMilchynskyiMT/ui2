@@ -51,7 +51,7 @@
         <div class="sheet-form">
           <MTextField v-model="sheetForm.hostname" label="Hostname" />
           <MTextField v-model="sheetForm.username" label="Username" />
-          <MTextField v-model="sheetForm.password" label="Password" type="password" />
+          <MPasswordField v-model="sheetForm.password" label="Password" />
 
           <p class="hint">
             Focus a field on a phone to see the Visual Viewport values update while the software keyboard is open.
@@ -101,6 +101,7 @@ import {
 
 import MButton from '@/lib/components/buttons/MButton.vue'
 import MBottomSheet, { type MBottomSheetExposed } from '@/lib/components/dialog/MBottomSheet.vue'
+import MPasswordField from '@/lib/components/fields/MPasswordField.vue'
 import MTextField from '@/lib/components/fields/MTextField.vue'
 import MAdaptiveActions, { type MAdaptiveAction } from '@/lib/components/layout/MAdaptiveActions.vue'
 import MBottomActions from '@/lib/components/layout/MBottomActions.vue'

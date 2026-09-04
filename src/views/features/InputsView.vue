@@ -66,29 +66,17 @@
       <MCheckbox v-model="indeterminateModel" indeterminate label="Indeterminate checkbox" />
     </section>
 
-    <section style="grid-column: 1 / span 2; display: flex; gap: 2rem">
-      <MRadio
-        v-model="radioModel"
-        label="HTTP"
-        name="protocol-radio"
-        style="--control-color: var(--red-500)"
-        value="http"
-      />
-      <MRadio
-        v-model="radioModel"
-        label="HTTPS"
-        name="protocol-radio"
-        style="--control-color: var(--yellow-500)"
-        value="https"
-      />
-      <MRadio
-        v-model="radioModel"
-        label="SSH"
-        name="protocol-radio"
-        style="--control-color: var(--green-500)"
-        value="ssh"
-      />
-    </section>
+    <MRadioGroup
+      v-model="radioModel"
+      :options="radioOptions"
+      hint="Select the protocol used by this service"
+      label="Protocol"
+      orientation="horizontal"
+      style="grid-column: 1 / span 2"
+    />
+
+    <MPasswordField v-model="passwordModel" label="Password" />
+    <MPasswordField v-model="passwordModel" :icon="KeyRoundIcon" label="Password with custom icon" />
 
     <section style="grid-column: 1 / span 2; display: flex; gap: 2rem">
       <MSwitch v-model="toggleModel" label="Toggle" />
@@ -152,7 +140,7 @@
 
 <script lang="ts" setup>
 import { reactive, ref } from 'vue'
-import { EthernetPortIcon, MailPlusIcon } from '@lucide/vue'
+import { EthernetPortIcon, KeyRoundIcon, MailPlusIcon } from '@lucide/vue'
 
 import MButton from '@/lib/components/buttons/MButton.vue'
 import MCheckbox from '@/lib/components/fields/MCheckbox.vue'
@@ -160,7 +148,8 @@ import MColorField from '@/lib/components/fields/MColorField.vue'
 import MCombobox from '@/lib/components/fields/MCombobox.vue'
 import MFilePicker from '@/lib/components/fields/MFilePicker.vue'
 import MNumber from '@/lib/components/fields/MNumber.vue'
-import MRadio from '@/lib/components/fields/MRadio.vue'
+import MPasswordField from '@/lib/components/fields/MPasswordField.vue'
+import MRadioGroup, { type MRadioGroupOption } from '@/lib/components/fields/MRadioGroup.vue'
 import MSelect from '@/lib/components/fields/MSelect.vue'
 import MSwitch from '@/lib/components/fields/MSwitch.vue'
 import MTextarea from '@/lib/components/fields/MTextarea.vue'
@@ -176,7 +165,8 @@ const comboModel = ref()
 const selectModel = ref<string | null>(null)
 const checkboxModel = ref(false)
 const indeterminateModel = ref(false)
-const radioModel = ref('http')
+const radioModel = ref<'http' | 'https' | 'ssh'>('http')
+const passwordModel = ref('secret')
 const toggleModel = ref(false)
 const colorModel = ref('#f59')
 const textareaModel = ref('')
@@ -206,6 +196,12 @@ const comboOptions: ListItem<string>[] = [
   { value: '67, 68', title: 'DHCP' },
   { value: '21', title: 'FTP' },
   { value: '69', title: 'TFTP' },
+]
+
+const radioOptions: MRadioGroupOption<'http' | 'https' | 'ssh'>[] = [
+  { value: 'http', label: 'HTTP' },
+  { value: 'https', label: 'HTTPS' },
+  { value: 'ssh', label: 'SSH' },
 ]
 
 const selectOptions: ListOption<string>[] = [

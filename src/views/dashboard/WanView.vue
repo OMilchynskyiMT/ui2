@@ -6,7 +6,7 @@
       <MCard>
         <MFormGrid :columns="2">
           <div>Mode</div>
-          <div><MChip tone="success" size="large">FAILOVER</MChip></div>
+          <div><MChip size="large" tone="success">FAILOVER</MChip></div>
         </MFormGrid>
       </MCard>
 
@@ -16,7 +16,7 @@
         </template>
 
         <template #cell-actions>
-          <MButton tone="neutral" variant="icon">
+          <MButton aria-label="Edit WAN" tone="neutral" variant="icon">
             <MIcon :icon="PencilIcon" />
           </MButton>
         </template>

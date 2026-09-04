@@ -25,6 +25,7 @@
             :items="commandsOptions"
             :menu-style="{ '--menu-icon-color': 'var(--lime-600)' }"
             :offset="10"
+            aria-label="Commands"
             menu-aria-label="Commands"
             placement="bottom-end"
             tone="neutral"
@@ -38,6 +39,7 @@
             :items="userMenuOptions"
             :menu-style="{ '--menu-icon-color': 'var(--blue-500)' }"
             :offset="10"
+            aria-label="User actions"
             menu-aria-label="User actions"
             placement="bottom-end"
             tone="neutral"
@@ -86,7 +88,18 @@
         </Teleport>
       </aside>
 
-      <main><RouterView /></main>
+      <main>
+        <MBreadcrumbs :items="breadcrumbs">
+          <template #item="{ current, item }">
+            <span v-if="current" aria-current="page">{{ item.label }}</span>
+            <RouterLink v-else-if="item.target" :to="item.target">{{ item.label }}</RouterLink>
+            <a v-else-if="item.href" :href="item.href">{{ item.label }}</a>
+            <span v-else>{{ item.label }}</span>
+          </template>
+        </MBreadcrumbs>
+
+        <RouterView />
+      </main>
     </div>
 
     <MDialog id="compact-navigation" ref="mainMenuDialog" aria-label="Main navigation" fullscreen>
@@ -95,7 +108,13 @@
           <img v-if="resolvedScheme === 'light'" src="/images/MT-logo.svg" width="180" />
           <img v-else src="/images/MT-logo-light.svg" width="180" />
           <template #trailing>
-            <MButton class="close-button" tone="danger" variant="icon" @click="mainMenuDialog?.close()">
+            <MButton
+              aria-label="Close navigation"
+              class="close-button"
+              tone="danger"
+              variant="icon"
+              @click="mainMenuDialog?.close()"
+            >
               <MIcon :icon="XIcon" />
             </MButton>
           </template>
@@ -139,10 +158,12 @@ import MScrollArea from '@/lib/components/layout/MScrollArea.vue'
 import type { MMenuItem } from '@/lib/components/menu/MMenu.vue'
 import MMenuButton from '@/lib/components/menu/MMenuButton.vue'
 import MIcon from '@/lib/components/MIcon.vue'
+import MBreadcrumbs from '@/lib/components/navigation/MBreadcrumbs.vue'
 import MShell from '@/components/application/MShell.vue'
 import MTopBar from '@/components/bars/MTopBar.vue'
 import MUserAvatar from '@/components/MUserAvatar.vue'
 import MNavigationTree, { type MNavigationTreeItem } from '@/components/navigation/MNavigationTree.vue'
+import { useBreadcrumbs } from '@/composables/useBreadcrumbs'
 import { useColorScheme } from '@/composables/useColorScheme'
 import { remToPixels, useViewportSizeListener } from '@/composables/useViewportSizeListener'
 import { containerTokens } from '@/postcss/containerTokens'
@@ -153,6 +174,7 @@ const saveAndApplyConfirm = useTemplateRef<ConfirmExposed>('saveAndApplyConfirm'
 let stopResizeSubscription: (() => void) | undefined
 
 const { toggleScheme, scheme: resolvedScheme } = useColorScheme()
+const { breadcrumbs } = useBreadcrumbs()
 
 const navigationOptions: MNavigationTreeItem[] = [
   { title: 'Dashboard', icon: LayoutDashboardIcon, to: { name: 'dashboard' } },
@@ -239,6 +261,13 @@ onBeforeUnmount(() => {
 
   & > aside {
     width: min(25vw, 22rem);
+  }
+
+  & > main {
+    min-inline-size: 0;
+    display: grid;
+    align-content: start;
+    gap: var(--space-lg);
   }
 }
 
