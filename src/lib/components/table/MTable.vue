@@ -66,7 +66,7 @@
         </tbody>
 
         <tbody v-else>
-          <template v-for="(row, rowIndex) in rows" :key="getRowKey(row, rowIndex)">
+          <template v-for="(row, rowIndex) in displayedRows" :key="getRowKey(row, rowIndex)">
             <tr class="row">
               <component
                 :is="column.rowHeader ? 'th' : 'td'"
@@ -142,17 +142,16 @@ const {
   compact = 'auto',
   layout = 'auto',
   mode = 'scroll',
-  sort,
+  sortMode = 'client',
   stickyHeader = false,
-} = defineProps<TableProperties<Row>>()
+} = defineProps<Omit<TableProperties<Row>, 'sort'>>()
 
-const emit = defineEmits<{
-  'update:sort': [sort: TableSort]
-}>()
+const sort = defineModel<TableSort | null>('sort', { default: null })
 
 const slots = defineSlots<TableSlots<Row>>()
 const columnSpan = computed(() => Math.max(columns.length, 1))
 const detailColumns = computed(() => columns.filter(column => column.compact === 'details'))
+const collator = new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' })
 
 const getColumnStyle = (column: TableColumn<Row>): CSSProperties => {
   return {
@@ -212,7 +211,7 @@ const getDetailSlotName = (column: TableColumn<Row>): `detail-${string}` => {
 }
 
 const getSortDirection = (column: TableColumn<Row>): SortDirection | undefined => {
-  return sort?.column === column.key ? sort.direction : undefined
+  return sort.value?.column === column.key ? sort.value.direction : undefined
 }
 
 const getAriaSort = (column: TableColumn<Row>): 'ascending' | 'descending' | undefined => {
@@ -237,13 +236,62 @@ const getSortLabel = (column: TableColumn<Row>): string => {
   return `${column.label}: sort ascending`
 }
 
-const toggleSort = (column: TableColumn<Row>): void => {
-  const direction = sort?.column === column.key && sort.direction === 'asc' ? 'desc' : 'asc'
+const compareText = (left: unknown, right: unknown): number => collator.compare(String(left), String(right))
 
-  emit('update:sort', {
+const compareValues = (left: unknown, right: unknown, column: TableColumn<Row>): number => {
+  if (column.type === 'number') {
+    const leftNumber = typeof left === 'number' ? left : Number(left)
+    const rightNumber = typeof right === 'number' ? right : Number(right)
+    if (Number.isFinite(leftNumber) && Number.isFinite(rightNumber)) return leftNumber - rightNumber
+  } else if (column.type === 'date') {
+    const leftTime = left instanceof Date ? left.getTime() : Date.parse(String(left))
+    const rightTime = right instanceof Date ? right.getTime() : Date.parse(String(right))
+    if (Number.isFinite(leftTime) && Number.isFinite(rightTime)) return leftTime - rightTime
+  }
+
+  if (column.type === 'boolean' || (typeof left === 'boolean' && typeof right === 'boolean')) {
+    return Number(Boolean(left)) - Number(Boolean(right))
+  }
+
+  if (typeof left === 'number' && typeof right === 'number') return left - right
+
+  return compareText(left, right)
+}
+
+const displayedRows = computed<Row[]>(() => {
+  const activeSort = sort.value
+  if (sortMode === 'manual' || !activeSort) return rows
+
+  const column = columns.find(candidate => candidate.key === activeSort.column)
+  if (!column?.sortable) return rows
+
+  const direction = activeSort.direction === 'asc' ? 1 : -1
+  return rows
+    .map((row, sourceIndex) => ({ row, sourceIndex }))
+    .toSorted((leftEntry, rightEntry) => {
+      const left = getCellValue(leftEntry.row, leftEntry.sourceIndex, column)
+      const right = getCellValue(rightEntry.row, rightEntry.sourceIndex, column)
+
+      if (left == null && right == null) return leftEntry.sourceIndex - rightEntry.sourceIndex
+      if (left == null) return 1
+      if (right == null) return -1
+
+      const comparison = column.compare
+        ? column.compare(left, right, leftEntry.row, rightEntry.row)
+        : compareValues(left, right, column)
+
+      return comparison === 0 ? leftEntry.sourceIndex - rightEntry.sourceIndex : comparison * direction
+    })
+    .map(entry => entry.row)
+})
+
+const toggleSort = (column: TableColumn<Row>): void => {
+  const direction = sort.value?.column === column.key && sort.value.direction === 'asc' ? 'desc' : 'asc'
+
+  sort.value = {
     column: column.key,
     direction,
-  })
+  }
 }
 </script>
 

@@ -3,6 +3,7 @@ import type { VNode } from 'vue'
 export type TableLayout = 'auto' | 'fixed' | 'content'
 export type TableResponsiveMode = 'scroll' | 'details'
 export type TableCompactMode = boolean | 'auto'
+export type TableSortMode = 'client' | 'manual'
 export type CellAlign = 'start' | 'center' | 'end'
 export type SortDirection = 'asc' | 'desc'
 export type TableColumnKey = string
@@ -12,6 +13,8 @@ export type TableSort = {
   column: TableColumnKey
   direction: SortDirection
 }
+
+export type TableComparator<Row> = (left: unknown, right: unknown, leftRow: Row, rightRow: Row) => number
 
 export type TableColumn<Row> = {
   key: TableColumnKey
@@ -32,6 +35,7 @@ export type TableColumn<Row> = {
 
   rowHeader?: boolean
   sortable?: boolean
+  compare?: TableComparator<Row>
 }
 
 type TableProperties<Row> = {
@@ -49,12 +53,13 @@ type TableProperties<Row> = {
   layout?: TableLayout
   mode?: TableResponsiveMode
   sort?: TableSort | null
+  sortMode?: TableSortMode
   stickyHeader?: boolean
 }
 
 type HeaderSlotProperties<Row> = {
   column: TableColumn<Row>
-  sort: TableSort | null | undefined
+  sort: TableSort | null
 }
 
 type CellSlotProperties<Row> = {
