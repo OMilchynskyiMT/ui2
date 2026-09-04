@@ -11,7 +11,9 @@
 
     <header>
       <h2 :title="hint"><slot /></h2>
-      <div class="description"><slot name="description" /></div>
+      <div v-if="description || slots.description" class="description">
+        <slot name="description">{{ description }}</slot>
+      </div>
     </header>
   </MBar>
 </template>
@@ -24,9 +26,10 @@ import MIcon from '../MIcon.vue'
 
 const slots = useSlots()
 
-const { icon, hint } = defineProps<{
+const { icon, hint, description } = defineProps<{
   icon?: Component
   hint?: string
+  description?: string
 }>()
 </script>
 
