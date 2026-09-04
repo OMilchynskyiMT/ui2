@@ -13,14 +13,17 @@ import { useRoute, useRouter } from 'vue-router'
 import MNotifications from '@/features/notifications/MNotifications.vue'
 import { useUserSession } from '@/state/userSession'
 
+const router = useRouter()
+const route = useRoute()
 const { isExpired } = useUserSession()
+
 watch(isExpired, expired => {
   if (!expired) return
 
-  void useRouter().replace({
+  void router.replace({
     name: 'sign-in',
     query: {
-      redirect: useRoute().fullPath,
+      redirect: route.fullPath,
     },
   })
 })
