@@ -25,6 +25,7 @@
             :ref="element => setItemReference(element, index)"
             role="menuitem"
             :aria-disabled="item.disabled || undefined"
+            :data-tone="item.tone"
             :disabled="item.disabled"
             :title="item.hint"
             type="button"
@@ -44,6 +45,7 @@
 <script lang="ts">
 import type { Component } from 'vue'
 
+import type { ComponentTone } from '../component.types'
 import type { OverlayPlacement } from '../overlay/MPopover.vue'
 
 export type MMenuItem<V> = {
@@ -51,6 +53,7 @@ export type MMenuItem<V> = {
   value: V
   icon?: Component
   hint?: string
+  tone?: ComponentTone
   disabled?: boolean
 }
 
@@ -279,7 +282,7 @@ onBeforeUnmount(clearTypeahead)
       padding-block: var(--item-padding-block);
       border: 0;
       border-radius: var(--radius-lg);
-      color: currentColor;
+      color: var(--item-color, currentColor);
       background-color: var(--item-bg);
       text-align: start;
       cursor: pointer;
@@ -287,6 +290,15 @@ onBeforeUnmount(clearTypeahead)
       transition-property: background-color, opacity;
       transition-duration: var(--duration-sm);
       transition-timing-function: var(--bezier-smooth);
+
+      &[data-tone]:not([data-tone='neutral']) {
+        --accent: var(--tone-color);
+        --icon-color: var(--tone-color);
+        --item-color: light-dark(
+          oklch(from var(--tone-color) calc(l - 0.15) c h),
+          oklch(from var(--tone-color) calc(l + 0.25) c h)
+        );
+      }
 
       &:is(:hover, :focus-visible) {
         --item-bg: color-mix(in oklch, var(--accent) 6%, transparent);
