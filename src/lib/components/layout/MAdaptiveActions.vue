@@ -146,6 +146,7 @@ const overflowMenuItems = computed<MMenuItem<MAdaptiveAction<Value>>[]>(() => {
     value: action,
     icon: action.icon,
     hint: action.hint,
+    tone: action.tone,
     disabled: action.disabled ?? action.loading,
   }))
 })
