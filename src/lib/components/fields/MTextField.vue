@@ -41,10 +41,19 @@
 </template>
 
 <script lang="ts">
+import type { MFieldProperties } from './mfield.shared'
+
 export type MFieldExpose = {
   focus: (options?: FocusOptions) => void
   blur: () => void
   select: () => void
+}
+
+export type MTextFieldProperties = Omit<MFieldProperties, 'id' | 'focused' | 'populated' | 'multiline'> & {
+  id?: string
+  type?: HTMLInputElement['type']
+  lazy?: boolean
+  placeholder?: string
 }
 </script>
 
@@ -54,14 +63,6 @@ import { computed, ref, useAttrs, useSlots, useTemplateRef } from 'vue'
 import { useId } from '@/composables/useId'
 
 import FieldFrame from './FieldFrame.vue'
-import { type MFieldProperties } from './mfield.shared'
-
-type Properties = Omit<MFieldProperties, 'id' | 'focused' | 'populated' | 'multiline'> & {
-  id?: string
-  type?: HTMLInputElement['type']
-  lazy?: boolean
-  placeholder?: string
-}
 
 defineOptions({
   inheritAttrs: false,
@@ -84,7 +85,7 @@ const {
   type = 'text',
   lazy = false,
   placeholder = '',
-} = defineProps<Properties>()
+} = defineProps<MTextFieldProperties>()
 
 const model = defineModel<string>({ required: true })
 const inputReference = useTemplateRef<HTMLInputElement>('input')
