@@ -17,7 +17,14 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reporter: ['text', 'html'],
-      include: ['src/lib/validation/**/*.ts'],
+      include: [
+        'src/lib/validation/**/*.ts',
+        'src/composables/useAsyncResource.ts',
+        'src/composables/useChangeTracker.ts',
+        'src/composables/usePageModel.ts',
+        'src/composables/usePageNavigationGuard.ts',
+        'src/composables/usePolling.ts',
+      ],
       exclude: [
         'src/lib/validation/index.ts',
         'src/lib/validation/model/**/*.ts',
