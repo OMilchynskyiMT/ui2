@@ -7,7 +7,7 @@
     :hint="hint"
     :invalid="isInvalid"
     :label="label"
-    :populated="model !== '' || placeholder.trim() !== ''"
+    :populated="isPopulated"
     :prefix="prefix"
     :readonly="readonly"
     :suffix="suffix"
@@ -48,6 +48,10 @@ export type MFieldExpose = {
   blur: () => void
   select: () => void
 }
+
+const nativeStructuredInputTypes = new Set(['date', 'datetime-local', 'month', 'time', 'week'])
+
+export const isNativeStructuredInput = (type: string): boolean => nativeStructuredInputTypes.has(type)
 
 export type MTextFieldProperties = Omit<MFieldProperties, 'id' | 'focused' | 'populated' | 'multiline'> & {
   id?: string
@@ -91,6 +95,7 @@ const model = defineModel<string>({ required: true })
 const inputReference = useTemplateRef<HTMLInputElement>('input')
 const isFocused = ref(false)
 const isInvalid = computed(() => invalid || Boolean(error || slots.error))
+const isPopulated = computed(() => model.value !== '' || placeholder.trim() !== '' || isNativeStructuredInput(type))
 const description = computed(() => {
   const identifiers: string[] = []
   if (isInvalid.value && (error || slots.error)) identifiers.push(`${id}-error`)
