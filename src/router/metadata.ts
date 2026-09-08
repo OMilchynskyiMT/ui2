@@ -30,5 +30,5 @@ export const applyPageMetadata = (route: RouteLocationNormalizedLoaded): void =>
 
   const { title, description } = usePageMeta()
   title.value = pageTitle ?? ''
-  if (pageDescription) description.value = pageDescription
+  description.value = pageDescription ?? ''
 }
