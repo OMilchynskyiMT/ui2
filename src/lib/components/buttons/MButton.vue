@@ -169,8 +169,8 @@ const {
       );
     }
     &:is([data-variant='icon']) {
-      --padding-inline: var(--input-gap-x);
-      --padding-block: var(--input-gap-x);
+      --padding-inline: var(--space-xxs);
+      --padding-block: var(--space-xxs);
       --block-size: auto;
       --color: light-dark(
         oklch(from var(--accent-color) calc(l - 0.33) c h),
