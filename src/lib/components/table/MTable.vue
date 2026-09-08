@@ -66,7 +66,7 @@
         </tbody>
 
         <tbody v-else>
-          <template v-for="(row, rowIndex) in displayedRows" :key="getRowKey(row, rowIndex)">
+          <template v-for="entry in displayedRows" :key="getRowKey(entry.row, entry.sourceIndex)">
             <tr class="row">
               <component
                 :is="column.rowHeader ? 'th' : 'td'"
@@ -83,18 +83,18 @@
                 <slot
                   :column="column"
                   :name="getCellSlotName(column)"
-                  :row="row"
-                  :row-index="rowIndex"
-                  :value="getCellValue(row, rowIndex, column)"
+                  :row="entry.row"
+                  :row-index="entry.sourceIndex"
+                  :value="getCellValue(entry.row, entry.sourceIndex, column)"
                 >
-                  {{ getCellText(row, rowIndex, column) }}
+                  {{ getCellText(entry.row, entry.sourceIndex, column) }}
                 </slot>
               </component>
             </tr>
 
             <tr v-if="mode === 'details' && detailColumns.length > 0" class="details-row">
               <td :colspan="columnSpan" class="details-cell">
-                <slot :columns="detailColumns" :row="row" :row-index="rowIndex" name="details">
+                <slot :columns="detailColumns" :row="entry.row" :row-index="entry.sourceIndex" name="details">
                   <dl class="details-list">
                     <div v-for="column in detailColumns" :key="column.key" class="details-item">
                       <dt>{{ column.label }}</dt>
@@ -102,11 +102,11 @@
                         <slot
                           :column="column"
                           :name="getDetailSlotName(column)"
-                          :row="row"
-                          :row-index="rowIndex"
-                          :value="getCellValue(row, rowIndex, column)"
+                          :row="entry.row"
+                          :row-index="entry.sourceIndex"
+                          :value="getCellValue(entry.row, entry.sourceIndex, column)"
                         >
-                          {{ getCellText(row, rowIndex, column) }}
+                          {{ getCellText(entry.row, entry.sourceIndex, column) }}
                         </slot>
                       </dd>
                     </div>
@@ -258,31 +258,34 @@ const compareValues = (left: unknown, right: unknown, column: TableColumn<Row>):
   return compareText(left, right)
 }
 
-const displayedRows = computed<Row[]>(() => {
+type DisplayedRow = {
+  row: Row
+  sourceIndex: number
+}
+
+const displayedRows = computed<DisplayedRow[]>(() => {
+  const sourceRows = rows.map((row, sourceIndex) => ({ row, sourceIndex }))
   const activeSort = sort.value
-  if (sortMode === 'manual' || !activeSort) return rows
+  if (sortMode === 'manual' || !activeSort) return sourceRows
 
   const column = columns.find(candidate => candidate.key === activeSort.column)
-  if (!column?.sortable) return rows
+  if (!column?.sortable) return sourceRows
 
   const direction = activeSort.direction === 'asc' ? 1 : -1
-  return rows
-    .map((row, sourceIndex) => ({ row, sourceIndex }))
-    .toSorted((leftEntry, rightEntry) => {
-      const left = getCellValue(leftEntry.row, leftEntry.sourceIndex, column)
-      const right = getCellValue(rightEntry.row, rightEntry.sourceIndex, column)
+  return sourceRows.toSorted((leftEntry, rightEntry) => {
+    const left = getCellValue(leftEntry.row, leftEntry.sourceIndex, column)
+    const right = getCellValue(rightEntry.row, rightEntry.sourceIndex, column)
 
-      if (left == null && right == null) return leftEntry.sourceIndex - rightEntry.sourceIndex
-      if (left == null) return 1
-      if (right == null) return -1
+    if (left == null && right == null) return leftEntry.sourceIndex - rightEntry.sourceIndex
+    if (left == null) return 1
+    if (right == null) return -1
 
-      const comparison = column.compare
-        ? column.compare(left, right, leftEntry.row, rightEntry.row)
-        : compareValues(left, right, column)
+    const comparison = column.compare
+      ? column.compare(left, right, leftEntry.row, rightEntry.row)
+      : compareValues(left, right, column)
 
-      return comparison === 0 ? leftEntry.sourceIndex - rightEntry.sourceIndex : comparison * direction
-    })
-    .map(entry => entry.row)
+    return comparison === 0 ? leftEntry.sourceIndex - rightEntry.sourceIndex : comparison * direction
+  })
 })
 
 const toggleSort = (column: TableColumn<Row>): void => {
