@@ -1,6 +1,12 @@
 <template>
   <TransitionGroup appear class="notifications" name="notification" tag="div">
-    <div v-for="item in latests" :key="item.id" class="item">
+    <div
+      v-for="item in latests"
+      :key="item.id"
+      :aria-atomic="true"
+      :role="item.tone === 'danger' ? 'alert' : 'status'"
+      class="item"
+    >
       <div :data-tone="item.tone" class="notification">
         <div v-if="item.icon" class="icon">
           <MIcon :icon="item.icon as Component" />
