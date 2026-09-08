@@ -1,5 +1,5 @@
-import { defineValidator } from '../index'
 import type { Validator, ValidatorOptions } from '../types'
+import { defineValidator } from './define'
 
 export const minLength = (length: number, options: ValidatorOptions = {}): Validator<string> => {
   return defineValidator({

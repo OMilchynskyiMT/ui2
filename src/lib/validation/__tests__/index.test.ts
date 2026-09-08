@@ -1,6 +1,6 @@
 import { expect, expectTypeOf, it, vi } from 'vitest'
 
-import { optional, Schema, types, withMessages } from '../index'
+import { minValue, numberInRange, optional, Schema, types, withMessages } from '../index'
 import type { SchemaShape, ValidationContext, ValidationIssue, Validator } from '../types'
 
 const emptyValues: readonly unknown[] = [undefined, null, '']
@@ -84,6 +84,14 @@ it('rejects an optional node for a required property', () => {
   }
 
   expectTypeOf(shape).toEqualTypeOf<SchemaShape<Model>>()
+})
+
+it('exports number validators from the public validation entry point', () => {
+  const port = types.number(minValue(1), numberInRange(1, 65_535))
+  const schema = new Schema(types.object({ port }))
+
+  expect(schema.validate({ port: 443 }).valid).toBe(true)
+  expect(schema.validate({ port: 0 }).errors).toEqual({ port: ['Must be at least 1', 'Must be between 1 and 65535'] })
 })
 
 it('returns an empty result for valid data', () => {

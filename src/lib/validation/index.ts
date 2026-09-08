@@ -17,6 +17,15 @@ import type {
 } from './types'
 
 export { useValidation, type ValidationSchema } from './useValidation'
+export { defineValidator } from './validators/define'
+export {
+  integer,
+  max as maxValue,
+  min as minValue,
+  negative,
+  inRange as numberInRange,
+  positive,
+} from './validators/number'
 export { email, inRange, matches, maxLength, minLength, oneOf } from './validators/string'
 
 const emptyValues: ReadonlySet<unknown> = new Set([undefined, null, ''])
@@ -154,10 +163,6 @@ export function withMessages<T, TOptional extends boolean>(
       ...messages,
     },
   }
-}
-
-export function defineValidator<T>(validator: Validator<T>): Validator<T> {
-  return validator
 }
 
 export class Schema<T extends object> {
