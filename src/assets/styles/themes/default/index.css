@@ -21,7 +21,7 @@
   --link-hover-color: light-dark(var(--blue-600), var(--blue-500));
 
   --tone-neutral: light-dark(var(--gray-500), var(--gray-500));
-  --tone-primary: light-dark(var(--blue-500), var(--blue-400));
+  --tone-primary: light-dark(var(--blue-500), var(--blue-600));
   --tone-info: light-dark(var(--cyan-600), var(--cyan-500));
   --tone-success: light-dark(var(--green-600), var(--green-500));
   --tone-warning: light-dark(var(--orange-500), var(--orange-600));
