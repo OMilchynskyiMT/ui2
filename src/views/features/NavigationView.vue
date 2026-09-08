@@ -1,7 +1,8 @@
 <template>
   <div class="navigation-examples">
     <section>
-      <h2>Menu button</h2>
+      <MSectionHeader>Menu button</MSectionHeader>
+
       <MMenuButton
         :items="menuItems"
         :offset="8"
@@ -16,13 +17,15 @@
     </section>
 
     <section>
-      <h2>Pagination</h2>
+      <MSectionHeader>Pagination</MSectionHeader>
+
       <MPagination v-model="page" :page-count="18" />
       <div class="result">Current page: {{ page }}</div>
     </section>
 
     <section>
-      <h2>Disclosure</h2>
+      <MSectionHeader>Disclosures</MSectionHeader>
+
       <div class="disclosures">
         <MDisclosure
           v-model="firstDisclosureOpen"
@@ -47,14 +50,19 @@
           <p>Advanced network configuration can be placed here without introducing an accordion abstraction.</p>
         </MDisclosure>
 
-        <MDisclosure description="Independent disclosure state" title="Diagnostics" style="--accent: var(--tone-success);">
+        <MDisclosure
+          description="Independent disclosure state"
+          style="--accent: var(--tone-success)"
+          title="Diagnostics"
+        >
           <p>Each disclosure can be controlled independently through v-model when necessary.</p>
         </MDisclosure>
       </div>
     </section>
 
     <section>
-      <h2>Breadcrumbs</h2>
+      <MSectionHeader>Breadcrumbs</MSectionHeader>
+
       <MBreadcrumbs :items="breadcrumbs">
         <template #item="{ item, current }">
           <span v-if="current" aria-current="page">{{ item.label }}</span>
@@ -81,6 +89,7 @@ import MMenuButton from '@/lib/components/menu/MMenuButton.vue'
 import MIcon from '@/lib/components/MIcon.vue'
 import MBreadcrumbs from '@/lib/components/navigation/MBreadcrumbs.vue'
 import MPagination from '@/lib/components/navigation/MPagination.vue'
+import MSectionHeader from '@/lib/components/section/MSectionHeader.vue'
 import { useBreadcrumbs } from '@/composables/useBreadcrumbs'
 
 const page = ref(7)

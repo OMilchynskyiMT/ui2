@@ -75,6 +75,8 @@
       style="grid-column: 1 / span 2"
     />
 
+    <MSearchField v-model="searchModel" hint="Uses the native search input with a consistent clear action" />
+
     <MPasswordField v-model="passwordModel" label="Password" />
     <MPasswordField v-model="passwordModel" :icon="KeyRoundIcon" label="Password with custom icon" />
 
@@ -87,6 +89,10 @@
         style="--control-color: var(--teal-500)"
       />
     </section>
+
+    <MTextField v-model="dateModel" label="Date" type="date" />
+    <MTextField v-model="timeModel" label="Time" type="time" />
+    <MTextField v-model="dateTimeModel" label="Date and time" type="datetime-local" />
 
     <MColorField v-model="colorModel" label="Color Picker" suffix="hex">
       <template #hint>Lorem ipsum dolor sit amet consectetur adipisicing elit</template>
@@ -150,6 +156,7 @@ import MFilePicker from '@/lib/components/fields/MFilePicker.vue'
 import MNumber from '@/lib/components/fields/MNumber.vue'
 import MPasswordField from '@/lib/components/fields/MPasswordField.vue'
 import MRadioGroup, { type MRadioGroupOption } from '@/lib/components/fields/MRadioGroup.vue'
+import MSearchField from '@/lib/components/fields/MSearchField.vue'
 import MSelect from '@/lib/components/fields/MSelect.vue'
 import MSwitch from '@/lib/components/fields/MSwitch.vue'
 import MTextarea from '@/lib/components/fields/MTextarea.vue'
@@ -166,8 +173,12 @@ const selectModel = ref<string | null>(null)
 const checkboxModel = ref(false)
 const indeterminateModel = ref(false)
 const radioModel = ref<'http' | 'https' | 'ssh'>('http')
+const searchModel = ref('')
 const passwordModel = ref('secret')
 const toggleModel = ref(false)
+const dateModel = ref('')
+const timeModel = ref('')
+const dateTimeModel = ref('')
 const colorModel = ref('#f59')
 const textareaModel = ref('')
 const fileModel = ref<File[]>([])

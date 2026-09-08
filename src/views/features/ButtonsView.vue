@@ -1,7 +1,8 @@
 <template>
   <main>
     <section>
-      <h2>Regular buttons</h2>
+      <MSectionHeader>Regular buttons</MSectionHeader>
+
       <div v-for="variant in variants" :key="variant" class="container">
         <div v-for="tone in tones" :key="tone">
           <MButton :tone="tone" :variant="variant">
@@ -13,7 +14,7 @@
     </section>
 
     <section>
-      <h2>Disabled</h2>
+      <MSectionHeader>Disabled</MSectionHeader>
 
       <div v-for="variant in regularVariants" :key="variant" class="container">
         <div v-for="tone in tones" :key="tone">
@@ -23,7 +24,7 @@
     </section>
 
     <section>
-      <h2>Loading</h2>
+      <MSectionHeader>Loading</MSectionHeader>
 
       <div v-for="variant in regularVariants" :key="variant" class="container">
         <div v-for="tone in tones" :key="tone">
@@ -33,7 +34,7 @@
     </section>
 
     <section>
-      <h2>Sizes</h2>
+      <MSectionHeader>Sizes</MSectionHeader>
 
       <div v-for="variant in regularVariants" :key="variant" class="container">
         <div v-for="size in sizes" :key="size">
@@ -43,7 +44,7 @@
     </section>
 
     <section>
-      <h2>Tooltip</h2>
+      <MSectionHeader>Tooltip</MSectionHeader>
       <div class="container">
         <span ref="tooltipAnchor" class="tooltip-anchor" tabindex="0">Hover or focus</span>
         <MTooltip :anchor="tooltipAnchor" text="Tooltip attached to an external anchor" />
@@ -51,7 +52,7 @@
     </section>
 
     <section>
-      <h2>Interactive</h2>
+      <MSectionHeader>Interactive</MSectionHeader>
 
       <div v-for="variant in regularVariants" :key="variant" class="container">
         <div v-for="tone in tones" :key="tone">
@@ -73,6 +74,7 @@ import MButton, { type Size, type Variant } from '@/lib/components/buttons/MButt
 import type { ComponentTone } from '@/lib/components/component.types'
 import MIcon from '@/lib/components/MIcon.vue'
 import MTooltip from '@/lib/components/overlay/MTooltip.vue'
+import MSectionHeader from '@/lib/components/section/MSectionHeader.vue'
 
 const variants: Variant[] = ['outlined', 'filled', 'text', 'tonal', 'icon']
 const regularVariants: Variant[] = ['outlined', 'filled', 'text', 'tonal']

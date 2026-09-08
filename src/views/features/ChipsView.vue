@@ -1,7 +1,8 @@
 <template>
   <div>
     <section>
-      <h2>Size: medium</h2>
+      <MSectionHeader>Size: medium</MSectionHeader>
+
       <div class="content">
         <div v-for="{ tone, variant } in all()" :key="`${tone}-${variant}`">
           <MChip :tone="tone" :variant="variant" closable>
@@ -14,7 +15,8 @@
     </section>
 
     <section>
-      <h2>Size: small</h2>
+      <MSectionHeader>Size: small</MSectionHeader>
+
       <div class="content">
         <div v-for="{ tone, variant } in all()" :key="`${tone}-${variant}`">
           123<MChip :tone="tone" :variant="variant" size="small" tag="sup"> 123 </MChip>
@@ -23,14 +25,8 @@
     </section>
 
     <section>
-      <h2>Badges</h2>
-      <div class="content">
-        <div v-for="tone in tones" :key="`badge-${tone}`">Notifications <MBadge :label="3" :tone="tone" /></div>
-      </div>
-    </section>
+      <MSectionHeader>Size: large</MSectionHeader>
 
-    <section>
-      <h2>Size: large</h2>
       <div class="content">
         <div v-for="{ tone, variant } in all()" :key="`${tone}-${variant}`">
           <MChip :tone="tone" :variant="variant" closable size="large" @close="() => console.debug('close pressed')">
@@ -39,6 +35,14 @@
             {{ `${tone} ${variant}` }}
           </MChip>
         </div>
+      </div>
+    </section>
+
+    <section>
+      <MSectionHeader>Badges</MSectionHeader>
+
+      <div class="content">
+        <div v-for="tone in tones" :key="`badge-${tone}`">Notifications <MBadge :label="3" :tone="tone" /></div>
       </div>
     </section>
   </div>
@@ -51,6 +55,7 @@ import type { ComponentTone } from '@/lib/components/component.types'
 import MBadge from '@/lib/components/MBadge.vue'
 import MChip, { type Variant } from '@/lib/components/MChip.vue'
 import MIcon from '@/lib/components/MIcon.vue'
+import MSectionHeader from '@/lib/components/section/MSectionHeader.vue'
 
 const variants = ['outlined', 'filled', 'text', 'tonal'] as const
 const tones = ['primary', 'info', 'success', 'warning', 'danger', 'neutral'] as const

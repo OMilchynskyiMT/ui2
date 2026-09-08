@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts" setup>
-import { BusFrontIcon, ChartBarIcon, FormInputIcon, GlobeIcon, SmartphoneIcon } from '@lucide/vue'
+import { BusFrontIcon, ChartBarIcon, FormInputIcon, GlobeIcon, LogInIcon, SmartphoneIcon } from '@lucide/vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import MTabs, { type MTabItem } from '@/lib/components/tabs/MTabs.vue'
@@ -27,6 +27,7 @@ import { useTabNavigation } from '@/composables/useTabNavigation'
 
 const tabs: MTabItem<string>[] = [
   { icon: FormInputIcon, title: 'Inputs', value: 'inputs' },
+  { icon: LogInIcon, title: 'Sign in', value: 'sign-in' },
   { icon: BusFrontIcon, title: 'Buttons', value: 'buttons' },
   { icon: GlobeIcon, title: 'Loading & Progress', value: 'spinners' },
   { icon: GlobeIcon, title: 'Tab four', value: 'disabled', disabled: true },

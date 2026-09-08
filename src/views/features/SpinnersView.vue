@@ -1,6 +1,7 @@
 <template>
   <div style="display: grid; gap: 2rem">
-    <h2>Circular progress & spinner</h2>
+    <MSectionHeader>Circular progress & spinner</MSectionHeader>
+
     <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(5rem, 1fr))">
       <MCircularProgress
         v-for="size in ['1rem', '1.5rem', '2rem', '2.5rem', '3rem', '4rem', '5rem']"
@@ -33,7 +34,7 @@
       />
     </div>
 
-    <h2>Linear progress bars</h2>
+    <MSectionHeader>Linear progress bars</MSectionHeader>
     <MProgressBar :max="150" :value="72" style="--accent: var(--cyan-500)" />
     <MProgressBar
       :value="90"
@@ -52,7 +53,7 @@
     <MProgressBar />
     <MProgressBar :value="[28, 14, 5, 20]" style="--accent: var(--purple-500); --height: 1rem" />
 
-    <h2>Skeleton</h2>
+    <MSectionHeader>Skeleton</MSectionHeader>
     <div class="skeleton-example">
       <div class="skeleton-heading">
         <MSkeleton block-size="3rem" variant="circle" />
@@ -79,6 +80,7 @@ import { onUnmounted, ref } from 'vue'
 import MCircularProgress from '@/lib/components/progress/MCircularProgress.vue'
 import MProgressBar from '@/lib/components/progress/MProgressBar.vue'
 import MSpinner from '@/lib/components/progress/MSpinner.vue'
+import MSectionHeader from '@/lib/components/section/MSectionHeader.vue'
 import MSkeleton from '@/lib/components/status/MSkeleton.vue'
 
 const progress = ref(0)

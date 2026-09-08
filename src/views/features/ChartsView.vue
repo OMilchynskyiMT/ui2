@@ -1,9 +1,8 @@
 <template>
   <main class="charts">
-    <header>
-      <h1>Charts</h1>
-      <p>Chart components and data visualization examples.</p>
-    </header>
+    <MSectionHeader description="Chart components and data visualization examples">
+      Charts
+    </MSectionHeader>
 
     <section>
       <h2>Network traffic</h2>
@@ -20,8 +19,10 @@
 </template>
 
 <script lang="ts" setup>
+import MSectionHeader from '@/lib/components/section/MSectionHeader.vue'
 import { MChart } from '@/components/chart'
 import type { ChartDefinition, ChartLabel } from '@/components/chart/types'
+
 
 const raw: { label: string, rx: number, tx: number }[] = []
 const now = new Date()

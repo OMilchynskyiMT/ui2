@@ -115,6 +115,12 @@ const routes: RouterOptions['routes'] = [
             component: () => import('@/views/features/InputsView.vue'),
           },
           {
+            path: 'sign-in',
+            name: 'sign-in',
+            component: () => import('@/views/features/SignInView.vue'),
+            meta: { title: 'Sign in' },
+          },
+          {
             path: 'spinners',
             name: 'spinners',
             component: () => import('@/views/features/SpinnersView.vue'),
@@ -188,16 +194,6 @@ const routes: RouterOptions['routes'] = [
             meta: { title: 'Bar Chart' },
           },
         ],
-      },
-    ],
-  },
-  {
-    path: '/dashboard',
-    component: () => import('@/layouts/DashboardLayout.vue'),
-    children: [
-      {
-        path: '',
-        component: () => import('@/views/TestView.vue'),
       },
     ],
   },

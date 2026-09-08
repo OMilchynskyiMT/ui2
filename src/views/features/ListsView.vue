@@ -8,7 +8,7 @@
       </template>
     </MListbox>
 
-    <h1 style="grid-column: 1 / span 2">Popovers</h1>
+    <MSectionHeader style="grid-column: span 2">Popovers</MSectionHeader>
 
     <div style="display: flex; gap: 5rem">
       <button id="p-top-start" @click="showPopup(getbyId('p-top-start'), 'top-start')">Top Start</button>
@@ -19,10 +19,10 @@
 
     <MPopover
       :anchor="popupAnchor"
+      :offset="10"
       :open="popupShow"
       :placement="popupPosition"
-      style="box-shadow: 0 0 1rem rgba(0, 0, 0, 0.2); border-radius: 1rem;"
-      :offset="10"
+      style="box-shadow: 0 0 1rem rgba(0, 0, 0, 0.2); border-radius: 1rem"
       @dismiss="popupShow = false"
     >
       <MListbox :active-value="active" :items="items" :selected-value="selected" @select="selected = $event.value" />
@@ -36,6 +36,7 @@ import { ref } from 'vue'
 import type { ListItem } from '@/lib/components/list/listbox.types'
 import MListbox from '@/lib/components/list/MListbox.vue'
 import MPopover, { type OverlayPlacement } from '@/lib/components/overlay/MPopover.vue'
+import MSectionHeader from '@/lib/components/section/MSectionHeader.vue'
 
 const selected = ref()
 const active = ref()
