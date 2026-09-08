@@ -10,7 +10,7 @@
 import { watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
-import MNotifications from '@/features/notifications/MNotifications.vue'
+import MNotifications from '@/components/notifications/MNotifications.vue'
 import { useUserSession } from '@/state/userSession'
 
 const router = useRouter()

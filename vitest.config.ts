@@ -17,10 +17,10 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reporter: ['text', 'html'],
-      include: ['src/features/validation/**/*.ts'],
+      include: ['src/lib/validation/**/*.ts'],
       exclude: [
-        'src/features/validation/index.ts',
-        'src/features/validation/model/**/*.ts',
+        'src/lib/validation/index.ts',
+        'src/lib/validation/model/**/*.ts',
       ],
     },
   },

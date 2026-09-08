@@ -49,7 +49,7 @@
 import { ClockCheckIcon } from '@lucide/vue'
 
 import MButton from '@/lib/components/buttons/MButton.vue'
-import { useNotifications } from '@/features/notifications'
+import { useNotifications } from '@/components/notifications'
 
 const { error, warning, success, info, notify } = useNotifications()
 </script>

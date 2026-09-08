@@ -157,7 +157,7 @@ import MTextField from '@/lib/components/fields/MTextField.vue'
 import type { ListItem, ListOption } from '@/lib/components/list/listbox.types'
 import MIcon from '@/lib/components/MIcon.vue'
 import MSpinner from '@/lib/components/progress/MSpinner.vue'
-import { email, Schema, types, useValidation } from '@/features/validation'
+import { email, Schema, types, useValidation } from '@/lib/validation'
 
 const inputModel = ref('')
 const numberModel = ref<number | null>(null)
