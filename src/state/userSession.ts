@@ -31,8 +31,9 @@ const restore = (): void => {
   if (session !== null) {
     try {
       user.value = JSON.parse(session)
-    } catch (error) {
-      console.error('No valid user data found in local storage:', error)
+    } catch {
+      user.value = undefined
+      localStorage.removeItem(SESSION_STORAGE_KEY)
     }
   }
 }
