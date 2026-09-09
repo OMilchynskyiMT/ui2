@@ -165,6 +165,11 @@ const onChange = (event: Event): void => {
     cursor: var(--cursor);
   }
 
+  input:is([type='date'], [type='datetime-local'], [type='month'], [type='time'], [type='week']) {
+    display: inline-flex;
+    align-items: center;
+  }
+
   @supports (-webkit-touch-callout: none) {
     @media (pointer: coarse) {
       input {
