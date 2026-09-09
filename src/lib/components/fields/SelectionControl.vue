@@ -166,6 +166,7 @@ defineExpose<SelectionControlExpose>({
     --control-indicator-bg: var(--control-container-color);
 
     position: relative;
+    -webkit-tap-highlight-color: transparent;
     display: inline-grid;
     grid-template-columns: var(--control-inline-size) minmax(0, 1fr);
     grid-template-areas: 'indicator body';
