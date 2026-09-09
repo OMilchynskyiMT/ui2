@@ -27,35 +27,22 @@
       <span class="color-actions">
         <slot name="leading" />
 
-        <input
-          ref="colorInput"
-          :disabled="disabled || readonly"
-          :value="pickerColor"
-          aria-hidden="true"
-          class="native-color-input"
-          tabindex="-1"
-          type="color"
-          @change="onPickerChange"
-          @input="onPickerInput"
-        />
-
-        <MButton
-          :aria-controls="id"
-          :aria-label="pickerLabel"
-          :disabled="disabled || readonly"
-          :title="pickerLabel"
-          class="color-picker"
-          size="small"
-          style="--padding-inline: 0; --padding-block: 0"
-          tone="neutral"
-          type="button"
-          variant="icon"
-          @click="colorInput?.click()"
-        >
+        <span :class="{ disabled: disabled || readonly }" class="color-picker">
           <span aria-hidden="true" class="swatch">
             <MIcon :icon="PaletteIcon" />
           </span>
-        </MButton>
+
+          <input
+            :aria-label="pickerLabel"
+            :disabled="disabled || readonly"
+            :title="pickerLabel"
+            :value="pickerColor"
+            class="native-color-input"
+            type="color"
+            @change="onPickerChange"
+            @input="onPickerInput"
+          />
+        </span>
       </span>
     </template>
 
@@ -97,7 +84,6 @@ import { PaletteIcon } from '@lucide/vue'
 
 import { useId } from '@/composables/useId'
 
-import MButton from '../buttons/MButton.vue'
 import MIcon from '../MIcon.vue'
 import MTextField, { type MFieldExpose } from './MTextField.vue'
 
@@ -134,7 +120,6 @@ const model = defineModel<string>({ required: true })
 const attributes = useAttrs()
 const slots = useSlots()
 const fieldReference = useTemplateRef<MFieldExpose>('field')
-const colorInput = useTemplateRef<HTMLInputElement>('colorInput')
 const syntaxInvalid = computed((): boolean => model.value !== '' && !isHexColorValid(model.value))
 const isInvalid = computed((): boolean => invalid === true || syntaxInvalid.value)
 const pickerColor = computed(() => normalizeHexColor(model.value))
@@ -171,21 +156,31 @@ defineExpose<MFieldExpose>({
     gap: var(--space-xs);
   }
 
-  .native-color-input {
-    position: absolute;
-    inline-size: 1px;
-    block-size: 1px;
-    margin: -1px;
-    padding: 0;
-    border: 0;
-    clip-path: inset(50%);
-    overflow: hidden;
-    white-space: nowrap;
+  .color-picker {
+    position: relative;
+    display: inline-grid;
+    place-items: center;
+    padding: var(--space-xxs);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+
+    &.disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
   }
 
-  .color-picker {
-    --padding-inline: var(--space-xxs);
-    --padding-block: var(--space-xxs);
+  .native-color-input {
+    position: absolute;
+    z-index: 1;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    opacity: 0;
+    cursor: inherit;
   }
 
   .swatch {
@@ -195,6 +190,7 @@ defineExpose<MFieldExpose>({
     place-items: center;
     inline-size: 1.75rem;
     block-size: 1.75rem;
+    pointer-events: none;
     border: 1px solid color-mix(in oklch, var(--text-color) 20%, transparent);
     border-radius: var(--radius-md);
     background: var(--swatch-color);
