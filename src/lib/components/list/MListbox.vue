@@ -10,7 +10,7 @@
     :selected-value="model"
     tabindex="0"
     @activate="activeValue = $event.value"
-    @focus="syncActiveValue"
+    @focus="onFocus"
     @keydown="onKeydown"
     @pointerdown="onPointerDown"
     @select="selectOption"
@@ -42,7 +42,7 @@ export { TYPEAHEAD_RESET_TIMEOUT } from '@/composables/useTypeahead'
 </script>
 
 <script generic="V extends string | number" lang="ts" setup>
-import { computed, useTemplateRef } from 'vue'
+import { computed, shallowRef, useTemplateRef } from 'vue'
 
 import { useId } from '@/composables/useId'
 import { isTypeaheadKey, useTypeahead } from '@/composables/useTypeahead'
@@ -122,12 +122,22 @@ const onKeydown = (event: KeyboardEvent): void => {
   if (isTypeaheadKey(event)) typeahead.apply(event.key)
 }
 
+const pointerFocus = shallowRef(false)
+
 const focus = (options?: FocusOptions): void => {
   contentReference.value?.list?.focus(options)
 }
 
+const onFocus = (): void => {
+  if (!pointerFocus.value) syncActiveValue()
+}
+
 const onPointerDown = (event: PointerEvent): void => {
-  if (event.pointerType !== 'touch') focus({ preventScroll: true })
+  if (event.pointerType === 'touch') return
+
+  pointerFocus.value = true
+  focus({ preventScroll: true })
+  pointerFocus.value = false
 }
 
 defineExpose<MListboxExpose>({ focus })
