@@ -193,11 +193,6 @@ defineExpose<ListboxContentExpose>({
     background-color: var(--list-bg);
     border-radius: inherit;
 
-    &:focus-visible {
-      outline: 2px solid var(--link-color);
-      outline-offset: -2px;
-    }
-
     & > .group {
       display: flex;
       flex-direction: column;
