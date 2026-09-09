@@ -4,11 +4,6 @@
       <header class="brand">
         <img v-if="resolvedScheme === 'light'" alt="MultiTech" src="/images/MT-logo.svg" />
         <img v-else alt="MultiTech" src="/images/MT-logo-light.svg" />
-
-        <div class="product">
-          <strong>mPower™ Edge Intelligence Conduit AP</strong>
-          <span>MTCAP3-L4G2D-WIFI · Firmware 8.0.0-dev1</span>
-        </div>
       </header>
 
       <div :class="{ 'has-policy': usagePolicy }" class="content">
@@ -104,13 +99,18 @@ const submit = (): void => {
     border: 1px solid var(--divider-color);
     border-radius: var(--radius-lg);
     background:
-      radial-gradient(circle at 50% 15%, color-mix(in oklch, var(--tone-primary) 8%, transparent), transparent 40%),
+      radial-gradient(
+        circle at 50% 15%,
+        oklch(from var(--tone-primary) l c h / 0.12),
+        var(--bg) 60%
+      ),
+      url('/images/noise.svg') repeat,
       var(--bg);
   }
 
   .sign-in-panel {
     display: grid;
-    gap: var(--space-xxl);
+    gap: calc(var(--space-xxl) * 1.5);
     inline-size: min(100%, 62rem);
   }
 
