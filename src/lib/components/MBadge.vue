@@ -8,9 +8,9 @@
 import type { ComponentTone } from './component.types'
 
 export type MBadgeProperties = {
-  tag?: 'span' | 'sup'
+  tag?: 'span' | 'sup' | 'sub'
   tone?: ComponentTone
-  size?: 'small' | 'medium'
+  size?: 'small' | 'medium' | 'large'
   label?: string | number
 }
 </script>
@@ -48,6 +48,12 @@ const {
       --badge-size: 1rem;
       --badge-padding-inline: 0.3rem;
       font-size: var(--font-size-xxs);
+    }
+
+    &[data-size='large'] {
+      --badge-size: 1.5rem;
+      --badge-padding-inline: 0.5rem;
+      font-size: var(--font-size-sm);
     }
   }
 }

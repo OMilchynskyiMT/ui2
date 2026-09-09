@@ -198,7 +198,7 @@ onMounted(() => {
     opacity: var(--opacity);
     font-size: var(--font-size);
 
-    &:is(.has-label):is([data-variant='outlined']) {
+    &:is([data-variant='outlined']) {
       padding-block-start: var(--label-clearance);
     }
 

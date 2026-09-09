@@ -1,13 +1,13 @@
-export type ListItem<V> = {
+export type ListboxOption<V> = {
   value: V
   title?: string
   disabled?: boolean
 }
 
-export type ListGroup<V> = {
+export type ListboxGroup<V> = {
   type: 'group'
   title: string
-  items: ListItem<V>[]
+  items: readonly ListboxOption<V>[]
 }
 
-export type ListOption<V> = ListItem<V> | ListGroup<V>
+export type ListboxEntry<V> = ListboxOption<V> | ListboxGroup<V>

@@ -6,8 +6,8 @@
       </MSectionHeader>
 
       <MFormGrid>
-        <MListbox :active-value="active" :items="items" :selected-value="selected" @select="selected = $event.value" />
-        <MListbox :active-value="active" :items="items" :selected-value="selected" @select="selected = $event.value">
+        <MListbox v-model="selected" aria-label="Default listbox" :items="items" />
+        <MListbox v-model="selected" aria-label="Custom listbox" :items="items">
           <template #item="{ item }">
             <strong>{{ item.title }}</strong>
             <div>{{ item.value }}</div>
@@ -42,7 +42,7 @@
         style="--popover-radius: var(--radius-lg); --popover-shadow: var(--shadow-md)"
         @dismiss="popupShow = false"
       >
-        <MListbox :active-value="active" :items="items" :selected-value="selected" @select="selected = $event.value" />
+        <MListbox v-model="selected" aria-label="Popover listbox" :items="items" />
       </MPopover>
     </section>
   </div>
@@ -54,14 +54,13 @@ import { ref } from 'vue'
 import MButton from '@/lib/components/buttons/MButton.vue'
 import MFormGrid from '@/lib/components/grid/MFormGrid.vue'
 import MCluster from '@/lib/components/layout/MCluster.vue'
-import type { ListItem } from '@/lib/components/list/listbox.types'
+import type { ListboxOption } from '@/lib/components/list/listbox.types'
 import MListbox from '@/lib/components/list/MListbox.vue'
 import MPopover, { type OverlayPlacement } from '@/lib/components/overlay/MPopover.vue'
 import MSectionHeader from '@/lib/components/section/MSectionHeader.vue'
 
-const selected = ref()
-const active = ref()
-const items = ref<ListItem<string>[]>([
+const selected = ref<string | null>(null)
+const items = ref<ListboxOption<string>[]>([
   { value: 'test 1', title: 'Test 1' },
   { value: 'test 2', title: 'Different title' },
   { value: 'Lorem ipsum', title: 'Lorem ipsum', disabled: true },

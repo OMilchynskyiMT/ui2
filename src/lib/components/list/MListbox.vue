@@ -1,218 +1,152 @@
 <template>
-  <MScrollArea class="listbox-scroll" fade-edges overscroll="contain">
-    <ul :id="id" ref="list" role="listbox" class="list">
-      <template v-for="(option, optionIndex) in items" :key="getOptionKey(option, optionIndex)">
-        <li v-if="isListGroup(option)" role="group" :aria-labelledby="getGroupLabelId(optionIndex)" class="group">
-          <div :id="getGroupLabelId(optionIndex)" class="group-label">
-            <slot :group="option" :level="0" name="group">
-              {{ option.title }}
-            </slot>
-          </div>
-
-          <ul role="presentation" class="group-items">
-            <li
-              v-for="item in option.items"
-              :id="getOptionId(item)"
-              :key="item.value"
-              role="option"
-              :aria-disabled="item.disabled || undefined"
-              :aria-selected="item.value === selectedValue"
-              :class="[
-                'item',
-                {
-                  active: item.value === activeValue,
-                  selected: item.value === selectedValue,
-                  disabled: item.disabled,
-                },
-              ]"
-              :style="getLevelStyle(1)"
-              @click="onSelect(item)"
-              @pointerdown.prevent
-              @pointerenter="onHover(item)"
-            >
-              <slot :item="item" :level="1" name="item">
-                {{ getListItemText(item) }}
-              </slot>
-            </li>
-          </ul>
-        </li>
-
-        <li
-          v-else
-          :id="getOptionId(option)"
-          role="option"
-          :aria-disabled="option.disabled || undefined"
-          :aria-selected="option.value === selectedValue"
-          :class="[
-            'item',
-            {
-              active: option.value === activeValue,
-              selected: option.value === selectedValue,
-              disabled: option.disabled,
-            },
-          ]"
-          :style="getLevelStyle(0)"
-          @click="onSelect(option)"
-          @pointerdown.prevent
-          @pointerenter="onHover(option)"
-        >
-          <slot :item="option" :level="0" name="item">
-            {{ getListItemText(option) }}
-          </slot>
-        </li>
-      </template>
-    </ul>
-  </MScrollArea>
+  <ListboxContent
+    :id="id"
+    ref="content"
+    :active-value="activeValue"
+    :aria-activedescendant="activeOptionId"
+    :aria-label="ariaLabel"
+    :aria-labelledby="ariaLabelledby"
+    :items="items"
+    :selected-value="model"
+    tabindex="0"
+    @activate="activeValue = $event.value"
+    @focus="syncActiveValue"
+    @keydown="onKeydown"
+    @pointerdown="onPointerDown"
+    @select="selectOption"
+  >
+    <template v-if="$slots.group" #group="slotProperties">
+      <slot v-bind="slotProperties" name="group" />
+    </template>
+    <template v-if="$slots.item" #item="slotProperties">
+      <slot v-bind="slotProperties" name="item" />
+    </template>
+  </ListboxContent>
 </template>
 
 <script lang="ts">
-import type { ListItem, ListOption } from './listbox.types'
+import type { ListboxEntry, ListboxOption } from './listbox.types'
 
 export type MListboxProperties<V> = {
   id?: string
-  items: ListOption<V>[]
-  activeValue?: ListItem<V>['value']
-  selectedValue?: ListItem<V>['value']
+  items: readonly ListboxEntry<V>[]
+  ariaLabel?: string
+  ariaLabelledby?: string
 }
+
+export type MListboxExpose = {
+  focus: (options?: FocusOptions) => void
+}
+
+export const TYPEAHEAD_RESET_TIMEOUT = 700
 </script>
 
 <script generic="V extends string | number" lang="ts" setup>
-import { computed, nextTick, useTemplateRef, watch } from 'vue'
+import { computed, onBeforeUnmount, useTemplateRef } from 'vue'
 
 import { useId } from '@/composables/useId'
 
-import MScrollArea from '../layout/MScrollArea.vue'
-import { flattenListItems, getListboxOptionId, getListItemText, isListGroup } from './listbox.shared'
+import ListboxContent, { type ListboxContentExpose } from './internal/ListboxContent.vue'
+import { findNextListboxOption, useListboxNavigation } from './listbox.shared'
 
-const { id = useId(), items, activeValue, selectedValue } = defineProps<MListboxProperties<V>>()
-const listReference = useTemplateRef<HTMLUListElement>('list')
-
+const { id = useId(), items, ariaLabel, ariaLabelledby } = defineProps<MListboxProperties<V>>()
 const emit = defineEmits<{
-  select: [item: ListItem<V>]
-  hover: [item: ListItem<V>]
+  change: [option: ListboxOption<V>]
+  select: [option: ListboxOption<V>]
 }>()
+const model = defineModel<V | null>({ default: null })
+const contentReference = useTemplateRef<ListboxContentExpose>('content')
+let typeahead = ''
+let typeaheadTimer: ReturnType<typeof globalThis.setTimeout> | undefined
 
-const optionIds = computed(() => {
-  return new Map(flattenListItems(items).map((item, index) => [item.value, getListboxOptionId(id, index)]))
-})
+const { activeValue, enabledOptions, activeOption, syncActiveValue, moveActiveValue, moveActiveTo, getActiveOptionId } =
+  useListboxNavigation(
+    () => items,
+    () => model.value
+  )
 
-const getOptionKey = (option: ListOption<V>, index: number): string | number => {
-  return isListGroup(option) ? `group-${index}-${option.title}` : option.value
+const activeOptionId = computed(() => getActiveOptionId(id))
+
+const clearTypeahead = (): void => {
+  typeahead = ''
+  if (typeaheadTimer === undefined) return
+
+  clearTimeout(typeaheadTimer)
+  typeaheadTimer = undefined
 }
 
-const getOptionId = (item: ListItem<V>): string | undefined => optionIds.value.get(item.value)
-const getGroupLabelId = (index: number): string => `${id}-group-${index}`
-const getLevelStyle = (level: number) => ({ '--list-level': level })
+const applyTypeahead = (key: string): void => {
+  if (typeaheadTimer !== undefined) clearTimeout(typeaheadTimer)
 
-const onSelect = (item: ListItem<V>): void => {
-  if (item.disabled) return
-  emit('select', item)
+  const normalizedKey = key.toLocaleLowerCase()
+  const repeatedKey = typeahead.length > 0 && [...typeahead].every(character => character === normalizedKey)
+  typeahead = repeatedKey ? normalizedKey : `${typeahead}${normalizedKey}`
+
+  const option = findNextListboxOption(enabledOptions.value, activeValue.value, typeahead)
+  if (option) activeValue.value = option.value
+
+  typeaheadTimer = setTimeout(clearTypeahead, TYPEAHEAD_RESET_TIMEOUT)
 }
 
-const onHover = (item: ListItem<V>): void => {
-  if (item.disabled) return
-  emit('hover', item)
+const selectOption = (option: ListboxOption<V>): void => {
+  if (option.disabled) return
+
+  const changed = model.value !== option.value
+  model.value = option.value
+  activeValue.value = option.value
+  emit('select', option)
+
+  if (changed) emit('change', option)
 }
 
-const scrollActiveItemIntoView = async (): Promise<void> => {
-  await nextTick()
-
-  const activeElement = listReference.value?.querySelector('.item.active')
-  if (!(activeElement instanceof HTMLElement)) return
-
-  activeElement.scrollIntoView({ block: 'nearest' })
+const isTypeaheadKey = (event: KeyboardEvent): boolean => {
+  return event.key.length === 1 && !event.altKey && !event.ctrlKey && !event.metaKey
 }
 
-watch(() => activeValue, scrollActiveItemIntoView, { immediate: true, flush: 'post' })
+const onKeydown = (event: KeyboardEvent): void => {
+  if (event.key === 'ArrowDown') {
+    event.preventDefault()
+    moveActiveValue(1)
+    return
+  }
+
+  if (event.key === 'ArrowUp') {
+    event.preventDefault()
+    moveActiveValue(-1)
+    return
+  }
+
+  if (event.key === 'Home') {
+    event.preventDefault()
+    moveActiveTo('first')
+    return
+  }
+
+  if (event.key === 'End') {
+    event.preventDefault()
+    moveActiveTo('last')
+    return
+  }
+
+  if (event.key === 'Enter' || event.key === ' ') {
+    if (!activeOption.value) return
+
+    event.preventDefault()
+    selectOption(activeOption.value)
+    return
+  }
+
+  if (isTypeaheadKey(event)) applyTypeahead(event.key)
+}
+
+const focus = (options?: FocusOptions): void => {
+  contentReference.value?.list?.focus(options)
+}
+
+const onPointerDown = (): void => {
+  focus()
+}
+
+onBeforeUnmount(clearTypeahead)
+defineExpose<MListboxExpose>({ focus })
 </script>
-
-<style scoped>
-@layer components {
-  .listbox-scroll {
-    --max-block-size: min(16rem, var(--overlay-available-block-size, 16rem));
-    --list-bg: var(--surface-bg);
-
-    max-block-size: var(--max-block-size);
-    border-radius: inherit;
-    background-color: var(--list-bg);
-    --scroll-area-fade-color: var(--list-bg);
-  }
-
-  .list {
-    --item-min-block-size: calc(var(--font-size-md) * 3);
-    --item-padding-inline: var(--font-size-md);
-
-    --item-opacity: 1;
-    --item-bg: transparent;
-    --item-bg-active: light-dark(
-      oklch(from var(--list-bg) calc(l - 0.033) c h),
-      oklch(from var(--list-bg) calc(l + 0.033) c h)
-    );
-    --item-color: inherit;
-    --item-color-selected: var(--link-color);
-    --group-color: oklch(from currentColor l c h / 0.64);
-
-    display: flex;
-    flex-direction: column;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    background-color: var(--list-bg);
-    border-radius: inherit;
-
-    & > .group {
-      display: flex;
-      flex-direction: column;
-
-      & > .group-label {
-        min-block-size: calc(var(--item-min-block-size) * 0.75);
-        display: flex;
-        align-items: end;
-        padding-block-end: calc(var(--item-padding-inline) / 4);
-        padding-inline: var(--item-padding-inline);
-        color: var(--group-color);
-        font-size: var(--font-size-sm);
-        font-weight: var(--font-weight-medium, 500);
-        user-select: none;
-      }
-
-      & > .group-items {
-        display: flex;
-        margin: 0;
-        padding: 0;
-        list-style: none;
-        flex-direction: column;
-      }
-    }
-
-    & .item {
-      min-block-size: var(--item-min-block-size);
-      display: flex;
-      align-items: center;
-      padding-inline: calc(var(--item-padding-inline) + var(--list-level, 0) * 1rem) var(--item-padding-inline);
-      cursor: pointer;
-      user-select: none;
-      background-color: var(--item-bg);
-      color: var(--item-color);
-      opacity: var(--item-opacity);
-
-      transition-property: background-color, color, opacity;
-      transition-duration: var(--duration-sm);
-      transition-timing-function: var(--bezier-smooth);
-
-      &.active {
-        --item-bg: var(--item-bg-active);
-      }
-
-      &.selected {
-        --item-color: var(--item-color-selected);
-      }
-
-      &.disabled {
-        --item-opacity: 0.5;
-        pointer-events: none;
-      }
-    }
-  }
-}
-</style>

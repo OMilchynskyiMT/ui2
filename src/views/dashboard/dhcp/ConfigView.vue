@@ -39,7 +39,7 @@
       </template>
 
       <template #cell-raMode="{ value }">
-        <MChip tone="success">{{ value }}</MChip>
+        <MBadge tone="success">{{ value }}</MBadge>
       </template>
 
       <template #cell-actions>
@@ -64,7 +64,7 @@ import { CheckIcon, PencilIcon, TrashIcon, XIcon } from '@lucide/vue'
 
 import MButton from '@/lib/components/buttons/MButton.vue'
 import MConfirmDialog, { type Exposed as ConfirmExposed } from '@/lib/components/dialog/MConfirmDialog.vue'
-import MChip from '@/lib/components/MChip.vue'
+import MBadge from '@/lib/components/MBadge.vue'
 import MIcon from '@/lib/components/MIcon.vue'
 import type { TableColumn, TableSort } from '@/lib/components/table/mtable.types'
 import MTable from '@/lib/components/table/MTable.vue'

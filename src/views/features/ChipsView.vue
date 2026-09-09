@@ -15,14 +15,14 @@
     </section>
 
     <section>
-      <MSectionHeader description="Compact inline chips suitable for annotations and dense metadata">
+      <MSectionHeader description="Dense chips retain chip behavior without doubling as superscript badges">
         Small chips
       </MSectionHeader>
 
-      <MCluster align="baseline" class="samples">
-        <span v-for="{ tone, variant } in combinations" :key="`${tone}-${variant}`">
-          123<MChip :tone :variant size="small" tag="sup">123</MChip>
-        </span>
+      <MCluster class="samples">
+        <MChip v-for="{ tone, variant } in combinations" :key="`${tone}-${variant}`" :tone :variant size="small">
+          {{ `${tone} ${variant}` }}
+        </MChip>
       </MCluster>
     </section>
 
@@ -49,10 +49,13 @@
     </section>
 
     <section>
-      <MSectionHeader description="Compact status/count indicators across all component tones"> Badges </MSectionHeader>
+      <MSectionHeader description="Passive count and status annotations are rendered by the dedicated badge component">
+        Badges
+      </MSectionHeader>
 
-      <MCluster class="samples">
-        <span v-for="tone in tones" :key="`badge-${tone}`">Notifications <MBadge :label="3" :tone /></span>
+      <MCluster align="baseline" class="samples">
+        <span v-for="tone in tones" :key="`badge-${tone}`">Notifications<MBadge :label="3" :tone tag="sup" /></span>
+        <MBadge label="FAILOVER" size="large" tone="success" />
       </MCluster>
     </section>
   </div>

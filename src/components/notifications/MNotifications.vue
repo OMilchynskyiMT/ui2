@@ -70,7 +70,7 @@ const timeoutStyle = (item: Notification): Record<string, string> => {
     --border-width: 0px;
     --x-icon-size: 1rem;
     --x-icon-color: var(--gray-500);
-    --icon-size: 24px;
+    --icon-size: 1.5rem;
     --progress-width: 1px;
 
     position: fixed;
@@ -137,8 +137,9 @@ const timeoutStyle = (item: Notification): Record<string, string> => {
         align-self: start;
         min-block-size: 0;
 
-        display: flex;
-        align-items: center;
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr) auto;
+        align-items: start;
         column-gap: var(--space-md);
 
         border-left: var(--border-width) solid var(--accent);
@@ -162,21 +163,14 @@ const timeoutStyle = (item: Notification): Record<string, string> => {
 
         & > div.content {
           min-inline-size: 0;
-          flex: 1 1 auto;
 
           display: grid;
           gap: var(--space-xxs);
-
-          & > h4 {
-            line-height: var(--icon-size);
-          }
         }
 
         & > div.icon,
         & > div.close {
-          place-self: flex-start;
-          flex: 0 0 auto;
-
+          align-self: start;
           display: grid;
           place-items: center;
         }

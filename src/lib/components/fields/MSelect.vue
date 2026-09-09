@@ -46,9 +46,9 @@
       @focus="onFocus"
       @keydown="onKeydown"
     >
-      <span :class="['value', { placeholder: !selectedItem }]">
-        <slot v-if="selectedItem" :item="selectedItem" name="value">
-          {{ getListItemText(selectedItem) }}
+      <span :class="['value', { placeholder: !selectedOption }]">
+        <slot v-if="selectedOption" :item="selectedOption" name="value">
+          {{ getListboxOptionText(selectedOption) }}
         </slot>
         <template v-else>{{ placeholder }}</template>
       </span>
@@ -58,13 +58,14 @@
     </button>
 
     <MPopover :anchor="popupAnchor" :offset="2" :open="isOpen" class="select-popup" match-anchor-width @dismiss="close">
-      <MListbox
+      <ListboxContent
         :id="listId"
         :active-value="activeValue"
         :items="options"
-        :selected-value="model ?? undefined"
-        @hover="activeValue = $event.value"
-        @select="selectItem"
+        :selected-value="activeValue"
+        preserve-focus
+        @activate="activeValue = $event.value"
+        @select="selectOption"
       >
         <template #group="{ group, level }">
           <slot v-bind="{ group, level }" name="group">
@@ -78,13 +79,13 @@
             <div v-if="item.title" class="value">{{ item.value }}</div>
           </slot>
         </template>
-      </MListbox>
+      </ListboxContent>
     </MPopover>
   </FieldFrame>
 </template>
 
 <script lang="ts">
-import type { ListItem, ListOption } from '../list/listbox.types'
+import type { ListboxEntry, ListboxOption } from '../list/listbox.types'
 import type { MFieldProperties } from './mfield.shared'
 
 export type SelectModel = string | number | null
@@ -93,10 +94,10 @@ export type MSelectProperties<V extends string | number> = Omit<
   MFieldProperties,
   'id' | 'focused' | 'populated' | 'multiline'
 > & {
-    id?: string
-    options: ListOption<V>[]
-    placeholder?: string
-  }
+  id?: string
+  options: readonly ListboxEntry<V>[]
+  placeholder?: string
+}
 
 export type MSelectExpose = {
   focus: (options?: FocusOptions) => void
@@ -114,12 +115,11 @@ import { ChevronDownIcon } from '@lucide/vue'
 
 import { useId } from '@/composables/useId'
 
-import { getListItemText } from '../list/listbox.shared'
-import MListbox from '../list/MListbox.vue'
+import ListboxContent from '../list/internal/ListboxContent.vue'
+import { findNextListboxOption, getListboxOptionText, useListboxNavigation } from '../list/listbox.shared'
 import MIcon from '../MIcon.vue'
 import MPopover from '../overlay/MPopover.vue'
 import FieldFrame, { type FieldFrameExpose } from './FieldFrame.vue'
-import { findNextTypeaheadItem, useSelectionNavigation } from './selection.shared'
 
 defineOptions({
   inheritAttrs: false,
@@ -145,10 +145,10 @@ const {
 } = defineProps<MSelectProperties<V>>()
 
 const emit = defineEmits<{
-  change: [item: ListItem<V>]
+  change: [option: ListboxOption<V>]
   focus: [event: FocusEvent]
   blur: [event: FocusEvent]
-  select: [item: ListItem<V>]
+  select: [option: ListboxOption<V>]
   open: []
   close: []
 }>()
@@ -167,14 +167,14 @@ let typeaheadTimer: ReturnType<typeof globalThis.setTimeout> | undefined
 
 const {
   activeValue,
-  enabledItems,
-  activeItem,
-  selectedItem,
+  enabledOptions,
+  activeOption,
+  selectedOption,
   syncActiveValue,
   moveActiveValue,
   moveActiveTo,
   getActiveOptionId,
-} = useSelectionNavigation(
+} = useListboxNavigation(
   () => options,
   () => model.value
 )
@@ -193,7 +193,7 @@ const description = computed(() => {
 
   return identifiers.length > 0 ? identifiers.join(' ') : undefined
 })
-const isPopulated = computed(() => Boolean(selectedItem.value) || model.value != null || placeholder.trim() !== '')
+const isPopulated = computed(() => Boolean(selectedOption.value) || model.value != null || placeholder.trim() !== '')
 const hiddenInputName = computed(() => {
   const name = attributes.name
   return !disabled && typeof name === 'string' ? name : undefined
@@ -218,7 +218,7 @@ const close = (): void => {
 }
 
 const open = (): void => {
-  if (readonly || disabled || enabledItems.value.length === 0 || isOpen.value) return
+  if (readonly || disabled || enabledOptions.value.length === 0 || isOpen.value) return
 
   syncActiveValue()
   isOpen.value = true
@@ -236,18 +236,18 @@ const toggle = (): void => {
   open()
 }
 
-const selectItem = (item: ListItem<V>, focusAfterSelect = true): void => {
-  if (readonly || disabled || item.disabled) return
+const selectOption = (option: ListboxOption<V>, focusAfterSelect = true): void => {
+  if (readonly || disabled || option.disabled) return
 
-  const changed = model.value !== item.value
+  const changed = model.value !== option.value
 
-  model.value = item.value
-  activeValue.value = item.value
+  model.value = option.value
+  activeValue.value = option.value
   close()
-  emit('select', item)
+  emit('select', option)
 
   if (changed) {
-    emit('change', item)
+    emit('change', option)
   }
 
   if (focusAfterSelect) {
@@ -261,12 +261,12 @@ const applyTypeahead = (key: string): void => {
   const repeatedKey = typeahead.value.length > 0 && [...typeahead.value].every(character => character === key)
   typeahead.value = repeatedKey ? key : `${typeahead.value}${key}`
 
-  const item = findNextTypeaheadItem(enabledItems.value, activeValue.value, typeahead.value, getListItemText)
-  if (item) {
-    activeValue.value = item.value
+  const option = findNextListboxOption(enabledOptions.value, activeValue.value, typeahead.value)
+  if (option) {
+    activeValue.value = option.value
 
     if (!isOpen.value) {
-      selectItem(item, false)
+      selectOption(option, false)
     }
   }
 
@@ -334,8 +334,8 @@ const onKeydown = (event: KeyboardEvent): void => {
   if (event.key === 'Enter' || event.key === ' ') {
     event.preventDefault()
 
-    if (isOpen.value && activeItem.value) {
-      selectItem(activeItem.value)
+    if (isOpen.value && activeOption.value) {
+      selectOption(activeOption.value)
     } else {
       open()
     }
@@ -431,10 +431,7 @@ defineExpose<MSelectExpose>({
 
       & .value {
         font-size: var(--font-size-sm);
-        color: light-dark(
-          oklch(from var(--gray-800) l c h / 0.5),
-          oklch(from var(--gray-300) l c h / 0.5)
-        );
+        color: light-dark(oklch(from var(--gray-800) l c h / 0.5), oklch(from var(--gray-300) l c h / 0.5));
       }
     }
   }

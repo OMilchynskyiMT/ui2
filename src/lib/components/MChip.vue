@@ -1,5 +1,5 @@
 <template>
-  <component :is="tag" :data-size="size" :data-tone="tone" :data-variant="variant" :title="title" class="chip">
+  <span :data-size="size" :data-tone="tone" :data-variant="variant" :title="title" class="chip">
     <span v-if="slots.leading" class="leading"><slot name="leading" /></span>
     <span class="main">
       <span class="label">
@@ -19,7 +19,7 @@
       variant="icon"
       @click.prevent="emit('close')"
     />
-  </component>
+  </span>
 </template>
 
 <script lang="ts">
@@ -29,7 +29,6 @@ export type Variant = 'outlined' | 'filled' | 'tonal' | 'text'
 export type Size = 'small' | 'medium' | 'large'
 
 export type Properties = {
-  tag?: 'span' | 'sup' | 'sub'
   variant?: Variant
   tone?: ComponentTone
   size?: Size
@@ -46,7 +45,6 @@ import MButton from './buttons/MButton.vue'
 
 const slots = useSlots()
 const {
-  tag = 'span',
   variant = 'outlined',
   tone = 'primary',
   size = 'medium',

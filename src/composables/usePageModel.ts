@@ -67,6 +67,7 @@ export const usePageModel = <T extends object, TTracked = T>(options: PageModelO
     replaceData(value)
   }
 
+  // eslint-disable-next-line unicorn/consistent-boolean-name
   const confirmDiscard = async (): Promise<boolean> => {
     if (!changes.dirty.value) return true
     if (!options.confirmDiscard) return false
@@ -87,6 +88,7 @@ export const usePageModel = <T extends object, TTracked = T>(options: PageModelO
     return confirmDiscard()
   }
 
+  // eslint-disable-next-line unicorn/consistent-boolean-name
   const load = async (loadOptions: PageLoadOptions = {}): Promise<boolean> => {
     const canDiscardChanges = loadOptions.discardChanges === true
     const isAllowed = await canReplaceData(canDiscardChanges)
@@ -112,6 +114,7 @@ export const usePageModel = <T extends object, TTracked = T>(options: PageModelO
     return true
   }
 
+  // eslint-disable-next-line unicorn/consistent-boolean-name
   const reload = async (loadOptions: PageLoadOptions = {}): Promise<boolean> => {
     return load(loadOptions)
   }
@@ -150,7 +153,7 @@ export const usePageModel = <T extends object, TTracked = T>(options: PageModelO
     void load({
       discardChanges: true,
     }).catch(() => {
-      /* empty */
+      // empty
     })
   }
 

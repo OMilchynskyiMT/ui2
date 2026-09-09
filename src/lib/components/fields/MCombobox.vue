@@ -57,13 +57,14 @@
       match-anchor-width
       @dismiss="close"
     >
-      <MListbox
+      <ListboxContent
         :id="listId"
         :active-value="activeValue"
         :items="visibleOptions"
-        :selected-value="model ?? undefined"
-        @hover="activeValue = $event.value"
-        @select="selectItem"
+        :selected-value="activeValue"
+        preserve-focus
+        @activate="activeValue = $event.value"
+        @select="selectOption"
       >
         <template #group="{ group, level }">
           <slot v-bind="{ group, level }" name="group">
@@ -77,12 +78,13 @@
             <div v-if="item.title" class="value">{{ item.value }}</div>
           </slot>
         </template>
-      </MListbox>
+      </ListboxContent>
     </MPopover>
   </FieldFrame>
 </template>
 
 <script lang="ts">
+import type { ListboxEntry, ListboxOption } from '../list/listbox.types'
 import type { MFieldProperties } from './mfield.shared'
 import type { MFieldExpose } from './MTextField.vue'
 
@@ -92,13 +94,13 @@ export type MComboboxProperties<V extends string | number> = Omit<
   MFieldProperties,
   'id' | 'focused' | 'populated' | 'multiline'
 > & {
-    id?: string
-    options: ListOption<V>[]
-    filterable?: boolean
-    openOnFocus?: boolean
-    placeholder?: string
-    matcher?: (item: ListItem<V>, query?: string) => boolean
-  } & CustomComboboxProperties<V>
+  id?: string
+  options: readonly ListboxEntry<V>[]
+  filterable?: boolean
+  openOnFocus?: boolean
+  placeholder?: string
+  matcher?: (option: ListboxOption<V>, query?: string) => boolean
+} & CustomComboboxProperties<V>
 
 export type CustomComboboxProperties<V extends string | number> =
   | {
@@ -118,12 +120,15 @@ import { computed, nextTick, ref, useAttrs, useSlots, useTemplateRef, watch } fr
 
 import { useId } from '@/composables/useId'
 
-import { flattenListItems, getListItemText, isListGroup } from '../list/listbox.shared'
-import type { ListItem, ListOption } from '../list/listbox.types'
-import MListbox from '../list/MListbox.vue'
+import ListboxContent from '../list/internal/ListboxContent.vue'
+import {
+  flattenListboxOptions,
+  getListboxOptionText,
+  isListboxGroup,
+  useListboxNavigation,
+} from '../list/listbox.shared'
 import MPopover from '../overlay/MPopover.vue'
 import FieldFrame, { type FieldFrameExpose } from './FieldFrame.vue'
-import { useSelectionNavigation } from './selection.shared'
 
 const reservedSlots = ['default', 'group', 'item']
 
@@ -146,8 +151,8 @@ const {
   placeholder = '',
   variant = 'outlined',
   size = 'medium',
-  matcher = (item: ListItem<V>, query?: string) =>
-    !query || Object.values(item).join(' ').toLowerCase().includes(query.toLowerCase()),
+  matcher = (option: ListboxOption<V>, query?: string) =>
+    !query || Object.values(option).join(' ').toLowerCase().includes(query.toLowerCase()),
 } = defineProps<MComboboxProperties<V>>()
 
 const emit = defineEmits<{
@@ -155,7 +160,7 @@ const emit = defineEmits<{
   change: [event: Event]
   focus: [event: FocusEvent]
   blur: [event: FocusEvent]
-  select: [item: ListItem<V>]
+  select: [option: ListboxOption<V>]
 }>()
 
 defineOptions({
@@ -178,8 +183,8 @@ const listId = `${id}-listbox`
 const text = ref('')
 
 const popupAnchor = computed(() => frame.value?.container ?? null)
-const allItems = computed(() => flattenListItems(options))
-const selectedItem = computed(() => allItems.value.find(item => item.value === model.value))
+const allOptions = computed(() => flattenListboxOptions(options))
+const selectedOption = computed(() => allOptions.value.find(option => option.value === model.value))
 const isInvalid = computed(() => invalid || Boolean(error || slots.error))
 const description = computed(() => {
   const identifiers: string[] = []
@@ -189,36 +194,36 @@ const description = computed(() => {
   return identifiers.length > 0 ? identifiers.join(' ') : undefined
 })
 
-const isOptionMatched = (item: ListItem<V>, query: string): boolean => {
-  return !filterable || matcher(item, query)
+const isOptionMatched = (option: ListboxOption<V>, query: string): boolean => {
+  return !filterable || matcher(option, query)
 }
 
-const filterOptions = (items: readonly ListOption<V>[], query: string): ListOption<V>[] => {
-  return items.flatMap((option): ListOption<V>[] => {
-    if (!isListGroup(option)) {
+const filterOptions = (entries: readonly ListboxEntry<V>[], query: string): ListboxEntry<V>[] => {
+  return entries.flatMap((option): ListboxEntry<V>[] => {
+    if (!isListboxGroup(option)) {
       return isOptionMatched(option, query) ? [option] : []
     }
 
-    const matchedItems = option.items.filter(item => isOptionMatched(item, query))
-    return matchedItems.length > 0 ? [{ ...option, items: matchedItems }] : []
+    const matchedOptions = option.items.filter(nestedOption => isOptionMatched(nestedOption, query))
+    return matchedOptions.length > 0 ? [{ ...option, items: matchedOptions }] : []
   })
 }
 
 const visibleOptions = computed(() => filterOptions(options, text.value))
-const { activeValue, enabledItems, activeItem, syncActiveValue, moveActiveValue, getActiveOptionId } =
-  useSelectionNavigation(
+const { activeValue, enabledOptions, activeOption, syncActiveValue, moveActiveValue, getActiveOptionId } =
+  useListboxNavigation(
     () => visibleOptions.value,
     () => model.value
   )
 const activeOptionId = computed(() => (isOpen.value ? getActiveOptionId(listId) : undefined))
 
 const setTextFromModel = (): void => {
-  const item = selectedItem.value
-  text.value = item ? getListItemText(item) : model.value == null ? '' : String(model.value)
+  const option = selectedOption.value
+  text.value = option ? getListboxOptionText(option) : model.value == null ? '' : String(model.value)
 }
 
 const open = (): void => {
-  if (readonly || disabled || enabledItems.value.length === 0 || isOpen.value) return
+  if (readonly || disabled || enabledOptions.value.length === 0 || isOpen.value) return
 
   syncActiveValue()
   isOpen.value = true
@@ -232,22 +237,22 @@ const focus = (options?: FocusOptions): void => {
   inputReference.value?.focus(options)
 }
 
-const selectItem = (item: ListItem<V>, focusAfterSelect = true): void => {
-  if (readonly || disabled || item.disabled) return
+const selectOption = (option: ListboxOption<V>, focusAfterSelect = true): void => {
+  if (readonly || disabled || option.disabled) return
 
-  model.value = item.value
-  text.value = getListItemText(item)
-  activeValue.value = item.value
+  model.value = option.value
+  text.value = getListboxOptionText(option)
+  activeValue.value = option.value
   close()
-  emit('select', item)
+  emit('select', option)
 
   if (focusAfterSelect) {
     void nextTick(focus)
   }
 }
 
-const findExactItem = (): ListItem<V> | undefined => {
-  return allItems.value.find(item => getListItemText(item) === text.value)
+const findExactOption = (): ListboxOption<V> | undefined => {
+  return allOptions.value.find(option => getListboxOptionText(option) === text.value)
 }
 
 const createStringValue = <T extends string | number>(value: string): T => {
@@ -259,10 +264,10 @@ const createValueFromCustomText = (value: string): V => {
 }
 
 const commitText = (): void => {
-  const exactItem = findExactItem()
+  const exactOption = findExactOption()
 
-  if (exactItem && !exactItem.disabled) {
-    selectItem(exactItem, false)
+  if (exactOption && !exactOption.disabled) {
+    selectOption(exactOption, false)
     return
   }
 
@@ -330,9 +335,9 @@ const onKeydown = (event: KeyboardEvent): void => {
   }
 
   if (event.key === 'Enter') {
-    if (isOpen.value && activeItem.value) {
+    if (isOpen.value && activeOption.value) {
       event.preventDefault()
-      selectItem(activeItem.value)
+      selectOption(activeOption.value)
       return
     }
 
@@ -397,10 +402,7 @@ defineExpose<MComboboxExpose>({
 
         & .value {
           font-size: var(--font-size-sm);
-          color: light-dark(
-            oklch(from var(--gray-800) l c h / 0.5),
-            oklch(from var(--gray-300) l c h / 0.5)
-          );
+          color: light-dark(oklch(from var(--gray-800) l c h / 0.5), oklch(from var(--gray-300) l c h / 0.5));
         }
       }
     }

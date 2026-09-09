@@ -49,6 +49,14 @@
         <MSearchField v-model="searchModel" hint="Default outlined, medium search field" />
         <MSearchField
           v-model="searchModel"
+          aria-label="Unlabeled search"
+          hint="Outlined fields keep stable geometry even without a floating label"
+          label=""
+          placeholder="Unlabeled outlined search"
+        />
+
+        <MSearchField
+          v-model="searchModel"
           aria-label="Search"
           hint="Compact filled presentation for search/filter surfaces"
           label=""
@@ -56,8 +64,9 @@
           size="small"
           variant="filled"
         />
-
         <MTextField v-model="inputModel" label="Compact filled text field" size="small" variant="filled" />
+
+        <MTextField v-model="inputModel" label="Compact outlined text field" size="small" />
         <MSelect
           v-model="selectModel"
           :options="selectOptions"
@@ -247,7 +256,7 @@ import MSwitch from '@/lib/components/fields/MSwitch.vue'
 import MTextarea from '@/lib/components/fields/MTextarea.vue'
 import MTextField from '@/lib/components/fields/MTextField.vue'
 import MFormGrid from '@/lib/components/grid/MFormGrid.vue'
-import type { ListItem, ListOption } from '@/lib/components/list/listbox.types'
+import type { ListboxEntry, ListboxOption } from '@/lib/components/list/listbox.types'
 import MIcon from '@/lib/components/MIcon.vue'
 import MSpinner from '@/lib/components/progress/MSpinner.vue'
 import MSectionHeader from '@/lib/components/section/MSectionHeader.vue'
@@ -283,7 +292,7 @@ const validationType = types.object<ValidationDemo>({
 const validationSchema = new Schema(validationType)
 const validation = useValidation(validationSchema, validationModel)
 
-const comboOptions: ListItem<string>[] = [
+const comboOptions: ListboxOption<string>[] = [
   { value: '80' },
   { value: '8080-8085', title: 'Strange Web Server' },
   { value: '443', title: 'HTTPS' },
@@ -302,7 +311,7 @@ const radioOptions: MRadioGroupOption<'http' | 'https' | 'ssh'>[] = [
   { value: 'ssh', label: 'SSH' },
 ]
 
-const selectOptions: ListOption<string>[] = [
+const selectOptions: ListboxEntry<string>[] = [
   {
     type: 'group',
     title: 'Common',

@@ -58,12 +58,10 @@ const actualIcon = computed((): Component => {
 @layer components {
   .alert {
     --border-width: 1px;
-    --icon-size: 24px;
+    --icon-size: 1.5rem;
     --accent: var(--tone-color);
-    --align-items: start;
-
     display: grid;
-    align-items: var(--align-items);
+    align-items: start;
     gap: var(--space-md);
 
     padding: var(--space-md) var(--space-lg);
@@ -84,6 +82,7 @@ const actualIcon = computed((): Component => {
     }
 
     & > .icon {
+      align-self: start;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -95,12 +94,14 @@ const actualIcon = computed((): Component => {
     }
 
     > .content {
+      align-self: start;
       min-inline-size: 0;
     }
 
     > .actions {
+      align-self: start;
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       gap: var(--space-md);
     }
   }

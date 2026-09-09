@@ -6,7 +6,7 @@
       <MCard>
         <MFormGrid :columns="2">
           <div>Mode</div>
-          <div><MChip size="large" tone="success">FAILOVER</MChip></div>
+          <div><MBadge size="large" tone="success">FAILOVER</MBadge></div>
         </MFormGrid>
       </MCard>
 
@@ -22,7 +22,7 @@
         </template>
 
         <template #cell-type="{ value }">
-          <MChip tone="primary">{{ value }}</MChip>
+          <MBadge tone="primary">{{ value }}</MBadge>
         </template>
 
         <template #cell-status="{ value }">
@@ -39,7 +39,7 @@ import { CheckIcon, GripVerticalIcon, PencilIcon, XIcon } from '@lucide/vue'
 
 import MButton from '@/lib/components/buttons/MButton.vue'
 import MFormGrid from '@/lib/components/grid/MFormGrid.vue'
-import MChip from '@/lib/components/MChip.vue'
+import MBadge from '@/lib/components/MBadge.vue'
 import MIcon from '@/lib/components/MIcon.vue'
 import MCard from '@/lib/components/section/MCard.vue'
 import MSectionHeader from '@/lib/components/section/MSectionHeader.vue'
