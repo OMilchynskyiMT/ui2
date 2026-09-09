@@ -1,6 +1,7 @@
 <template>
   <FieldFrame
     :id="id"
+    v-bind="fieldAttributes"
     :disabled="disabled"
     :error="error"
     :focused="isFocused"
@@ -10,8 +11,10 @@
     :populated="currentValue !== '' || placeholder.trim() !== ''"
     :prefix="prefix"
     :readonly="readonly"
+    :size="size"
     :suffix="suffix"
     :title="title"
+    :variant="variant"
     multiline
     @request-focus="focus"
   >
@@ -28,7 +31,7 @@
     <textarea
       :id="id"
       ref="textarea"
-      v-bind="attributes"
+      v-bind="controlAttributes"
       v-resize="onResize"
       :aria-describedby="description"
       :aria-disabled="disabled"
@@ -65,7 +68,7 @@ import { computed, nextTick, onMounted, ref, useAttrs, useSlots, useTemplateRef,
 import { useId } from '@/composables/useId'
 
 import FieldFrame from './FieldFrame.vue'
-import { type MFieldProperties } from './mfield.shared'
+import type { MFieldProperties } from './mfield.shared'
 
 type Properties = Omit<MFieldProperties, 'id' | 'focused' | 'populated' | 'multiline'> & {
   id?: string
@@ -83,6 +86,11 @@ defineOptions({
 
 const slots = useSlots()
 const attributes = useAttrs()
+const fieldAttributes = computed(() => ({ class: attributes.class, style: attributes.style }))
+const controlAttributes = computed(() => {
+  const { class: _class, style: _style, ...rest } = attributes
+  return rest
+})
 
 const {
   id = useId(),
@@ -101,6 +109,8 @@ const {
   maxlength,
   autoGrow = false,
   counter = false,
+  variant = 'outlined',
+  size = 'medium',
 } = defineProps<Properties>()
 
 const model = defineModel<string>({ required: true })
@@ -217,16 +227,16 @@ watch([() => autoGrow, () => rows], () => void nextTick(updateBlockSize), { flus
     box-sizing: border-box;
     min-inline-size: 0;
     inline-size: 100%;
-    min-block-size: calc(var(--input-font-size) * 1.5);
+    min-block-size: calc(var(--font-size) * 1.5);
     max-block-size: var(--textarea-max-block-size, none);
     overflow: auto;
     resize: var(--textarea-resize, block);
-    line-height: var(--input-line-height, 1.5);
+    line-height: var(--line-height);
     cursor: var(--cursor);
 
     &::placeholder {
       opacity: 1;
-      color: var(--input-hint-color);
+      color: var(--hint-color);
     }
 
     &:is(.auto-grow) {

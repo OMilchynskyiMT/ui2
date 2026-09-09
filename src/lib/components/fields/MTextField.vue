@@ -1,6 +1,7 @@
 <template>
   <FieldFrame
     :id="id"
+    v-bind="fieldAttributes"
     :disabled="disabled"
     :error="error"
     :focused="isFocused"
@@ -10,8 +11,10 @@
     :populated="isPopulated"
     :prefix="prefix"
     :readonly="readonly"
+    :size="size"
     :suffix="suffix"
     :title="title"
+    :variant="variant"
     @request-focus="focus"
   >
     <template v-for="name in Object.keys(slots).filter(name => name !== 'default')" #[name]>
@@ -21,7 +24,7 @@
     <input
       :id="id"
       ref="input"
-      v-bind="attributes"
+      v-bind="controlAttributes"
       :aria-describedby="description"
       :aria-disabled="disabled"
       :aria-errormessage="isInvalid && (error || slots.error) ? `${id}-error` : undefined"
@@ -74,6 +77,11 @@ defineOptions({
 
 const slots = useSlots()
 const attributes = useAttrs()
+const fieldAttributes = computed(() => ({ class: attributes.class, style: attributes.style }))
+const controlAttributes = computed(() => {
+  const { class: _class, style: _style, ...rest } = attributes
+  return rest
+})
 
 const {
   id = useId(),
@@ -89,6 +97,8 @@ const {
   type = 'text',
   lazy = false,
   placeholder = '',
+  variant = 'outlined',
+  size = 'medium',
 } = defineProps<MTextFieldProperties>()
 
 const model = defineModel<string>({ required: true })
@@ -158,7 +168,7 @@ const onChange = (event: Event): void => {
     display: block;
     min-inline-size: 0;
     inline-size: 100%;
-    block-size: var(--input-height);
+    block-size: var(--control-height);
     cursor: var(--cursor);
   }
 }

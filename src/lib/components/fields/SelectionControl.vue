@@ -168,17 +168,17 @@ defineExpose<SelectionControlExpose>({
 <style scoped>
 @layer components {
   .selection-control {
-    --control-color: var(--input-border-active-color);
-    --control-container-color: var(--input-border-color);
+    --control-color: var(--blue-500);
+    --control-container-color: light-dark(var(--gray-300), var(--gray-600));
     --control-container-hover-color: color-mix(in srgb, var(--control-container-color) 90%, currentColor);
-    --control-error-color: var(--input-border-error-color);
+    --control-error-color: var(--red-500);
     --control-mark-color: var(--surface-bg);
-    --control-text-color: var(--input-text-color);
-    --control-hint-color: var(--input-hint-color);
-    --control-error-text-color: var(--input-error-color);
-    --control-font-size: var(--input-font-size);
-    --control-details-font-size: var(--input-error-font-size);
-    --control-gap: var(--input-gap-x);
+    --control-text-color: light-dark(var(--gray-900), var(--gray-100));
+    --control-hint-color: var(--text-color-dimmed);
+    --control-error-text-color: var(--error-text-color);
+    --control-font-size: var(--font-size-md);
+    --control-details-font-size: var(--font-size-sm);
+    --control-gap: calc(var(--font-size) / 2);
     --control-size: 1.25rem;
     --control-inline-size: var(--control-size);
     --control-block-size: var(--control-size);
@@ -305,10 +305,10 @@ defineExpose<SelectionControlExpose>({
     }
 
     &.toggle {
-      --control-size: calc(var(--input-font-size) * 1.5);
+      --control-size: calc(var(--font-size-md) * 1.5);
       --control-height: var(--control-size);
       --control-width: calc(var(--control-height) * 1.9);
-      --control-padding: var(--input-border-width);
+      --control-padding: 2px;
       --control-thumb-size: calc(var(--control-height) - var(--control-padding) * 2);
       --control-inline-size: var(--control-width);
       --control-block-size: var(--control-height);

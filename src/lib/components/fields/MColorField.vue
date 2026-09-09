@@ -13,8 +13,10 @@
     :placeholder="placeholder"
     :prefix="prefix"
     :readonly="readonly"
+    :size="size"
     :suffix="suffix"
     :title="title"
+    :variant="variant"
     type="text"
     @blur="emit('blur', $event)"
     @change="emit('change', $event)"
@@ -116,6 +118,8 @@ const {
   hint = '',
   lazy = false,
   placeholder = '',
+  variant = 'outlined',
+  size = 'medium',
   pickerLabel = 'Choose color',
 } = defineProps<MColorFieldProperties>()
 
@@ -131,8 +135,8 @@ const attributes = useAttrs()
 const slots = useSlots()
 const fieldReference = useTemplateRef<MFieldExpose>('field')
 const colorInput = useTemplateRef<HTMLInputElement>('colorInput')
-const syntaxInvalid = computed(() => model.value !== '' && !isHexColorValid(model.value))
-const isInvalid = computed((): boolean => invalid ?? syntaxInvalid.value)
+const syntaxInvalid = computed((): boolean => model.value !== '' && !isHexColorValid(model.value))
+const isInvalid = computed((): boolean => invalid === true || syntaxInvalid.value)
 const pickerColor = computed(() => normalizeHexColor(model.value))
 const forwardedSlots = computed(() =>
   Object.keys(slots).filter(name => name !== 'default' && name !== 'leading' && name !== 'trailing')

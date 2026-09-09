@@ -59,22 +59,25 @@ const {
 <style scoped>
 @layer components {
   .button {
+    --button-border-width: 2px;
+    --button-border-radius: var(--radius-md);
+    --button-gap: calc(var(--font-size) / 2);
+    --button-text-color: light-dark(var(--gray-900), var(--gray-100));
+
     --block-size: calc(var(--font-size) * 2.5);
     --padding-inline: calc(var(--font-size) * 1.25);
     --padding-block: 0px;
     --border-width: 0px;
     --outline-width: 0px;
     --border-color: transparent;
-    --border-radius: var(--input-border-radius);
-    --font-size: var(--input-font-size);
+    --border-radius: var(--button-border-radius);
+    --font-size: var(--font-size-md);
     --bg: transparent;
-    --bg-hover: transparent;
-    --bg-active: transparent;
     --shadow: 0 0 0 transparent;
     --outline-color: transparent;
     --opacity: 1;
     --accent-color: var(--tone-color);
-    --color: var(--input-text-color);
+    --color: var(--button-text-color);
 
     position: relative;
     overflow: hidden;
@@ -109,7 +112,7 @@ const {
       align-items: center;
       justify-content: center;
       transform: scale(var(--scale));
-      column-gap: var(--input-gap-x);
+      column-gap: var(--button-gap);
       opacity: var(--opacity);
       transition-property: opacity, transform;
       transition-duration: var(--duration-lg);
@@ -148,7 +151,7 @@ const {
     }
 
     &:is([data-variant='outlined']) {
-      --border-width: var(--input-border-width);
+      --border-width: var(--button-border-width);
       --border-color: var(--accent-color);
     }
     &:is([data-variant='filled']) {
@@ -180,7 +183,7 @@ const {
 
     &:not(:disabled, .disabled, [data-variant='icon']) {
       &:not([data-variant='text']):is(:focus) {
-        --outline-width: var(--input-border-width);
+        --outline-width: var(--button-border-width);
         --outline-color: oklch(from var(--accent-color) l c h / 0.1);
       }
 

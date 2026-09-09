@@ -2,6 +2,7 @@
   <FieldFrame
     :id="id"
     ref="frame"
+    v-bind="fieldAttributes"
     :disabled="disabled"
     :error="error"
     :focused="isFocused || isOpen"
@@ -11,9 +12,10 @@
     :populated="isPopulated"
     :prefix="prefix"
     :readonly="readonly"
+    :size="size"
     :suffix="suffix"
     :title="title"
-    style="--cursor: pointer"
+    :variant="variant"
     @request-focus="focus"
   >
     <template v-for="name in Object.keys(slots).filter(name => !reservedSlots.includes(name))" #[name]>
@@ -91,10 +93,10 @@ export type MSelectProperties<V extends string | number> = Omit<
   MFieldProperties,
   'id' | 'focused' | 'populated' | 'multiline'
 > & {
-  id?: string
-  options: ListOption<V>[]
-  placeholder?: string
-}
+    id?: string
+    options: ListOption<V>[]
+    placeholder?: string
+  }
 
 export type MSelectExpose = {
   focus: (options?: FocusOptions) => void
@@ -138,6 +140,8 @@ const {
   hint = '',
   invalid = false,
   placeholder = '',
+  variant = 'outlined',
+  size = 'medium',
 } = defineProps<MSelectProperties<V>>()
 
 const emit = defineEmits<{
@@ -151,6 +155,7 @@ const emit = defineEmits<{
 
 const model = defineModel<V | null>({ required: true })
 const attributes = useAttrs()
+const fieldAttributes = computed(() => ({ class: attributes.class, style: attributes.style }))
 const slots = useSlots()
 const frame = ref<FieldFrameExpose>()
 const triggerReference = useTemplateRef<HTMLButtonElement>('trigger')
@@ -176,7 +181,7 @@ const {
 
 const popupAnchor = computed(() => frame.value?.container ?? null)
 const triggerAttributes = computed(() => {
-  const { name: _name, ...rest } = attributes
+  const { class: _class, name: _name, style: _style, ...rest } = attributes
   return rest
 })
 const activeOptionId = computed(() => (isOpen.value ? getActiveOptionId(listId) : undefined))
@@ -360,13 +365,15 @@ defineExpose<MSelectExpose>({
 
 <style scoped>
 .select-trigger {
+  --cursor: pointer;
+
   display: flex;
   align-items: center;
   justify-content: space-between;
-  column-gap: var(--input-gap-x);
+  column-gap: var(--gap-x);
   min-inline-size: 0;
   inline-size: 100%;
-  block-size: var(--input-height);
+  block-size: var(--control-height);
   padding: 0;
   border: 0;
   cursor: var(--cursor);
@@ -380,7 +387,7 @@ defineExpose<MSelectExpose>({
     white-space: nowrap;
 
     &.placeholder {
-      color: oklch(from var(--input-label-color) l c h / 0.5);
+      color: oklch(from var(--label-color) l c h / 0.5);
     }
   }
 
@@ -413,7 +420,7 @@ defineExpose<MSelectExpose>({
       justify-content: space-between;
       overflow-x: hidden;
       flex-wrap: nowrap;
-      gap: var(--input-gap-x);
+      gap: calc(var(--font-size-md) / 2);
 
       & .title,
       & .value {
@@ -424,7 +431,10 @@ defineExpose<MSelectExpose>({
 
       & .value {
         font-size: var(--font-size-sm);
-        color: oklch(from var(--input-label-color) l c h / 0.5);
+        color: light-dark(
+          oklch(from var(--gray-800) l c h / 0.5),
+          oklch(from var(--gray-300) l c h / 0.5)
+        );
       }
     }
   }

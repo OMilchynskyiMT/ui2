@@ -117,10 +117,10 @@ const description = computed(() => {
   .radio-group {
     --group-gap: var(--space-md);
     --group-option-gap: var(--space-lg);
-    --group-label-color: var(--input-label-color);
-    --group-hint-color: var(--input-hint-color);
-    --group-error-color: var(--input-error-color);
-    --group-details-font-size: var(--input-error-font-size);
+    --group-label-color: light-dark(var(--gray-800), var(--gray-300));
+    --group-hint-color: var(--text-color-dimmed);
+    --group-error-color: var(--error-text-color);
+    --group-details-font-size: var(--font-size-sm);
 
     min-inline-size: 0;
     display: grid;
@@ -132,7 +132,7 @@ const description = computed(() => {
     & > legend {
       padding: 0;
       color: var(--group-label-color);
-      font-size: var(--input-font-size);
+      font-size: var(--font-size-md);
       font-weight: var(--font-weight-semibold);
     }
 
@@ -164,7 +164,7 @@ const description = computed(() => {
     }
 
     &.invalid {
-      --group-label-color: var(--input-error-color);
+      --group-label-color: var(--error-text-color);
     }
 
     &.disabled > :is(legend, .supporting) {

@@ -25,6 +25,7 @@
       :multiline="variant === 'area'"
       :populated="variant === 'area' || model.length > 0 || placeholder.trim() !== ''"
       :readonly="readonly"
+      :size="size"
       :title="title"
       @request-focus="browse"
     >
@@ -181,9 +182,12 @@ import { useId } from '@/composables/useId'
 
 import MIcon from '../MIcon.vue'
 import FieldFrame from './FieldFrame.vue'
-import { type MFieldProperties } from './mfield.shared'
+import type { MFieldProperties } from './mfield.shared'
 
-type Properties = Omit<MFieldProperties, 'id' | 'focused' | 'populated' | 'multiline' | 'prefix' | 'suffix'> & {
+type Properties = Omit<
+  MFieldProperties,
+  'id' | 'focused' | 'populated' | 'multiline' | 'prefix' | 'suffix' | 'variant'
+> & {
   id?: string
   variant?: MFilePickerVariant
   accept?: string
@@ -223,6 +227,7 @@ const {
   areaText,
   acceptText,
   clearable = true,
+  size = 'medium',
 } = defineProps<Properties>()
 
 const model = defineModel<File[]>({ required: true })
@@ -472,7 +477,7 @@ onMounted(() => syncNativeFiles(model.value))
       display: flex;
       align-items: center;
       inline-size: 100%;
-      block-size: var(--input-height);
+      block-size: var(--control-height);
       text-align: start;
 
       & > .summary {
@@ -482,7 +487,7 @@ onMounted(() => syncNativeFiles(model.value))
         white-space: nowrap;
 
         &:is(.placeholder) {
-          color: var(--input-hint-color);
+          color: var(--hint-color);
         }
       }
     }
@@ -492,7 +497,7 @@ onMounted(() => syncNativeFiles(model.value))
     }
 
     &:is(.file-upload-field) .upload-icon {
-      color: var(--input-border-active-color);
+      color: var(--border-active-color);
     }
     &:is(.file-upload-area) .upload-icon {
       color: var(--text-color-dimmed);
@@ -520,10 +525,10 @@ onMounted(() => syncNativeFiles(model.value))
       display: flex;
       align-items: center;
       justify-content: center;
-      column-gap: var(--input-gap-x);
+      column-gap: var(--gap-x);
       inline-size: 100%;
-      min-block-size: calc(var(--input-height) * 2.5);
-      border-radius: var(--input-border-radius);
+      min-block-size: calc(var(--control-height) * 2.5);
+      border-radius: var(--border-radius);
       cursor: pointer;
       text-align: start;
 
@@ -546,7 +551,7 @@ onMounted(() => syncNativeFiles(model.value))
 
         & > small {
           overflow-wrap: anywhere;
-          color: var(--input-hint-color);
+          color: var(--hint-color);
           font-size: var(--font-size-sm);
         }
       }
@@ -567,14 +572,14 @@ onMounted(() => syncNativeFiles(model.value))
   .files {
     display: flex;
     flex-direction: column;
-    row-gap: calc(var(--input-padding-inline) / 2);
-    padding-block-start: var(--input-padding-inline);
+    row-gap: calc(var(--padding-inline) / 2);
+    padding-block-start: var(--padding-inline);
 
     .file {
       display: grid;
       grid-template-columns: minmax(0, 1fr) auto auto;
       align-items: center;
-      column-gap: var(--input-gap-x);
+      column-gap: var(--gap-x);
 
       & > .file-name {
         overflow: hidden;
@@ -584,7 +589,7 @@ onMounted(() => syncNativeFiles(model.value))
       }
 
       & > .file-size {
-        color: var(--input-hint-color);
+        color: var(--hint-color);
         font-size: var(--font-size-sm);
         white-space: nowrap;
       }

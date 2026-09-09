@@ -75,7 +75,26 @@
       style="grid-column: 1 / span 2"
     />
 
-    <MSearchField v-model="searchModel" hint="Uses the native search input with a consistent clear action" />
+    <MSearchField v-model="searchModel" hint="Default outlined, medium search field" />
+    <MSearchField
+      v-model="searchModel"
+      aria-label="Search"
+      hint="Compact filled presentation for search/filter surfaces"
+      label=""
+      placeholder="Search"
+      size="small"
+      variant="filled"
+    />
+
+    <MTextField v-model="inputModel" label="Compact filled text field" size="small" variant="filled" />
+    <MSelect
+      v-model="selectModel"
+      :options="selectOptions"
+      label="Compact filled select"
+      placeholder="Choose protocol"
+      size="small"
+      variant="filled"
+    />
 
     <MPasswordField v-model="passwordModel" label="Password" />
     <MPasswordField v-model="passwordModel" :icon="KeyRoundIcon" label="Password with custom icon" />

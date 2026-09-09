@@ -1,3 +1,6 @@
+export type MFieldVariant = 'outlined' | 'filled'
+export type MFieldSize = 'small' | 'medium'
+
 export type MFieldProperties = {
   id: string
 
@@ -7,6 +10,9 @@ export type MFieldProperties = {
   readonly?: boolean
   invalid?: boolean
   multiline?: boolean
+
+  variant?: MFieldVariant
+  size?: MFieldSize
 
   label?: string
   title?: string

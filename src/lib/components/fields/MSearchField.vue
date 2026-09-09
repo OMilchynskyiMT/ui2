@@ -13,8 +13,10 @@
     :placeholder="placeholder"
     :prefix="prefix"
     :readonly="readonly"
+    :size="size"
     :suffix="suffix"
     :title="title"
+    :variant="variant"
     enterkeyhint="search"
     type="search"
     @blur="emit('blur', $event)"
@@ -90,6 +92,8 @@ const {
   hint = '',
   lazy = false,
   placeholder = '',
+  variant = 'outlined',
+  size = 'medium',
   clearable = true,
   clearLabel = 'Clear search',
 } = defineProps<MSearchFieldProperties>()

@@ -139,8 +139,8 @@ watch(() => activeValue, scrollActiveItemIntoView, { immediate: true, flush: 'po
   }
 
   .list {
-    --item-min-block-size: calc(var(--input-font-size) * 3);
-    --item-padding-inline: var(--input-padding-inline);
+    --item-min-block-size: calc(var(--font-size-md) * 3);
+    --item-padding-inline: var(--font-size-md);
 
     --item-opacity: 1;
     --item-bg: transparent;

@@ -13,8 +13,10 @@
     :placeholder="placeholder"
     :prefix="prefix"
     :readonly="readonly"
+    :size="size"
     :suffix="suffix"
     :title="title"
+    :variant="variant"
     :type="visible ? 'text' : 'password'"
     @blur="emit('blur', $event)"
     @change="emit('change', $event)"
@@ -88,6 +90,8 @@ const {
   hint = '',
   lazy = false,
   placeholder = '',
+  variant = 'outlined',
+  size = 'medium',
   icon = LockKeyholeIcon,
   showPasswordLabel = 'Show password',
   hidePasswordLabel = 'Hide password',

@@ -2,6 +2,7 @@
   <FieldFrame
     :id="id"
     ref="frame"
+    v-bind="fieldAttributes"
     :disabled="disabled"
     :error="error"
     :focused="isFocused || isOpen"
@@ -11,8 +12,10 @@
     :populated="text !== '' || placeholder.trim() !== ''"
     :prefix="prefix"
     :readonly="readonly"
+    :size="size"
     :suffix="suffix"
     :title="title"
+    :variant="variant"
     @request-focus="focus"
   >
     <template v-for="name in Object.keys(slots).filter(name => !reservedSlots.includes(name))" #[name]>
@@ -22,7 +25,7 @@
     <input
       :id="id"
       ref="input"
-      v-bind="attributes"
+      v-bind="controlAttributes"
       role="combobox"
       :aria-activedescendant="activeOptionId"
       :aria-controls="listId"
@@ -89,13 +92,13 @@ export type MComboboxProperties<V extends string | number> = Omit<
   MFieldProperties,
   'id' | 'focused' | 'populated' | 'multiline'
 > & {
-  id?: string
-  options: ListOption<V>[]
-  filterable?: boolean
-  openOnFocus?: boolean
-  placeholder?: string
-  matcher?: (item: ListItem<V>, query?: string) => boolean
-} & CustomComboboxProperties<V>
+    id?: string
+    options: ListOption<V>[]
+    filterable?: boolean
+    openOnFocus?: boolean
+    placeholder?: string
+    matcher?: (item: ListItem<V>, query?: string) => boolean
+  } & CustomComboboxProperties<V>
 
 export type CustomComboboxProperties<V extends string | number> =
   | {
@@ -141,6 +144,8 @@ const {
   hint = '',
   invalid = false,
   placeholder = '',
+  variant = 'outlined',
+  size = 'medium',
   matcher = (item: ListItem<V>, query?: string) =>
     !query || Object.values(item).join(' ').toLowerCase().includes(query.toLowerCase()),
 } = defineProps<MComboboxProperties<V>>()
@@ -159,6 +164,11 @@ defineOptions({
 
 const model = defineModel<V | null>({ required: true })
 const attributes = useAttrs()
+const fieldAttributes = computed(() => ({ class: attributes.class, style: attributes.style }))
+const controlAttributes = computed(() => {
+  const { class: _class, style: _style, ...rest } = attributes
+  return rest
+})
 const slots = useSlots()
 const frame = ref<FieldFrameExpose>()
 const inputReference = useTemplateRef<HTMLInputElement>('input')
@@ -354,7 +364,7 @@ defineExpose<MComboboxExpose>({
     display: block;
     min-inline-size: 0;
     inline-size: 100%;
-    block-size: var(--input-height);
+    block-size: var(--control-height);
     border: 0;
     cursor: var(--cursor);
   }
@@ -376,7 +386,7 @@ defineExpose<MComboboxExpose>({
         justify-content: space-between;
         overflow-x: hidden;
         flex-wrap: nowrap;
-        gap: var(--input-gap-x);
+        gap: calc(var(--font-size-md) / 2);
 
         & .title,
         & .value {
@@ -387,7 +397,10 @@ defineExpose<MComboboxExpose>({
 
         & .value {
           font-size: var(--font-size-sm);
-          color: oklch(from var(--input-label-color) l c h / 0.5);
+          color: light-dark(
+            oklch(from var(--gray-800) l c h / 0.5),
+            oklch(from var(--gray-300) l c h / 0.5)
+          );
         }
       }
     }

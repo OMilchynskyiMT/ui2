@@ -11,8 +11,10 @@
     :label="label"
     :prefix="prefix"
     :readonly="readonly"
+    :size="size"
     :suffix="suffix"
     :title="title"
+    :variant="variant"
     inputmode="decimal"
     type="text"
     @blur="onBlur"
@@ -27,6 +29,8 @@
 </template>
 
 <script lang="ts">
+import type { MFieldProperties } from './mfield.shared'
+
 export type NumberModel = number | null
 
 export const formatNumber = (value: NumberModel): string => {
@@ -63,7 +67,6 @@ import { computed, ref, useAttrs, useSlots, watch } from 'vue'
 
 import { useId } from '@/composables/useId'
 
-import type { MFieldProperties } from './mfield.shared'
 import MTextField, { type MFieldExpose } from './MTextField.vue'
 
 defineOptions({
@@ -84,6 +87,8 @@ const {
   hint = '',
   invalid = false,
   lazy = false,
+  variant = 'outlined',
+  size = 'medium',
 } = defineProps<MNumberProperties>()
 
 const emit = defineEmits<{
