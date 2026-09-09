@@ -1,5 +1,7 @@
 import { computed, type MaybeRefOrGetter, shallowRef, toValue } from 'vue'
 
+import { findNextTypeaheadMatch } from '@/composables/useTypeahead'
+
 import type { ListboxEntry, ListboxGroup, ListboxOption } from './listbox.types'
 
 export const getListboxOptionId = (listboxId: string, index: number): string => `${listboxId}-option-${index}`
@@ -85,10 +87,6 @@ export const findNextListboxOption = <V>(
   activeValue: V | undefined,
   query: string
 ): ListboxOption<V> | undefined => {
-  const normalizedQuery = query.toLocaleLowerCase()
   const activeIndex = options.findIndex(option => option.value === activeValue)
-  const orderedOptions =
-    activeIndex === -1 ? options : [...options.slice(activeIndex + 1), ...options.slice(0, activeIndex + 1)]
-
-  return orderedOptions.find(option => getListboxOptionText(option).toLocaleLowerCase().startsWith(normalizedQuery))
+  return findNextTypeaheadMatch(options, activeIndex, query, getListboxOptionText)
 }

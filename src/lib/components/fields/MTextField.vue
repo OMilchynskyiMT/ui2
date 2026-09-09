@@ -27,7 +27,7 @@
       v-bind="controlAttributes"
       :aria-describedby="description"
       :aria-disabled="disabled"
-      :aria-errormessage="isInvalid && (error || slots.error) ? `${id}-error` : undefined"
+      :aria-errormessage="isInvalid && hasError ? `${id}-error` : undefined"
       :aria-invalid="isInvalid || undefined"
       :aria-readonly="readonly"
       :disabled="disabled"
@@ -46,11 +46,7 @@
 <script lang="ts">
 import type { MFieldProperties } from './mfield.shared'
 
-export type MFieldExpose = {
-  focus: (options?: FocusOptions) => void
-  blur: () => void
-  select: () => void
-}
+export type { MFieldExpose } from './mfield.shared'
 
 const nativeStructuredInputTypes = new Set(['date', 'datetime-local', 'month', 'time', 'week'])
 
@@ -65,23 +61,20 @@ export type MTextFieldProperties = Omit<MFieldProperties, 'id' | 'focused' | 'po
 </script>
 
 <script lang="ts" setup>
-import { computed, ref, useAttrs, useSlots, useTemplateRef } from 'vue'
+import { computed, ref, useSlots, useTemplateRef } from 'vue'
 
 import { useId } from '@/composables/useId'
 
+import { useSplitAttributes } from '../component.shared'
 import FieldFrame from './FieldFrame.vue'
+import { type MFieldExpose, useFieldState } from './mfield.shared'
 
 defineOptions({
   inheritAttrs: false,
 })
 
 const slots = useSlots()
-const attributes = useAttrs()
-const fieldAttributes = computed(() => ({ class: attributes.class, style: attributes.style }))
-const controlAttributes = computed(() => {
-  const { class: _class, style: _style, ...rest } = attributes
-  return rest
-})
+const { rootAttributes: fieldAttributes, controlAttributes } = useSplitAttributes()
 
 const {
   id = useId(),
@@ -104,15 +97,14 @@ const {
 const model = defineModel<string>({ required: true })
 const inputReference = useTemplateRef<HTMLInputElement>('input')
 const isFocused = ref(false)
-const isInvalid = computed(() => invalid || Boolean(error || slots.error))
+const { hasError, isInvalid, description } = useFieldState(
+  id,
+  () => invalid,
+  () => error,
+  () => hint,
+  slots
+)
 const isPopulated = computed(() => model.value !== '' || placeholder.trim() !== '' || isNativeStructuredInput(type))
-const description = computed(() => {
-  const identifiers: string[] = []
-  if (isInvalid.value && (error || slots.error)) identifiers.push(`${id}-error`)
-  if (hint || slots.hint) identifiers.push(`${id}-hint`)
-
-  return identifiers.length > 0 ? identifiers.join(' ') : undefined
-})
 
 const focus = (options?: FocusOptions): void => {
   inputReference.value?.focus(options)

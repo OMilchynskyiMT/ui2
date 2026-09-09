@@ -71,7 +71,9 @@ export type MMenuProperties<V> = {
 </script>
 
 <script generic="V" lang="ts" setup>
-import { type ComponentPublicInstance, nextTick, onBeforeUnmount, ref, useAttrs, watch } from 'vue'
+import { type ComponentPublicInstance, nextTick, ref, useAttrs, watch } from 'vue'
+
+import { isTypeaheadKey, useTypeahead } from '@/composables/useTypeahead'
 
 import MScrollArea from '../layout/MScrollArea.vue'
 import MIcon from '../MIcon.vue'
@@ -99,8 +101,6 @@ defineOptions({ inheritAttrs: false })
 const attributes = useAttrs()
 const itemReferences = ref<(HTMLButtonElement | undefined)[]>([])
 const activeIndex = ref(-1)
-let typeahead = ''
-let typeaheadTimer: ReturnType<typeof globalThis.setTimeout> | undefined
 
 const setItemReference = (element: Element | ComponentPublicInstance | null, index: number): void => {
   itemReferences.value[index] = element instanceof HTMLButtonElement ? element : undefined
@@ -138,37 +138,12 @@ const moveFocus = (delta: -1 | 1): void => {
   if (index !== undefined) focusItem(index)
 }
 
-const clearTypeahead = (): void => {
-  typeahead = ''
-  if (typeaheadTimer === undefined) return
-
-  clearTimeout(typeaheadTimer)
-  typeaheadTimer = undefined
-}
-
-const findTypeaheadIndex = (query: string): number | undefined => {
-  const indexes = enabledIndexes()
-  if (indexes.length === 0) return undefined
-
-  const current = indexes.indexOf(activeIndex.value)
-  const orderedIndexes = current === -1 ? indexes : [...indexes.slice(current + 1), ...indexes.slice(0, current + 1)]
-  const normalizedQuery = query.toLocaleLowerCase()
-
-  return orderedIndexes.find(index => items[index]?.title.toLocaleLowerCase().startsWith(normalizedQuery))
-}
-
-const applyTypeahead = (key: string): void => {
-  if (typeaheadTimer !== undefined) clearTimeout(typeaheadTimer)
-
-  const normalizedKey = key.toLocaleLowerCase()
-  const repeatedKey = typeahead.length > 0 && [...typeahead].every(character => character === normalizedKey)
-  typeahead = repeatedKey ? normalizedKey : `${typeahead}${normalizedKey}`
-
-  const index = findTypeaheadIndex(typeahead)
-  if (index !== undefined) focusItem(index)
-
-  typeaheadTimer = setTimeout(clearTypeahead, 700)
-}
+const typeahead = useTypeahead<number>({
+  items: enabledIndexes,
+  activeIndex: () => enabledIndexes().indexOf(activeIndex.value),
+  getText: index => items[index]?.title ?? '',
+  onMatch: focusItem,
+})
 
 const focusAnchor = (): void => {
   anchor?.focus()
@@ -221,9 +196,7 @@ const onKeydown = (event: KeyboardEvent): void => {
     return
   }
 
-  if (event.key.length === 1 && !event.altKey && !event.ctrlKey && !event.metaKey) {
-    applyTypeahead(event.key)
-  }
+  if (isTypeaheadKey(event)) typeahead.apply(event.key)
 }
 
 watch(
@@ -231,7 +204,7 @@ watch(
   async isOpen => {
     if (!isOpen) {
       activeIndex.value = -1
-      clearTypeahead()
+      typeahead.clear()
       return
     }
 
@@ -240,8 +213,6 @@ watch(
   },
   { immediate: true }
 )
-
-onBeforeUnmount(clearTypeahead)
 </script>
 
 <style>

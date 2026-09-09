@@ -38,16 +38,17 @@ export type MListboxExpose = {
   focus: (options?: FocusOptions) => void
 }
 
-export const TYPEAHEAD_RESET_TIMEOUT = 700
+export { TYPEAHEAD_RESET_TIMEOUT } from '@/composables/useTypeahead'
 </script>
 
 <script generic="V extends string | number" lang="ts" setup>
-import { computed, onBeforeUnmount, useTemplateRef } from 'vue'
+import { computed, useTemplateRef } from 'vue'
 
 import { useId } from '@/composables/useId'
+import { isTypeaheadKey, useTypeahead } from '@/composables/useTypeahead'
 
 import ListboxContent, { type ListboxContentExpose } from './internal/ListboxContent.vue'
-import { findNextListboxOption, useListboxNavigation } from './listbox.shared'
+import { getListboxOptionText, useListboxNavigation } from './listbox.shared'
 
 const { id = useId(), items, ariaLabel, ariaLabelledby } = defineProps<MListboxProperties<V>>()
 const emit = defineEmits<{
@@ -56,8 +57,6 @@ const emit = defineEmits<{
 }>()
 const model = defineModel<V | null>({ default: null })
 const contentReference = useTemplateRef<ListboxContentExpose>('content')
-let typeahead = ''
-let typeaheadTimer: ReturnType<typeof globalThis.setTimeout> | undefined
 
 const { activeValue, enabledOptions, activeOption, syncActiveValue, moveActiveValue, moveActiveTo, getActiveOptionId } =
   useListboxNavigation(
@@ -66,27 +65,6 @@ const { activeValue, enabledOptions, activeOption, syncActiveValue, moveActiveVa
   )
 
 const activeOptionId = computed(() => getActiveOptionId(id))
-
-const clearTypeahead = (): void => {
-  typeahead = ''
-  if (typeaheadTimer === undefined) return
-
-  clearTimeout(typeaheadTimer)
-  typeaheadTimer = undefined
-}
-
-const applyTypeahead = (key: string): void => {
-  if (typeaheadTimer !== undefined) clearTimeout(typeaheadTimer)
-
-  const normalizedKey = key.toLocaleLowerCase()
-  const repeatedKey = typeahead.length > 0 && [...typeahead].every(character => character === normalizedKey)
-  typeahead = repeatedKey ? normalizedKey : `${typeahead}${normalizedKey}`
-
-  const option = findNextListboxOption(enabledOptions.value, activeValue.value, typeahead)
-  if (option) activeValue.value = option.value
-
-  typeaheadTimer = setTimeout(clearTypeahead, TYPEAHEAD_RESET_TIMEOUT)
-}
 
 const selectOption = (option: ListboxOption<V>): void => {
   if (option.disabled) return
@@ -99,9 +77,14 @@ const selectOption = (option: ListboxOption<V>): void => {
   if (changed) emit('change', option)
 }
 
-const isTypeaheadKey = (event: KeyboardEvent): boolean => {
-  return event.key.length === 1 && !event.altKey && !event.ctrlKey && !event.metaKey
-}
+const typeahead = useTypeahead<ListboxOption<V>>({
+  items: () => enabledOptions.value,
+  activeIndex: () => enabledOptions.value.findIndex(option => option.value === activeValue.value),
+  getText: getListboxOptionText,
+  onMatch: option => {
+    activeValue.value = option.value
+  },
+})
 
 const onKeydown = (event: KeyboardEvent): void => {
   if (event.key === 'ArrowDown') {
@@ -136,7 +119,7 @@ const onKeydown = (event: KeyboardEvent): void => {
     return
   }
 
-  if (isTypeaheadKey(event)) applyTypeahead(event.key)
+  if (isTypeaheadKey(event)) typeahead.apply(event.key)
 }
 
 const focus = (options?: FocusOptions): void => {
@@ -147,6 +130,5 @@ const onPointerDown = (event: PointerEvent): void => {
   if (event.pointerType !== 'touch') focus({ preventScroll: true })
 }
 
-onBeforeUnmount(clearTypeahead)
 defineExpose<MListboxExpose>({ focus })
 </script>

@@ -72,8 +72,10 @@ import { SearchIcon, XIcon } from '@lucide/vue'
 import { useId } from '@/composables/useId'
 
 import MButton from '../buttons/MButton.vue'
+import { getForwardedSlotNames } from '../component.shared'
 import MIcon from '../MIcon.vue'
-import MTextField, { type MFieldExpose } from './MTextField.vue'
+import { createFieldExpose, type MFieldExpose } from './mfield.shared'
+import MTextField from './MTextField.vue'
 
 defineOptions({
   inheritAttrs: false,
@@ -110,9 +112,7 @@ const model = defineModel<string>({ required: true })
 const attributes = useAttrs()
 const slots = useSlots()
 const fieldReference = useTemplateRef<MFieldExpose>('field')
-const forwardedSlots = computed(() =>
-  Object.keys(slots).filter(name => name !== 'default' && name !== 'leading' && name !== 'trailing')
-)
+const forwardedSlots = computed(() => getForwardedSlotNames(slots, ['default', 'leading', 'trailing']))
 
 const clear = (): void => {
   if (disabled || readonly) return
@@ -122,11 +122,7 @@ const clear = (): void => {
   emit('clear')
 }
 
-defineExpose<MFieldExpose>({
-  focus: options => fieldReference.value?.focus(options),
-  blur: () => fieldReference.value?.blur(),
-  select: () => fieldReference.value?.select(),
-})
+defineExpose<MFieldExpose>(createFieldExpose(() => fieldReference.value))
 </script>
 
 <style scoped>

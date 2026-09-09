@@ -35,7 +35,7 @@
       v-resize="onResize"
       :aria-describedby="description"
       :aria-disabled="disabled"
-      :aria-errormessage="isInvalid && (error || slots.error) ? `${id}-error` : undefined"
+      :aria-errormessage="isInvalid && hasError ? `${id}-error` : undefined"
       :aria-invalid="isInvalid || undefined"
       :aria-readonly="readonly"
       :class="{ 'auto-grow': autoGrow }"
@@ -63,12 +63,13 @@ export type MTextareaExpose = {
 </script>
 
 <script lang="ts" setup>
-import { computed, nextTick, onMounted, ref, useAttrs, useSlots, useTemplateRef, watch } from 'vue'
+import { computed, nextTick, onMounted, ref, useSlots, useTemplateRef, watch } from 'vue'
 
 import { useId } from '@/composables/useId'
 
+import { useSplitAttributes } from '../component.shared'
 import FieldFrame from './FieldFrame.vue'
-import type { MFieldProperties } from './mfield.shared'
+import { type MFieldProperties, useFieldState } from './mfield.shared'
 
 type Properties = Omit<MFieldProperties, 'id' | 'focused' | 'populated' | 'multiline'> & {
   id?: string
@@ -85,12 +86,7 @@ defineOptions({
 })
 
 const slots = useSlots()
-const attributes = useAttrs()
-const fieldAttributes = computed(() => ({ class: attributes.class, style: attributes.style }))
-const controlAttributes = computed(() => {
-  const { class: _class, style: _style, ...rest } = attributes
-  return rest
-})
+const { rootAttributes: fieldAttributes, controlAttributes } = useSplitAttributes()
 
 const {
   id = useId(),
@@ -117,17 +113,15 @@ const model = defineModel<string>({ required: true })
 const currentValue = ref(model.value)
 const textareaReference = useTemplateRef<HTMLTextAreaElement>('textarea')
 const isFocused = ref(false)
-const isInvalid = computed(() => invalid || Boolean(error || slots.error))
+const { hasError, isInvalid, description } = useFieldState(
+  id,
+  () => invalid,
+  () => error,
+  () => hint,
+  slots
+)
 const length = computed(() => currentValue.value.length)
 const counterText = computed(() => (maxlength === undefined ? length.value : `${length.value} / ${maxlength}`))
-const description = computed(() => {
-  const identifiers: string[] = []
-
-  if (isInvalid.value && (error || slots.error)) identifiers.push(`${id}-error`)
-  if (hint || slots.hint) identifiers.push(`${id}-hint`)
-
-  return identifiers.length > 0 ? identifiers.join(' ') : undefined
-})
 
 const focus = (options?: FocusOptions): void => {
   textareaReference.value?.focus(options)

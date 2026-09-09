@@ -74,8 +74,10 @@ import { EyeIcon, EyeOffIcon, LockKeyholeIcon } from '@lucide/vue'
 import { useId } from '@/composables/useId'
 
 import MButton from '../buttons/MButton.vue'
+import { getForwardedSlotNames } from '../component.shared'
 import MIcon from '../MIcon.vue'
-import MTextField, { type MFieldExpose } from './MTextField.vue'
+import { createFieldExpose, type MFieldExpose } from './mfield.shared'
+import MTextField from './MTextField.vue'
 
 const {
   id = useId(),
@@ -109,19 +111,13 @@ const attributes = useAttrs()
 const slots = useSlots()
 const fieldReference = useTemplateRef<MFieldExpose>('field')
 const visible = ref(false)
-const forwardedSlots = computed(() =>
-  Object.keys(slots).filter(name => name !== 'default' && name !== 'leading' && name !== 'trailing')
-)
+const forwardedSlots = computed(() => getForwardedSlotNames(slots, ['default', 'leading', 'trailing']))
 
 defineOptions({
   inheritAttrs: false,
 })
 
-defineExpose<MFieldExpose>({
-  focus: options => fieldReference.value?.focus(options),
-  blur: () => fieldReference.value?.blur(),
-  select: () => fieldReference.value?.select(),
-})
+defineExpose<MFieldExpose>(createFieldExpose(() => fieldReference.value))
 </script>
 
 <style scoped>

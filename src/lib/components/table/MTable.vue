@@ -122,13 +122,26 @@
 </template>
 
 <script generic="Row" lang="ts" setup>
-import { computed, type CSSProperties } from 'vue'
+import { computed } from 'vue'
 import { ChevronUpIcon } from '@lucide/vue'
 
 import MScrollArea from '../layout/MScrollArea.vue'
 import MIcon from '../MIcon.vue'
 import MSpinner from '../progress/MSpinner.vue'
-import type { SortDirection, TableColumn, TableProperties, TableSlots, TableSort } from './mtable.types'
+import {
+  getDisplayedTableRows,
+  getTableAriaSort,
+  getTableCellSlotName,
+  getTableCellText,
+  getTableCellValue,
+  getTableColumnStyle,
+  getTableDetailSlotName,
+  getTableHeaderSlotName,
+  getTableRowKey,
+  getTableSortDirection,
+  getTableSortLabel,
+} from './mtable.shared'
+import type { TableColumn, TableProperties, TableSlots, TableSort } from './mtable.types'
 
 const {
   columns,
@@ -147,153 +160,26 @@ const {
 } = defineProps<Omit<TableProperties<Row>, 'sort'>>()
 
 const sort = defineModel<TableSort | null>('sort', { default: null })
-
 const slots = defineSlots<TableSlots<Row>>()
 const columnSpan = computed(() => Math.max(columns.length, 1))
 const detailColumns = computed(() => columns.filter(column => column.compact === 'details'))
-const collator = new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' })
+const displayedRows = computed(() => getDisplayedTableRows(rows, columns, sort.value, sortMode))
 
-const getColumnStyle = (column: TableColumn<Row>): CSSProperties => {
-  return {
-    width: column.width,
-    minWidth: column.minWidth,
-    maxWidth: column.maxWidth,
-  }
-}
-
-const getRowKey = (row: Row, rowIndex: number): PropertyKey => {
-  if (typeof rowKey === 'function') {
-    return rowKey(row, rowIndex)
-  }
-
-  if (rowKey !== undefined && row !== null && typeof row === 'object') {
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-    return row[rowKey] as PropertyKey
-  }
-
-  return rowIndex
-}
-
-const getCellValue = (row: Row, rowIndex: number, column: TableColumn<Row>): unknown => {
-  if (typeof column.value === 'function') {
-    return column.value(row, rowIndex)
-  }
-
-  if (row === null || typeof row !== 'object') {
-    return undefined
-  }
-
-  const key = column.value ?? column.key
-  return row[key as keyof Row]
-}
-
-const getCellText = (row: Row, rowIndex: number, column: TableColumn<Row>): string | number => {
-  const value = getCellValue(row, rowIndex, column)
-
-  if (column.format) {
-    return column.format(value, row, rowIndex)
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-base-to-string
-  return value === null || value === undefined ? '' : String(value)
-}
-
-const getHeaderSlotName = (column: TableColumn<Row>): `header-${string}` => {
-  return `header-${column.key}`
-}
-
-const getCellSlotName = (column: TableColumn<Row>): `cell-${string}` => {
-  return `cell-${column.key}`
-}
-
-const getDetailSlotName = (column: TableColumn<Row>): `detail-${string}` => {
-  return `detail-${column.key}`
-}
-
-const getSortDirection = (column: TableColumn<Row>): SortDirection | undefined => {
-  return sort.value?.column === column.key ? sort.value.direction : undefined
-}
-
-const getAriaSort = (column: TableColumn<Row>): 'ascending' | 'descending' | undefined => {
-  const direction = getSortDirection(column)
-  if (direction === 'asc') return 'ascending'
-  if (direction === 'desc') return 'descending'
-
-  return undefined
-}
-
-const getSortLabel = (column: TableColumn<Row>): string => {
-  const direction = getSortDirection(column)
-
-  if (direction === 'asc') {
-    return `${column.label}: sorted ascending. Sort descending`
-  }
-
-  if (direction === 'desc') {
-    return `${column.label}: sorted descending. Sort ascending`
-  }
-
-  return `${column.label}: sort ascending`
-}
-
-const compareText = (left: unknown, right: unknown): number => collator.compare(String(left), String(right))
-
-const compareValues = (left: unknown, right: unknown, column: TableColumn<Row>): number => {
-  if (column.type === 'number') {
-    const leftNumber = typeof left === 'number' ? left : Number(left)
-    const rightNumber = typeof right === 'number' ? right : Number(right)
-    if (Number.isFinite(leftNumber) && Number.isFinite(rightNumber)) return leftNumber - rightNumber
-  } else if (column.type === 'date') {
-    const leftTime = left instanceof Date ? left.getTime() : Date.parse(String(left))
-    const rightTime = right instanceof Date ? right.getTime() : Date.parse(String(right))
-    if (Number.isFinite(leftTime) && Number.isFinite(rightTime)) return leftTime - rightTime
-  }
-
-  if (column.type === 'boolean' || (typeof left === 'boolean' && typeof right === 'boolean')) {
-    return Number(Boolean(left)) - Number(Boolean(right))
-  }
-
-  if (typeof left === 'number' && typeof right === 'number') return left - right
-
-  return compareText(left, right)
-}
-
-type DisplayedRow = {
-  row: Row
-  sourceIndex: number
-}
-
-const displayedRows = computed<DisplayedRow[]>(() => {
-  const sourceRows = rows.map((row, sourceIndex) => ({ row, sourceIndex }))
-  const activeSort = sort.value
-  if (sortMode === 'manual' || !activeSort) return sourceRows
-
-  const column = columns.find(candidate => candidate.key === activeSort.column)
-  if (!column?.sortable) return sourceRows
-
-  const direction = activeSort.direction === 'asc' ? 1 : -1
-  return sourceRows.toSorted((leftEntry, rightEntry) => {
-    const left = getCellValue(leftEntry.row, leftEntry.sourceIndex, column)
-    const right = getCellValue(rightEntry.row, rightEntry.sourceIndex, column)
-
-    if (left == null && right == null) return leftEntry.sourceIndex - rightEntry.sourceIndex
-    if (left == null) return 1
-    if (right == null) return -1
-
-    const comparison = column.compare
-      ? column.compare(left, right, leftEntry.row, rightEntry.row)
-      : compareValues(left, right, column)
-
-    return comparison === 0 ? leftEntry.sourceIndex - rightEntry.sourceIndex : comparison * direction
-  })
-})
+const getColumnStyle = getTableColumnStyle<Row>
+const getCellValue = getTableCellValue<Row>
+const getCellText = getTableCellText<Row>
+const getHeaderSlotName = getTableHeaderSlotName<Row>
+const getCellSlotName = getTableCellSlotName<Row>
+const getDetailSlotName = getTableDetailSlotName<Row>
+const getRowKey = (row: Row, rowIndex: number): PropertyKey => getTableRowKey(row, rowIndex, rowKey)
+const getSortDirection = (column: TableColumn<Row>) => getTableSortDirection(column, sort.value)
+const getAriaSort = (column: TableColumn<Row>) => getTableAriaSort(column, sort.value)
+const getSortLabel = (column: TableColumn<Row>): string => getTableSortLabel(column, sort.value)
 
 const toggleSort = (column: TableColumn<Row>): void => {
-  const direction = sort.value?.column === column.key && sort.value.direction === 'asc' ? 'desc' : 'asc'
-
   sort.value = {
     column: column.key,
-    direction,
+    direction: getSortDirection(column) === 'asc' ? 'desc' : 'asc',
   }
 }
 </script>

@@ -33,20 +33,10 @@
 </template>
 
 <script lang="ts">
-import type { SelectionControlExpose } from './SelectionControl.vue'
-
 export type RadioValue = string | number | boolean
 
-export type MRadioProperties<V extends RadioValue> = {
-  id?: string
+export type MRadioProperties<V extends RadioValue> = SelectionControlCommonProperties & {
   value: V
-  label?: string
-  hint?: string
-  error?: string
-  title?: string
-  invalid?: boolean
-  disabled?: boolean
-  readonly?: boolean
 }
 
 export type MRadioExpose = SelectionControlExpose
@@ -57,6 +47,7 @@ import { computed, ref, useAttrs, useSlots } from 'vue'
 
 import { useId } from '@/composables/useId'
 
+import type { SelectionControlCommonProperties, SelectionControlExpose } from './selection.shared'
 import SelectionControl from './SelectionControl.vue'
 
 const {

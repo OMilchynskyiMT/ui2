@@ -41,7 +41,7 @@
         ref="control"
         :aria-describedby="description"
         :aria-disabled="readonly || undefined"
-        :aria-errormessage="isInvalid && (error || slots.error) ? `${id}-error` : undefined"
+        :aria-errormessage="isInvalid && hasError ? `${id}-error` : undefined"
         :aria-invalid="isInvalid || undefined"
         :aria-readonly="readonly || undefined"
         :disabled="disabled"
@@ -70,7 +70,7 @@
           ref="control"
           :aria-describedby="description"
           :aria-disabled="readonly || undefined"
-          :aria-errormessage="isInvalid && (error || slots.error) ? `${id}-error` : undefined"
+          :aria-errormessage="isInvalid && hasError ? `${id}-error` : undefined"
           :aria-invalid="isInvalid || undefined"
           :aria-readonly="readonly || undefined"
           :disabled="disabled"
@@ -93,16 +93,16 @@
         </button>
 
         <ul v-if="model.length > 0" aria-live="polite" class="files">
-          <li v-for="(file, index) in model" :key="`${fileKey(file)}:${index}`" class="file">
+          <li v-for="(file, index) in model" :key="`${getFileKey(file)}:${index}`" class="file">
             <slot
               :file="file"
-              :formatted-size="formatSize(file.size)"
+              :formatted-size="formatFileSize(file.size)"
               :index="index"
               :remove="() => remove(index)"
               name="file"
             >
               <span :title="file.name" class="file-name">{{ file.name }}</span>
-              <span class="file-size">{{ formatSize(file.size) }}</span>
+              <span class="file-size">{{ formatFileSize(file.size) }}</span>
             </slot>
 
             <button
@@ -158,14 +158,12 @@
 </template>
 
 <script lang="ts">
-export type MFilePickerVariant = 'field' | 'area'
-export type MFilePickerChangeSource = 'picker' | 'drop' | 'clear' | 'remove'
-export type MFileRejectionReason = 'accept' | 'multiple'
-
-export type MFileRejection = {
-  file: File
-  reason: MFileRejectionReason
-}
+export {
+  type MFilePickerChangeSource,
+  type MFilePickerVariant,
+  type MFileRejection,
+  type MFileRejectionReason,
+} from './filePicker.shared'
 
 export type MFilePickerExpose = {
   browse: () => void
@@ -182,7 +180,16 @@ import { useId } from '@/composables/useId'
 
 import MIcon from '../MIcon.vue'
 import FieldFrame from './FieldFrame.vue'
-import type { MFieldProperties } from './mfield.shared'
+import {
+  filterSelectedFiles,
+  formatFileSize,
+  getFileKey,
+  type MFilePickerChangeSource,
+  type MFilePickerVariant,
+  type MFileRejection,
+  parseAccept,
+} from './filePicker.shared'
+import { type MFieldProperties, useFieldState } from './mfield.shared'
 
 type Properties = Omit<
   MFieldProperties,
@@ -243,21 +250,14 @@ const emit = defineEmits<{
   cancel: [event: Event]
 }>()
 
-const formatSize = (size: number): string => {
-  if (size < 1024) return `${size} B`
-
-  const units = ['KB', 'MB', 'GB', 'TB']
-  const exponent = Math.min(Math.floor(Math.log(size) / Math.log(1024)), units.length)
-  const value = size / 1024 ** exponent
-  const formatted = value >= 10 ? Math.round(value).toString() : value.toFixed(1).replace(/\.0$/, '')
-
-  return `${formatted} ${units[exponent - 1]}`
-}
-
-const fileKey = (file: File): string => `${file.name}:${file.size}:${file.lastModified}:${file.type}`
-
 const canChange = computed(() => !disabled && !readonly)
-const isInvalid = computed(() => invalid || Boolean(error || slots.error))
+const { hasError, isInvalid, description } = useFieldState(
+  id,
+  () => invalid,
+  () => error,
+  () => hint,
+  slots
+)
 const totalSize = computed(() => model.value.reduce((total, file) => total + file.size, 0))
 
 const summaryText = computed(() => {
@@ -265,13 +265,13 @@ const summaryText = computed(() => {
   if (model.value.length === 1) {
     const [file] = model.value
     if (!file) return placeholder
-    return `${file.name} - ${formatSize(file.size)}`
+    return `${file.name} - ${formatFileSize(file.size)}`
   }
 
-  return `${model.value.length} files - ${formatSize(totalSize.value)}`
+  return `${model.value.length} files - ${formatFileSize(totalSize.value)}`
 })
 
-const selectedTitle = computed(() => model.value.map(file => `${file.name} - ${formatSize(file.size)}`).join('\n'))
+const selectedTitle = computed(() => model.value.map(file => `${file.name} - ${formatFileSize(file.size)}`).join('\n'))
 
 const resolvedAreaText = computed(() => {
   if (areaText !== undefined) return areaText
@@ -290,20 +290,7 @@ const resolvedAcceptText = computed(() => {
 
 const showClear = computed(() => clearable && model.value.length > 0 && !disabled && !readonly)
 
-const description = computed(() => {
-  const identifiers: string[] = []
-  if (isInvalid.value && (error || slots.error)) identifiers.push(`${id}-error`)
-  if (hint || slots.hint) identifiers.push(`${id}-hint`)
-
-  return identifiers.length > 0 ? identifiers.join(' ') : undefined
-})
-
-const acceptTokens = computed(() =>
-  accept
-    .split(',')
-    .map(value => value.trim().toLowerCase())
-    .filter(Boolean)
-)
+const acceptTokens = computed(() => parseAccept(accept))
 
 const syncNativeFiles = (files: File[]): void => {
   const input = inputReference.value
@@ -349,36 +336,8 @@ const remove = (index: number): void => {
   )
 }
 
-const isMatchesAccept = (file: File): boolean => {
-  if (acceptTokens.value.length === 0) return true
-
-  const name = file.name.toLowerCase()
-  const type = file.type.toLowerCase()
-
-  return acceptTokens.value.some(token => {
-    if (token.startsWith('.')) return name.endsWith(token)
-    if (token.endsWith('/*')) return type.startsWith(token.slice(0, -1))
-    return type === token
-  })
-}
-
 const selectFiles = (files: FileList | File[], source: 'picker' | 'drop', event: Event): void => {
-  const accepted: File[] = []
-  const rejected: MFileRejection[] = []
-
-  for (const file of files) {
-    if (!isMatchesAccept(file)) {
-      rejected.push({ file, reason: 'accept' })
-      continue
-    }
-
-    if (!multiple && accepted.length > 0) {
-      rejected.push({ file, reason: 'multiple' })
-      continue
-    }
-
-    accepted.push(file)
-  }
+  const { accepted, rejected } = filterSelectedFiles(files, acceptTokens.value, multiple)
 
   if (rejected.length > 0) emit('reject', rejected, source, event)
 

@@ -77,6 +77,7 @@ import { computed, useSlots } from 'vue'
 
 import { useId } from '@/composables/useId'
 
+import { useFieldState } from './mfield.shared'
 import MRadio from './MRadio.vue'
 
 const {
@@ -101,15 +102,13 @@ const emit = defineEmits<{
 const model = defineModel<V>({ required: true })
 const slots = useSlots()
 const resolvedName = computed(() => name ?? id)
-const hasError = computed(() => Boolean(error || slots.error))
-const hasHint = computed(() => Boolean(hint || slots.hint))
-const isInvalid = computed(() => invalid || hasError.value)
-const description = computed(() => {
-  const identifiers: string[] = []
-  if (hasError.value) identifiers.push(`${id}-error`)
-  if (hasHint.value) identifiers.push(`${id}-hint`)
-  return identifiers.length > 0 ? identifiers.join(' ') : undefined
-})
+const { hasError, hasHint, isInvalid, description } = useFieldState(
+  id,
+  () => invalid,
+  () => error,
+  () => hint,
+  slots
+)
 </script>
 
 <style scoped>

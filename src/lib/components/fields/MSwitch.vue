@@ -33,18 +33,7 @@
 </template>
 
 <script lang="ts">
-import type { SelectionControlExpose } from './SelectionControl.vue'
-
-export type MSwitchProperties = {
-  id?: string
-  label?: string
-  hint?: string
-  error?: string
-  title?: string
-  invalid?: boolean
-  disabled?: boolean
-  readonly?: boolean
-}
+export type MSwitchProperties = SelectionControlCommonProperties
 
 export type MSwitchExpose = SelectionControlExpose
 </script>
@@ -54,6 +43,7 @@ import { ref, useAttrs, useSlots } from 'vue'
 
 import { useId } from '@/composables/useId'
 
+import type { SelectionControlCommonProperties, SelectionControlExpose } from './selection.shared'
 import SelectionControl from './SelectionControl.vue'
 
 const {

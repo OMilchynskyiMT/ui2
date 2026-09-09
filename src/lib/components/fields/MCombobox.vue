@@ -31,7 +31,7 @@
       :aria-controls="listId"
       :aria-describedby="description"
       :aria-disabled="disabled"
-      :aria-errormessage="isInvalid && (error || slots.error) ? `${id}-error` : undefined"
+      :aria-errormessage="isInvalid && hasError ? `${id}-error` : undefined"
       :aria-expanded="isOpen"
       :aria-invalid="isInvalid || undefined"
       :aria-readonly="readonly"
@@ -49,44 +49,30 @@
       @keydown="onKeydown"
     />
 
-    <MPopover
+    <FieldListboxPopup
+      :id="listId"
+      :active-value="activeValue"
       :anchor="popupAnchor"
-      :offset="2"
+      :items="visibleOptions"
       :open="isOpen"
-      class="combobox-popup"
-      match-anchor-width
+      :selected-value="model"
+      @activate="activeValue = $event.value"
       @dismiss="close"
+      @select="selectOption"
     >
-      <ListboxContent
-        :id="listId"
-        :active-value="activeValue"
-        :items="visibleOptions"
-        :selected-value="model"
-        preserve-focus
-        @activate="activeValue = $event.value"
-        @select="selectOption"
-      >
-        <template #group="{ group, level }">
-          <slot v-bind="{ group, level }" name="group">
-            <div class="header">{{ group.title }}</div>
-          </slot>
-        </template>
-
-        <template #item="{ item, level }">
-          <slot v-bind="{ item, level }" name="item">
-            <div class="title">{{ item.title ?? item.value }}</div>
-            <div v-if="item.title" class="value">{{ item.value }}</div>
-          </slot>
-        </template>
-      </ListboxContent>
-    </MPopover>
+      <template v-if="slots.group" #group="slotProperties">
+        <slot v-bind="slotProperties" name="group" />
+      </template>
+      <template v-if="slots.item" #item="slotProperties">
+        <slot v-bind="slotProperties" name="item" />
+      </template>
+    </FieldListboxPopup>
   </FieldFrame>
 </template>
 
 <script lang="ts">
 import type { ListboxEntry, ListboxOption } from '../list/listbox.types'
-import type { MFieldProperties } from './mfield.shared'
-import type { MFieldExpose } from './MTextField.vue'
+import type { MFieldExpose, MFieldProperties } from './mfield.shared'
 
 export type ComboboxModel = string | number | null
 
@@ -116,19 +102,20 @@ export type MComboboxExpose = MFieldExpose
 </script>
 
 <script generic="V extends string | number" lang="ts" setup>
-import { computed, nextTick, ref, useAttrs, useSlots, useTemplateRef, watch } from 'vue'
+import { computed, nextTick, ref, useSlots, useTemplateRef, watch } from 'vue'
 
 import { useId } from '@/composables/useId'
 
-import ListboxContent from '../list/internal/ListboxContent.vue'
+import { useSplitAttributes } from '../component.shared'
 import {
   flattenListboxOptions,
   getListboxOptionText,
   isListboxGroup,
   useListboxNavigation,
 } from '../list/listbox.shared'
-import MPopover from '../overlay/MPopover.vue'
+import FieldListboxPopup from './internal/FieldListboxPopup.vue'
 import FieldFrame, { type FieldFrameExpose } from './FieldFrame.vue'
+import { useFieldState } from './mfield.shared'
 
 const reservedSlots = ['default', 'group', 'item']
 
@@ -168,12 +155,7 @@ defineOptions({
 })
 
 const model = defineModel<V | null>({ required: true })
-const attributes = useAttrs()
-const fieldAttributes = computed(() => ({ class: attributes.class, style: attributes.style }))
-const controlAttributes = computed(() => {
-  const { class: _class, style: _style, ...rest } = attributes
-  return rest
-})
+const { rootAttributes: fieldAttributes, controlAttributes } = useSplitAttributes()
 const slots = useSlots()
 const frame = ref<FieldFrameExpose>()
 const inputReference = useTemplateRef<HTMLInputElement>('input')
@@ -185,14 +167,13 @@ const text = ref('')
 const popupAnchor = computed(() => frame.value?.container ?? null)
 const allOptions = computed(() => flattenListboxOptions(options))
 const selectedOption = computed(() => allOptions.value.find(option => option.value === model.value))
-const isInvalid = computed(() => invalid || Boolean(error || slots.error))
-const description = computed(() => {
-  const identifiers: string[] = []
-  if (isInvalid.value && (error || slots.error)) identifiers.push(`${id}-error`)
-  if (hint || slots.hint) identifiers.push(`${id}-hint`)
-
-  return identifiers.length > 0 ? identifiers.join(' ') : undefined
-})
+const { hasError, isInvalid, description } = useFieldState(
+  id,
+  () => invalid,
+  () => error,
+  () => hint,
+  slots
+)
 
 const isOptionMatched = (option: ListboxOption<V>, query: string): boolean => {
   return !filterable || matcher(option, query)
@@ -384,40 +365,6 @@ defineExpose<MComboboxExpose>({
     block-size: var(--control-height);
     border: 0;
     cursor: var(--cursor);
-  }
-}
-</style>
-
-<style>
-@layer components {
-  .popover.combobox-popup {
-    --bg: var(--surface-bg);
-    background-color: var(--bg);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-sm);
-
-    & > .listbox-scroll {
-      --list-bg: var(--bg);
-
-      & .item {
-        justify-content: space-between;
-        overflow-x: hidden;
-        flex-wrap: nowrap;
-        gap: calc(var(--font-size-md) / 2);
-
-        & .title,
-        & .value {
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-        }
-
-        & .value {
-          font-size: var(--font-size-sm);
-          color: light-dark(oklch(from var(--gray-800) l c h / 0.5), oklch(from var(--gray-300) l c h / 0.5));
-        }
-      }
-    }
   }
 
   @supports (-webkit-touch-callout: none) {

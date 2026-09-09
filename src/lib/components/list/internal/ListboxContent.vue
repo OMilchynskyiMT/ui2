@@ -18,56 +18,40 @@
           </div>
 
           <ul role="presentation" class="group-items">
-            <li
+            <ListboxOptionRow
               v-for="option in entry.items"
               :id="getOptionId(option)"
               :key="option.value"
-              role="option"
-              :aria-disabled="option.disabled || undefined"
-              :aria-selected="option.value === selectedValue"
-              :class="[
-                'item',
-                {
-                  active: option.value === activeValue,
-                  selected: option.value === selectedValue,
-                  disabled: option.disabled,
-                },
-              ]"
-              :style="getLevelStyle(1)"
-              @click="onSelect(option)"
+              :active-value="activeValue"
+              :level="1"
+              :option="option"
+              :selected-value="selectedValue"
+              @activate="emit('activate', $event)"
               @pointerdown="onPointerDown"
-              @pointerenter="onPointerEnter(option)"
+              @select="emit('select', $event)"
             >
-              <slot :item="option" :level="1" name="item">
-                {{ getListboxOptionText(option) }}
-              </slot>
-            </li>
+              <template v-if="$slots.item" #default="slotProperties">
+                <slot v-bind="slotProperties" name="item" />
+              </template>
+            </ListboxOptionRow>
           </ul>
         </li>
 
-        <li
+        <ListboxOptionRow
           v-else
           :id="getOptionId(entry)"
-          role="option"
-          :aria-disabled="entry.disabled || undefined"
-          :aria-selected="entry.value === selectedValue"
-          :class="[
-            'item',
-            {
-              active: entry.value === activeValue,
-              selected: entry.value === selectedValue,
-              disabled: entry.disabled,
-            },
-          ]"
-          :style="getLevelStyle(0)"
-          @click="onSelect(entry)"
+          :active-value="activeValue"
+          :level="0"
+          :option="entry"
+          :selected-value="selectedValue"
+          @activate="emit('activate', $event)"
           @pointerdown="onPointerDown"
-          @pointerenter="onPointerEnter(entry)"
+          @select="emit('select', $event)"
         >
-          <slot :item="entry" :level="0" name="item">
-            {{ getListboxOptionText(entry) }}
-          </slot>
-        </li>
+          <template v-if="$slots.item" #default="slotProperties">
+            <slot v-bind="slotProperties" name="item" />
+          </template>
+        </ListboxOptionRow>
       </template>
     </ul>
   </MScrollArea>
@@ -95,7 +79,8 @@ export type ListboxContentProperties<V> = {
 import { computed, nextTick, useAttrs, useTemplateRef, watch } from 'vue'
 
 import MScrollArea from '../../layout/MScrollArea.vue'
-import { flattenListboxOptions, getListboxOptionId, getListboxOptionText, isListboxGroup } from '../listbox.shared'
+import { flattenListboxOptions, getListboxOptionId, isListboxGroup } from '../listbox.shared'
+import ListboxOptionRow from './ListboxOptionRow.vue'
 
 const {
   id,
@@ -125,25 +110,11 @@ const getEntryKey = (entry: ListboxEntry<V>, index: number): string | number => 
 
 const getOptionId = (option: ListboxOption<V>): string | undefined => optionIds.value.get(option.value)
 const getGroupLabelId = (index: number): string => `${id}-group-${index}`
-const getLevelStyle = (level: number) => ({ '--list-level': level })
 
 const onPointerDown = (event: PointerEvent): void => {
-  // NOTE: keeping DOM focus on the combobox trigger is useful for mouse input,
-  // but cancelling a touch pointerdown is unreliable in iOS WebKit and can
-  // suppress the click that performs selection. The owning combobox/select
-  // keeps the popup alive across the temporary touch-induced blur instead
+  // WARN: keep DOM focus on an owning combobox/select for mouse input. Cancelling
+  // touch pointerdown is unreliable on WebKit (iOS) and can suppress selection
   if (preserveFocus && event.pointerType !== 'touch') event.preventDefault()
-}
-
-const onSelect = (option: ListboxOption<V>): void => {
-  if (option.disabled) return
-  emit('select', option)
-}
-
-const onPointerEnter = (option: ListboxOption<V>): void => {
-  if (option.disabled === true) return
-  if (!matchMedia('(hover: hover)').matches) return
-  emit('activate', option)
 }
 
 const scrollActiveOptionIntoView = async (): Promise<void> => {
@@ -220,35 +191,6 @@ defineExpose<ListboxContentExpose>({
         padding: 0;
         list-style: none;
         flex-direction: column;
-      }
-    }
-
-    & .item {
-      min-block-size: var(--item-min-block-size);
-      display: flex;
-      align-items: center;
-      padding-inline: calc(var(--item-padding-inline) + var(--list-level, 0) * 1rem) var(--item-padding-inline);
-      cursor: pointer;
-      user-select: none;
-      background-color: var(--item-bg);
-      color: var(--item-color);
-      opacity: var(--item-opacity);
-
-      transition-property: background-color, color, opacity;
-      transition-duration: var(--duration-sm);
-      transition-timing-function: var(--bezier-smooth);
-
-      &.active {
-        --item-bg: var(--item-bg-active);
-      }
-
-      &.selected {
-        --item-color: var(--item-color-selected);
-      }
-
-      &.disabled {
-        --item-opacity: 0.5;
-        pointer-events: none;
       }
     }
   }

@@ -33,17 +33,7 @@
 </template>
 
 <script lang="ts">
-import type { SelectionControlExpose } from './SelectionControl.vue'
-
-export type MCheckboxProperties = {
-  id?: string
-  label?: string
-  hint?: string
-  error?: string
-  title?: string
-  invalid?: boolean
-  disabled?: boolean
-  readonly?: boolean
+export type MCheckboxProperties = SelectionControlCommonProperties & {
   indeterminate?: boolean
 }
 
@@ -55,6 +45,7 @@ import { ref, useAttrs, useSlots } from 'vue'
 
 import { useId } from '@/composables/useId'
 
+import type { SelectionControlCommonProperties, SelectionControlExpose } from './selection.shared'
 import SelectionControl from './SelectionControl.vue'
 
 const {

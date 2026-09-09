@@ -63,19 +63,7 @@ export type MColorFieldProperties = Omit<MTextFieldProperties, 'type'> & {
   pickerLabel?: string
 }
 
-export const isHexColorValid = (color: string): boolean => {
-  return /^#(?:[A-Fa-f\d]{3}|[A-Fa-f\d]{6})$/.test(color)
-}
-
-export const normalizeHexColor = (color: string, fallback = '#000000'): string => {
-  if (!isHexColorValid(color)) return fallback
-  if (color.length === 7) return color
-
-  const red = color.charAt(1)
-  const green = color.charAt(2)
-  const blue = color.charAt(3)
-  return `#${red}${red}${green}${green}${blue}${blue}`
-}
+export { isHexColorValid, normalizeHexColor } from './color.shared'
 </script>
 
 <script lang="ts" setup>
@@ -84,8 +72,11 @@ import { PaletteIcon } from '@lucide/vue'
 
 import { useId } from '@/composables/useId'
 
+import { getForwardedSlotNames } from '../component.shared'
 import MIcon from '../MIcon.vue'
-import MTextField, { type MFieldExpose } from './MTextField.vue'
+import { isHexColorValid, normalizeHexColor } from './color.shared'
+import { createFieldExpose, type MFieldExpose } from './mfield.shared'
+import MTextField from './MTextField.vue'
 
 defineOptions({
   inheritAttrs: false,
@@ -123,9 +114,7 @@ const fieldReference = useTemplateRef<MFieldExpose>('field')
 const syntaxInvalid = computed((): boolean => model.value !== '' && !isHexColorValid(model.value))
 const isInvalid = computed((): boolean => invalid === true || syntaxInvalid.value)
 const pickerColor = computed(() => normalizeHexColor(model.value))
-const forwardedSlots = computed(() =>
-  Object.keys(slots).filter(name => name !== 'default' && name !== 'leading' && name !== 'trailing')
-)
+const forwardedSlots = computed(() => getForwardedSlotNames(slots, ['default', 'leading', 'trailing']))
 
 const updateFromPicker = (event: Event): void => {
   model.value = (event.currentTarget as HTMLInputElement).value
@@ -141,11 +130,7 @@ const onPickerChange = (event: Event): void => {
   emit('change', event)
 }
 
-defineExpose<MFieldExpose>({
-  focus: options => fieldReference.value?.focus(options),
-  blur: () => fieldReference.value?.blur(),
-  select: () => fieldReference.value?.select(),
-})
+defineExpose<MFieldExpose>(createFieldExpose(() => fieldReference.value))
 </script>
 
 <style scoped>

@@ -11,9 +11,9 @@
         indeterminate,
         'icon-only': !hasBody,
       },
-      rootClass,
+      rootAttributes.class,
     ]"
-    :style="rootStyle"
+    :style="rootAttributes.style"
     :title="title"
   >
     <input
@@ -55,36 +55,14 @@
   </label>
 </template>
 
-<script lang="ts">
-export type SelectionControlVariant = 'checkbox' | 'radio' | 'toggle'
-
-export type SelectionControlProperties = {
-  id?: string
-  type: 'checkbox' | 'radio'
-  variant: SelectionControlVariant
-  checked?: boolean
-  disabled?: boolean
-  readonly?: boolean
-  invalid?: boolean
-  indeterminate?: boolean
-  label?: string
-  hint?: string
-  error?: string
-  title?: string
-  role?: string
-  value?: string
-}
-
-export type SelectionControlExpose = {
-  focus: (options?: FocusOptions) => void
-  blur: () => void
-}
-</script>
-
 <script lang="ts" setup>
-import { computed, useAttrs, useSlots, useTemplateRef, watchEffect } from 'vue'
+import { computed, useSlots, useTemplateRef, watchEffect } from 'vue'
 
 import { useId } from '@/composables/useId'
+
+import { useSplitAttributes } from '../component.shared'
+import { useFieldState } from './mfield.shared'
+import type { SelectionControlExpose, SelectionControlProperties } from './selection.shared'
 
 const {
   id = useId(),
@@ -108,33 +86,26 @@ const emit = defineEmits<{
 }>()
 
 const slots = useSlots()
-const attributes = useAttrs()
+const { rootAttributes, controlAttributes: inputAttributes } = useSplitAttributes()
 const inputReference = useTemplateRef<HTMLInputElement>('input')
 
 defineOptions({
   inheritAttrs: false,
 })
 
-const rootClass = computed(() => attributes.class)
-const rootStyle = computed(() => attributes.style)
-
-const inputAttributes = computed(() => {
-  const { class: _class, style: _style, ...rest } = attributes
-  return rest
-})
-
-const hasError = computed(() => Boolean(error || slots.error))
-const isInvalid = computed(() => invalid || hasError.value)
-const hasHint = computed(() => Boolean(hint || slots.hint))
-const hasBody = computed(() => label !== '' || Boolean(slots.default) || hasError.value || hasHint.value)
-const describedBy = computed(() => {
-  const ids: string[] = []
-
-  if (hasError.value) ids.push(`${id}-error`)
-  if (hasHint.value) ids.push(`${id}-hint`)
-
-  return ids.length > 0 ? ids.join(' ') : undefined
-})
+const {
+  hasError,
+  hasHint,
+  isInvalid,
+  description: describedBy,
+} = useFieldState(
+  id,
+  () => invalid,
+  () => error,
+  () => hint,
+  slots
+)
+const hasBody = computed((): boolean => (label !== '' || Boolean(slots.default)) ?? hasError.value ?? hasHint.value)
 
 watchEffect(() => {
   if (inputReference.value) {

@@ -33,7 +33,7 @@
       :aria-controls="listId"
       :aria-describedby="description"
       :aria-disabled="disabled"
-      :aria-errormessage="isInvalid && (error || slots.error) ? `${id}-error` : undefined"
+      :aria-errormessage="isInvalid && hasError ? `${id}-error` : undefined"
       :aria-expanded="isOpen"
       :aria-invalid="isInvalid || undefined"
       :aria-readonly="readonly"
@@ -57,33 +57,26 @@
       </span>
     </button>
 
-    <MPopover :anchor="popupAnchor" :offset="2" :open="isOpen" class="select-popup" match-anchor-width @dismiss="close">
-      <ListboxContent
-        :id="listId"
-        :active-value="activeValue"
-        :items="options"
-        :selected-value="model"
-        preserve-focus
-        @activate="activeValue = $event.value"
-        @pointercancel="onListboxPointerEnd"
-        @pointerdown="onListboxPointerStart"
-        @pointerup="onListboxPointerEnd"
-        @select="selectOption"
-      >
-        <template #group="{ group, level }">
-          <slot v-bind="{ group, level }" name="group">
-            <div class="header">{{ group.title }}</div>
-          </slot>
-        </template>
-
-        <template #item="{ item, level }">
-          <slot v-bind="{ item, level }" name="item">
-            <div class="title">{{ item.title ?? item.value }}</div>
-            <div v-if="item.title" class="value">{{ item.value }}</div>
-          </slot>
-        </template>
-      </ListboxContent>
-    </MPopover>
+    <FieldListboxPopup
+      :id="listId"
+      :active-value="activeValue"
+      :anchor="popupAnchor"
+      :items="options"
+      :open="isOpen"
+      :selected-value="model"
+      @activate="activeValue = $event.value"
+      @dismiss="close"
+      @pointer-end="onListboxPointerEnd"
+      @pointer-start="onListboxPointerStart"
+      @select="selectOption"
+    >
+      <template v-if="slots.group" #group="slotProperties">
+        <slot v-bind="slotProperties" name="group" />
+      </template>
+      <template v-if="slots.item" #item="slotProperties">
+        <slot v-bind="slotProperties" name="item" />
+      </template>
+    </FieldListboxPopup>
   </FieldFrame>
 </template>
 
@@ -109,20 +102,22 @@ export type MSelectExpose = {
   close: () => void
 }
 
-export const TYPEAHEAD_RESET_TIMEOUT = 700
+export { TYPEAHEAD_RESET_TIMEOUT } from '@/composables/useTypeahead'
 </script>
 
 <script generic="V extends string | number" lang="ts" setup>
-import { computed, nextTick, onBeforeUnmount, ref, useAttrs, useSlots, useTemplateRef } from 'vue'
+import { computed, nextTick, ref, useSlots, useTemplateRef } from 'vue'
 import { ChevronDownIcon } from '@lucide/vue'
 
 import { useId } from '@/composables/useId'
+import { isTypeaheadKey, useTypeahead } from '@/composables/useTypeahead'
 
-import ListboxContent from '../list/internal/ListboxContent.vue'
-import { findNextListboxOption, getListboxOptionText, useListboxNavigation } from '../list/listbox.shared'
+import { useSplitAttributes } from '../component.shared'
+import { getListboxOptionText, useListboxNavigation } from '../list/listbox.shared'
 import MIcon from '../MIcon.vue'
-import MPopover from '../overlay/MPopover.vue'
+import FieldListboxPopup from './internal/FieldListboxPopup.vue'
 import FieldFrame, { type FieldFrameExpose } from './FieldFrame.vue'
+import { useFieldState } from './mfield.shared'
 
 defineOptions({
   inheritAttrs: false,
@@ -157,17 +152,18 @@ const emit = defineEmits<{
 }>()
 
 const model = defineModel<V | null>({ required: true })
-const attributes = useAttrs()
-const fieldAttributes = computed(() => ({ class: attributes.class, style: attributes.style }))
+const {
+  attributes,
+  rootAttributes: fieldAttributes,
+  controlAttributes: triggerAttributes,
+} = useSplitAttributes(['name'])
 const slots = useSlots()
 const frame = ref<FieldFrameExpose>()
 const triggerReference = useTemplateRef<HTMLButtonElement>('trigger')
 const isFocused = ref(false)
 const isOpen = ref(false)
 let isPointerInteractingWithListbox = false
-const typeahead = ref('')
 const listId = `${id}-listbox`
-let typeaheadTimer: ReturnType<typeof globalThis.setTimeout> | undefined
 
 const {
   activeValue,
@@ -184,19 +180,14 @@ const {
 )
 
 const popupAnchor = computed(() => frame.value?.container ?? null)
-const triggerAttributes = computed(() => {
-  const { class: _class, name: _name, style: _style, ...rest } = attributes
-  return rest
-})
 const activeOptionId = computed(() => (isOpen.value ? getActiveOptionId(listId) : undefined))
-const isInvalid = computed(() => invalid || Boolean(error || slots.error))
-const description = computed(() => {
-  const identifiers: string[] = []
-  if (isInvalid.value && (error || slots.error)) identifiers.push(`${id}-error`)
-  if (hint || slots.hint) identifiers.push(`${id}-hint`)
-
-  return identifiers.length > 0 ? identifiers.join(' ') : undefined
-})
+const { hasError, isInvalid, description } = useFieldState(
+  id,
+  () => invalid,
+  () => error,
+  () => hint,
+  slots
+)
 const isPopulated = computed(() => Boolean(selectedOption.value) || model.value != null || placeholder.trim() !== '')
 const hiddenInputName = computed(() => {
   const name = attributes.name
@@ -208,16 +199,11 @@ const focus = (options?: FocusOptions): void => {
   triggerReference.value?.focus(options)
 }
 
-const clearTypeahead = (): void => {
-  typeahead.value = ''
-  if (typeaheadTimer) clearTimeout(typeaheadTimer)
-}
-
 const close = (): void => {
   if (!isOpen.value) return
 
   isOpen.value = false
-  clearTypeahead()
+  typeahead.clear()
   emit('close')
 }
 
@@ -259,27 +245,15 @@ const selectOption = (option: ListboxOption<V>, focusAfterSelect = true): void =
   }
 }
 
-const applyTypeahead = (key: string): void => {
-  if (typeaheadTimer) clearTimeout(typeaheadTimer)
-
-  const repeatedKey = typeahead.value.length > 0 && [...typeahead.value].every(character => character === key)
-  typeahead.value = repeatedKey ? key : `${typeahead.value}${key}`
-
-  const option = findNextListboxOption(enabledOptions.value, activeValue.value, typeahead.value)
-  if (option) {
+const typeahead = useTypeahead<ListboxOption<V>>({
+  items: () => enabledOptions.value,
+  activeIndex: () => enabledOptions.value.findIndex(option => option.value === activeValue.value),
+  getText: getListboxOptionText,
+  onMatch: option => {
     activeValue.value = option.value
-
-    if (!isOpen.value) {
-      selectOption(option, false)
-    }
-  }
-
-  typeaheadTimer = setTimeout(clearTypeahead, TYPEAHEAD_RESET_TIMEOUT)
-}
-
-const isTypeaheadKey = (event: KeyboardEvent): boolean => {
-  return event.key.length === 1 && !event.altKey && !event.ctrlKey && !event.metaKey
-}
+    if (!isOpen.value) selectOption(option, false)
+  },
+})
 
 const onFocus = (event: FocusEvent): void => {
   isFocused.value = true
@@ -365,11 +339,9 @@ const onKeydown = (event: KeyboardEvent): void => {
   }
 
   if (isTypeaheadKey(event)) {
-    applyTypeahead(event.key)
+    typeahead.apply(event.key)
   }
 }
-
-onBeforeUnmount(clearTypeahead)
 
 defineExpose<MSelectExpose>({
   focus,
@@ -418,38 +390,6 @@ defineExpose<MSelectExpose>({
 
   &[aria-expanded='true'] > .indicator {
     transform: scaleY(-1);
-  }
-}
-</style>
-
-<style>
-.popover.select-popup {
-  --bg: var(--surface-bg);
-  background-color: var(--bg);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
-
-  & > .listbox-scroll {
-    --list-bg: var(--bg);
-
-    & .item {
-      justify-content: space-between;
-      overflow-x: hidden;
-      flex-wrap: nowrap;
-      gap: calc(var(--font-size-md) / 2);
-
-      & .title,
-      & .value {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
-
-      & .value {
-        font-size: var(--font-size-sm);
-        color: light-dark(oklch(from var(--gray-800) l c h / 0.5), oklch(from var(--gray-300) l c h / 0.5));
-      }
-    }
   }
 }
 </style>

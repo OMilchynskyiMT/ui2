@@ -31,11 +31,7 @@
 <script lang="ts">
 import type { MFieldProperties } from './mfield.shared'
 
-export type NumberModel = number | null
-
-export const formatNumber = (value: NumberModel): string => {
-  return typeof value === 'number' && Number.isFinite(value) ? String(value) : ''
-}
+export { formatNumber, type NumberModel, parseNumberText, type NumberParseResult as ParseResult } from './number.shared'
 
 export type MNumberProperties = Omit<MFieldProperties, 'id' | 'focused' | 'populated' | 'multiline'> & {
   id?: string
@@ -44,22 +40,6 @@ export type MNumberProperties = Omit<MFieldProperties, 'id' | 'focused' | 'popul
   lazy?: boolean
   clampOnBlur?: boolean
 }
-
-export type ParseResult = { type: 'empty' } | { type: 'invalid' } | { type: 'number'; value: number }
-export const parseNumberText = (value: string): ParseResult => {
-  const text = value.trim()
-
-  if (!text) {
-    return { type: 'empty' }
-  }
-
-  if (!/^[+-]?(?:\d+(?:\.\d*)?|\.\d+)$/.test(text)) {
-    return { type: 'invalid' }
-  }
-
-  const number = Number(text)
-  return Number.isFinite(number) ? { type: 'number', value: number } : { type: 'invalid' }
-}
 </script>
 
 <script lang="ts" setup>
@@ -67,7 +47,9 @@ import { computed, ref, useAttrs, useSlots, watch } from 'vue'
 
 import { useId } from '@/composables/useId'
 
-import MTextField, { type MFieldExpose } from './MTextField.vue'
+import { createFieldExpose, type MFieldExpose } from './mfield.shared'
+import MTextField from './MTextField.vue'
+import { clampNumber, formatNumber, type NumberModel, parseNumberText } from './number.shared'
 
 defineOptions({
   inheritAttrs: false,
@@ -175,19 +157,5 @@ const onBlur = (event: FocusEvent): void => {
   emit('blur', event)
 }
 
-defineExpose<MFieldExpose>({
-  focus: options => field.value?.focus(options),
-  blur: () => field.value?.blur(),
-  select: () => field.value?.select(),
-})
-
-const clampNumber = (value: number, min?: number, max?: number): number => {
-  if (typeof min === 'number' && value < min) {
-    return min
-  }
-  if (typeof max === 'number' && value > max) {
-    return max
-  }
-  return value
-}
+defineExpose<MFieldExpose>(createFieldExpose(() => field.value))
 </script>
