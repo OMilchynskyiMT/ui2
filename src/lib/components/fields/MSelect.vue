@@ -62,9 +62,12 @@
         :id="listId"
         :active-value="activeValue"
         :items="options"
-        :selected-value="activeValue"
+        :selected-value="model"
         preserve-focus
         @activate="activeValue = $event.value"
+        @pointercancel="onListboxPointerEnd"
+        @pointerdown="onListboxPointerStart"
+        @pointerup="onListboxPointerEnd"
         @select="selectOption"
       >
         <template #group="{ group, level }">
@@ -161,6 +164,7 @@ const frame = ref<FieldFrameExpose>()
 const triggerReference = useTemplateRef<HTMLButtonElement>('trigger')
 const isFocused = ref(false)
 const isOpen = ref(false)
+let isPointerInteractingWithListbox = false
 const typeahead = ref('')
 const listId = `${id}-listbox`
 let typeaheadTimer: ReturnType<typeof globalThis.setTimeout> | undefined
@@ -283,9 +287,21 @@ const onFocus = (event: FocusEvent): void => {
   emit('focus', event)
 }
 
+const onListboxPointerStart = (): void => {
+  isPointerInteractingWithListbox = true
+}
+
+const onListboxPointerEnd = (): void => {
+  isPointerInteractingWithListbox = false
+}
+
 const onBlur = (event: FocusEvent): void => {
   isFocused.value = false
-  close()
+
+  if (!isPointerInteractingWithListbox) {
+    close()
+  }
+
   emit('blur', event)
 }
 

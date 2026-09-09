@@ -223,6 +223,7 @@ watch([() => autoGrow, () => rows], () => void nextTick(updateBlockSize), { flus
 <style scoped>
 @layer components {
   textarea {
+    font-size: var(--font-size);
     display: block;
     box-sizing: border-box;
     min-inline-size: 0;
@@ -241,6 +242,14 @@ watch([() => autoGrow, () => rows], () => void nextTick(updateBlockSize), { flus
 
     &:is(.auto-grow) {
       resize: none;
+    }
+  }
+
+  @supports (-webkit-touch-callout: none) {
+    @media (pointer: coarse) {
+      textarea {
+        font-size: max(var(--font-size), 1rem);
+      }
     }
   }
 }

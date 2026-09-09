@@ -5,6 +5,7 @@
       v-bind="getDialogAttributes()"
       :data-fullscreen="fullscreen || undefined"
       :data-phase="phase"
+      :style="viewportStyle"
       @cancel="cancel"
       @close="closed"
       @transitionend.self="transitionend"
@@ -25,13 +26,16 @@ export type Exposed = {
 </script>
 
 <script lang="ts" setup>
-import { onBeforeUnmount, ref, type TeleportProps, useAttrs, useTemplateRef } from 'vue'
+import { computed, type CSSProperties, onBeforeUnmount, ref, type TeleportProps, useAttrs, useTemplateRef } from 'vue'
+
+import { useVisualViewport } from '@/composables/useVisualViewport'
 
 defineOptions({ inheritAttrs: false })
 
 type Phase = 'closed' | 'opened' | 'closing'
 
 const attributes = useAttrs()
+const visualViewport = useVisualViewport()
 
 const {
   persistent = false,
@@ -54,6 +58,21 @@ const dialog = useTemplateRef<HTMLDialogElement>('dialog')
 const phase = ref<Phase>('closed')
 
 let closeTimer: number | undefined
+
+const viewportStyle = computed((): CSSProperties => {
+  const width = visualViewport.width.value
+  const height = visualViewport.height.value
+  if (!visualViewport.supported.value || width <= 0 || height <= 0) return {}
+
+  return {
+    '--dialog-viewport-inline-size': `${width}px`,
+    '--dialog-viewport-block-size': `${height}px`,
+    '--dialog-viewport-offset-block-start': `${Math.max(0, visualViewport.offsetTop.value)}px`,
+    '--dialog-viewport-offset-inline-start': `${Math.max(0, visualViewport.offsetLeft.value)}px`,
+    '--dialog-viewport-inset-block-end': `${visualViewport.insetBottom.value}px`,
+    '--dialog-viewport-inset-inline-end': `${visualViewport.insetRight.value}px`,
+  }
+})
 
 const getDialogAttributes = (): Record<string, unknown> => {
   const result = { ...attributes }
@@ -184,19 +203,29 @@ defineExpose<Exposed>({ show, close, isVisible })
     --outer-margin: var(--space-lg);
 
     position: fixed;
-    inset-block-start: max(var(--outer-margin), var(--safe-area-top));
-    inset-block-end: max(var(--outer-margin), var(--safe-area-bottom));
-    inset-inline-start: max(var(--outer-margin), var(--safe-area-left));
-    inset-inline-end: max(var(--outer-margin), var(--safe-area-right));
+    inset-block-start: calc(
+      var(--dialog-viewport-offset-block-start, 0px) + max(var(--outer-margin), var(--safe-area-top))
+    );
+    inset-block-end: calc(
+      var(--dialog-viewport-inset-block-end, 0px) + max(var(--outer-margin), var(--safe-area-bottom))
+    );
+    inset-inline-start: calc(
+      var(--dialog-viewport-offset-inline-start, 0px) + max(var(--outer-margin), var(--safe-area-left))
+    );
+    inset-inline-end: calc(
+      var(--dialog-viewport-inset-inline-end, 0px) + max(var(--outer-margin), var(--safe-area-right))
+    );
     margin: auto;
     isolation: isolate;
 
     inline-size: var(--dialog-width);
     max-inline-size: calc(
-      100dvw - max(var(--outer-margin), var(--safe-area-left)) - max(var(--outer-margin), var(--safe-area-right))
+      var(--dialog-viewport-inline-size, 100dvw) - max(var(--outer-margin), var(--safe-area-left)) -
+        max(var(--outer-margin), var(--safe-area-right))
     );
     max-block-size: calc(
-      100dvh - max(var(--outer-margin), var(--safe-area-top)) - max(var(--outer-margin), var(--safe-area-bottom))
+      var(--dialog-viewport-block-size, 100dvh) - max(var(--outer-margin), var(--safe-area-top)) -
+        max(var(--outer-margin), var(--safe-area-bottom))
     );
 
     color: inherit;
@@ -212,11 +241,15 @@ defineExpose<Exposed>({ show, close, isVisible })
     transition-timing-function: var(--bezier-smooth);
 
     &[data-fullscreen] {
-      inset: 0;
-      inline-size: 100dvw;
-      block-size: 100dvh;
-      max-inline-size: 100dvw;
-      max-block-size: 100dvh;
+      inset-block-start: var(--dialog-viewport-offset-block-start, 0px);
+      inset-block-end: var(--dialog-viewport-inset-block-end, 0px);
+      inset-inline-start: var(--dialog-viewport-offset-inline-start, 0px);
+      inset-inline-end: var(--dialog-viewport-inset-inline-end, 0px);
+      margin: 0;
+      inline-size: auto;
+      block-size: auto;
+      max-inline-size: none;
+      max-block-size: none;
       border-radius: 0;
     }
 

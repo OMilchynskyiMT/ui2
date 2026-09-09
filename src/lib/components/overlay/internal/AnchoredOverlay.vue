@@ -34,7 +34,23 @@ const overlayReference = useTemplateRef<HTMLDivElement>('overlay')
 const currentPlacement = ref<OverlayPlacement>(placement)
 const snapToDevicePixel = useSnapToDevicePixel
 
+type OverlayRect = {
+  top: number
+  right: number
+  bottom: number
+  left: number
+  width: number
+  height: number
+}
+
 type ViewportInsets = {
+  blockStart: number
+  blockEnd: number
+  inlineStart: number
+  inlineEnd: number
+}
+
+type ViewportBounds = {
   blockStart: number
   blockEnd: number
   inlineStart: number
@@ -52,6 +68,10 @@ const oppositePlacement = (value: OverlayPlacement): OverlayPlacement => {
   return value.replace('top', 'bottom') as OverlayPlacement
 }
 
+const isWebKit = (): boolean => {
+  return typeof CSS !== 'undefined' && CSS.supports('-webkit-backdrop-filter', 'none')
+}
+
 const getSafeAreaInset = (property: string): number => {
   const value = Number.parseFloat(getComputedStyle(document.documentElement).getPropertyValue(property))
   return Number.isFinite(value) ? value : 0
@@ -64,16 +84,56 @@ const getViewportInsets = (): ViewportInsets => ({
   inlineEnd: Math.max(viewportPadding, getSafeAreaInset('--safe-area-right')),
 })
 
-const getAvailableBlockSize = (value: OverlayPlacement, anchorRect: DOMRect, insets: ViewportInsets): number => {
-  return isBottomPlacement(value)
-    ? innerHeight - insets.blockEnd - anchorRect.bottom - offset
-    : anchorRect.top - offset - insets.blockStart
+const getViewportBounds = (insets: ViewportInsets): ViewportBounds => {
+  const viewport = window.visualViewport
+  const blockStart = viewport?.offsetTop ?? 0
+  const inlineStart = viewport?.offsetLeft ?? 0
+  const blockSize = viewport?.height ?? innerHeight
+  const inlineSize = viewport?.width ?? innerWidth
+
+  return {
+    blockStart: blockStart + insets.blockStart,
+    blockEnd: blockStart + blockSize - insets.blockEnd,
+    inlineStart: inlineStart + insets.inlineStart,
+    inlineEnd: inlineStart + inlineSize - insets.inlineEnd,
+  }
 }
 
-const resolvePlacement = (anchorRect: DOMRect, overlayRect: DOMRect, insets: ViewportInsets): OverlayPlacement => {
-  const preferredSpace = getAvailableBlockSize(placement, anchorRect, insets)
+const getAnchorRect = (): OverlayRect | undefined => {
+  if (!anchor) return undefined
+
+  const rect = anchor.getBoundingClientRect()
+  const viewport = window.visualViewport
+
+  // NOTE: WebKit reports client rects without the visual viewport offset while fixed
+  // top-layer elements are positioned in layout-viewport coordinates
+  const inlineOffset = viewport && isWebKit() ? viewport.offsetLeft : 0
+  const blockOffset = viewport && isWebKit() ? viewport.offsetTop : 0
+
+  return {
+    top: rect.top + blockOffset,
+    right: rect.right + inlineOffset,
+    bottom: rect.bottom + blockOffset,
+    left: rect.left + inlineOffset,
+    width: rect.width,
+    height: rect.height,
+  }
+}
+
+const getAvailableBlockSize = (value: OverlayPlacement, anchorRect: OverlayRect, bounds: ViewportBounds): number => {
+  return isBottomPlacement(value)
+    ? bounds.blockEnd - anchorRect.bottom - offset
+    : anchorRect.top - offset - bounds.blockStart
+}
+
+const resolvePlacement = (
+  anchorRect: OverlayRect,
+  overlayRect: OverlayRect,
+  bounds: ViewportBounds
+): OverlayPlacement => {
+  const preferredSpace = getAvailableBlockSize(placement, anchorRect, bounds)
   const opposite = oppositePlacement(placement)
-  const oppositeSpace = getAvailableBlockSize(opposite, anchorRect, insets)
+  const oppositeSpace = getAvailableBlockSize(opposite, anchorRect, bounds)
 
   if (overlayRect.height > preferredSpace && oppositeSpace > preferredSpace) {
     return opposite
@@ -86,12 +146,12 @@ const updatePosition = (): void => {
   const element = overlayReference.value
   if (!element) return
 
-  if (!anchor) {
+  const anchorRect = getAnchorRect()
+  if (!anchorRect) {
     delete element.dataset.positioned
     return
   }
 
-  const anchorRect = anchor.getBoundingClientRect()
   if (matchAnchorWidth) {
     element.style.setProperty('--overlay-inline-size', `${snapToDevicePixel(anchorRect.width)}px`)
   } else {
@@ -99,12 +159,15 @@ const updatePosition = (): void => {
   }
 
   const insets = getViewportInsets()
-  element.style.setProperty('--overlay-viewport-inline-start', `${insets.inlineStart}px`)
-  element.style.setProperty('--overlay-viewport-inline-end', `${insets.inlineEnd}px`)
+  const bounds = getViewportBounds(insets)
+  element.style.setProperty(
+    '--overlay-max-inline-size',
+    `${snapToDevicePixel(Math.max(0, bounds.inlineEnd - bounds.inlineStart))}px`
+  )
 
   const overlayRect = element.getBoundingClientRect()
-  const resolvedPlacement = resolvePlacement(anchorRect, overlayRect, insets)
-  const availableBlockSize = Math.max(0, getAvailableBlockSize(resolvedPlacement, anchorRect, insets))
+  const resolvedPlacement = resolvePlacement(anchorRect, overlayRect, bounds)
+  const availableBlockSize = Math.max(0, getAvailableBlockSize(resolvedPlacement, anchorRect, bounds))
 
   currentPlacement.value = resolvedPlacement
   element.style.setProperty('--overlay-available-block-size', `${snapToDevicePixel(availableBlockSize)}px`)
@@ -114,14 +177,14 @@ const updatePosition = (): void => {
     : isStartPlacement(resolvedPlacement)
       ? anchorRect.left
       : anchorRect.left + (anchorRect.width - overlayRect.width) / 2
-  const maxInlineStart = Math.max(insets.inlineStart, innerWidth - insets.inlineEnd - overlayRect.width)
-  const inlineStart = Math.min(Math.max(unclampedInlineStart, insets.inlineStart), maxInlineStart)
+  const maxInlineStart = Math.max(bounds.inlineStart, bounds.inlineEnd - overlayRect.width)
+  const inlineStart = Math.min(Math.max(unclampedInlineStart, bounds.inlineStart), maxInlineStart)
 
   const unclampedBlockStart = isBottomPlacement(resolvedPlacement)
     ? anchorRect.bottom + offset
     : anchorRect.top - overlayRect.height - offset
-  const maxBlockStart = Math.max(insets.blockStart, innerHeight - insets.blockEnd - overlayRect.height)
-  const blockStart = Math.min(Math.max(unclampedBlockStart, insets.blockStart), maxBlockStart)
+  const maxBlockStart = Math.max(bounds.blockStart, bounds.blockEnd - overlayRect.height)
+  const blockStart = Math.min(Math.max(unclampedBlockStart, bounds.blockStart), maxBlockStart)
 
   element.style.setProperty('--overlay-inset-block-start', `${snapToDevicePixel(blockStart)}px`)
   element.style.setProperty('--overlay-inset-inline-start', `${snapToDevicePixel(inlineStart)}px`)
@@ -145,6 +208,18 @@ const { start, stop } = useEventListeners(() => [
     type: 'scroll',
     listener: requestPositionUpdate,
     options: { capture: true, passive: true },
+  },
+  {
+    target: window.visualViewport,
+    type: 'resize',
+    listener: requestPositionUpdate,
+    options: { passive: true },
+  },
+  {
+    target: window.visualViewport,
+    type: 'scroll',
+    listener: requestPositionUpdate,
+    options: { passive: true },
   },
 ])
 
@@ -197,7 +272,7 @@ onBeforeUnmount(() => {
     inset-block-start: var(--overlay-inset-block-start, 0px);
     inset-inline-start: var(--overlay-inset-inline-start, 0px);
     inline-size: var(--overlay-inline-size, max-content);
-    max-inline-size: calc(100dvw - var(--overlay-viewport-inline-start, 8px) - var(--overlay-viewport-inline-end, 8px));
+    max-inline-size: var(--overlay-max-inline-size, calc(100dvw - 16px));
     margin: 0;
     padding: 0;
     border: 0;

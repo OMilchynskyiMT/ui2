@@ -182,18 +182,25 @@ const {
     }
 
     &:not(:disabled, .disabled, [data-variant='icon']) {
-      &:not([data-variant='text']):is(:focus) {
+      &:not([data-variant='text']):focus {
         --outline-width: var(--button-border-width);
         --outline-color: oklch(from var(--accent-color) l c h / 0.1);
       }
 
-      &:is(:hover, :focus) {
+      &:focus {
         --opacity: 0.9;
         --shadow: var(--shadow-sm);
       }
 
-      &:is(:active) {
+      &:active {
         --opacity: 1;
+      }
+    }
+
+    @media (hover: hover) {
+      &:not(:disabled, .disabled, [data-variant='icon']):hover {
+        --opacity: 0.9;
+        --shadow: var(--shadow-sm);
       }
     }
 

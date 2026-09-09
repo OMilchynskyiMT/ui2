@@ -205,8 +205,10 @@ watch(() => [route.fullPath, items] as const, syncExpandedItems, { immediate: tr
         transition: background-color var(--duration-md) var(--bezier-smooth);
       }
 
-      &:hover {
-        --item-bg: color-mix(in oklch, var(--accent) 6%, transparent);
+      @media (hover: hover) {
+        &:hover {
+          --item-bg: color-mix(in oklch, var(--accent) 6%, transparent);
+        }
       }
 
       & > :is(.item-icon, .arrow) {

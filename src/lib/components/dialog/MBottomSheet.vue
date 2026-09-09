@@ -5,7 +5,6 @@
     :aria-describedby="description ? descriptionId : undefined"
     :aria-labelledby="hasHeading ? headingId : undefined"
     :persistent="persistent"
-    :style="viewportStyle"
     :teleport-to="teleportTo"
     class="bottom-sheet"
     @cancel="emit('cancel', $event)"
@@ -26,14 +25,7 @@
         </div>
 
         <slot :close="close" name="header-actions">
-          <MButton
-            v-if="closeButton"
-            aria-label="Close"
-            style="--block-size: var(--touch-target-min)"
-            tone="neutral"
-            variant="icon"
-            @click="close"
-          >
+          <MButton v-if="closeButton" aria-label="Close" tone="neutral" variant="icon" @click="close">
             <MIcon :icon="XIcon" size="1rem" />
           </MButton>
         </slot>
@@ -80,7 +72,6 @@ import { computed, useAttrs, useSlots, useTemplateRef } from 'vue'
 import { XIcon } from '@lucide/vue'
 
 import { useId } from '@/composables/useId'
-import { useVisualViewport } from '@/composables/useVisualViewport'
 
 import MButton from '../buttons/MButton.vue'
 import MBottomActions from '../layout/MBottomActions.vue'
@@ -92,7 +83,6 @@ defineOptions({ inheritAttrs: false })
 
 const attributes = useAttrs()
 const slots = useSlots()
-const visualViewport = useVisualViewport()
 
 const {
   title,
@@ -116,16 +106,6 @@ const dialog = useTemplateRef<DialogExposed>('dialog')
 
 const hasHeading = computed(() => Boolean(slots.title ?? title))
 const hasHeader = computed(() => Boolean((description ?? closeButton) || hasHeading.value || slots['header-actions']))
-const viewportStyle = computed(() => {
-  const height = visualViewport.height.value
-  if (!visualViewport.supported.value || height <= 0) return {}
-  const insetBottom = Math.max(0, document.documentElement.clientHeight - visualViewport.offsetTop.value - height)
-  return {
-    '--bottom-sheet-visual-height': `${height}px`,
-    '--bottom-sheet-visual-inset-bottom': `${insetBottom}px`,
-  }
-})
-
 const show = (isModal = true): void => dialog.value?.show(isModal)
 const close = (): void => dialog.value?.close()
 const isVisible = (): boolean => dialog.value?.isVisible() ?? false
@@ -141,14 +121,15 @@ defineExpose<MBottomSheetExposed>({ show, close, isVisible })
     --outer-margin: 0px;
 
     inset-block-start: auto;
-    inset-block-end: var(--bottom-sheet-visual-inset-bottom, 0px);
-    inset-inline: 0;
+    inset-block-end: var(--dialog-viewport-inset-block-end, 0px);
+    inset-inline-start: var(--dialog-viewport-offset-inline-start, 0px);
+    inset-inline-end: var(--dialog-viewport-inset-inline-end, 0px);
     margin-block: 0;
     margin-inline: auto;
 
     inline-size: var(--dialog-width);
-    max-inline-size: 100%;
-    max-block-size: min(var(--bottom-sheet-max-height, 85dvh), var(--bottom-sheet-visual-height, 100dvh));
+    max-inline-size: var(--dialog-viewport-inline-size, 100dvw);
+    max-block-size: min(var(--bottom-sheet-max-height, 85dvh), var(--dialog-viewport-block-size, 100dvh));
 
     border-end-start-radius: 0;
     border-end-end-radius: 0;

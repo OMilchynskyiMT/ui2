@@ -394,18 +394,20 @@ onMounted(() => {
     }
   }
 
-  .field:is(:hover):where(:not(.disabled, .readonly)) {
-    --border-color-current: var(--border-hover-color);
-    --container-bg: var(--bg-hover);
+  @media (hover: hover) {
+    .field:is(:hover):where(:not(.disabled, .readonly)) {
+      --border-color-current: var(--border-hover-color);
+      --container-bg: var(--bg-hover);
+    }
   }
 
-  .field:is(.focused):where(:not(.disabled, .readonly)) {
+  .field:is(.focused, :focus-within):where(:not(.disabled, .readonly)) {
     --border-color-current: var(--border-active-color);
     --filled-border-width: var(--border-width);
     --label-color-current: var(--label-active-color);
   }
 
-  .field:is(.focused, .populated) {
+  .field:is(.focused, .populated, :focus-within) {
     --prefix-opacity: 1;
     --prefix-scale: 1;
     --label-font-size: var(--label-font-size-active);
@@ -421,9 +423,11 @@ onMounted(() => {
     }
   }
 
-  .field:is(.has-label):is([data-variant='filled']):is(.focused, .populated) > div.container > label {
-    inset-block-start: var(--filled-label-block-start);
-    transform: none;
+  .field:is(.has-label):is([data-variant='filled']) {
+    &:is(.focused, .populated, :focus-within) > div.container > label {
+      inset-block-start: var(--filled-label-block-start);
+      transform: none;
+    }
   }
 
   .field:is(.invalid) {

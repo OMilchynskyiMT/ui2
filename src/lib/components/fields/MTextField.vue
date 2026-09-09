@@ -165,11 +165,20 @@ const onChange = (event: Event): void => {
 <style scoped>
 @layer components {
   input {
+    font-size: var(--font-size);
     display: block;
     min-inline-size: 0;
     inline-size: 100%;
     block-size: var(--control-height);
     cursor: var(--cursor);
+  }
+
+  @supports (-webkit-touch-callout: none) {
+    @media (pointer: coarse) {
+      input {
+        font-size: max(var(--font-size), 1rem);
+      }
+    }
   }
 }
 </style>

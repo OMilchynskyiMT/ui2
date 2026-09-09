@@ -61,7 +61,7 @@
         :id="listId"
         :active-value="activeValue"
         :items="visibleOptions"
-        :selected-value="activeValue"
+        :selected-value="model"
         preserve-focus
         @activate="activeValue = $event.value"
         @select="selectOption"
@@ -307,12 +307,20 @@ const onFocus = (event: FocusEvent): void => {
 
 const onBlur = (event: FocusEvent): void => {
   isFocused.value = false
-  commitText()
+  if (!isOpen.value) {
+    commitText()
+  }
+
   emit('blur', event)
 }
 
 const onKeydown = (event: KeyboardEvent): void => {
   if (readonly || disabled) return
+
+  if (event.key === 'Tab') {
+    close()
+    return
+  }
 
   if (event.key === 'ArrowDown') {
     event.preventDefault()
@@ -358,7 +366,10 @@ watch(visibleOptions, () => {
 
 defineExpose<MComboboxExpose>({
   focus,
-  blur: () => inputReference.value?.blur(),
+  blur: () => {
+    close()
+    inputReference.value?.blur()
+  },
   select: () => inputReference.value?.select(),
 })
 </script>
@@ -366,6 +377,7 @@ defineExpose<MComboboxExpose>({
 <style scoped>
 @layer components {
   input {
+    font-size: var(--font-size);
     display: block;
     min-inline-size: 0;
     inline-size: 100%;
@@ -404,6 +416,14 @@ defineExpose<MComboboxExpose>({
           font-size: var(--font-size-sm);
           color: light-dark(oklch(from var(--gray-800) l c h / 0.5), oklch(from var(--gray-300) l c h / 0.5));
         }
+      }
+    }
+  }
+
+  @supports (-webkit-touch-callout: none) {
+    @media (pointer: coarse) {
+      input {
+        font-size: max(var(--font-size), 1rem);
       }
     }
   }

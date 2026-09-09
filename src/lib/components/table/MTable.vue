@@ -423,8 +423,14 @@ div.table {
       transition-timing-function: var(--bezier-smooth);
     }
 
-    &:is(:hover, :focus-visible, [data-direction]) > .sort-indicator {
+    &:is(:focus-visible, [data-direction]) > .sort-indicator {
       opacity: 0.65;
+    }
+
+    @media (hover: hover) {
+      &:hover > .sort-indicator {
+        opacity: 0.65;
+      }
     }
 
     &[data-direction='desc'] > .sort-indicator {

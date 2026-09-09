@@ -558,9 +558,12 @@ onMounted(() => syncNativeFiles(model.value))
     }
   }
 
-  .file-upload-area:where(:not(.disabled, .readonly)) {
-    & .drop-zone:hover,
-    &:is(.dragging) .drop-zone {
+  .file-upload-area:where(:not(.disabled, .readonly)):is(.dragging) .drop-zone {
+    background-color: oklch(from currentColor l c h / 0.05);
+  }
+
+  @media (hover: hover) {
+    .file-upload-area:where(:not(.disabled, .readonly)) .drop-zone:hover {
       background-color: oklch(from currentColor l c h / 0.05);
     }
   }

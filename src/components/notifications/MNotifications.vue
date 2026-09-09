@@ -1,5 +1,5 @@
 <template>
-  <TransitionGroup appear class="notifications" name="notification" tag="div">
+  <TransitionGroup :style="viewportStyle" appear class="notifications" name="notification" tag="div">
     <div
       v-for="item in latests"
       :key="item.id"
@@ -41,15 +41,27 @@
 </template>
 
 <script lang="ts" setup>
+import { type Component, computed, type CSSProperties } from 'vue'
 import { XIcon } from '@lucide/vue'
-import type { Component } from 'vue'
 
 import MButton from '@/lib/components/buttons/MButton.vue'
 import MIcon from '@/lib/components/MIcon.vue'
+import { useVisualViewport } from '@/composables/useVisualViewport'
 
 import { type Notification, useNotifications } from '.'
 
 const { latests, remove } = useNotifications()
+const visualViewport = useVisualViewport()
+const viewportStyle = computed((): CSSProperties => {
+  if (!visualViewport.supported.value) return {}
+
+  return {
+    '--notifications-viewport-offset-block-start': `${Math.max(0, visualViewport.offsetTop.value)}px`,
+    '--notifications-viewport-offset-inline-start': `${Math.max(0, visualViewport.offsetLeft.value)}px`,
+    '--notifications-viewport-inset-block-end': `${visualViewport.insetBottom.value}px`,
+    '--notifications-viewport-inset-inline-end': `${visualViewport.insetRight.value}px`,
+  }
+})
 const timeoutStyle = (item: Notification): Record<string, string> => {
   if (!item.timeout) return {}
 
@@ -74,10 +86,18 @@ const timeoutStyle = (item: Notification): Record<string, string> => {
     --progress-width: 1px;
 
     position: fixed;
-    inset-block-start: max(var(--space-lg), var(--safe-area-top));
-    inset-block-end: max(var(--space-lg), var(--safe-area-bottom));
-    inset-inline-start: max(var(--space-lg), var(--safe-area-left));
-    inset-inline-end: max(var(--space-lg), var(--safe-area-right));
+    inset-block-start: calc(
+      var(--notifications-viewport-offset-block-start, 0px) + max(var(--space-lg), var(--safe-area-top))
+    );
+    inset-block-end: calc(
+      var(--notifications-viewport-inset-block-end, 0px) + max(var(--space-lg), var(--safe-area-bottom))
+    );
+    inset-inline-start: calc(
+      var(--notifications-viewport-offset-inline-start, 0px) + max(var(--space-lg), var(--safe-area-left))
+    );
+    inset-inline-end: calc(
+      var(--notifications-viewport-inset-inline-end, 0px) + max(var(--space-lg), var(--safe-area-right))
+    );
     z-index: 1000;
 
     display: flex;

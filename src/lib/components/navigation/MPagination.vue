@@ -199,7 +199,7 @@ const getPageLabel = (page: number): string => {
       transition-duration: var(--duration-sm);
       transition-timing-function: var(--bezier-smooth);
 
-      &:is(:hover, :focus-visible) {
+      &:focus-visible {
         background-color: color-mix(in oklch, var(--accent) 8%, transparent);
       }
 
@@ -213,6 +213,12 @@ const getPageLabel = (page: number): string => {
       &:disabled:not(.active) {
         opacity: 0.45;
         cursor: not-allowed;
+      }
+
+      @media (hover: hover) {
+        &:hover {
+          background-color: color-mix(in oklch, var(--accent) 8%, transparent);
+        }
       }
     }
 

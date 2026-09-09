@@ -77,8 +77,14 @@ const open = defineModel<boolean>({ default: false })
 
       transition: background-color var(--duration-sm) var(--bezier-smooth);
 
-      &:has(> .trigger:is(:hover, :focus-visible)) {
+      &:has(> .trigger:focus-visible) {
         --header-bg: color-mix(in oklch, var(--accent) 5%, transparent);
+      }
+
+      @media (hover: hover) {
+        &:has(> .trigger:hover) {
+          --header-bg: color-mix(in oklch, var(--accent) 5%, transparent);
+        }
       }
 
       & > :is(.leading, .trailing) {

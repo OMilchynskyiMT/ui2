@@ -36,7 +36,7 @@
               :style="getLevelStyle(1)"
               @click="onSelect(option)"
               @pointerdown="onPointerDown"
-              @pointerenter="onActivate(option)"
+              @pointerenter="onPointerEnter(option)"
             >
               <slot :item="option" :level="1" name="item">
                 {{ getListboxOptionText(option) }}
@@ -62,7 +62,7 @@
           :style="getLevelStyle(0)"
           @click="onSelect(entry)"
           @pointerdown="onPointerDown"
-          @pointerenter="onActivate(entry)"
+          @pointerenter="onPointerEnter(entry)"
         >
           <slot :item="entry" :level="0" name="item">
             {{ getListboxOptionText(entry) }}
@@ -128,7 +128,11 @@ const getGroupLabelId = (index: number): string => `${id}-group-${index}`
 const getLevelStyle = (level: number) => ({ '--list-level': level })
 
 const onPointerDown = (event: PointerEvent): void => {
-  if (preserveFocus) event.preventDefault()
+  // NOTE: keeping DOM focus on the combobox trigger is useful for mouse input,
+  // but cancelling a touch pointerdown is unreliable in iOS WebKit and can
+  // suppress the click that performs selection. The owning combobox/select
+  // keeps the popup alive across the temporary touch-induced blur instead
+  if (preserveFocus && event.pointerType !== 'touch') event.preventDefault()
 }
 
 const onSelect = (option: ListboxOption<V>): void => {
@@ -136,8 +140,9 @@ const onSelect = (option: ListboxOption<V>): void => {
   emit('select', option)
 }
 
-const onActivate = (option: ListboxOption<V>): void => {
-  if (option.disabled) return
+const onPointerEnter = (option: ListboxOption<V>): void => {
+  if (option.disabled === true) return
+  if (!matchMedia('(hover: hover)').matches) return
   emit('activate', option)
 }
 

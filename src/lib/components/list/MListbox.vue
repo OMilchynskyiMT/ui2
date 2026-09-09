@@ -143,8 +143,8 @@ const focus = (options?: FocusOptions): void => {
   contentReference.value?.list?.focus(options)
 }
 
-const onPointerDown = (): void => {
-  focus()
+const onPointerDown = (event: PointerEvent): void => {
+  if (event.pointerType !== 'touch') focus({ preventScroll: true })
 }
 
 onBeforeUnmount(clearTypeahead)

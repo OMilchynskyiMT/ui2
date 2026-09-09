@@ -6,6 +6,8 @@ export type UseVisualViewport = {
   height: Readonly<Ref<number>>
   offsetTop: Readonly<Ref<number>>
   offsetLeft: Readonly<Ref<number>>
+  insetBottom: Readonly<Ref<number>>
+  insetRight: Readonly<Ref<number>>
   scale: Readonly<Ref<number>>
 }
 
@@ -15,6 +17,8 @@ export const useVisualViewport = (): UseVisualViewport => {
   const height = shallowRef(0)
   const offsetTop = shallowRef(0)
   const offsetLeft = shallowRef(0)
+  const insetBottom = shallowRef(0)
+  const insetRight = shallowRef(0)
   const scale = shallowRef(1)
 
   let animationFrame: number | undefined
@@ -31,6 +35,8 @@ export const useVisualViewport = (): UseVisualViewport => {
         height.value = viewport.height
         offsetTop.value = viewport.offsetTop
         offsetLeft.value = viewport.offsetLeft
+        insetBottom.value = Math.max(0, document.documentElement.clientHeight - viewport.offsetTop - viewport.height)
+        insetRight.value = Math.max(0, document.documentElement.clientWidth - viewport.offsetLeft - viewport.width)
         scale.value = viewport.scale
         return
       }
@@ -39,6 +45,8 @@ export const useVisualViewport = (): UseVisualViewport => {
       height.value = document.documentElement.clientHeight
       offsetTop.value = 0
       offsetLeft.value = 0
+      insetBottom.value = 0
+      insetRight.value = 0
       scale.value = 1
     })
   }
@@ -79,6 +87,8 @@ export const useVisualViewport = (): UseVisualViewport => {
     height: readonly(height),
     offsetTop: readonly(offsetTop),
     offsetLeft: readonly(offsetLeft),
+    insetBottom: readonly(insetBottom),
+    insetRight: readonly(insetRight),
     scale: readonly(scale),
   }
 }

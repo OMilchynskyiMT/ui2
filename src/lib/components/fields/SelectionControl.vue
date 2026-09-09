@@ -390,8 +390,10 @@ defineExpose<SelectionControlExpose>({
       --control-cursor: default;
     }
 
-    &:where(:not(.disabled, .readonly)):hover {
-      --control-indicator-bg: var(--control-container-hover-color);
+    @media (hover: hover) {
+      &:where(:not(.disabled, .readonly)):hover {
+        --control-indicator-bg: var(--control-container-hover-color);
+      }
     }
 
     &:has(.input:checked) {

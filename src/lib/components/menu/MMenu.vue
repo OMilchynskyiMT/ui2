@@ -31,7 +31,7 @@
             type="button"
             @click="selectItem(item)"
             @focus="activeIndex = index"
-            @pointerenter="focusItem(index)"
+            @pointerenter="onItemPointerEnter(index)"
           >
             <MIcon v-if="item.icon" :icon="item.icon" :size="iconSize" class="item-icon" />
             <span class="title">{{ item.title }}</span>
@@ -114,6 +114,11 @@ const focusItem = (index: number): void => {
   if (items[index]?.disabled) return
   activeIndex.value = index
   itemReferences.value[index]?.focus()
+}
+
+const onItemPointerEnter = (index: number): void => {
+  if (!matchMedia('(hover: hover)').matches) return
+  focusItem(index)
 }
 
 const focusEdge = (edge: 'first' | 'last'): void => {
@@ -300,13 +305,19 @@ onBeforeUnmount(clearTypeahead)
         );
       }
 
-      &:is(:hover, :focus-visible) {
+      &:focus-visible {
         --item-bg: color-mix(in oklch, var(--accent) 6%, transparent);
       }
 
       &:disabled {
         opacity: 0.5;
         cursor: not-allowed;
+      }
+
+      @media (hover: hover) {
+        &:hover {
+          --item-bg: color-mix(in oklch, var(--accent) 6%, transparent);
+        }
       }
 
       & > .item-icon {

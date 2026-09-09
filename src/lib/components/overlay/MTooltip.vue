@@ -70,19 +70,27 @@ const scheduleOpen = (): void => {
   }, delay)
 }
 
+const canHover = (): boolean => matchMedia('(hover: hover)').matches
+const hasVisibleFocus = (): boolean => {
+  if (!anchor) return false
+  return anchor.matches(':focus-visible') || anchor.querySelector(':focus-visible') !== null
+}
+
 const onPointerEnter = (): void => {
+  if (!canHover()) return
   hovered.value = true
   scheduleOpen()
 }
 
 const onPointerLeave = (): void => {
+  if (!canHover()) return
   hovered.value = false
   if (!focused.value) close()
 }
 
 const onFocusIn = (): void => {
   focused.value = true
-  scheduleOpen()
+  if (hasVisibleFocus()) scheduleOpen()
 }
 
 const onFocusOut = (event: Event): void => {
