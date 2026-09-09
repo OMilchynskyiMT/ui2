@@ -1,7 +1,7 @@
 <template>
   <div class="navigation-examples">
     <section>
-      <MSectionHeader>Menu button</MSectionHeader>
+      <MSectionHeader description="Typed actions exposed through an anchored menu surface">Menu button</MSectionHeader>
 
       <MMenuButton
         :items="menuItems"
@@ -17,14 +17,16 @@
     </section>
 
     <section>
-      <MSectionHeader>Pagination</MSectionHeader>
+      <MSectionHeader description="Compact page navigation that adapts its visible range">Pagination</MSectionHeader>
 
       <MPagination v-model="page" :page-count="18" />
       <div class="result">Current page: {{ page }}</div>
     </section>
 
     <section>
-      <MSectionHeader>Disclosures</MSectionHeader>
+      <MSectionHeader description="Independent native disclosure state with leading and trailing content"
+        >Disclosures</MSectionHeader
+      >
 
       <div class="disclosures">
         <MDisclosure
@@ -61,7 +63,7 @@
     </section>
 
     <section>
-      <MSectionHeader>Breadcrumbs</MSectionHeader>
+      <MSectionHeader description="Route-aware hierarchy with custom item rendering">Breadcrumbs</MSectionHeader>
 
       <MBreadcrumbs :items="breadcrumbs">
         <template #item="{ item, current }">
@@ -77,9 +79,7 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue'
-import { LogOutIcon, PaletteIcon, RefreshCwIcon, SaveIcon } from '@lucide/vue'
-import { TrashIcon } from '@lucide/vue'
-import { TableConfigIcon } from '@lucide/vue'
+import { LogOutIcon, PaletteIcon, RefreshCwIcon, SaveIcon, TableConfigIcon, TrashIcon } from '@lucide/vue'
 
 import MButton from '@/lib/components/buttons/MButton.vue'
 import MDisclosure from '@/lib/components/disclosure/MDisclosure.vue'
@@ -114,10 +114,6 @@ const menuItems: MMenuItem<string>[] = [
     display: grid;
     justify-items: start;
     gap: var(--space-md);
-
-    & > h2 {
-      margin: 0;
-    }
   }
 }
 

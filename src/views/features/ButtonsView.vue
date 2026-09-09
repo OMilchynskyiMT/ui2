@@ -1,69 +1,102 @@
 <template>
-  <main>
+  <div class="buttons-view">
     <section>
-      <MSectionHeader>Regular buttons</MSectionHeader>
+      <MSectionHeader description="All button tones across outlined, filled, text, and tonal presentations">
+        Regular buttons
+      </MSectionHeader>
 
-      <div v-for="variant in variants" :key="variant" class="container">
-        <div v-for="tone in tones" :key="tone">
-          <MButton :tone="tone" :variant="variant">
+      <div v-for="variant in regularVariants" :key="variant" class="variant-group">
+        <strong>{{ variant }}</strong>
+        <MCluster class="samples">
+          <MButton v-for="tone in tones" :key="tone" :tone :variant>
             <MIcon :icon="UserIcon" size="1rem" />
             {{ tone }}
           </MButton>
-        </div>
+        </MCluster>
       </div>
     </section>
 
     <section>
-      <MSectionHeader>Disabled</MSectionHeader>
+      <MSectionHeader description="Icon-only actions keep their accessible name outside the visual content">
+        Icon buttons
+      </MSectionHeader>
 
-      <div v-for="variant in regularVariants" :key="variant" class="container">
-        <div v-for="tone in tones" :key="tone">
-          <MButton :tone="tone" :variant="variant" disabled @click="() => console.debug('click')">{{ tone }}</MButton>
-        </div>
+      <MCluster class="samples">
+        <MButton
+          v-for="tone in tones"
+          :key="tone"
+          :aria-label="`${tone} action`"
+          :title="`${tone} action`"
+          :tone
+          variant="icon"
+        >
+          <MIcon :icon="UserIcon" size="1rem" />
+        </MButton>
+      </MCluster>
+    </section>
+
+    <section>
+      <MSectionHeader description="Disabled state across regular button variants and tones"> Disabled </MSectionHeader>
+
+      <div v-for="variant in regularVariants" :key="variant" class="variant-group">
+        <strong>{{ variant }}</strong>
+        <MCluster class="samples">
+          <MButton v-for="tone in tones" :key="tone" :tone :variant disabled @click="() => console.debug('click')">
+            {{ tone }}
+          </MButton>
+        </MCluster>
       </div>
     </section>
 
     <section>
-      <MSectionHeader>Loading</MSectionHeader>
+      <MSectionHeader description="Loading state keeps button geometry stable while replacing its content state">
+        Loading
+      </MSectionHeader>
 
-      <div v-for="variant in regularVariants" :key="variant" class="container">
-        <div v-for="tone in tones" :key="tone">
-          <MButton :tone="tone" :variant="variant" loading>{{ tone }}</MButton>
-        </div>
+      <div v-for="variant in regularVariants" :key="variant" class="variant-group">
+        <strong>{{ variant }}</strong>
+        <MCluster class="samples">
+          <MButton v-for="tone in tones" :key="tone" :tone :variant loading>{{ tone }}</MButton>
+        </MCluster>
       </div>
     </section>
 
     <section>
-      <MSectionHeader>Sizes</MSectionHeader>
+      <MSectionHeader description="Small, medium, and large sizing is independent from presentation variant">
+        Sizes
+      </MSectionHeader>
 
-      <div v-for="variant in regularVariants" :key="variant" class="container">
-        <div v-for="size in sizes" :key="size">
-          <MButton :size="size" :variant="variant" tone="primary">{{ size }}</MButton>
-        </div>
+      <div v-for="variant in regularVariants" :key="variant" class="variant-group">
+        <strong>{{ variant }}</strong>
+        <MCluster align="baseline" class="samples">
+          <MButton v-for="size in sizes" :key="size" :size :variant tone="primary">{{ size }}</MButton>
+        </MCluster>
       </div>
     </section>
 
     <section>
-      <MSectionHeader>Tooltip</MSectionHeader>
-      <div class="container">
-        <span ref="tooltipAnchor" class="tooltip-anchor" tabindex="0">Hover or focus</span>
-        <MTooltip :anchor="tooltipAnchor" text="Tooltip attached to an external anchor" />
-      </div>
+      <MSectionHeader description="Tooltip attached to an external focusable anchor"> Tooltip </MSectionHeader>
+
+      <span ref="tooltipAnchor" class="tooltip-anchor" tabindex="0">Hover or focus</span>
+      <MTooltip :anchor="tooltipAnchor" text="Tooltip attached to an external anchor" />
     </section>
 
     <section>
-      <MSectionHeader>Interactive</MSectionHeader>
+      <MSectionHeader description="Click any button to exercise the transient loading state">
+        Interactive
+      </MSectionHeader>
 
-      <div v-for="variant in regularVariants" :key="variant" class="container">
-        <div v-for="tone in tones" :key="tone">
-          <MButton :loading="loading" :tone="tone" :variant="variant" @click="setLoading">
+      <div v-for="variant in regularVariants" :key="variant" class="variant-group">
+        <strong>{{ variant }}</strong>
+        <MCluster class="samples">
+          <MButton v-for="tone in tones" :key="tone" :loading :tone :variant @click="setLoading">
             <MIcon :icon="UserIcon" size="1rem" />
             {{ tone }}
           </MButton>
-        </div>
+        </MCluster>
       </div>
     </section>
-  </main>
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -72,11 +105,11 @@ import { UserIcon } from '@lucide/vue'
 
 import MButton, { type Size, type Variant } from '@/lib/components/buttons/MButton.vue'
 import type { ComponentTone } from '@/lib/components/component.types'
+import MCluster from '@/lib/components/layout/MCluster.vue'
 import MIcon from '@/lib/components/MIcon.vue'
 import MTooltip from '@/lib/components/overlay/MTooltip.vue'
 import MSectionHeader from '@/lib/components/section/MSectionHeader.vue'
 
-const variants: Variant[] = ['outlined', 'filled', 'text', 'tonal', 'icon']
 const regularVariants: Variant[] = ['outlined', 'filled', 'text', 'tonal']
 const tones: ComponentTone[] = ['primary', 'info', 'success', 'warning', 'danger', 'neutral']
 const sizes: Size[] = ['small', 'medium', 'large']
@@ -94,23 +127,39 @@ const setLoading = (): void => {
 </script>
 
 <style scoped>
-main {
+.buttons-view {
+  min-inline-size: 0;
   display: grid;
-  gap: 3rem;
+  gap: var(--space-xxl);
+
+  & > section,
+  & .variant-group {
+    min-inline-size: 0;
+    display: grid;
+  }
 
   & > section {
-    display: grid;
-    gap: 2rem;
+    gap: var(--space-xl);
+  }
 
-    & > div.container {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
-      gap: 2rem;
+  & .variant-group {
+    gap: var(--space-md);
+
+    & > strong {
+      color: var(--text-color-dimmed);
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-semibold);
+      text-transform: capitalize;
     }
+  }
+
+  & .samples {
+    --cluster-gap: var(--space-lg);
   }
 }
 
 .tooltip-anchor {
+  justify-self: start;
   inline-size: max-content;
   padding: var(--space-sm) var(--space-md);
   border: 1px solid var(--divider-color);

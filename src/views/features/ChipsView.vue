@@ -1,49 +1,59 @@
 <template>
-  <div>
+  <div class="chips-view">
     <section>
-      <MSectionHeader>Size: medium</MSectionHeader>
+      <MSectionHeader description="Tone and variant combinations with leading, trailing, and close affordances">
+        Medium chips
+      </MSectionHeader>
 
-      <div class="content">
-        <div v-for="{ tone, variant } in all()" :key="`${tone}-${variant}`">
-          <MChip :tone="tone" :variant="variant" closable>
-            <template #leading><MIcon :icon="UserIcon" size="0.75rem" /></template>
-            <template #trailing><MIcon :icon="LockOpenIcon" size="0.75rem" /></template>
-            {{ `${tone} ${variant}` }}
-          </MChip>
-        </div>
-      </div>
+      <MCluster class="samples">
+        <MChip v-for="{ tone, variant } in combinations" :key="`${tone}-${variant}`" :tone :variant closable>
+          <template #leading><MIcon :icon="UserIcon" size="0.75rem" /></template>
+          <template #trailing><MIcon :icon="LockOpenIcon" size="0.75rem" /></template>
+          {{ `${tone} ${variant}` }}
+        </MChip>
+      </MCluster>
     </section>
 
     <section>
-      <MSectionHeader>Size: small</MSectionHeader>
+      <MSectionHeader description="Compact inline chips suitable for annotations and dense metadata">
+        Small chips
+      </MSectionHeader>
 
-      <div class="content">
-        <div v-for="{ tone, variant } in all()" :key="`${tone}-${variant}`">
-          123<MChip :tone="tone" :variant="variant" size="small" tag="sup"> 123 </MChip>
-        </div>
-      </div>
+      <MCluster align="baseline" class="samples">
+        <span v-for="{ tone, variant } in combinations" :key="`${tone}-${variant}`">
+          123<MChip :tone :variant size="small" tag="sup">123</MChip>
+        </span>
+      </MCluster>
     </section>
 
     <section>
-      <MSectionHeader>Size: large</MSectionHeader>
+      <MSectionHeader description="Large chips retain the same content and close-button behavior">
+        Large chips
+      </MSectionHeader>
 
-      <div class="content">
-        <div v-for="{ tone, variant } in all()" :key="`${tone}-${variant}`">
-          <MChip :tone="tone" :variant="variant" closable size="large" @close="() => console.debug('close pressed')">
-            <template #leading><MIcon :icon="UserIcon" size="0.75rem" /></template>
-            <template #trailing><MIcon :icon="LockOpenIcon" size="0.75rem" /></template>
-            {{ `${tone} ${variant}` }}
-          </MChip>
-        </div>
-      </div>
+      <MCluster class="samples">
+        <MChip
+          v-for="{ tone, variant } in combinations"
+          :key="`${tone}-${variant}`"
+          :tone
+          :variant
+          closable
+          size="large"
+          @close="() => console.debug('close pressed')"
+        >
+          <template #leading><MIcon :icon="UserIcon" size="0.75rem" /></template>
+          <template #trailing><MIcon :icon="LockOpenIcon" size="0.75rem" /></template>
+          {{ `${tone} ${variant}` }}
+        </MChip>
+      </MCluster>
     </section>
 
     <section>
-      <MSectionHeader>Badges</MSectionHeader>
+      <MSectionHeader description="Compact status/count indicators across all component tones"> Badges </MSectionHeader>
 
-      <div class="content">
-        <div v-for="tone in tones" :key="`badge-${tone}`">Notifications <MBadge :label="3" :tone="tone" /></div>
-      </div>
+      <MCluster class="samples">
+        <span v-for="tone in tones" :key="`badge-${tone}`">Notifications <MBadge :label="3" :tone /></span>
+      </MCluster>
     </section>
   </div>
 </template>
@@ -52,6 +62,7 @@
 import { LockOpenIcon, UserIcon } from '@lucide/vue'
 
 import type { ComponentTone } from '@/lib/components/component.types'
+import MCluster from '@/lib/components/layout/MCluster.vue'
 import MBadge from '@/lib/components/MBadge.vue'
 import MChip, { type Variant } from '@/lib/components/MChip.vue'
 import MIcon from '@/lib/components/MIcon.vue'
@@ -59,27 +70,25 @@ import MSectionHeader from '@/lib/components/section/MSectionHeader.vue'
 
 const variants = ['outlined', 'filled', 'text', 'tonal'] as const
 const tones = ['primary', 'info', 'success', 'warning', 'danger', 'neutral'] as const
-const all = (): { tone: ComponentTone; variant: Variant }[] => {
-  const result: { tone: ComponentTone; variant: Variant }[] = []
-  for (const tone of tones) {
-    for (const variant of variants) {
-      result.push({ tone, variant })
-    }
-  }
-  return result
-}
+const combinations: { tone: ComponentTone; variant: Variant }[] = tones.flatMap(tone =>
+  variants.map(variant => ({ tone, variant }))
+)
 </script>
 
 <style scoped>
-section {
+.chips-view {
+  min-inline-size: 0;
   display: grid;
-  gap: 2rem;
-  margin-block-end: 2rem;
+  gap: var(--space-xxl);
 
-  & > div.content {
+  & > section {
+    min-inline-size: 0;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
-    gap: 1rem;
+    gap: var(--space-xl);
+  }
+
+  & .samples {
+    --cluster-gap: var(--space-md);
   }
 }
 </style>

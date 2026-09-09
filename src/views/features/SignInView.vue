@@ -13,10 +13,13 @@
 
       <div :class="{ 'has-policy': usagePolicy }" class="content">
         <MCard v-if="usagePolicy" class="policy-card">
-          <section aria-labelledby="usage-policy-title" class="policy">
-            <MSectionHeader style="--sections-gap: var(--space-md);" description="Review the policy for use of this device before signing in.">
+          <section aria-label="Usage policy" class="policy">
+            <MSectionHeader
+              description="Review the policy for use of this device before signing in."
+              style="--sections-gap: var(--space-md)"
+            >
               <template #leading>
-                <MIcon :icon="ScaleIcon" style="--color: var(--tone-primary);" size="32px" />
+                <MIcon :icon="ScaleIcon" size="32px" style="--color: var(--tone-primary)" />
               </template>
               Usage Policy
             </MSectionHeader>
@@ -164,20 +167,6 @@ const submit = (): void => {
     gap: var(--space-xxl);
   }
 
-  .heading {
-    display: grid;
-    gap: var(--space-xs);
-
-    & > h1 {
-      font-size: var(--font-size-xl);
-      font-weight: var(--font-weight-semibold);
-    }
-
-    & > p {
-      color: var(--text-color-dimmed);
-    }
-  }
-
   .fields {
     display: grid;
     gap: var(--space-lg);
@@ -185,32 +174,6 @@ const submit = (): void => {
 
   .submit {
     inline-size: 100%;
-  }
-
-  .policy-heading {
-    display: grid;
-    grid-template-columns: auto minmax(0, 1fr);
-    align-items: start;
-    gap: var(--space-md);
-
-    & > .icon {
-      margin-block-start: 0.125rem;
-    }
-
-    & > div {
-      display: grid;
-      gap: var(--space-xs);
-    }
-
-    & h2 {
-      font-size: var(--font-size-lg);
-      font-weight: var(--font-weight-semibold);
-    }
-
-    & p {
-      color: var(--text-color-dimmed);
-      font-size: var(--font-size-sm);
-    }
   }
 
   .policy-content {

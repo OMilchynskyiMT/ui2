@@ -1,11 +1,10 @@
 <template>
-  <main class="charts">
-    <MSectionHeader description="Chart components and data visualization examples">
-      Charts
-    </MSectionHeader>
-
+  <div class="charts-view">
     <section>
-      <h2>Network traffic</h2>
+      <MSectionHeader description="Responsive bar chart with application-owned data and formatters">
+        Network traffic
+      </MSectionHeader>
+
       <div class="chart">
         <MChart
           :chart="trafficChart"
@@ -15,7 +14,7 @@
         />
       </div>
     </section>
-  </main>
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -23,8 +22,7 @@ import MSectionHeader from '@/lib/components/section/MSectionHeader.vue'
 import { MChart } from '@/components/chart'
 import type { ChartDefinition, ChartLabel } from '@/components/chart/types'
 
-
-const raw: { label: string, rx: number, tx: number }[] = []
+const raw: { label: string; rx: number; tx: number }[] = []
 const now = new Date()
 const initialDate = new Date(now.getFullYear(), now.getMonth() - 2, now.getDate())
 
@@ -80,27 +78,14 @@ const formatBytes = (value: number): string => {
 </script>
 
 <style scoped>
-.charts {
+.charts-view > section {
+  min-inline-size: 0;
   display: grid;
-  gap: 2rem;
+  gap: var(--space-xl);
+}
 
-  header,
-  section {
-    display: grid;
-    gap: 1rem;
-  }
-
-  header,
-  section {
-    > h1,
-    > h2,
-    > p {
-      margin: 0;
-    }
-  }
-
-  .chart {
-    block-size: 20rem;
-  }
+.chart {
+  inline-size: min(100%, var(--container-xl));
+  block-size: clamp(16rem, 50vw, 24rem);
 }
 </style>

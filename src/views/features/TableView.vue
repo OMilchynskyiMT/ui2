@@ -1,25 +1,34 @@
 <template>
-  <MTable
-    v-model:sort="sort"
-    :columns
-    :loading
-    :rows
-    caption="Users"
-    loading-label="Loading users..."
-    mode="details"
-    row-key="id"
-    sticky-header
-    style="--max-block-size: 30rem"
-  >
-    <template #cell-active="{ value }">
-      {{ value ? 'Active' : 'Inactive' }}
-    </template>
-  </MTable>
+  <div class="table-view">
+    <section>
+      <MSectionHeader description="Sortable data with sticky headers and responsive detail-column behavior">
+        Responsive table
+      </MSectionHeader>
+
+      <MTable
+        v-model:sort="sort"
+        :columns
+        :loading
+        :rows
+        caption="Users"
+        loading-label="Loading users..."
+        mode="details"
+        row-key="id"
+        sticky-header
+        style="--max-block-size: 30rem"
+      >
+        <template #cell-active="{ value }">
+          {{ value ? 'Active' : 'Inactive' }}
+        </template>
+      </MTable>
+    </section>
+  </div>
 </template>
 
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue'
 
+import MSectionHeader from '@/lib/components/section/MSectionHeader.vue'
 import type { TableColumn, TableSort } from '@/lib/components/table/mtable.types'
 import MTable from '@/lib/components/table/MTable.vue'
 
@@ -81,3 +90,11 @@ onMounted(() => {
   }, 3000)
 })
 </script>
+
+<style scoped>
+.table-view > section {
+  min-inline-size: 0;
+  display: grid;
+  gap: var(--space-xl);
+}
+</style>

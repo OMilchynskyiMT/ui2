@@ -1,38 +1,59 @@
 <template>
-  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem">
-    <MListbox :active-value="active" :items="items" :selected-value="selected" @select="selected = $event.value" />
-    <MListbox :active-value="active" :items="items" :selected-value="selected" @select="selected = $event.value">
-      <template #item="{ item }">
-        <strong>{{ item.title }}</strong>
-        <div>{{ item.value }}</div>
-      </template>
-    </MListbox>
+  <div class="lists-view">
+    <section>
+      <MSectionHeader description="Default and custom item rendering with shared selection state">
+        Listboxes
+      </MSectionHeader>
 
-    <MSectionHeader style="grid-column: span 2">Popovers</MSectionHeader>
+      <MFormGrid>
+        <MListbox :active-value="active" :items="items" :selected-value="selected" @select="selected = $event.value" />
+        <MListbox :active-value="active" :items="items" :selected-value="selected" @select="selected = $event.value">
+          <template #item="{ item }">
+            <strong>{{ item.title }}</strong>
+            <div>{{ item.value }}</div>
+          </template>
+        </MListbox>
+      </MFormGrid>
+    </section>
 
-    <div style="display: flex; gap: 5rem">
-      <button id="p-top-start" @click="showPopup(getbyId('p-top-start'), 'top-start')">Top Start</button>
-      <button id="p-top-end" @click="showPopup(getbyId('p-top-end'), 'top-end')">Top End</button>
-      <button id="p-bottom-start" @click="showPopup(getbyId('p-bottom-start'), 'bottom-start')">Bottom Start</button>
-      <button id="p-bottom-end" @click="showPopup(getbyId('p-bottom-end'), 'bottom-end')">Bottom End</button>
-    </div>
+    <section>
+      <MSectionHeader description="Anchored overlays using the same listbox content at each supported corner placement">
+        Popovers
+      </MSectionHeader>
 
-    <MPopover
-      :anchor="popupAnchor"
-      :offset="10"
-      :open="popupShow"
-      :placement="popupPosition"
-      style="box-shadow: 0 0 1rem rgba(0, 0, 0, 0.2); border-radius: 1rem"
-      @dismiss="popupShow = false"
-    >
-      <MListbox :active-value="active" :items="items" :selected-value="selected" @select="selected = $event.value" />
-    </MPopover>
+      <MCluster>
+        <MButton id="p-top-start" variant="tonal" @click="showPopup(getById('p-top-start'), 'top-start')">
+          Top start
+        </MButton>
+        <MButton id="p-top-end" variant="tonal" @click="showPopup(getById('p-top-end'), 'top-end')"> Top end </MButton>
+        <MButton id="p-bottom-start" variant="tonal" @click="showPopup(getById('p-bottom-start'), 'bottom-start')">
+          Bottom start
+        </MButton>
+        <MButton id="p-bottom-end" variant="tonal" @click="showPopup(getById('p-bottom-end'), 'bottom-end')">
+          Bottom end
+        </MButton>
+      </MCluster>
+
+      <MPopover
+        :anchor="popupAnchor"
+        :offset="10"
+        :open="popupShow"
+        :placement="popupPosition"
+        style="--popover-radius: var(--radius-lg); --popover-shadow: var(--shadow-md)"
+        @dismiss="popupShow = false"
+      >
+        <MListbox :active-value="active" :items="items" :selected-value="selected" @select="selected = $event.value" />
+      </MPopover>
+    </section>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue'
 
+import MButton from '@/lib/components/buttons/MButton.vue'
+import MFormGrid from '@/lib/components/grid/MFormGrid.vue'
+import MCluster from '@/lib/components/layout/MCluster.vue'
 import type { ListItem } from '@/lib/components/list/listbox.types'
 import MListbox from '@/lib/components/list/MListbox.vue'
 import MPopover, { type OverlayPlacement } from '@/lib/components/overlay/MPopover.vue'
@@ -50,11 +71,25 @@ const popupShow = ref(false)
 const popupAnchor = ref<HTMLElement | null>(null)
 const popupPosition = ref<OverlayPlacement>('bottom-start')
 
-const getbyId = (id: string): HTMLElement | null => document.querySelector(`#${id}`)
+const getById = (id: string): HTMLElement | null => document.querySelector(`#${id}`)
 
-const showPopup = (anchor: HTMLElement | null, position: OverlayPlacement) => {
+const showPopup = (anchor: HTMLElement | null, position: OverlayPlacement): void => {
   popupAnchor.value = anchor
   popupPosition.value = position
   popupShow.value = true
 }
 </script>
+
+<style scoped>
+.lists-view {
+  min-inline-size: 0;
+  display: grid;
+  gap: var(--space-xxl);
+
+  & > section {
+    min-inline-size: 0;
+    display: grid;
+    gap: var(--space-xl);
+  }
+}
+</style>

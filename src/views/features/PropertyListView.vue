@@ -1,33 +1,34 @@
 <template>
-  <MFormGrid :columns="2">
-    <MPropertyList :data :items empty-value="+">
-      <template #value-test1="{ value }">
-        <MCopyButton :text="String(value)" direction="rtl">{{ value }}</MCopyButton>
-      </template>
-      <template #value-someTestThree="{ value }">
-        <MIcon :icon="UserIcon" color="red" />
-        <MCopyButton :text="String(value)" style="--accent-color: var(--purple-500)">{{ value }}</MCopyButton>
-      </template>
-      <template #value-test4="{ value }">
-        <MSignalStrength
-          :level="Number(value) ?? 0"
-          :steps="5"
-          style="--color: var(--cyan-600)"
-          title="Lorem ipsum"
-        />
-        {{ value }}
-      </template>
-    </MPropertyList>
-  </MFormGrid>
+  <div class="property-list-view">
+    <section>
+      <MSectionHeader description="Key/value data with per-field rendering overrides and reusable inline actions">
+        Property list
+      </MSectionHeader>
+
+      <MPropertyList :data :items empty-value="+">
+        <template #value-test1="{ value }">
+          <MCopyButton :text="String(value)" direction="rtl">{{ value }}</MCopyButton>
+        </template>
+        <template #value-someTestThree="{ value }">
+          <MIcon :icon="UserIcon" color="red" />
+          <MCopyButton :text="String(value)" style="--accent-color: var(--purple-500)">{{ value }}</MCopyButton>
+        </template>
+        <template #value-test4="{ value }">
+          <MSignalStrength :level="Number(value)" :steps="5" style="--color: var(--cyan-600)" title="Lorem ipsum" />
+          {{ value }}
+        </template>
+      </MPropertyList>
+    </section>
+  </div>
 </template>
 
 <script lang="ts" setup>
 import { UserIcon } from '@lucide/vue'
 
 import MCopyButton from '@/lib/components/buttons/MCopyButton.vue'
-import MFormGrid from '@/lib/components/grid/MFormGrid.vue'
 import MPropertyList from '@/lib/components/list/MPropertyList.vue'
 import MIcon from '@/lib/components/MIcon.vue'
+import MSectionHeader from '@/lib/components/section/MSectionHeader.vue'
 import MSignalStrength from '@/components/MSignalStrength.vue'
 
 const data = {
@@ -44,3 +45,12 @@ const items = [
   { field: 'test4', label: 'Test #4 field name' },
 ]
 </script>
+
+<style scoped>
+.property-list-view > section {
+  min-inline-size: 0;
+  display: grid;
+  gap: var(--space-xl);
+  inline-size: min(100%, var(--container-lg));
+}
+</style>

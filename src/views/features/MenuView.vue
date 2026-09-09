@@ -1,17 +1,23 @@
 <template>
-  <div class="menu-demo">
-    <MMenuButton
-      :items="menuItems"
-      :offset="8"
-      menu-aria-label="Example actions"
-      tone="neutral"
-      variant="tonal"
-      @select="selected = $event.value"
-    >
-      Open menu
-    </MMenuButton>
+  <div class="menu-view">
+    <section>
+      <MSectionHeader description="Action menu with icons, typed values, and selection feedback">
+        Menu button
+      </MSectionHeader>
 
-    <div v-if="selected">Selected: {{ selected }}</div>
+      <MMenuButton
+        :items="menuItems"
+        :offset="8"
+        menu-aria-label="Example actions"
+        tone="neutral"
+        variant="tonal"
+        @select="selected = $event.value"
+      >
+        Open menu
+      </MMenuButton>
+
+      <div v-if="selected" class="result">Selected: {{ selected }}</div>
+    </section>
   </div>
 </template>
 
@@ -21,6 +27,7 @@ import { LogOutIcon, PaletteIcon, SaveIcon } from '@lucide/vue'
 
 import type { MMenuItem } from '@/lib/components/menu/MMenu.vue'
 import MMenuButton from '@/lib/components/menu/MMenuButton.vue'
+import MSectionHeader from '@/lib/components/section/MSectionHeader.vue'
 
 const selected = ref<string>()
 const menuItems: MMenuItem<string>[] = [
@@ -31,9 +38,15 @@ const menuItems: MMenuItem<string>[] = [
 </script>
 
 <style scoped>
-.menu-demo {
+.menu-view > section {
+  min-inline-size: 0;
   display: grid;
   justify-items: start;
-  gap: var(--space-md);
+  gap: var(--space-xl);
+}
+
+.result {
+  color: var(--text-color-dimmed);
+  font-size: var(--font-size-sm);
 }
 </style>

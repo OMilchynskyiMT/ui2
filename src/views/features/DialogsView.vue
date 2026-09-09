@@ -1,17 +1,25 @@
 <template>
-  <div>
-    <div style="display: flex; gap: 1rem">
-      <button @click="d1?.show()">Show dialog</button>
-      <button @click="confirm1">Show confirm</button>
-      <button @click="f1?.show()">Show Form</button>
-    </div>
+  <div class="dialogs-view">
+    <section>
+      <MSectionHeader description="Basic, confirmation, and form dialogs using the shared dialog infrastructure">
+        Dialog types
+      </MSectionHeader>
+
+      <MCluster>
+        <MButton variant="tonal" @click="d1?.show()">Show dialog</MButton>
+        <MButton variant="tonal" @click="confirm1">Show confirm</MButton>
+        <MButton variant="tonal" @click="f1?.show()">Show form</MButton>
+      </MCluster>
+    </section>
 
     <MDialog ref="d1" @cancel="console.debug('canceled')">
-      Test body
-      <button @click="d1?.close()">Close</button>
+      <div class="dialog-content">
+        <p>Basic dialog content with an explicit close action.</p>
+        <MButton @click="d1?.close()">Close</MButton>
+      </div>
     </MDialog>
 
-    <MConfirmDialog ref="c1" title="confirmation title (optional)">
+    <MConfirmDialog ref="c1" title="Confirmation title (optional)">
       Lorem, ipsum dolor sit amet consectetur adipisicing elit. Voluptatum, blanditiis quibusdam dignissimos corporis
       error velit pariatur quae nobis aspernatur officiis quidem eius soluta optio ducimus ullam doloremque tempora,
       quod nesciunt.
@@ -30,16 +38,18 @@
       @submit="log('submit')"
     >
       <template #title>
-        <div style="display: flex; gap: 0.5rem; align-items: center">
+        <MCluster>
           <MIcon :icon="UserPlusIcon" size="2rem" style="--color: var(--pink-600)" />
-          Create User
-        </div>
+          <span>Create user</span>
+        </MCluster>
       </template>
 
-      <MTextField v-model="form.name" label="Name" required />
-      <MTextField v-model="form.email" label="Email" required type="email" />
-      <MSwitch v-model="simulateFailure" label="Simulate API error" />
-      <MCheckbox v-model="keepOpen" label="Return false and keep dialog open" />
+      <MFormGrid>
+        <MTextField v-model="form.name" label="Name" required />
+        <MTextField v-model="form.email" label="Email" required type="email" />
+        <MSwitch v-model="simulateFailure" label="Simulate API error" />
+        <MCheckbox v-model="keepOpen" label="Return false and keep dialog open" />
+      </MFormGrid>
     </MFormDialog>
   </div>
 </template>
@@ -48,13 +58,17 @@
 import { computed, reactive, ref, useTemplateRef } from 'vue'
 import { UserPlusIcon } from '@lucide/vue'
 
+import MButton from '@/lib/components/buttons/MButton.vue'
 import MConfirmDialog, { type Exposed as ConfirmExposed } from '@/lib/components/dialog/MConfirmDialog.vue'
 import MDialog, { type Exposed } from '@/lib/components/dialog/MDialog.vue'
 import MFormDialog, { type Exposed as FormExposed } from '@/lib/components/dialog/MFormDialog.vue'
 import MCheckbox from '@/lib/components/fields/MCheckbox.vue'
 import MSwitch from '@/lib/components/fields/MSwitch.vue'
 import MTextField from '@/lib/components/fields/MTextField.vue'
+import MFormGrid from '@/lib/components/grid/MFormGrid.vue'
+import MCluster from '@/lib/components/layout/MCluster.vue'
 import MIcon from '@/lib/components/MIcon.vue'
+import MSectionHeader from '@/lib/components/section/MSectionHeader.vue'
 
 const d1 = useTemplateRef<Exposed>('d1')
 const c1 = useTemplateRef<ConfirmExposed>('c1')
@@ -109,3 +123,25 @@ const confirm1 = async (): Promise<void> => {
   }
 }
 </script>
+
+<style scoped>
+.dialogs-view,
+.dialogs-view > section,
+.dialog-content {
+  min-inline-size: 0;
+  display: grid;
+}
+
+.dialogs-view {
+  gap: var(--space-xxl);
+
+  & > section {
+    gap: var(--space-xl);
+  }
+}
+
+.dialog-content {
+  justify-items: start;
+  gap: var(--space-lg);
+}
+</style>
