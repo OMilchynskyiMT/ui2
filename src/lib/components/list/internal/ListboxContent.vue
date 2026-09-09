@@ -1,5 +1,5 @@
 <template>
-  <MScrollArea class="listbox-scroll" fade-edges overscroll="contain">
+  <MScrollArea class="listbox-scroll" fade-edges overscroll="contain" scrollbar-gutter="auto">
     <ul
       :id="id"
       ref="list"
@@ -168,6 +168,10 @@ defineExpose<ListboxContentExpose>({
     list-style: none;
     background-color: var(--list-bg);
     border-radius: inherit;
+
+    &:focus {
+      outline: none;
+    }
 
     & > .group {
       display: flex;

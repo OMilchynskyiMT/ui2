@@ -10,7 +10,7 @@
   >
     <slot name="header" />
 
-    <MScrollArea class="menu-scroll" fade-edges overscroll="contain">
+    <MScrollArea class="menu-scroll" fade-edges overscroll="contain" scrollbar-gutter="auto">
       <ul
         ref="menu"
         role="menu"
