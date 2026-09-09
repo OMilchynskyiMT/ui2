@@ -20,7 +20,7 @@ const rows: readonly Row[] = [
 ]
 
 it('sorts automatically while preserving source indexes', () => {
-  const displayed = getDisplayedTableRows(rows, columns, { column: 'name', direction: 'asc' }, 'auto')
+  const displayed = getDisplayedTableRows(rows, columns, { column: 'name', direction: 'asc' }, 'client')
 
   expect(displayed.map(entry => entry.row.name)).toEqual(['Item 1', 'Item 2', 'Item 10'])
   expect(displayed.map(entry => entry.sourceIndex)).toEqual([2, 1, 0])
