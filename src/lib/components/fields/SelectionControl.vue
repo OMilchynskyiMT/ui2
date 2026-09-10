@@ -105,7 +105,7 @@ const {
   () => hint,
   slots
 )
-const hasBody = computed((): boolean => (label !== '' || Boolean(slots.default)) ?? hasError.value ?? hasHint.value)
+const hasBody = computed((): boolean => (label !== '' || Boolean(slots.default)) || hasError.value || hasHint.value)
 
 watchEffect(() => {
   if (inputReference.value) {

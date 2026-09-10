@@ -105,7 +105,7 @@ const emit = defineEmits<{
 const dialog = useTemplateRef<DialogExposed>('dialog')
 
 const hasHeading = computed(() => Boolean(slots.title ?? title))
-const hasHeader = computed(() => Boolean((description ?? closeButton) || hasHeading.value || slots['header-actions']))
+const hasHeader = computed(() => Boolean(description || closeButton || hasHeading.value || slots['header-actions']))
 const show = (isModal = true): void => dialog.value?.show(isModal)
 const close = (): void => dialog.value?.close()
 const isVisible = (): boolean => dialog.value?.isVisible() ?? false
