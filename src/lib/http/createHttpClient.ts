@@ -1,15 +1,15 @@
 import { HttpError, HttpTransportError } from './errors'
-import { buildUrl, mergeHeaders, serializeRequestBody } from './serialization'
+import { buildUrl, mergeHeaders } from './serialization'
 import type {
   HttpClient,
   HttpClientConfig,
   HttpHandler,
   HttpMiddleware,
   HttpRequest,
+  HttpRequestBodyOptions,
   HttpRequestOptions,
   HttpRequestOptionsWithBody,
   HttpResponse,
-  HttpResponseType,
   HttpTransportRequest,
   HttpTransportResponse,
 } from './types'
@@ -82,109 +82,75 @@ const executeRequest = async (config: HttpClientConfig, request: HttpRequest): P
 
   const url = buildUrl(request.url, config.baseUrl, request.query)
   const headers = mergeHeaders(config.headers, request.headers)
-  const serialized = serializeRequestBody(request, headers)
-  const responseType = request.responseType ?? 'json'
-  const transportRequest: HttpTransportRequest = {
-    method: request.method,
-    url,
-    headers: serialized.headers,
-    responseType: responseType === 'json' ? 'text' : responseType,
-    ...(serialized.body !== undefined && { body: serialized.body }),
-    ...(request.signal !== undefined && { signal: request.signal }),
-    ...(!(timeout === null || timeout === undefined) && { timeout }),
-    ...(request.onUploadProgress !== undefined && { onUploadProgress: request.onUploadProgress }),
-    ...(request.onDownloadProgress !== undefined && { onDownloadProgress: request.onDownloadProgress }),
-  }
+  const transportRequest = createTransportRequest(request, url, headers, timeout)
 
   let transportResponse: HttpTransportResponse
   try {
     transportResponse = await config.transport(transportRequest)
   } catch (error) {
+    if (!(error instanceof HttpTransportError)) throw error
     throw normalizeTransportError(error, request)
   }
 
-  const parsed = parseResponse(transportResponse, responseType)
-  if (!isSuccessfulStatus(transportResponse.status)) {
-    throw new HttpError(`HTTP ${transportResponse.status}: ${request.method} ${request.url}`, {
+  const response = normalizeResponse(request, transportResponse)
+  if (!isSuccessfulStatus(response.status)) {
+    throw new HttpError(`HTTP ${response.status}: ${request.method} ${request.url}`, {
       kind: 'response',
       method: request.method,
       url: request.url,
-      response: {
-        data: parsed.ok ? parsed.data : transportResponse.data,
-        status: transportResponse.status,
-        headers: transportResponse.headers,
-      },
-      ...(!parsed.ok && { cause: parsed.error }),
+      response,
     })
   }
 
-  if (!parsed.ok) {
-    throw new HttpError(`Failed to parse HTTP response: ${request.method} ${request.url}`, {
-      kind: 'parse',
-      method: request.method,
-      url: request.url,
-      response: {
-        data: transportResponse.data,
-        status: transportResponse.status,
-        headers: transportResponse.headers,
-      },
-      cause: parsed.error,
-    })
-  }
+  return response
+}
 
+const createTransportRequest = (
+  request: HttpRequest,
+  url: string,
+  headers: HttpTransportRequest['headers'],
+  timeout: number | null | undefined
+): HttpTransportRequest => {
   return {
-    data: parsed.data,
-    status: transportResponse.status,
-    headers: transportResponse.headers,
+    method: request.method,
+    url,
+    headers,
+    ...getRequestBody(request),
+    ...(request.signal !== undefined && { signal: request.signal }),
+    ...(!(timeout === null || timeout === undefined) && { timeout }),
+    ...(request.responseType !== undefined && { responseType: request.responseType }),
+    ...(request.onUploadProgress !== undefined && { onUploadProgress: request.onUploadProgress }),
+    ...(request.onDownloadProgress !== undefined && { onDownloadProgress: request.onDownloadProgress }),
   }
 }
 
-const parseResponse = (
-  response: HttpTransportResponse,
-  responseType: HttpResponseType
-): { readonly ok: true; readonly data: unknown } | { readonly ok: false; readonly error: unknown } => {
-  if (responseType !== 'json') {
-    return { ok: true, data: response.data }
-  }
+const getRequestBody = (request: HttpRequest): HttpRequestBodyOptions => {
+  if ('json' in request) return { json: request.json }
+  if ('body' in request && request.body !== undefined) return { body: request.body }
+  return {}
+}
 
-  if ((['', null, undefined] as unknown[]).includes(response.data)) {
-    return { ok: true, data: undefined }
-  }
-
-  if (typeof response.data !== 'string') {
+const normalizeResponse = (request: HttpRequest, response: HttpTransportResponse): HttpResponse<unknown> => {
+  if (!hasResponseBody(request.method, response.status)) {
     return {
-      ok: false,
-      error: new TypeError('Expected text response for JSON deserialization'),
+      ...response,
+      data: undefined,
     }
   }
 
-  const text = response.data.replace(/^\u{FEFF}/u, '')
-  if (text.trim().length === 0) {
-    return { ok: true, data: undefined }
-  }
-
-  try {
-    return { ok: true, data: JSON.parse(text) }
-  } catch (error) {
-    return { ok: false, error }
-  }
+  return response
 }
 
-const normalizeTransportError = (error: unknown, request: HttpRequest): HttpError => {
-  if (error instanceof HttpTransportError) {
-    return new HttpError(transportErrorMessage(error.kind, request), {
-      kind: error.kind,
-      method: request.method,
-      url: request.url,
-      cause: error.cause ?? error,
-    })
-  }
+const hasResponseBody = (method: HttpRequest['method'], status: number): boolean => {
+  return method !== 'HEAD' && ![204, 205, 304].includes(status)
+}
 
-  return new HttpError(`HTTP request failed: ${request.method} ${request.url}`, {
-    kind: 'unknown',
+const normalizeTransportError = (error: HttpTransportError, request: HttpRequest): HttpError => {
+  return new HttpError(transportErrorMessage(error.kind, request), {
+    kind: error.kind,
     method: request.method,
     url: request.url,
-    cause: error,
+    cause: error.cause ?? error,
   })
 }
 

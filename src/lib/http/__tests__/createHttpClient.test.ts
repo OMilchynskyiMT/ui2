@@ -3,7 +3,7 @@
 import { describe, expect, it } from 'vitest'
 
 import { createHttpClient } from '../createHttpClient'
-import { HttpError, HttpTransportError, isHttpError } from '../errors'
+import { HttpError, HttpTransportError } from '../errors'
 import type { HttpMiddleware, HttpTransport, HttpTransportRequest, HttpTransportResponse } from '../types'
 
 const transportResponse = (data: unknown, status = 200): HttpTransportResponse => {
@@ -17,12 +17,12 @@ const transportResponse = (data: unknown, status = 200): HttpTransportResponse =
 }
 
 describe('createHttpClient', () => {
-  it('normalizes and serializes a JSON request before transport', async () => {
+  it('resolves request metadata while preserving the semantic JSON body for transport', async () => {
     let actualRequest: HttpTransportRequest | undefined
 
     const transport: HttpTransport = async request => {
       actualRequest = request
-      return transportResponse('{"id":1}', 201)
+      return transportResponse({ id: 1 }, 201)
     }
 
     const http = createHttpClient({
@@ -55,11 +55,11 @@ describe('createHttpClient', () => {
       headers: {
         accept: 'application/json',
         'x-default': 'overridden',
-        'content-type': 'application/json',
       },
-      body: '{"name":"John"}',
+      json: {
+        name: 'John',
+      },
       timeout: 15_000,
-      responseType: 'text',
     })
 
     expect(response).toEqual({
@@ -71,12 +71,50 @@ describe('createHttpClient', () => {
     })
   })
 
+  it('forwards raw request bodies without interpreting them', async () => {
+    let actualRequest: HttpTransportRequest | undefined
+
+    const transport: HttpTransport = async request => {
+      actualRequest = request
+      return transportResponse({})
+    }
+
+    const http = createHttpClient({ transport })
+    await http.post('/raw', {
+      body: 'raw request body',
+    })
+
+    expect(actualRequest).toEqual({
+      method: 'POST',
+      url: '/raw',
+      headers: {},
+      body: 'raw request body',
+    })
+  })
+
+  it('forwards an explicit response representation without changing the response data', async () => {
+    let actualRequest: HttpTransportRequest | undefined
+
+    const transport: HttpTransport = async request => {
+      actualRequest = request
+      return transportResponse('{"id":1}')
+    }
+
+    const http = createHttpClient({ transport })
+    const response = await http.get<string>('/raw', {
+      responseType: 'text',
+    })
+
+    expect(actualRequest?.responseType).toBe('text')
+    expect(response.data).toBe('{"id":1}')
+  })
+
   it('allows a request to disable the client timeout', async () => {
     let actualRequest: HttpTransportRequest | undefined
 
     const transport: HttpTransport = async request => {
       actualRequest = request
-      return transportResponse('{}')
+      return transportResponse({})
     }
 
     const http = createHttpClient({
@@ -92,7 +130,6 @@ describe('createHttpClient', () => {
       method: 'GET',
       url: '/status',
       headers: {},
-      responseType: 'text',
     })
   })
 
@@ -119,7 +156,7 @@ describe('createHttpClient', () => {
 
     const transport: HttpTransport = async request => {
       order.push(request.headers.authorization ?? 'missing-auth')
-      return transportResponse('{}')
+      return transportResponse({})
     }
 
     const http = createHttpClient({
@@ -131,8 +168,8 @@ describe('createHttpClient', () => {
     expect(order).toEqual(['first:before', 'second:before', 'Bearer token', 'second:after', 'first:after'])
   })
 
-  it('returns structured response errors with parsed JSON bodies', async () => {
-    const transport: HttpTransport = async () => transportResponse('{"code":"user_exists"}', 409)
+  it('returns structured response errors with transport-decoded bodies', async () => {
+    const transport: HttpTransport = async () => transportResponse({ code: 'user_exists' }, 409)
     const http = createHttpClient({ transport })
 
     try {
@@ -157,11 +194,33 @@ describe('createHttpClient', () => {
           'content-type': 'application/json',
         },
       })
+      expect(error.cause).toBeUndefined()
     }
   })
 
-  it('preserves a malformed non-success response body', async () => {
-    const transport: HttpTransport = async () => transportResponse('not-json', 500)
+  it('normalizes HEAD responses to undefined', async () => {
+    const transport: HttpTransport = async () => transportResponse('', 200)
+    const http = createHttpClient({ transport })
+
+    const response = await http.request({
+      method: 'HEAD',
+      url: '/status',
+    })
+
+    expect(response.data).toBeUndefined()
+  })
+
+  it.each([204, 205])('normalizes bodyless HTTP %i responses to undefined', async status => {
+    const transport: HttpTransport = async () => transportResponse('', status)
+    const http = createHttpClient({ transport })
+
+    const response = await http.get('/status')
+
+    expect(response.data).toBeUndefined()
+  })
+
+  it('normalizes a bodyless 304 response before exposing the response error', async () => {
+    const transport: HttpTransport = async () => transportResponse('', 304)
     const http = createHttpClient({ transport })
 
     try {
@@ -172,26 +231,20 @@ describe('createHttpClient', () => {
       if (!(error instanceof HttpError)) throw error
 
       expect(error.kind).toBe('response')
-      expect(error.response?.data).toBe('not-json')
-      expect(error.cause).toBeInstanceOf(SyntaxError)
+      expect(error.response?.status).toBe(304)
+      expect(error.response?.data).toBeUndefined()
     }
   })
 
-  it('reports malformed successful JSON as a parse error', async () => {
-    const transport: HttpTransport = async () => transportResponse('not-json')
+  it('does not disguise non-transport failures as HTTP failures', async () => {
+    const failure = new TypeError('Invalid transport request')
+    const transport: HttpTransport = async () => {
+      throw failure
+    }
+
     const http = createHttpClient({ transport })
 
-    try {
-      await http.get('/status')
-      throw new Error('Expected request to fail')
-    } catch (error) {
-      expect(error).toBeInstanceOf(HttpError)
-      if (!isHttpError(error)) throw error
-
-      expect(error.kind).toBe('parse')
-      expect(error.response?.status).toBe(200)
-      expect(error.response?.data).toBe('not-json')
-    }
+    await expect(http.get('/status')).rejects.toBe(failure)
   })
 
   it('normalizes transport failures', async () => {

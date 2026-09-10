@@ -1,13 +1,7 @@
 import axios, { AxiosError, type AxiosProgressEvent } from 'axios'
 
 import { HttpTransportError } from '../errors'
-import type {
-  HttpProgress,
-  HttpRawHeaders,
-  HttpTransport,
-  HttpTransportRequest,
-  HttpTransportResponseType,
-} from '../types'
+import type { HttpProgress, HttpRawHeaders, HttpResponseType, HttpTransport, HttpTransportRequest } from '../types'
 
 export const createAxiosTransport = (): HttpTransport => {
   const client = axios.create({
@@ -16,8 +10,6 @@ export const createAxiosTransport = (): HttpTransport => {
       Accept: undefined,
       'Content-Type': undefined,
     },
-    transformRequest: [data => data],
-    transformResponse: [data => data],
     validateStatus: null,
     withXSRFToken: false,
     transitional: {
@@ -26,14 +18,16 @@ export const createAxiosTransport = (): HttpTransport => {
   })
 
   return async request => {
+    const body = prepareRequestBody(request)
+
     try {
       const response = await client.request({
         method: request.method,
         url: request.url,
-        headers: { ...request.headers },
-        responseType: mapResponseType(request.responseType),
+        headers: body.headers,
         timeout: request.timeout ?? 0,
-        ...(request.body !== undefined && { data: request.body }),
+        ...(request.responseType !== undefined && { responseType: mapResponseType(request.responseType) }),
+        ...(body.data !== undefined && { data: body.data }),
         ...(request.signal !== undefined && { signal: request.signal }),
         ...(request.onUploadProgress !== undefined && {
           onUploadProgress: (event: AxiosProgressEvent) => request.onUploadProgress?.(normalizeProgress(event)),
@@ -54,7 +48,33 @@ export const createAxiosTransport = (): HttpTransport => {
   }
 }
 
-const mapResponseType = (responseType: HttpTransportResponseType): 'text' | 'blob' | 'arraybuffer' => {
+type PreparedRequestBody = {
+  readonly headers: HttpRawHeaders
+  readonly data?: unknown
+}
+
+const prepareRequestBody = (request: HttpTransportRequest): PreparedRequestBody => {
+  const headers = { ...request.headers }
+
+  if ('json' in request) {
+    const data = JSON.stringify(request.json)
+    if (data === undefined) throw new TypeError('HTTP JSON body is not serializable')
+
+    headers['content-type'] ??= 'application/json'
+    return { headers, data }
+  }
+
+  if ('body' in request && request.body !== undefined) {
+    return {
+      headers,
+      data: request.body,
+    }
+  }
+
+  return { headers }
+}
+
+const mapResponseType = (responseType: HttpResponseType): 'text' | 'blob' | 'arraybuffer' => {
   return responseType === 'arrayBuffer' ? 'arraybuffer' : responseType
 }
 

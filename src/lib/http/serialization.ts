@@ -1,4 +1,4 @@
-import type { HttpHeaders, HttpQuery, HttpRawBody, HttpRawHeaders, HttpRequest } from './types'
+import type { HttpHeaders, HttpQuery, HttpRawHeaders } from './types'
 
 const absoluteUrlPattern = /^[a-z][a-z\d+.-]*:/i
 
@@ -29,40 +29,6 @@ export const buildUrl = (url: string, baseUrl?: string, query?: HttpQuery): stri
   const separator = path.includes('?') ? '&' : '?'
 
   return `${path}${separator}${serializedQuery}${hash}`
-}
-
-export const serializeRequestBody = (
-  request: HttpRequest,
-  headers: HttpHeaders
-): {
-  readonly body?: HttpRawBody
-  readonly headers: HttpRawHeaders
-} => {
-  const normalizedHeaders = normalizeHeaders(headers)
-
-  if ('json' in request) {
-    const body = JSON.stringify(request.json)
-    if (body === undefined) {
-      throw new TypeError('HTTP JSON body is not serializable')
-    }
-
-    normalizedHeaders['content-type'] ??= 'application/json'
-    return {
-      body,
-      headers: normalizedHeaders,
-    }
-  }
-
-  if ('body' in request) {
-    return {
-      body: request.body,
-      headers: normalizedHeaders,
-    }
-  }
-
-  return {
-    headers: normalizedHeaders,
-  }
 }
 
 const resolveUrl = (url: string, baseUrl?: string): string => {

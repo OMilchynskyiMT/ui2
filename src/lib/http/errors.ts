@@ -13,7 +13,7 @@ export class HttpTransportError extends Error {
   }
 }
 
-export type HttpErrorKind = 'aborted' | 'timeout' | 'network' | 'response' | 'parse' | 'unknown'
+export type HttpErrorKind = 'aborted' | 'timeout' | 'network' | 'response' | 'unknown'
 export type HttpErrorOptions = {
   readonly kind: HttpErrorKind
   readonly method: HttpMethod

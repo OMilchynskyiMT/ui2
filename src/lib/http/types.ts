@@ -1,5 +1,5 @@
 export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'HEAD' | 'OPTIONS'
-export type HttpResponseType = 'json' | 'text' | 'blob' | 'arrayBuffer'
+export type HttpResponseType = 'text' | 'blob' | 'arrayBuffer'
 export type HttpQueryPrimitive = string | number | boolean
 export type HttpQueryValue = HttpQueryPrimitive | readonly HttpQueryPrimitive[] | null | undefined
 export type HttpQuery = Readonly<Record<string, HttpQueryValue>>
@@ -56,18 +56,16 @@ export type HttpResponse<T = unknown> = {
 
 export type HttpHandler = (request: HttpRequest) => Promise<HttpResponse<unknown>>
 export type HttpMiddleware = (request: HttpRequest, next: HttpHandler) => Promise<HttpResponse<unknown>>
-export type HttpTransportResponseType = Exclude<HttpResponseType, 'json'>
 export type HttpTransportRequest = {
   readonly method: HttpMethod
   readonly url: string
   readonly headers: HttpHeaders
-  readonly body?: HttpRawBody
   readonly signal?: AbortSignal
   readonly timeout?: number
-  readonly responseType: HttpTransportResponseType
+  readonly responseType?: HttpResponseType
   readonly onUploadProgress?: (progress: HttpProgress) => void
   readonly onDownloadProgress?: (progress: HttpProgress) => void
-}
+} & HttpRequestBodyOptions
 
 export type HttpTransportResponse = {
   readonly data: unknown

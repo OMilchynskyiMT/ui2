@@ -29,5 +29,4 @@ export type {
   HttpTransport,
   HttpTransportRequest,
   HttpTransportResponse,
-  HttpTransportResponseType,
 } from './types'
