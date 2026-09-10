@@ -32,22 +32,12 @@
   </SelectionControl>
 </template>
 
-<script lang="ts">
-export type RadioValue = string | number | boolean
-
-export type MRadioProperties<V extends RadioValue> = SelectionControlCommonProperties & {
-  value: V
-}
-
-export type MRadioExpose = SelectionControlExpose
-</script>
-
 <script generic="V extends RadioValue" lang="ts" setup>
 import { computed, ref, useAttrs, useSlots } from 'vue'
 
 import { useId } from '@/composables/useId'
 
-import type { SelectionControlCommonProperties, SelectionControlExpose } from './selection.shared'
+import type { MRadioExpose, MRadioProperties, RadioValue, SelectionControlExpose } from './selection.shared'
 import SelectionControl from './SelectionControl.vue'
 
 const {
@@ -68,7 +58,7 @@ const emit = defineEmits<{
   blur: [event: FocusEvent]
 }>()
 
-const model = defineModel<V>({ required: true })
+const model = defineModel<V | null>({ required: true })
 const attributes = useAttrs()
 const slots = useSlots()
 const control = ref<SelectionControlExpose>()

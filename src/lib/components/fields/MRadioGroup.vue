@@ -45,8 +45,6 @@
 </template>
 
 <script lang="ts">
-import type { RadioValue } from './MRadio.vue'
-
 export type MRadioGroupOrientation = 'horizontal' | 'vertical'
 
 export type MRadioGroupOption<V extends RadioValue> = {
@@ -79,6 +77,7 @@ import { useId } from '@/composables/useId'
 
 import { useFieldState } from './mfield.shared'
 import MRadio from './MRadio.vue'
+import type { RadioValue } from './selection.shared'
 
 const {
   options,
@@ -99,7 +98,7 @@ const emit = defineEmits<{
   blur: [event: FocusEvent]
 }>()
 
-const model = defineModel<V>({ required: true })
+const model = defineModel<V | null>({ required: true })
 const slots = useSlots()
 const resolvedName = computed(() => name ?? id)
 const { hasError, hasHint, isInvalid, description } = useFieldState(

@@ -26,3 +26,11 @@ export type SelectionControlExpose = {
   focus: (options?: FocusOptions) => void
   blur: () => void
 }
+
+export type RadioValue = string | number | boolean
+
+export type MRadioProperties<V extends RadioValue> = SelectionControlCommonProperties & {
+  value: V
+}
+
+export type MRadioExpose = SelectionControlExpose
