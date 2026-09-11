@@ -43,8 +43,6 @@ export default defineConfigWithVueTs(
       'vue/component-name-in-template-casing': ['error', 'PascalCase'],
       'vue/component-definition-name-casing': ['error', 'PascalCase'],
 
-      '@typescript-eslint/prefer-nullish-coalescing': 'warn',
-
       'unicorn/prevent-abbreviations': 'off',
       'unicorn/no-null': 'off',
       'unicorn/filename-case': [
