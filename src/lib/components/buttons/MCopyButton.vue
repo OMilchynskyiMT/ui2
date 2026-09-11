@@ -114,7 +114,7 @@ onBeforeUnmount(clearResetTimer)
 
     &:disabled {
       cursor: default;
-      opacity: var(--disabled-opacity);
+      opacity: var(--disabled-opacity, 0.5);
     }
 
     & > span.icon-frame {

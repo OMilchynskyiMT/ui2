@@ -1,5 +1,5 @@
 <template>
-  <ul :style="{ '--icon-size': iconSize, '--arrow-size': arrowSize }" class="navigation-tree">
+  <ul :style="{ '--icon-size': iconSize }" class="navigation-tree">
     <li
       v-for="(item, index) in items"
       :key="`${index}-${item.title}`"

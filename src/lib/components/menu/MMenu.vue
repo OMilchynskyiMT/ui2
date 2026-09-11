@@ -16,7 +16,6 @@
         role="menu"
         :aria-label="ariaLabel"
         :aria-labelledby="ariaLabelledby"
-        :style="{ '--icon-size': iconSize }"
         class="menu-list"
         @keydown="onKeydown"
       >
