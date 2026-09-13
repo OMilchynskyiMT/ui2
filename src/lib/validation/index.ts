@@ -17,16 +17,122 @@ import type {
 } from './types'
 
 export { useValidation, type ValidationSchema } from './useValidation'
-export { defineValidator } from './validators/define'
+export { simIccid } from './validators/cellular'
+export { fileExtension, fileMimeType, maxFileSize, nonEmptyFile } from './validators/file'
+export {
+  accountKey,
+  alphanumeric,
+  asciiPrintable,
+  backoffTimings,
+  base64Data,
+  carrierName,
+  countryCode,
+  date,
+  digitalIoName,
+  digits,
+  fileName,
+  hexBytes,
+  hexColor,
+  hexDigits,
+  hexPayload,
+  lowercaseHexDigits,
+  name,
+  noControlCharacters,
+  noWhitespace,
+  prefix,
+  ruleName,
+  separatedHexData,
+  systemNameDescription,
+  time,
+  tunnelName,
+  uri,
+  urlPath,
+  username,
+  x509OtherName,
+} from './validators/format'
+export {
+  address4 as loraAddress4,
+  appUri as loraApplicationUri,
+  basicStationUri as loraBasicStationUri,
+  channelFrequency as loraChannelFrequency,
+  channelMaskLength as loraChannelMaskLength,
+  deviceAddress as loraDeviceAddress,
+  deviceText as loraDeviceText,
+  downlinkChannel as loraDownlinkChannel,
+  eui as loraEui,
+  euiRangeEnd as loraEuiRangeEnd,
+  fragmentDescription as loraFragmentDescription,
+  key as loraKey,
+  nonReservedDeviceAddress as loraNonReservedDeviceAddress,
+  nonZeroGatewayId as loraNonZeroGatewayId,
+  packetForwarderConfig as loraPacketForwarderConfig,
+  sensorId as loraSensorId,
+  sessionText as loraSessionText,
+  uplinkChannel as loraUplinkChannel,
+} from './validators/lora'
+export {
+  availableServerPort,
+  domainName,
+  domainOrIpAddress,
+  ipv4Address,
+  ipv4Cidr,
+  ipv4Gateway,
+  ipv4InNetwork,
+  ipv4Mask,
+  ipv4Netmask,
+  ipv4RangeEnd,
+  ipv6Address,
+  ipv6InterfaceAddress,
+  ipv6InterfaceAddressWithPrefix,
+  ipv6LinkLocalAddress,
+  ipv6LinkLocalWithPrefix,
+  ipv6WithPrefix,
+  leaseTime,
+  macAddress,
+  nonOverlappingIpv4Network,
+  phoneNumber,
+  portCsv,
+  portRange,
+  publicUrl,
+  ssid,
+  trapIpv4Address,
+} from './validators/network'
 export {
   integer,
   max as maxValue,
   min as minValue,
   negative,
   inRange as numberInRange,
+  inRanges as numberInRanges,
+  type NumberRange,
   positive,
 } from './validators/number'
-export { email, inRange, matches, maxLength, minLength, oneOf } from './validators/string'
+export { greaterThanOrEqual, lessThanOrEqual, sameAs, uniqueBy } from './validators/relational'
+export { propertyName as scadaPropertyName, uplinkPayload as scadaUplinkPayload } from './validators/scada'
+export {
+  bootloaderPasswordCharacters,
+  engineId,
+  ipsecId,
+  openVpnPeerFingerprint,
+  passwordComplexity,
+  type PasswordComplexityRules,
+  passwordStrength,
+  pemCertificate,
+  pemPrivateKey,
+  radiusSharedSecret,
+  sshPublicKey,
+} from './validators/security'
+export {
+  email,
+  endsWith,
+  length,
+  matches,
+  maxLength,
+  minLength,
+  nonBlank,
+  startsWith,
+  inRange as stringInRange,
+} from './validators/string'
 
 const emptyValues: ReadonlySet<unknown> = new Set([undefined, null, ''])
 
@@ -68,10 +174,18 @@ const boolean = (...validators: readonly Validator<boolean>[]): ValueSchemaNode<
   return valueNode('boolean', (value): value is boolean => typeof value === 'boolean', validators)
 }
 
+const file = (...validators: readonly Validator<File>[]): ValueSchemaNode<File> => {
+  return valueNode('file', (value): value is File => value instanceof File, validators)
+}
+
 const enumeration = <const TValues extends readonly [string, ...string[]]>(
   values: TValues,
   ...validators: readonly Validator<TValues[number]>[]
 ): ValueSchemaNode<TValues[number]> => {
+  if (values.includes('')) {
+    throw new TypeError('An empty string cannot be used as an enum value because it represents a missing value')
+  }
+
   const allowed = new Set<string>(values)
 
   return valueNode(
@@ -138,6 +252,7 @@ export const types = {
   string,
   number,
   boolean,
+  file,
   enum: enumeration,
   literal,
   object,
@@ -169,7 +284,7 @@ export class Schema<T extends object> {
   readonly #root: ObjectSchemaNode<T, false>
   readonly #options: Required<SchemaOptions>
 
-  constructor(root: ObjectSchemaNode<T, false>, options: SchemaOptions = {}) {
+  constructor(root: ObjectSchemaNode<T, false>, options?: SchemaOptions) {
     this.#root = root
     this.#options = {
       ...defaultSchemaOptions,
@@ -248,7 +363,7 @@ export class Schema<T extends object> {
       if (validator.validate(value, context)) continue
       issues.push({
         code: validator.code,
-        message: validator.message,
+        message: typeof validator.message === 'function' ? validator.message(value, context) : validator.message,
         path,
       })
     }
