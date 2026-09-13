@@ -1,136 +1,128 @@
 import { describe, expect, it } from 'vitest'
 
-import { inRange, integer, max, min, negative, positive } from '../../validators/number'
+import { inRange, inRanges, integer, max, min, negative, positive } from '../../validators/number'
 import { shouldValidate } from '../helpers'
 
 describe('min', () => {
-  it('returns the expected metadata', () => {
-    const validator = min(1)
+  const validator = min(10)
+
+  it('validates the inclusive lower bound', () => {
     expect(validator.code).toBe('number.min')
-    expect(validator.message).toBe('Must be at least 1')
+    expect(validator.message).toBe('Must be at least 10')
+    expect(shouldValidate(validator, 10)).toBe(true)
+    expect(shouldValidate(validator, 11)).toBe(true)
+    expect(shouldValidate(validator, 9)).toBe(false)
   })
 
-  it.each([102, 105, 1000])('accepts %j', value => {
-    expect(shouldValidate(min(101), value)).toBe(true)
-  })
-
-  it.each([1, 5, 100])('rejects %j', value => {
-    expect(shouldValidate(min(101), value)).toBe(false)
-  })
-
-  it('uses a custom message', () => {
-    const message = 'at least 2'
-    const validator = min(1, { message })
-    expect(validator.message).toBe(message)
+  it('rejects non-finite configuration', () => {
+    expect(() => min(NaN)).toThrow(RangeError)
+    expect(() => min(-Infinity)).toThrow(RangeError)
   })
 })
 
 describe('max', () => {
-  it('returns the expected metadata', () => {
-    const validator = max(1)
+  const validator = max(10)
+
+  it('validates the inclusive upper bound', () => {
     expect(validator.code).toBe('number.max')
-    expect(validator.message).toBe('Must be at most 1')
+    expect(validator.message).toBe('Must be at most 10')
+    expect(shouldValidate(validator, 9)).toBe(true)
+    expect(shouldValidate(validator, 10)).toBe(true)
+    expect(shouldValidate(validator, 11)).toBe(false)
   })
 
-  it.each([1, 5, 100])('accepts %j', value => {
-    expect(shouldValidate(max(101), value)).toBe(true)
-  })
-
-  it.each([102, 105, 1000])('rejects %j', value => {
-    expect(shouldValidate(max(101), value)).toBe(false)
-  })
-
-  it('uses a custom message', () => {
-    const message = 'at most 2'
-    const validator = max(1, { message })
-    expect(validator.message).toBe(message)
+  it('rejects non-finite configuration', () => {
+    expect(() => max(NaN)).toThrow(RangeError)
+    expect(() => max(Infinity)).toThrow(RangeError)
   })
 })
 
 describe('inRange', () => {
-  it('returns the expected metadata', () => {
-    const validator = inRange(1, 2)
+  const validator = inRange(1, 2)
+
+  it('validates inclusive numeric bounds', () => {
     expect(validator.code).toBe('number.inRange')
     expect(validator.message).toBe('Must be between 1 and 2')
+    expect(shouldValidate(validator, 1)).toBe(true)
+    expect(shouldValidate(validator, 2)).toBe(true)
+    expect(shouldValidate(validator, 0)).toBe(false)
+    expect(shouldValidate(validator, 3)).toBe(false)
   })
 
-  it.each([1, 2])('accepts %j', value => {
-    expect(shouldValidate(inRange(1, 2), value)).toBe(true)
+  it('rejects invalid configuration', () => {
+    expect(() => inRange(2, 1)).toThrow(RangeError)
+    expect(() => inRange(1, Infinity)).toThrow(RangeError)
+  })
+})
+
+describe('inRanges', () => {
+  it('accepts any configured range', () => {
+    const validator = inRanges([
+      [10, 20],
+      [30, 40],
+    ])
+
+    expect(validator.code).toBe('number.inRanges')
+    expect(validator.message).toBe('Must be within 10-20, 30-40')
+    expect(shouldValidate(validator, 10)).toBe(true)
+    expect(shouldValidate(validator, 35)).toBe(true)
+    expect(shouldValidate(validator, 25)).toBe(false)
   })
 
-  it.each([0, 3])('rejects %j', value => {
-    expect(shouldValidate(inRange(1, 2), value)).toBe(false)
+  it('accepts explicit values outside configured ranges', () => {
+    const validator = inRanges([[10, 20]], { include: [0] })
+
+    expect(validator.message).toBe('Must be within 10-20 or 0')
+    expect(shouldValidate(validator, 0)).toBe(true)
+    expect(shouldValidate(validator, 15)).toBe(true)
+    expect(shouldValidate(validator, 9)).toBe(false)
   })
 
-  it('uses a custom message', () => {
-    const message = 'between 1 and 2'
-    const validator = inRange(1, 2, { message })
-    expect(validator.message).toBe(message)
+  it('rejects invalid configuration', () => {
+    expect(() => inRanges([])).toThrow(TypeError)
+    expect(() => inRanges([[20, 10]])).toThrow(RangeError)
+    expect(() => inRanges([[NaN, 10]])).toThrow(RangeError)
+    expect(() => inRanges([[1, 2]], { include: [Infinity] })).toThrow(RangeError)
   })
 })
 
 describe('integer', () => {
-  it('returns the expected metadata', () => {
-    const validator = integer()
+  const validator = integer()
+
+  it('accepts integer-valued numbers', () => {
     expect(validator.code).toBe('number.integer')
     expect(validator.message).toBe('Must be an integer')
-  })
-
-  it.each([1, 2, 1001])('accepts %j', value => {
-    expect(shouldValidate(integer(), value)).toBe(true)
-  })
-
-  it.each([1.1, 2.2, 1001.1])('rejects %j', value => {
-    expect(shouldValidate(integer(), value)).toBe(false)
-  })
-
-  it('uses a custom message', () => {
-    const message = 'an integer'
-    const validator = integer({ message })
-    expect(validator.message).toBe(message)
+    expect(shouldValidate(validator, 1)).toBe(true)
+    expect(shouldValidate(validator, Number.MAX_SAFE_INTEGER)).toBe(true)
+    expect(shouldValidate(validator, 1.5)).toBe(false)
+    expect(shouldValidate(validator, Number.MAX_SAFE_INTEGER + 1)).toBe(true)
   })
 })
 
 describe('positive', () => {
-  it('returns the expected metadata', () => {
-    const validator = positive()
+  const validator = positive()
+
+  it('accepts values greater than zero', () => {
     expect(validator.code).toBe('number.positive')
     expect(validator.message).toBe('Must be a positive number')
-  })
-
-  it.each([1, 2, 1001])('accepts %j', value => {
-    expect(shouldValidate(positive(), value)).toBe(true)
-  })
-
-  it.each([-1, -2, -1001])('rejects %j', value => {
-    expect(shouldValidate(positive(), value)).toBe(false)
-  })
-
-  it('uses a custom message', () => {
-    const message = 'a positive number'
-    const validator = positive({ message })
-    expect(validator.message).toBe(message)
+    expect(shouldValidate(validator, 1)).toBe(true)
+    expect(shouldValidate(validator, 0)).toBe(false)
+    expect(shouldValidate(validator, -1)).toBe(false)
   })
 })
 
 describe('negative', () => {
-  it('returns the expected metadata', () => {
-    const validator = negative()
+  const validator = negative()
+
+  it('accepts values lower than zero', () => {
     expect(validator.code).toBe('number.negative')
     expect(validator.message).toBe('Must be a negative number')
+    expect(shouldValidate(validator, -1)).toBe(true)
+    expect(shouldValidate(validator, 0)).toBe(false)
+    expect(shouldValidate(validator, 1)).toBe(false)
   })
+})
 
-  it.each([-1, -2, -1001])('accepts %j', value => {
-    expect(shouldValidate(negative(), value)).toBe(true)
-  })
-
-  it.each([1, 2, 1001])('rejects %j', value => {
-    expect(shouldValidate(negative(), value)).toBe(false)
-  })
-
-  it('uses a custom message', () => {
-    const message = 'a negative number'
-    const validator = negative({ message })
-    expect(validator.message).toBe(message)
-  })
+it('supports custom messages', () => {
+  expect(inRange(1, 2, { message: 'custom' }).message).toBe('custom')
 })

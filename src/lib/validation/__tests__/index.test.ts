@@ -1,13 +1,13 @@
 import { expect, expectTypeOf, it, vi } from 'vitest'
 
-import { minValue, numberInRange, optional, Schema, types, withMessages } from '../index'
-import type { SchemaShape, ValidationContext, ValidationIssue, Validator } from '../types'
+import { integer, numberInRange, optional, Schema, types, withMessages } from '../index'
+import type { SchemaShape, ValidationContext, ValidationIssue, Validator, ValidatorMessage } from '../types'
 
 const emptyValues: readonly unknown[] = [undefined, null, '']
 
 const createValidator = <T>(
   code: string,
-  message: string,
+  message: ValidatorMessage<T>,
   isValid: (value: T, context: ValidationContext) => boolean
 ): Validator<T> => {
   return {
@@ -86,12 +86,47 @@ it('rejects an optional node for a required property', () => {
   expectTypeOf(shape).toEqualTypeOf<SchemaShape<Model>>()
 })
 
-it('exports number validators from the public validation entry point', () => {
-  const port = types.number(minValue(1), numberInRange(1, 65_535))
+it('composes public number validators without redundant checks', () => {
+  const port = types.number(integer(), numberInRange(1, 65_535))
   const schema = new Schema(types.object({ port }))
 
   expect(schema.validate({ port: 443 }).valid).toBe(true)
-  expect(schema.validate({ port: 0 }).errors).toEqual({ port: ['Must be at least 1', 'Must be between 1 and 65535'] })
+  expect(schema.validate({ port: 0 }).errors).toEqual({ port: ['Must be between 1 and 65535'] })
+  expect(schema.validate({ port: 80.5 }).errors).toEqual({ port: ['Must be an integer'] })
+})
+
+it('resolves validator messages from the rejected value and validation context', () => {
+  const input = { value: 'rejected' }
+  const validator = createValidator<string>(
+    'dynamic',
+    (value, context) => `${value}:${context.path.join('.')}:${context.root === input}`,
+    () => false
+  )
+  const schema = new Schema(types.object({ value: types.string(validator) }))
+
+  expect(schema.validate(input).issues).toEqual([
+    {
+      code: 'dynamic',
+      message: 'rejected:value:true',
+      path: ['value'],
+    },
+  ])
+})
+
+it('validates File values as scalar schema nodes with scalar error output', () => {
+  type Model = { file: File }
+
+  const nonEmpty = createValidator<File>('file.nonEmpty', 'File must not be empty', value => value.size > 0)
+  const root = types.object<Model>({ file: types.file(nonEmpty) })
+  const schema = new Schema(root)
+
+  expect(schema.validate({ file: new File(['data'], 'config.bin') }).valid).toBe(true)
+  expect(schema.validate({ file: new File([], 'config.bin') }).errors).toEqual({
+    file: ['File must not be empty'],
+  })
+  expect(schema.validate({ file: 'config.bin' }).errors).toEqual({
+    file: ['Expected file'],
+  })
 })
 
 it('returns an empty result for valid data', () => {
@@ -362,6 +397,26 @@ it('rejects a non-object root value', () => {
 
   assertFalse(result.valid)
   assertEqual(result.errors, { $errors: ['Expected object'] })
+})
+
+it('validates enum values and preserves their literal union type', () => {
+  const field = types.enum(['active', 'disabled'] as const)
+
+  expectTypeOf(field).toMatchTypeOf<{
+    readonly optional: false
+    readonly validators: readonly Validator<'active' | 'disabled'>[]
+  }>()
+
+  const schema = new Schema(types.object({ status: field }))
+
+  assertTrue(schema.validate({ status: 'active' }).valid)
+  assertEqual(schema.validate({ status: 'other' }).errors, {
+    status: ['Expected one of: active, disabled'],
+  })
+})
+
+it('rejects an empty string enum member because an empty string represents a missing value', () => {
+  expect(() => types.enum(['', 'active'] as const)).toThrow(TypeError)
 })
 
 it('validates literal values and preserves their literal type', () => {

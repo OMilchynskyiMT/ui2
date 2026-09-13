@@ -12,9 +12,11 @@ export type ValidationContext = Readonly<{
   path: ValidationPath
 }>
 
+export type ValidatorMessage<T> = string | ((value: T, context: ValidationContext) => string)
+
 export type Validator<T> = Readonly<{
   code: string
-  message: string
+  message: ValidatorMessage<T>
   validate: (value: T, context: ValidationContext) => boolean
 }>
 
@@ -60,25 +62,29 @@ export type RecordSchemaNode<T, TOptional extends boolean = false> = BaseSchemaN
   readonly entry: SchemaNode<T, false>
 }
 
-export type SchemaNode<T, TOptional extends boolean> = [T] extends [unknown[]]
-  ? ArraySchemaNode<ArrayValue<T>, TOptional>
-  : [T] extends [object]
-    ? string extends keyof T
-      ? RecordSchemaNode<RecordValue<T>, TOptional>
-      : ObjectSchemaNode<Extract<T, object>, TOptional>
-    : ValueSchemaNode<T, TOptional>
+export type SchemaNode<T, TOptional extends boolean> = [T] extends [File]
+  ? ValueSchemaNode<T, TOptional>
+  : [T] extends [unknown[]]
+    ? ArraySchemaNode<ArrayValue<T>, TOptional>
+    : [T] extends [object]
+      ? string extends keyof T
+        ? RecordSchemaNode<RecordValue<T>, TOptional>
+        : ObjectSchemaNode<Extract<T, object>, TOptional>
+      : ValueSchemaNode<T, TOptional>
 
 export type SchemaShape<T extends object> = {
   [K in keyof T]-?: SchemaNode<NonNullable<T[K]>, IsOptionalKey<T, K>>
 }
 
-export type ValidationErrorNode<T> = [T] extends [unknown[]]
-  ? ValidationArrayErrors<ArrayValue<T>>
-  : [T] extends [object]
-    ? string extends keyof T
-      ? ValidationRecordErrors<RecordValue<T>>
-      : ValidationObjectErrors<Extract<T, object>>
-    : string[]
+export type ValidationErrorNode<T> = [T] extends [File]
+  ? string[]
+  : [T] extends [unknown[]]
+    ? ValidationArrayErrors<ArrayValue<T>>
+    : [T] extends [object]
+      ? string extends keyof T
+        ? ValidationRecordErrors<RecordValue<T>>
+        : ValidationObjectErrors<Extract<T, object>>
+      : string[]
 
 export type ValidationObjectErrors<T extends object> = {
   [K in keyof T]?: ValidationErrorNode<NonNullable<T[K]>>
