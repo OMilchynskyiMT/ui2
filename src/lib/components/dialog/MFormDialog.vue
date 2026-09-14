@@ -1,15 +1,21 @@
 <template>
   <MDialog
     ref="dialog"
-    v-bind="{ style: attributes.style, class: attributes.class }"
-    :aria-labelledby="title ? headerId : undefined"
+    :aria-labelledby="slots.title || title ? headerId : undefined"
     :persistent="persistent || submitting"
     @cancel="cancelled"
     @close="closed"
     @show="emit('show')"
   >
-    <form ref="form" class="form" novalidate @reset.prevent="cancel" @submit.prevent="submitForm">
-      <header v-if="$slots.title || title">
+    <form
+      ref="form"
+      :aria-busy="submitting || undefined"
+      class="form"
+      novalidate
+      @reset.prevent="cancel"
+      @submit.prevent="submitForm"
+    >
+      <header v-if="slots.title || title">
         <h2 :id="headerId" class="title">
           <slot name="title">{{ title }}</slot>
         </h2>
@@ -55,7 +61,7 @@ type SubmitResult = boolean | void
 </script>
 
 <script lang="ts" setup>
-import { ref, useAttrs, useTemplateRef } from 'vue'
+import { ref, useSlots, useTemplateRef } from 'vue'
 import { CheckIcon, XIcon } from '@lucide/vue'
 
 import { useId } from '@/composables/useId'
@@ -98,7 +104,7 @@ const emit = defineEmits<{
 
 const dialog = useTemplateRef<DialogExposed>('dialog')
 const form = useTemplateRef<HTMLFormElement>('form')
-const attributes = useAttrs()
+const slots = useSlots()
 
 const submitting = ref(false)
 
@@ -138,16 +144,23 @@ const submitForm = async (): Promise<void> => {
   if (!isValid()) return
 
   submitting.value = true
+  let keepSubmittingUntilClose = false
 
   try {
     emit('submit')
     const result = await submit?.()
     if (result === false) return
-    close()
+
+    if (dialog.value?.isVisible()) {
+      keepSubmittingUntilClose = true
+      close()
+    }
   } catch (error) {
     emit('error', error)
   } finally {
-    submitting.value = false
+    if (!keepSubmittingUntilClose) {
+      submitting.value = false
+    }
   }
 }
 

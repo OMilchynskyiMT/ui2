@@ -69,7 +69,7 @@ type PaginationItem = PaginationPage | PaginationEllipsis
 </script>
 
 <script lang="ts" setup>
-import { computed } from 'vue'
+import { computed, watch } from 'vue'
 import { ChevronLeftIcon, ChevronRightIcon } from '@lucide/vue'
 
 import MIcon from '../MIcon.vue'
@@ -97,10 +97,21 @@ const toNonNegativeInteger = (value: number): number => {
 const normalizedPageCount = computed(() => toNonNegativeInteger(pageCount))
 const normalizedSiblingCount = computed(() => toNonNegativeInteger(siblingCount))
 const normalizedBoundaryCount = computed(() => toNonNegativeInteger(boundaryCount))
-const currentPage = computed(() => {
-  const page = Number.isFinite(model.value) ? Math.trunc(model.value) : 1
+const normalizePage = (value: number): number => {
+  const page = Number.isFinite(value) ? Math.trunc(value) : 1
   return Math.min(Math.max(page, 1), Math.max(1, normalizedPageCount.value))
-})
+}
+
+const currentPage = computed(() => normalizePage(model.value))
+
+watch(
+  [model, normalizedPageCount],
+  ([page]) => {
+    const normalizedPage = normalizePage(page)
+    if (page !== normalizedPage) model.value = normalizedPage
+  },
+  { immediate: true }
+)
 
 const paginationItems = computed<PaginationItem[]>(() => {
   const count = normalizedPageCount.value
@@ -148,7 +159,7 @@ const paginationItems = computed<PaginationItem[]>(() => {
 const selectPage = (page: number): void => {
   if (disabled) return
 
-  const nextPage = Math.min(Math.max(Math.trunc(page), 1), normalizedPageCount.value)
+  const nextPage = normalizePage(page)
   if (nextPage === model.value) return
 
   model.value = nextPage

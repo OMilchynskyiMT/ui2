@@ -27,7 +27,7 @@ const slots = useSlots()
     grid-template-rows: 1fr auto;
   }
 
-  &:has(> header, > footer) {
+  &:has(> header):has(> footer) {
     grid-template-rows: auto 1fr auto;
   }
 }

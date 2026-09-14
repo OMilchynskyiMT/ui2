@@ -1,8 +1,14 @@
 <template>
   <MBar class="top-bar">
     <template #leading>
-      <img v-if="resolvedScheme === 'light'" src="/images/MT-logo.svg" class="u-hidden-below-md" width="180" />
-      <img v-else src="/images/MT-logo-light.svg" class="u-hidden-below-md" width="180" />
+      <img
+        v-if="resolvedScheme === 'light'"
+        alt="MultiTech"
+        class="u-hidden-below-md"
+        src="/images/MT-logo.svg"
+        width="180"
+      />
+      <img v-else alt="MultiTech" class="u-hidden-below-md" src="/images/MT-logo-light.svg" width="180" />
       <slot name="leading" />
     </template>
 

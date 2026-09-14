@@ -7,6 +7,7 @@
     :class="{ disabled, invalid: isInvalid, readonly }"
     :data-orientation="orientation"
     :disabled="disabled"
+    :form="form"
     class="radio-group"
   >
     <legend v-if="label || slots.label">
@@ -20,6 +21,7 @@
         :key="option.id ?? `${index}-${String(option.value)}`"
         v-model="model"
         :disabled="disabled || option.disabled"
+        :form="form"
         :hint="option.hint"
         :invalid="isInvalid"
         :label="option.label"
@@ -60,6 +62,7 @@ export type MRadioGroupProperties<V extends RadioValue> = {
   options: readonly MRadioGroupOption<V>[]
   id?: string
   name?: string
+  form?: string
   label?: string
   hint?: string
   error?: string
@@ -83,6 +86,7 @@ const {
   options,
   id = useId('m-radio-group-'),
   name,
+  form,
   label = '',
   hint = '',
   error = '',

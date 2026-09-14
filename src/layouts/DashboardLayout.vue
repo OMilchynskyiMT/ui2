@@ -105,8 +105,8 @@
     <MDialog id="compact-navigation" ref="mainMenuDialog" aria-label="Main navigation" fullscreen>
       <div class="compact-navigation">
         <MBar class="compact-navigation-header">
-          <img v-if="resolvedScheme === 'light'" src="/images/MT-logo.svg" width="180" />
-          <img v-else src="/images/MT-logo-light.svg" width="180" />
+          <img v-if="resolvedScheme === 'light'" alt="MultiTech" src="/images/MT-logo.svg" width="180" />
+          <img v-else alt="MultiTech" src="/images/MT-logo-light.svg" width="180" />
           <template #trailing>
             <MButton
               aria-label="Close navigation"

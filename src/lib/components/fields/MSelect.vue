@@ -18,11 +18,11 @@
     :variant="variant"
     @request-focus="focus"
   >
-    <template v-for="name in Object.keys(slots).filter(name => !reservedSlots.includes(name))" #[name]>
-      <slot :name="name" />
+    <template v-for="slotName in Object.keys(slots).filter(name => !reservedSlots.includes(name))" #[slotName]>
+      <slot :name="slotName" />
     </template>
 
-    <input v-if="hiddenInputName" :name="hiddenInputName" :value="hiddenInputValue" type="hidden" />
+    <input v-if="name" :disabled="disabled" :form="form" :name="name" :value="hiddenInputValue" type="hidden" />
 
     <button
       :id="id"
@@ -91,6 +91,8 @@ export type MSelectProperties<V extends string | number> = Omit<
   'id' | 'focused' | 'populated' | 'multiline'
 > & {
   id?: string
+  name?: string
+  form?: string
   options: readonly ListboxEntry<V>[]
   placeholder?: string
 }
@@ -127,6 +129,8 @@ const reservedSlots = ['default', 'group', 'item', 'value']
 
 const {
   id = useId(),
+  name,
+  form,
   options,
   readonly = false,
   disabled = false,
@@ -152,11 +156,7 @@ const emit = defineEmits<{
 }>()
 
 const model = defineModel<V | null>({ required: true })
-const {
-  attributes,
-  rootAttributes: fieldAttributes,
-  controlAttributes: triggerAttributes,
-} = useSplitAttributes(['name'])
+const { rootAttributes: fieldAttributes, controlAttributes: triggerAttributes } = useSplitAttributes()
 const slots = useSlots()
 const frame = ref<FieldFrameExpose>()
 const triggerReference = useTemplateRef<HTMLButtonElement>('trigger')
@@ -189,10 +189,6 @@ const { hasError, isInvalid, description } = useFieldState(
   slots
 )
 const isPopulated = computed(() => Boolean(selectedOption.value) || model.value != null || placeholder.trim() !== '')
-const hiddenInputName = computed(() => {
-  const name = attributes.name
-  return !disabled && typeof name === 'string' ? name : undefined
-})
 const hiddenInputValue = computed(() => (model.value == null ? '' : String(model.value)))
 
 const focus = (options?: FocusOptions): void => {
