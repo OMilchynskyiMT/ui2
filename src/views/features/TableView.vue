@@ -1,11 +1,11 @@
 <template>
   <div class="table-view">
     <section>
-      <MSectionHeader description="Sortable data with sticky headers and responsive detail-column behavior">
+      <UiSectionHeader description="Sortable data with sticky headers and responsive detail-column behavior">
         Responsive table
-      </MSectionHeader>
+      </UiSectionHeader>
 
-      <MTable
+      <UiTable
         v-model:sort="sort"
         :columns
         :loading
@@ -20,7 +20,7 @@
         <template #cell-active="{ value }">
           {{ value ? 'Active' : 'Inactive' }}
         </template>
-      </MTable>
+      </UiTable>
     </section>
   </div>
 </template>
@@ -28,9 +28,9 @@
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue'
 
-import MSectionHeader from '@/lib/components/section/MSectionHeader.vue'
-import type { TableColumn, TableSort } from '@/lib/components/table/mtable.types'
-import MTable from '@/lib/components/table/MTable.vue'
+import UiSectionHeader from '@/lib/components/section/UiSectionHeader.vue'
+import type { TableColumn, TableSort } from '@/lib/components/table/table.types'
+import UiTable from '@/lib/components/table/UiTable.vue'
 
 type User = {
   id: number

@@ -61,7 +61,7 @@ import { computed, useSlots, useTemplateRef, watchEffect } from 'vue'
 import { useId } from '@/composables/useId'
 
 import { useSplitAttributes } from '../component.shared'
-import { useFieldState } from './mfield.shared'
+import { useFieldState } from './field.shared'
 import type { SelectionControlExpose, SelectionControlProperties } from './selection.shared'
 
 const {

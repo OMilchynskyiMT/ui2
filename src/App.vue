@@ -2,7 +2,7 @@
   <RouterView />
 
   <Teleport to="#notifications">
-    <MNotifications />
+    <Notifications />
   </Teleport>
 </template>
 
@@ -10,7 +10,7 @@
 import { watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
-import MNotifications from '@/components/notifications/MNotifications.vue'
+import Notifications from '@/components/notifications/NotificationStack.vue'
 import { useUserSession } from '@/state/userSession'
 
 const router = useRouter()

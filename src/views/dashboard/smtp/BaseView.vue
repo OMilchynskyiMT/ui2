@@ -1,16 +1,16 @@
 <template>
-  <MFormGrid :columns="1">
-    <MSectionHeader>
+  <UiFormGrid :columns="1">
+    <UiSectionHeader>
       SMTP Configuration
       <template #description>
         Configure SMTP server and mail log settings to allow your device to send email messages
       </template>
-    </MSectionHeader>
+    </UiSectionHeader>
 
-    <MTabs
-      aria-label="SMTP sections"
+    <UiTabs
       :items="tabs"
       :model-value="route.name?.toString() ?? ''"
+      aria-label="SMTP sections"
       @update:model-value="goto($event, id => router.push({ name: id }))"
     >
       <template #panel>
@@ -20,21 +20,21 @@
           </PageTransition>
         </RouterView>
       </template>
-    </MTabs>
-  </MFormGrid>
+    </UiTabs>
+  </UiFormGrid>
 </template>
 
 <script lang="ts" setup>
 import { CogIcon, NotebookTabsIcon } from '@lucide/vue'
 import { useRoute, useRouter } from 'vue-router'
 
-import MFormGrid from '@/lib/components/grid/MFormGrid.vue'
-import MSectionHeader from '@/lib/components/section/MSectionHeader.vue'
-import MTabs, { type MTabItem } from '@/lib/components/tabs/MTabs.vue'
+import UiFormGrid from '@/lib/components/grid/UiFormGrid.vue'
+import UiSectionHeader from '@/lib/components/section/UiSectionHeader.vue'
+import UiTabs, { type UiTabItem } from '@/lib/components/tabs/UiTabs.vue'
 import PageTransition from '@/components/transitions/PageTransition.vue'
 import { useTabNavigation } from '@/composables/useTabNavigation'
 
-const tabs: MTabItem<string>[] = [
+const tabs: UiTabItem<string>[] = [
   { title: 'Settings', value: 'smtp-settings', icon: CogIcon },
   { title: 'Mail Log', value: 'smtp-log', icon: NotebookTabsIcon },
 ]

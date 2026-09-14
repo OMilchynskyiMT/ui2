@@ -1,5 +1,5 @@
 <template>
-  <MPopover
+  <UiPopover
     :anchor="anchor"
     :offset="2"
     :open="open"
@@ -32,7 +32,7 @@
         </slot>
       </template>
     </ListboxContent>
-  </MPopover>
+  </UiPopover>
 </template>
 
 <script lang="ts">
@@ -50,7 +50,7 @@ export type FieldListboxPopupProperties<V> = {
 
 <script generic="V extends string | number" lang="ts" setup>
 import ListboxContent from '../../list/internal/ListboxContent.vue'
-import MPopover from '../../overlay/MPopover.vue'
+import UiPopover from '../../overlay/UiPopover.vue'
 
 const { id, anchor, open, items, activeValue, selectedValue } = defineProps<FieldListboxPopupProperties<V>>()
 const emit = defineEmits<{

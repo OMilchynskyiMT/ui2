@@ -48,7 +48,6 @@ const initialize = (): void => {
     return
   }
 
-  // eslint-disable-next-line unicorn/no-top-level-assignment-in-function
   mediaQuery = matchMedia(SYSTEM_QUERY)
   rawScheme.value = readStoredScheme()
   updateSystemScheme()

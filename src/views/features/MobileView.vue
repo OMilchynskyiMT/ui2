@@ -1,57 +1,57 @@
 <template>
   <div class="mobile-examples">
     <section>
-      <MSectionHeader description="Responsive action rows with mobile safe-area handling">
+      <UiSectionHeader description="Responsive action rows with mobile safe-area handling">
         Bottom actions
-      </MSectionHeader>
+      </UiSectionHeader>
 
-      <MCard class="actions-demo">
+      <UiCard class="actions-demo">
         <p>
           Resize the viewport below the medium breakpoint. The action area becomes sticky and can expand its actions
           when
           <code>adaptive</code> is enabled.
         </p>
 
-        <MBottomActions adaptive>
-          <MButton tone="neutral" variant="tonal">Cancel</MButton>
-          <MButton tone="primary">
-            <MIcon :icon="CheckIcon" size="1rem" />
+        <UiBottomActions adaptive>
+          <UiButton tone="neutral" variant="tonal">Cancel</UiButton>
+          <UiButton tone="primary">
+            <UiIcon :icon="CheckIcon" size="1rem" />
             Save changes
-          </MButton>
-        </MBottomActions>
-      </MCard>
+          </UiButton>
+        </UiBottomActions>
+      </UiCard>
     </section>
 
     <section>
-      <MSectionHeader description="Measured action overflow without viewport breakpoints">
+      <UiSectionHeader description="Measured action overflow without viewport breakpoints">
         Adaptive actions
-      </MSectionHeader>
+      </UiSectionHeader>
 
-      <MCard class="adaptive-actions-demo">
+      <UiCard class="adaptive-actions-demo">
         <p>The highest-priority actions remain visible while actions that no longer fit move into the overflow menu.</p>
-        <MAdaptiveActions :items="adaptiveActions" aria-label="Example adaptive actions" />
-      </MCard>
+        <UiAdaptiveActions :items="adaptiveActions" aria-label="Example adaptive actions" />
+      </UiCard>
     </section>
 
     <section>
-      <MSectionHeader description="Modal mobile surface built on the common dialog infrastructure">
+      <UiSectionHeader description="Modal mobile surface built on the common dialog infrastructure">
         Bottom sheet
-      </MSectionHeader>
+      </UiSectionHeader>
 
-      <MButton tone="primary" variant="tonal" @click="bottomSheet?.show()">
-        <MIcon :icon="PanelBottomOpenIcon" size="1rem" />
+      <UiButton tone="primary" variant="tonal" @click="bottomSheet?.show()">
+        <UiIcon :icon="PanelBottomOpenIcon" size="1rem" />
         Open bottom sheet
-      </MButton>
+      </UiButton>
 
-      <MBottomSheet
+      <UiBottomSheet
         ref="bottomSheet"
         description="The sheet keeps its header and actions outside the scrolling content region."
         title="Connection settings"
       >
         <div class="sheet-form">
-          <MTextField v-model="sheetForm.hostname" label="Hostname" />
-          <MTextField v-model="sheetForm.username" label="Username" />
-          <MPasswordField v-model="sheetForm.password" label="Password" />
+          <UiTextField v-model="sheetForm.hostname" label="Hostname" />
+          <UiTextField v-model="sheetForm.username" label="Username" />
+          <UiPasswordField v-model="sheetForm.password" label="Password" />
 
           <p class="hint">
             Focus a field on a phone to see the Visual Viewport values update while the software keyboard is open.
@@ -59,30 +59,30 @@
         </div>
 
         <template #actions="{ close }">
-          <MButton tone="neutral" variant="tonal" @click="close">Cancel</MButton>
-          <MButton tone="primary" @click="close">
-            <MIcon :icon="CheckIcon" size="1rem" />
+          <UiButton tone="neutral" variant="tonal" @click="close">Cancel</UiButton>
+          <UiButton tone="primary" @click="close">
+            <UiIcon :icon="CheckIcon" size="1rem" />
             Apply
-          </MButton>
+          </UiButton>
         </template>
-      </MBottomSheet>
+      </UiBottomSheet>
     </section>
 
     <section>
-      <MSectionHeader description="Reusable vertical scrolling with edge fades and stable scrollbar layout">
+      <UiSectionHeader description="Reusable vertical scrolling with edge fades and stable scrollbar layout">
         Scroll area
-      </MSectionHeader>
+      </UiSectionHeader>
 
-      <MScrollArea class="scroll-demo" fade-edges>
+      <UiScrollArea class="scroll-demo" fade-edges>
         <div class="scroll-demo-content">
           <div v-for="item in scrollItems" :key="item">Scrollable item {{ item }}</div>
         </div>
-      </MScrollArea>
+      </UiScrollArea>
     </section>
 
     <section>
-      <MSectionHeader description="Reactive browser Visual Viewport measurements"> Visual viewport </MSectionHeader>
-      <MPropertyList :data="viewportData" :items="viewportItems" />
+      <UiSectionHeader description="Reactive browser Visual Viewport measurements"> Visual viewport </UiSectionHeader>
+      <UiPropertyList :data="viewportData" :items="viewportItems" />
     </section>
   </div>
 </template>
@@ -99,24 +99,24 @@ import {
   TrashIcon,
 } from '@lucide/vue'
 
-import MButton from '@/lib/components/buttons/MButton.vue'
-import MBottomSheet, { type MBottomSheetExposed } from '@/lib/components/dialog/MBottomSheet.vue'
-import MPasswordField from '@/lib/components/fields/MPasswordField.vue'
-import MTextField from '@/lib/components/fields/MTextField.vue'
-import MAdaptiveActions, { type MAdaptiveAction } from '@/lib/components/layout/MAdaptiveActions.vue'
-import MBottomActions from '@/lib/components/layout/MBottomActions.vue'
-import MScrollArea from '@/lib/components/layout/MScrollArea.vue'
-import MPropertyList, { type Item as PropertyListItem } from '@/lib/components/list/MPropertyList.vue'
-import MIcon from '@/lib/components/MIcon.vue'
-import MCard from '@/lib/components/section/MCard.vue'
-import MSectionHeader from '@/lib/components/section/MSectionHeader.vue'
+import UiButton from '@/lib/components/buttons/UiButton.vue'
+import UiBottomSheet, { type UiBottomSheetExposed } from '@/lib/components/dialog/UiBottomSheet.vue'
+import UiPasswordField from '@/lib/components/fields/UiPasswordField.vue'
+import UiTextField from '@/lib/components/fields/UiTextField.vue'
+import UiAdaptiveActions, { type UiAdaptiveAction } from '@/lib/components/layout/UiAdaptiveActions.vue'
+import UiBottomActions from '@/lib/components/layout/UiBottomActions.vue'
+import UiScrollArea from '@/lib/components/layout/UiScrollArea.vue'
+import UiPropertyList, { type Item as PropertyListItem } from '@/lib/components/list/UiPropertyList.vue'
+import UiCard from '@/lib/components/section/UiCard.vue'
+import UiSectionHeader from '@/lib/components/section/UiSectionHeader.vue'
+import UiIcon from '@/lib/components/UiIcon.vue'
 import { useVisualViewport } from '@/composables/useVisualViewport'
 
-const bottomSheet = useTemplateRef<MBottomSheetExposed>('bottomSheet')
+const bottomSheet = useTemplateRef<UiBottomSheetExposed>('bottomSheet')
 const viewport = useVisualViewport()
 const scrollItems = Array.from({ length: 18 }, (_, index) => index + 1)
 
-const adaptiveActions: MAdaptiveAction<string>[] = [
+const adaptiveActions: UiAdaptiveAction<string>[] = [
   { label: 'Refresh', value: 'refresh', icon: RefreshCwIcon, priority: 2, tone: 'primary', variant: 'tonal' },
   { label: 'Settings', value: 'settings', icon: SettingsIcon, priority: 1, tone: 'neutral', variant: 'tonal' },
   { label: 'Duplicate', value: 'duplicate', icon: CopyIcon, tone: 'neutral', variant: 'tonal' },

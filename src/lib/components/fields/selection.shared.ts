@@ -29,8 +29,8 @@ export type SelectionControlExpose = {
 
 export type RadioValue = string | number | boolean
 
-export type MRadioProperties<V extends RadioValue> = SelectionControlCommonProperties & {
+export type UiRadioProperties<V extends RadioValue> = SelectionControlCommonProperties & {
   value: V
 }
 
-export type MRadioExpose = SelectionControlExpose
+export type UiRadioExpose = SelectionControlExpose

@@ -1,11 +1,11 @@
 <template>
   <div class="menu-view">
     <section>
-      <MSectionHeader description="Action menu with icons, typed values, and selection feedback">
+      <UiSectionHeader description="Action menu with icons, typed values, and selection feedback">
         Menu button
-      </MSectionHeader>
+      </UiSectionHeader>
 
-      <MMenuButton
+      <UiMenuButton
         :items="menuItems"
         :offset="8"
         menu-aria-label="Example actions"
@@ -14,7 +14,7 @@
         @select="selected = $event.value"
       >
         Open menu
-      </MMenuButton>
+      </UiMenuButton>
 
       <div v-if="selected" class="result">Selected: {{ selected }}</div>
     </section>
@@ -25,12 +25,12 @@
 import { ref } from 'vue'
 import { LogOutIcon, PaletteIcon, SaveIcon } from '@lucide/vue'
 
-import type { MMenuItem } from '@/lib/components/menu/MMenu.vue'
-import MMenuButton from '@/lib/components/menu/MMenuButton.vue'
-import MSectionHeader from '@/lib/components/section/MSectionHeader.vue'
+import type { UiMenuItem } from '@/lib/components/menu/UiMenu.vue'
+import UiMenuButton from '@/lib/components/menu/UiMenuButton.vue'
+import UiSectionHeader from '@/lib/components/section/UiSectionHeader.vue'
 
 const selected = ref<string>()
-const menuItems: MMenuItem<string>[] = [
+const menuItems: UiMenuItem<string>[] = [
   { title: 'Save changes', icon: SaveIcon, value: 'save' },
   { title: 'Switch color scheme', icon: PaletteIcon, value: 'switch-color-scheme' },
   { title: 'Logout', icon: LogOutIcon, value: 'logout' },

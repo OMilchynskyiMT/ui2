@@ -1,81 +1,81 @@
 <template>
   <div class="alerts-view">
     <section>
-      <MSectionHeader description="Feedback tones with the default icon and full message content">
+      <UiSectionHeader description="Feedback tones with the default icon and full message content">
         Alerts
-      </MSectionHeader>
+      </UiSectionHeader>
 
-      <MFormGrid :columns="{ small: 1, large: 2 }">
-        <MAlert v-for="tone in tones" :key="`default-${tone}`" :tone>
+      <UiFormGrid :columns="{ small: 1, large: 2 }">
+        <UiAlert v-for="tone in tones" :key="`default-${tone}`" :tone>
           {{ tone }}. Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum provident accusamus cumque
           dolore cum neque eligendi laudantium, reprehenderit, delectus sequi fuga officiis adipisci consectetur maxime
           numquam temporibus, vitae veritatis ut.
-        </MAlert>
-      </MFormGrid>
+        </UiAlert>
+      </UiFormGrid>
     </section>
 
     <section>
-      <MSectionHeader description="Iconless alerts and alerts with custom icon/action content">
+      <UiSectionHeader description="Iconless alerts and alerts with custom icon/action content">
         Variants
-      </MSectionHeader>
+      </UiSectionHeader>
 
       <div class="variant-group">
         <strong>Without icons</strong>
-        <MFormGrid :columns="{ small: 1, large: 2 }">
-          <MAlert v-for="tone in tones" :key="`no-icon-${tone}`" :icon="false" :tone>{{ tone }}</MAlert>
-        </MFormGrid>
+        <UiFormGrid :columns="{ small: 1, large: 2 }">
+          <UiAlert v-for="tone in tones" :key="`no-icon-${tone}`" :icon="false" :tone>{{ tone }}</UiAlert>
+        </UiFormGrid>
       </div>
 
       <div class="variant-group">
         <strong>Custom icon and action</strong>
-        <MFormGrid :columns="{ small: 1, large: 2 }">
-          <MAlert v-for="tone in tones" :key="`custom-${tone}`" :tone>
+        <UiFormGrid :columns="{ small: 1, large: 2 }">
+          <UiAlert v-for="tone in tones" :key="`custom-${tone}`" :tone>
             {{ tone }}. Custom icon.
             <template #icon>
-              <MIcon :icon="LockKeyholeOpenIcon" />
+              <UiIcon :icon="LockKeyholeOpenIcon" />
             </template>
             <template #actions>
-              <MButton size="small" tone="neutral">Action</MButton>
+              <UiButton size="small" tone="neutral">Action</UiButton>
             </template>
-          </MAlert>
-        </MFormGrid>
+          </UiAlert>
+        </UiFormGrid>
       </div>
     </section>
 
     <section>
-      <MSectionHeader
+      <UiSectionHeader
         description="Loading, error, empty, and ready states rendered through a single boundary component"
       >
         Async state
-      </MSectionHeader>
+      </UiSectionHeader>
 
-      <MFormGrid>
-        <MCard class="state-example">
-          <MAsyncState loading />
-        </MCard>
+      <UiFormGrid>
+        <UiCard class="state-example">
+          <UiAsyncState loading />
+        </UiCard>
 
-        <MCard class="state-example">
-          <MAsyncState :error="demoError" />
-        </MCard>
+        <UiCard class="state-example">
+          <UiAsyncState :error="demoError" />
+        </UiCard>
 
-        <MCard class="state-example">
-          <MAsyncState empty>
+        <UiCard class="state-example">
+          <UiAsyncState empty>
             <template #empty>
-              <MEmptyState :icon="InboxIcon" description="There are no items to display yet." title="Nothing here">
+              <UiEmptyState :icon="InboxIcon" description="There are no items to display yet." title="Nothing here">
                 <template #actions>
-                  <MButton variant="tonal">Create item</MButton>
+                  <UiButton variant="tonal">Create item</UiButton>
                 </template>
-              </MEmptyState>
+              </UiEmptyState>
             </template>
-          </MAsyncState>
-        </MCard>
+          </UiAsyncState>
+        </UiCard>
 
-        <MCard class="state-example">
-          <MAsyncState>
-            <MAlert tone="success">Content is ready.</MAlert>
-          </MAsyncState>
-        </MCard>
-      </MFormGrid>
+        <UiCard class="state-example">
+          <UiAsyncState>
+            <UiAlert tone="success">Content is ready.</UiAlert>
+          </UiAsyncState>
+        </UiCard>
+      </UiFormGrid>
     </section>
   </div>
 </template>
@@ -83,15 +83,15 @@
 <script lang="ts" setup>
 import { InboxIcon, LockKeyholeOpenIcon } from '@lucide/vue'
 
-import MButton from '@/lib/components/buttons/MButton.vue'
+import UiButton from '@/lib/components/buttons/UiButton.vue'
 import type { FeedbackTone } from '@/lib/components/component.types'
-import MFormGrid from '@/lib/components/grid/MFormGrid.vue'
-import MIcon from '@/lib/components/MIcon.vue'
-import MCard from '@/lib/components/section/MCard.vue'
-import MSectionHeader from '@/lib/components/section/MSectionHeader.vue'
-import MAlert from '@/lib/components/status/MAlert.vue'
-import MAsyncState from '@/lib/components/status/MAsyncState.vue'
-import MEmptyState from '@/lib/components/status/MEmptyState.vue'
+import UiFormGrid from '@/lib/components/grid/UiFormGrid.vue'
+import UiCard from '@/lib/components/section/UiCard.vue'
+import UiSectionHeader from '@/lib/components/section/UiSectionHeader.vue'
+import UiAlert from '@/lib/components/status/UiAlert.vue'
+import UiAsyncState from '@/lib/components/status/UiAsyncState.vue'
+import UiEmptyState from '@/lib/components/status/UiEmptyState.vue'
+import UiIcon from '@/lib/components/UiIcon.vue'
 
 const tones: FeedbackTone[] = ['neutral', 'info', 'success', 'warning', 'danger']
 const demoError = new Error('Unable to load data')

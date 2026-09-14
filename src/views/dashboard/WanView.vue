@@ -1,50 +1,50 @@
 <template>
-  <MFormGrid :columns="1">
-    <MSectionHeader>WAN Configuration</MSectionHeader>
+  <UiFormGrid :columns="1">
+    <UiSectionHeader>WAN Configuration</UiSectionHeader>
 
-    <MFormGrid :columns="1">
-      <MCard>
-        <MFormGrid :columns="2">
+    <UiFormGrid :columns="1">
+      <UiCard>
+        <UiFormGrid :columns="2">
           <div>Mode</div>
-          <div><MBadge size="large" tone="success">FAILOVER</MBadge></div>
-        </MFormGrid>
-      </MCard>
+          <div><UiBadge size="large" tone="success">FAILOVER</UiBadge></div>
+        </UiFormGrid>
+      </UiCard>
 
-      <MTable :columns="wanColumns" :rows="wanRows" caption="WANs" mode="scroll">
+      <UiTable :columns="wanColumns" :rows="wanRows" caption="WANs" mode="scroll">
         <template #cell-drag>
-          <MIcon :icon="GripVerticalIcon" style="cursor: grab" />
+          <UiIcon :icon="GripVerticalIcon" style="cursor: grab" />
         </template>
 
         <template #cell-actions>
-          <MButton aria-label="Edit WAN" tone="neutral" variant="icon">
-            <MIcon :icon="PencilIcon" />
-          </MButton>
+          <UiButton aria-label="Edit WAN" tone="neutral" variant="icon">
+            <UiIcon :icon="PencilIcon" />
+          </UiButton>
         </template>
 
         <template #cell-type="{ value }">
-          <MBadge tone="primary">{{ value }}</MBadge>
+          <UiBadge tone="primary">{{ value }}</UiBadge>
         </template>
 
         <template #cell-status="{ value }">
-          <MIcon v-if="value" :icon="CheckIcon" :style="{ '--color': 'var(--green-500)' }" />
-          <MIcon v-else :icon="XIcon" :style="{ '--color': 'var(--red-500)' }" />
+          <UiIcon v-if="value" :icon="CheckIcon" :style="{ '--color': 'var(--green-500)' }" />
+          <UiIcon v-else :icon="XIcon" :style="{ '--color': 'var(--red-500)' }" />
         </template>
-      </MTable>
-    </MFormGrid>
-  </MFormGrid>
+      </UiTable>
+    </UiFormGrid>
+  </UiFormGrid>
 </template>
 
 <script lang="ts" setup>
 import { CheckIcon, GripVerticalIcon, PencilIcon, XIcon } from '@lucide/vue'
 
-import MButton from '@/lib/components/buttons/MButton.vue'
-import MFormGrid from '@/lib/components/grid/MFormGrid.vue'
-import MBadge from '@/lib/components/MBadge.vue'
-import MIcon from '@/lib/components/MIcon.vue'
-import MCard from '@/lib/components/section/MCard.vue'
-import MSectionHeader from '@/lib/components/section/MSectionHeader.vue'
-import type { TableColumn } from '@/lib/components/table/mtable.types'
-import MTable from '@/lib/components/table/MTable.vue'
+import UiButton from '@/lib/components/buttons/UiButton.vue'
+import UiFormGrid from '@/lib/components/grid/UiFormGrid.vue'
+import UiCard from '@/lib/components/section/UiCard.vue'
+import UiSectionHeader from '@/lib/components/section/UiSectionHeader.vue'
+import type { TableColumn } from '@/lib/components/table/table.types'
+import UiTable from '@/lib/components/table/UiTable.vue'
+import UiBadge from '@/lib/components/UiBadge.vue'
+import UiIcon from '@/lib/components/UiIcon.vue'
 
 type Wan = {
   status: boolean

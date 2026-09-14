@@ -1,15 +1,15 @@
 <template>
-  <MFormGrid :columns="1">
-    <MCard>
-      <MFormGrid :columns="{ small: 1, medium: 2, extraLarge: 4 }">
-        <MSwitch
+  <UiFormGrid :columns="1">
+    <UiCard>
+      <UiFormGrid :columns="{ small: 1, medium: 2, extraLarge: 4 }">
+        <UiSwitch
           v-model="form.status"
           class="grid-full"
           hint="Configure this device as a DHCP server for the LAN"
           label="Enabled"
         />
 
-        <MSelect
+        <UiSelect
           v-model="form.interface"
           :options="[
             { value: 'br0', title: 'Bridge' },
@@ -18,47 +18,51 @@
           label="Interface"
         />
 
-        <MTextField v-model="form.subnet" label="Subnet" />
-        <MTextField v-model="form.gateway" hint="Usually the address of this device" label="Gateway" />
-        <MTextField v-model="form.mask" label="Mask" />
+        <UiTextField v-model="form.subnet" label="Subnet" />
+        <UiTextField v-model="form.gateway" hint="Usually the address of this device" label="Gateway" />
+        <UiTextField v-model="form.mask" label="Mask" />
 
-        <MTextField v-model="form.domain" label="Domain" />
+        <UiTextField v-model="form.domain" label="Domain" />
 
-        <MTextField
+        <UiTextField
           v-model="form.leaseTime"
           hint="DHCP lease time set in days, hours, minutes. 00-00-00 is an infinite lease time"
           label="Lease Time"
         />
-        <MTextField
+        <UiTextField
           v-model="form.leaseStart"
           hint="Start of range for dynamically assigned IP addresses"
           label="Lease Start"
         />
-        <MTextField v-model="form.leaseEnd" hint="End of range for dynamically assigned IP addresses" label="Lease End" />
-      </MFormGrid>
-    </MCard>
+        <UiTextField
+          v-model="form.leaseEnd"
+          hint="End of range for dynamically assigned IP addresses"
+          label="Lease End"
+        />
+      </UiFormGrid>
+    </UiCard>
 
-    <MBottomActions adaptive>
-      <MButton>
-        <MIcon :icon="CheckIcon" />
+    <UiBottomActions adaptive>
+      <UiButton>
+        <UiIcon :icon="CheckIcon" />
         Save
-      </MButton>
-    </MBottomActions>
-  </MFormGrid>
+      </UiButton>
+    </UiBottomActions>
+  </UiFormGrid>
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue'
 import { CheckIcon } from '@lucide/vue'
 
-import MButton from '@/lib/components/buttons/MButton.vue'
-import MSelect from '@/lib/components/fields/MSelect.vue'
-import MSwitch from '@/lib/components/fields/MSwitch.vue'
-import MTextField from '@/lib/components/fields/MTextField.vue'
-import MFormGrid from '@/lib/components/grid/MFormGrid.vue'
-import MBottomActions from '@/lib/components/layout/MBottomActions.vue'
-import MIcon from '@/lib/components/MIcon.vue'
-import MCard from '@/lib/components/section/MCard.vue'
+import UiButton from '@/lib/components/buttons/UiButton.vue'
+import UiSelect from '@/lib/components/fields/UiSelect.vue'
+import UiSwitch from '@/lib/components/fields/UiSwitch.vue'
+import UiTextField from '@/lib/components/fields/UiTextField.vue'
+import UiFormGrid from '@/lib/components/grid/UiFormGrid.vue'
+import UiBottomActions from '@/lib/components/layout/UiBottomActions.vue'
+import UiCard from '@/lib/components/section/UiCard.vue'
+import UiIcon from '@/lib/components/UiIcon.vue'
 
 const form = ref<{
   status: boolean

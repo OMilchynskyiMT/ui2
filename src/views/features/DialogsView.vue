@@ -1,31 +1,31 @@
 <template>
   <div class="dialogs-view">
     <section>
-      <MSectionHeader description="Basic, confirmation, and form dialogs using the shared dialog infrastructure">
+      <UiSectionHeader description="Basic, confirmation, and form dialogs using the shared dialog infrastructure">
         Dialog types
-      </MSectionHeader>
+      </UiSectionHeader>
 
-      <MCluster>
-        <MButton variant="tonal" @click="d1?.show()">Show dialog</MButton>
-        <MButton variant="tonal" @click="confirm1">Show confirm</MButton>
-        <MButton variant="tonal" @click="f1?.show()">Show form</MButton>
-      </MCluster>
+      <UiCluster>
+        <UiButton variant="tonal" @click="d1?.show()">Show dialog</UiButton>
+        <UiButton variant="tonal" @click="confirm1">Show confirm</UiButton>
+        <UiButton variant="tonal" @click="f1?.show()">Show form</UiButton>
+      </UiCluster>
     </section>
 
-    <MDialog ref="d1" @cancel="console.debug('canceled')">
+    <UiDialog ref="d1" @cancel="console.debug('canceled')">
       <div class="dialog-content">
         <p>Basic dialog content with an explicit close action.</p>
-        <MButton @click="d1?.close()">Close</MButton>
+        <UiButton @click="d1?.close()">Close</UiButton>
       </div>
-    </MDialog>
+    </UiDialog>
 
-    <MConfirmDialog ref="c1" title="Confirmation title (optional)">
+    <UiConfirmDialog ref="c1" title="Confirmation title (optional)">
       Lorem, ipsum dolor sit amet consectetur adipisicing elit. Voluptatum, blanditiis quibusdam dignissimos corporis
       error velit pariatur quae nobis aspernatur officiis quidem eius soluta optio ducimus ullam doloremque tempora,
       quod nesciunt.
-    </MConfirmDialog>
+    </UiConfirmDialog>
 
-    <MFormDialog
+    <UiFormDialog
       ref="f1"
       :submit="submit"
       :submit-disabled="!canSubmit"
@@ -38,19 +38,19 @@
       @submit="log('submit')"
     >
       <template #title>
-        <MCluster>
-          <MIcon :icon="UserPlusIcon" size="2rem" style="--color: var(--pink-600)" />
+        <UiCluster>
+          <UiIcon :icon="UserPlusIcon" size="2rem" style="--color: var(--pink-600)" />
           <span>Create user</span>
-        </MCluster>
+        </UiCluster>
       </template>
 
-      <MFormGrid>
-        <MTextField v-model="form.name" label="Name" required />
-        <MTextField v-model="form.email" label="Email" required type="email" />
-        <MSwitch v-model="simulateFailure" label="Simulate API error" />
-        <MCheckbox v-model="keepOpen" label="Return false and keep dialog open" />
-      </MFormGrid>
-    </MFormDialog>
+      <UiFormGrid>
+        <UiTextField v-model="form.name" label="Name" required />
+        <UiTextField v-model="form.email" label="Email" required type="email" />
+        <UiSwitch v-model="simulateFailure" label="Simulate API error" />
+        <UiCheckbox v-model="keepOpen" label="Return false and keep dialog open" />
+      </UiFormGrid>
+    </UiFormDialog>
   </div>
 </template>
 
@@ -58,17 +58,17 @@
 import { computed, reactive, ref, useTemplateRef } from 'vue'
 import { UserPlusIcon } from '@lucide/vue'
 
-import MButton from '@/lib/components/buttons/MButton.vue'
-import MConfirmDialog, { type Exposed as ConfirmExposed } from '@/lib/components/dialog/MConfirmDialog.vue'
-import MDialog, { type Exposed } from '@/lib/components/dialog/MDialog.vue'
-import MFormDialog, { type Exposed as FormExposed } from '@/lib/components/dialog/MFormDialog.vue'
-import MCheckbox from '@/lib/components/fields/MCheckbox.vue'
-import MSwitch from '@/lib/components/fields/MSwitch.vue'
-import MTextField from '@/lib/components/fields/MTextField.vue'
-import MFormGrid from '@/lib/components/grid/MFormGrid.vue'
-import MCluster from '@/lib/components/layout/MCluster.vue'
-import MIcon from '@/lib/components/MIcon.vue'
-import MSectionHeader from '@/lib/components/section/MSectionHeader.vue'
+import UiButton from '@/lib/components/buttons/UiButton.vue'
+import UiConfirmDialog, { type Exposed as ConfirmExposed } from '@/lib/components/dialog/UiConfirmDialog.vue'
+import UiDialog, { type Exposed } from '@/lib/components/dialog/UiDialog.vue'
+import UiFormDialog, { type Exposed as FormExposed } from '@/lib/components/dialog/UiFormDialog.vue'
+import UiCheckbox from '@/lib/components/fields/UiCheckbox.vue'
+import UiSwitch from '@/lib/components/fields/UiSwitch.vue'
+import UiTextField from '@/lib/components/fields/UiTextField.vue'
+import UiFormGrid from '@/lib/components/grid/UiFormGrid.vue'
+import UiCluster from '@/lib/components/layout/UiCluster.vue'
+import UiSectionHeader from '@/lib/components/section/UiSectionHeader.vue'
+import UiIcon from '@/lib/components/UiIcon.vue'
 
 const d1 = useTemplateRef<Exposed>('d1')
 const c1 = useTemplateRef<ConfirmExposed>('c1')

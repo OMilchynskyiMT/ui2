@@ -1,5 +1,5 @@
 <template>
-  <MTabs
+  <UiTabs
     :items="tabs"
     :model-value="route.name?.toString() ?? ''"
     aria-label="Component examples"
@@ -14,18 +14,18 @@
         </RouterView>
       </main>
     </template>
-  </MTabs>
+  </UiTabs>
 </template>
 
 <script lang="ts" setup>
 import { BusFrontIcon, ChartBarIcon, FormInputIcon, GlobeIcon, LogInIcon, SmartphoneIcon } from '@lucide/vue'
 import { useRoute, useRouter } from 'vue-router'
 
-import MTabs, { type MTabItem } from '@/lib/components/tabs/MTabs.vue'
+import UiTabs, { type UiTabItem } from '@/lib/components/tabs/UiTabs.vue'
 import PageTransition from '@/components/transitions/PageTransition.vue'
 import { useTabNavigation } from '@/composables/useTabNavigation'
 
-const tabs: MTabItem<string>[] = [
+const tabs: UiTabItem<string>[] = [
   { icon: FormInputIcon, title: 'Inputs', value: 'inputs' },
   { icon: LogInIcon, title: 'Sign in', value: 'sign-in' },
   { icon: BusFrontIcon, title: 'Buttons', value: 'buttons' },

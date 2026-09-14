@@ -1,32 +1,32 @@
 <template>
-  <MFormGrid :columns="1">
-    <MSectionHeader>
+  <UiFormGrid :columns="1">
+    <UiSectionHeader>
       Mail Log
       <template #actions>
-        <MButton tone="neutral" size="small" variant="tonal">
-          <MIcon :icon="RefreshCwIcon" size="1rem" />
+        <UiButton size="small" tone="neutral" variant="tonal">
+          <UiIcon :icon="RefreshCwIcon" size="1rem" />
           Refresh
-        </MButton>
-        <MButton tone="warning" size="small" variant="tonal">
-          <MIcon :icon="TrashIcon" size="1rem" />
+        </UiButton>
+        <UiButton size="small" tone="warning" variant="tonal">
+          <UiIcon :icon="TrashIcon" size="1rem" />
           Purge
-        </MButton>
+        </UiButton>
       </template>
-    </MSectionHeader>
-    <MTable v-model:sort="sort" :columns :rows="[]" />
-  </MFormGrid>
+    </UiSectionHeader>
+    <UiTable v-model:sort="sort" :columns :rows="[]" />
+  </UiFormGrid>
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue'
 import { RefreshCwIcon, TrashIcon } from '@lucide/vue'
 
-import MButton from '@/lib/components/buttons/MButton.vue'
-import MFormGrid from '@/lib/components/grid/MFormGrid.vue'
-import MIcon from '@/lib/components/MIcon.vue'
-import MSectionHeader from '@/lib/components/section/MSectionHeader.vue'
-import { type TableColumn, type TableSort } from '@/lib/components/table/mtable.types'
-import MTable from '@/lib/components/table/MTable.vue'
+import UiButton from '@/lib/components/buttons/UiButton.vue'
+import UiFormGrid from '@/lib/components/grid/UiFormGrid.vue'
+import UiSectionHeader from '@/lib/components/section/UiSectionHeader.vue'
+import { type TableColumn, type TableSort } from '@/lib/components/table/table.types'
+import UiTable from '@/lib/components/table/UiTable.vue'
+import UiIcon from '@/lib/components/UiIcon.vue'
 
 type Log = {
   date: string

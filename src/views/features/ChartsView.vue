@@ -1,12 +1,12 @@
 <template>
   <div class="charts-view">
     <section>
-      <MSectionHeader description="Responsive bar chart with application-owned data and formatters">
+      <UiSectionHeader description="Responsive bar chart with application-owned data and formatters">
         Network traffic
-      </MSectionHeader>
+      </UiSectionHeader>
 
       <div class="chart">
-        <MChart
+        <Chart
           :chart="trafficChart"
           :format-label="formatDate"
           :format-value="formatBytes"
@@ -18,8 +18,8 @@
 </template>
 
 <script lang="ts" setup>
-import MSectionHeader from '@/lib/components/section/MSectionHeader.vue'
-import { MChart } from '@/components/chart'
+import UiSectionHeader from '@/lib/components/section/UiSectionHeader.vue'
+import { Chart } from '@/components/chart'
 import type { ChartDefinition, ChartLabel } from '@/components/chart/types'
 
 const raw: { label: string; rx: number; tx: number }[] = []

@@ -1,5 +1,5 @@
+export { default as Chart } from './BarChart.vue'
 export { resolveColor } from './helpers'
-export { default as MChart } from './MChart.vue'
 export type {
   BarChart,
   ChartDefinition,

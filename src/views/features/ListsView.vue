@@ -1,40 +1,44 @@
 <template>
   <div class="lists-view">
     <section>
-      <MSectionHeader description="Default and custom item rendering with shared selection state">
+      <UiSectionHeader description="Default and custom item rendering with shared selection state">
         Listboxes
-      </MSectionHeader>
+      </UiSectionHeader>
 
-      <MFormGrid>
-        <MListbox v-model="selected" aria-label="Default listbox" :items="items" />
-        <MListbox v-model="selected" aria-label="Custom listbox" :items="items">
+      <UiFormGrid>
+        <UiListbox v-model="selected" :items="items" aria-label="Default listbox" />
+        <UiListbox v-model="selected" :items="items" aria-label="Custom listbox">
           <template #item="{ item }">
             <strong>{{ item.title }}</strong>
             <div>{{ item.value }}</div>
           </template>
-        </MListbox>
-      </MFormGrid>
+        </UiListbox>
+      </UiFormGrid>
     </section>
 
     <section>
-      <MSectionHeader description="Anchored overlays using the same listbox content at each supported corner placement">
+      <UiSectionHeader
+        description="Anchored overlays using the same listbox content at each supported corner placement"
+      >
         Popovers
-      </MSectionHeader>
+      </UiSectionHeader>
 
-      <MCluster>
-        <MButton id="p-top-start" variant="tonal" @click="showPopup(getById('p-top-start'), 'top-start')">
+      <UiCluster>
+        <UiButton id="p-top-start" variant="tonal" @click="showPopup(getById('p-top-start'), 'top-start')">
           Top start
-        </MButton>
-        <MButton id="p-top-end" variant="tonal" @click="showPopup(getById('p-top-end'), 'top-end')"> Top end </MButton>
-        <MButton id="p-bottom-start" variant="tonal" @click="showPopup(getById('p-bottom-start'), 'bottom-start')">
+        </UiButton>
+        <UiButton id="p-top-end" variant="tonal" @click="showPopup(getById('p-top-end'), 'top-end')">
+          Top end
+        </UiButton>
+        <UiButton id="p-bottom-start" variant="tonal" @click="showPopup(getById('p-bottom-start'), 'bottom-start')">
           Bottom start
-        </MButton>
-        <MButton id="p-bottom-end" variant="tonal" @click="showPopup(getById('p-bottom-end'), 'bottom-end')">
+        </UiButton>
+        <UiButton id="p-bottom-end" variant="tonal" @click="showPopup(getById('p-bottom-end'), 'bottom-end')">
           Bottom end
-        </MButton>
-      </MCluster>
+        </UiButton>
+      </UiCluster>
 
-      <MPopover
+      <UiPopover
         :anchor="popupAnchor"
         :offset="10"
         :open="popupShow"
@@ -42,8 +46,8 @@
         style="--popover-radius: var(--radius-lg); --popover-shadow: var(--shadow-md)"
         @dismiss="popupShow = false"
       >
-        <MListbox v-model="selected" aria-label="Popover listbox" :items="items" />
-      </MPopover>
+        <UiListbox v-model="selected" :items="items" aria-label="Popover listbox" />
+      </UiPopover>
     </section>
   </div>
 </template>
@@ -51,13 +55,13 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 
-import MButton from '@/lib/components/buttons/MButton.vue'
-import MFormGrid from '@/lib/components/grid/MFormGrid.vue'
-import MCluster from '@/lib/components/layout/MCluster.vue'
+import UiButton from '@/lib/components/buttons/UiButton.vue'
+import UiFormGrid from '@/lib/components/grid/UiFormGrid.vue'
+import UiCluster from '@/lib/components/layout/UiCluster.vue'
 import type { ListboxOption } from '@/lib/components/list/listbox.types'
-import MListbox from '@/lib/components/list/MListbox.vue'
-import MPopover, { type OverlayPlacement } from '@/lib/components/overlay/MPopover.vue'
-import MSectionHeader from '@/lib/components/section/MSectionHeader.vue'
+import UiListbox from '@/lib/components/list/UiListbox.vue'
+import UiPopover, { type OverlayPlacement } from '@/lib/components/overlay/UiPopover.vue'
+import UiSectionHeader from '@/lib/components/section/UiSectionHeader.vue'
 
 const selected = ref<string | null>(null)
 const items = ref<ListboxOption<string>[]>([

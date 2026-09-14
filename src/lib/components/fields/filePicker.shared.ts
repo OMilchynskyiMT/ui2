@@ -1,10 +1,10 @@
-export type MFilePickerVariant = 'field' | 'area'
-export type MFilePickerChangeSource = 'picker' | 'drop' | 'clear' | 'remove'
-export type MFileRejectionReason = 'accept' | 'multiple'
+export type UiFilePickerVariant = 'field' | 'area'
+export type UiFilePickerChangeSource = 'picker' | 'drop' | 'clear' | 'remove'
+export type UiFileRejectionReason = 'accept' | 'multiple'
 
-export type MFileRejection = {
+export type UiFileRejection = {
   file: File
-  reason: MFileRejectionReason
+  reason: UiFileRejectionReason
 }
 
 export const formatFileSize = (size: number): string => {
@@ -44,9 +44,9 @@ export const filterSelectedFiles = (
   files: Iterable<File>,
   acceptTokens: readonly string[],
   isMultiple: boolean
-): { accepted: File[]; rejected: MFileRejection[] } => {
+): { accepted: File[]; rejected: UiFileRejection[] } => {
   const accepted: File[] = []
-  const rejected: MFileRejection[] = []
+  const rejected: UiFileRejection[] = []
 
   for (const file of files) {
     if (!isAcceptableFile(file, acceptTokens)) {

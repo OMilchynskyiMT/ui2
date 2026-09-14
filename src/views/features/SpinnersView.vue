@@ -1,12 +1,12 @@
 <template>
   <div class="progress-view">
     <section>
-      <MSectionHeader description="Determinate circular progress at representative component sizes">
+      <UiSectionHeader description="Determinate circular progress at representative component sizes">
         Circular progress
-      </MSectionHeader>
+      </UiSectionHeader>
 
-      <MCluster align="center" class="samples">
-        <MCircularProgress
+      <UiCluster align="center" class="samples">
+        <UiCircularProgress
           v-for="size in progressSizes"
           :key="size"
           :size="size"
@@ -14,16 +14,16 @@
           :value="progressValue"
           style="color: var(--blue-500)"
         />
-      </MCluster>
+      </UiCluster>
     </section>
 
     <section>
-      <MSectionHeader description="Animated progress values using a heavier stroke">
+      <UiSectionHeader description="Animated progress values using a heavier stroke">
         Animated circular progress
-      </MSectionHeader>
+      </UiSectionHeader>
 
-      <MCluster align="center" class="samples">
-        <MCircularProgress
+      <UiCluster align="center" class="samples">
+        <UiCircularProgress
           v-for="size in progressSizes"
           :key="size"
           :size="size"
@@ -31,31 +31,31 @@
           :value="progress"
           style="color: var(--purple-600)"
         />
-      </MCluster>
+      </UiCluster>
     </section>
 
     <section>
-      <MSectionHeader description="Indeterminate spinner sizing and stroke behavior">Spinners</MSectionHeader>
+      <UiSectionHeader description="Indeterminate spinner sizing and stroke behavior">Spinners</UiSectionHeader>
 
-      <MCluster align="center" class="samples">
-        <MSpinner
+      <UiCluster align="center" class="samples">
+        <UiSpinner
           v-for="size in progressSizes"
           :key="size"
           :size="size"
           :stroke-width="3"
           style="color: var(--green-500)"
         />
-      </MCluster>
+      </UiCluster>
     </section>
 
     <section>
-      <MSectionHeader description="Default, customized, indeterminate, and segmented linear progress">
+      <UiSectionHeader description="Default, customized, indeterminate, and segmented linear progress">
         Linear progress bars
-      </MSectionHeader>
+      </UiSectionHeader>
 
       <div class="linear-examples">
-        <MProgressBar :max="150" :value="72" style="--accent: var(--cyan-500)" />
-        <MProgressBar
+        <UiProgressBar :max="150" :value="72" style="--accent: var(--cyan-500)" />
+        <UiProgressBar
           :value="90"
           style="
             --accent: linear-gradient(
@@ -69,31 +69,31 @@
             --height: 0.5rem;
           "
         />
-        <MProgressBar />
-        <MProgressBar :value="[28, 14, 5, 20]" style="--accent: var(--purple-500); --height: 1rem" />
+        <UiProgressBar />
+        <UiProgressBar :value="[28, 14, 5, 20]" style="--accent: var(--purple-500); --height: 1rem" />
       </div>
     </section>
 
     <section>
-      <MSectionHeader description="Composed placeholder layout using circle, block, and text skeletons">
+      <UiSectionHeader description="Composed placeholder layout using circle, block, and text skeletons">
         Skeleton
-      </MSectionHeader>
+      </UiSectionHeader>
 
       <div class="skeleton-example">
         <div class="skeleton-heading">
-          <MSkeleton block-size="3rem" variant="circle" />
+          <UiSkeleton block-size="3rem" variant="circle" />
           <div class="skeleton-lines">
-            <MSkeleton inline-size="11rem" variant="text" />
-            <MSkeleton inline-size="7rem" variant="text" />
+            <UiSkeleton inline-size="11rem" variant="text" />
+            <UiSkeleton inline-size="7rem" variant="text" />
           </div>
         </div>
 
-        <MSkeleton block-size="8rem" />
+        <UiSkeleton block-size="8rem" />
 
         <div class="skeleton-lines">
-          <MSkeleton variant="text" />
-          <MSkeleton inline-size="86%" variant="text" />
-          <MSkeleton inline-size="62%" variant="text" />
+          <UiSkeleton variant="text" />
+          <UiSkeleton inline-size="86%" variant="text" />
+          <UiSkeleton inline-size="62%" variant="text" />
         </div>
       </div>
     </section>
@@ -103,12 +103,12 @@
 <script lang="ts" setup>
 import { onUnmounted, ref } from 'vue'
 
-import MCluster from '@/lib/components/layout/MCluster.vue'
-import MCircularProgress from '@/lib/components/progress/MCircularProgress.vue'
-import MProgressBar from '@/lib/components/progress/MProgressBar.vue'
-import MSpinner from '@/lib/components/progress/MSpinner.vue'
-import MSectionHeader from '@/lib/components/section/MSectionHeader.vue'
-import MSkeleton from '@/lib/components/status/MSkeleton.vue'
+import UiCluster from '@/lib/components/layout/UiCluster.vue'
+import UiCircularProgress from '@/lib/components/progress/UiCircularProgress.vue'
+import UiProgressBar from '@/lib/components/progress/UiProgressBar.vue'
+import UiSpinner from '@/lib/components/progress/UiSpinner.vue'
+import UiSectionHeader from '@/lib/components/section/UiSectionHeader.vue'
+import UiSkeleton from '@/lib/components/status/UiSkeleton.vue'
 
 const progressSizes = ['1rem', '1.5rem', '2rem', '2.5rem', '3rem', '4rem', '5rem']
 const progress = ref(0)

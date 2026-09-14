@@ -1,92 +1,92 @@
 <template>
-  <MFormGrid :columns="1">
-    <MCard>
-      <MFormGrid :columns="1">
-        <MSectionHeader>Server Configuration</MSectionHeader>
+  <UiFormGrid :columns="1">
+    <UiCard>
+      <UiFormGrid :columns="1">
+        <UiSectionHeader>Server Configuration</UiSectionHeader>
 
-        <MFormGrid :columns="{ small: 1, medium: 2, extraLarge: 4 }">
-          <MSwitch
+        <UiFormGrid :columns="{ small: 1, medium: 2, extraLarge: 4 }">
+          <UiSwitch
             v-model="form.status"
             class="grid-full"
             hint="Enable SMTP to allow your device to send email messages"
             label="Enabled"
           />
 
-          <MTextField v-model="form.server" label="Server" />
-          <MNumber v-model="form.port" label="Port" />
+          <UiTextField v-model="form.server" label="Server" />
+          <UiNumber v-model="form.port" label="Port" />
 
-          <MCheckbox v-model="form.tls" hint="Enable or disable SSL/TLS for secured connections." label="TLS" />
-          <MCheckbox
+          <UiCheckbox v-model="form.tls" hint="Enable or disable SSL/TLS for secured connections." label="TLS" />
+          <UiCheckbox
             v-model="form.startTls"
             hint="When enabled, the session starts with the normal protocol initialization, and TLS is then started using the protocol’s STARTTLS command. This setting is ignored if TLS is disabled."
             label="StartTLS"
           />
-          <MCheckbox
+          <UiCheckbox
             v-model="form.verify"
             hint="Activate server certificate verification using a list of trusted Certification Authorities (CAs)."
             label="Verify server certificate"
           />
-        </MFormGrid>
-      </MFormGrid>
-    </MCard>
+        </UiFormGrid>
+      </UiFormGrid>
+    </UiCard>
 
-    <MCard>
-      <MFormGrid :columns="1">
-        <MSectionHeader>Authentication</MSectionHeader>
+    <UiCard>
+      <UiFormGrid :columns="1">
+        <UiSectionHeader>Authentication</UiSectionHeader>
 
-        <MFormGrid :columns="{ small: 1, medium: 2, extraLarge: 4 }">
-          <MSwitch v-model="form.auth.enabled" class="grid-full" label="Enabled" />
+        <UiFormGrid :columns="{ small: 1, medium: 2, extraLarge: 4 }">
+          <UiSwitch v-model="form.auth.enabled" class="grid-full" label="Enabled" />
 
-          <MTextField v-model="form.auth.username" label="Username">
-            <template #leading><MIcon :icon="UserIcon" /></template>
-          </MTextField>
-          <MPasswordField v-model="form.auth.password" label="Password" />
-          <MTextField v-model="form.auth.email" label="Email" />
+          <UiTextField v-model="form.auth.username" label="Username">
+            <template #leading><UiIcon :icon="UserIcon" /></template>
+          </UiTextField>
+          <UiPasswordField v-model="form.auth.password" label="Password" />
+          <UiTextField v-model="form.auth.email" label="Email" />
 
           <div class="grid-align-center">
-            <MButton tone="primary" variant="tonal">
-              <MIcon :icon="MailCheckIcon" />
+            <UiButton tone="primary" variant="tonal">
+              <UiIcon :icon="MailCheckIcon" />
               Send Test Email
-            </MButton>
+            </UiButton>
           </div>
-        </MFormGrid>
-      </MFormGrid>
-    </MCard>
+        </UiFormGrid>
+      </UiFormGrid>
+    </UiCard>
 
-    <MCard>
-      <MFormGrid :columns="1">
-        <MSectionHeader>Mail Log Settings</MSectionHeader>
+    <UiCard>
+      <UiFormGrid :columns="1">
+        <UiSectionHeader>Mail Log Settings</UiSectionHeader>
 
-        <MFormGrid :columns="{ small: 1, medium: 2, extraLarge: 4 }">
-          <MNumber v-model="form.maillog.entriesToKeep" label="Entries to keep" />
-        </MFormGrid>
-      </MFormGrid>
-    </MCard>
+        <UiFormGrid :columns="{ small: 1, medium: 2, extraLarge: 4 }">
+          <UiNumber v-model="form.maillog.entriesToKeep" label="Entries to keep" />
+        </UiFormGrid>
+      </UiFormGrid>
+    </UiCard>
 
-    <MBottomActions adaptive>
-      <MButton tone="primary">
-        <MIcon :icon="CheckIcon" />
+    <UiBottomActions adaptive>
+      <UiButton tone="primary">
+        <UiIcon :icon="CheckIcon" />
         Save
-      </MButton>
-    </MBottomActions>
-  </MFormGrid>
+      </UiButton>
+    </UiBottomActions>
+  </UiFormGrid>
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue'
 import { CheckIcon, MailCheckIcon, UserIcon } from '@lucide/vue'
 
-import MButton from '@/lib/components/buttons/MButton.vue'
-import MCheckbox from '@/lib/components/fields/MCheckbox.vue'
-import MNumber from '@/lib/components/fields/MNumber.vue'
-import MPasswordField from '@/lib/components/fields/MPasswordField.vue'
-import MSwitch from '@/lib/components/fields/MSwitch.vue'
-import MTextField from '@/lib/components/fields/MTextField.vue'
-import MFormGrid from '@/lib/components/grid/MFormGrid.vue'
-import MBottomActions from '@/lib/components/layout/MBottomActions.vue'
-import MIcon from '@/lib/components/MIcon.vue'
-import MCard from '@/lib/components/section/MCard.vue'
-import MSectionHeader from '@/lib/components/section/MSectionHeader.vue'
+import UiButton from '@/lib/components/buttons/UiButton.vue'
+import UiCheckbox from '@/lib/components/fields/UiCheckbox.vue'
+import UiNumber from '@/lib/components/fields/UiNumberField.vue'
+import UiPasswordField from '@/lib/components/fields/UiPasswordField.vue'
+import UiSwitch from '@/lib/components/fields/UiSwitch.vue'
+import UiTextField from '@/lib/components/fields/UiTextField.vue'
+import UiFormGrid from '@/lib/components/grid/UiFormGrid.vue'
+import UiBottomActions from '@/lib/components/layout/UiBottomActions.vue'
+import UiCard from '@/lib/components/section/UiCard.vue'
+import UiSectionHeader from '@/lib/components/section/UiSectionHeader.vue'
+import UiIcon from '@/lib/components/UiIcon.vue'
 
 const form = ref<{
   status: boolean

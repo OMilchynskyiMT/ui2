@@ -1,28 +1,28 @@
 <template>
   <div class="buttons-view">
     <section>
-      <MSectionHeader description="All button tones across outlined, filled, text, and tonal presentations">
+      <UiSectionHeader description="All button tones across outlined, filled, text, and tonal presentations">
         Regular buttons
-      </MSectionHeader>
+      </UiSectionHeader>
 
       <div v-for="variant in regularVariants" :key="variant" class="variant-group">
         <strong>{{ variant }}</strong>
-        <MCluster class="samples">
-          <MButton v-for="tone in tones" :key="tone" :tone :variant>
-            <MIcon :icon="UserIcon" size="1rem" />
+        <UiCluster class="samples">
+          <UiButton v-for="tone in tones" :key="tone" :tone :variant>
+            <UiIcon :icon="UserIcon" size="1rem" />
             {{ tone }}
-          </MButton>
-        </MCluster>
+          </UiButton>
+        </UiCluster>
       </div>
     </section>
 
     <section>
-      <MSectionHeader description="Icon-only actions keep their accessible name outside the visual content">
+      <UiSectionHeader description="Icon-only actions keep their accessible name outside the visual content">
         Icon buttons
-      </MSectionHeader>
+      </UiSectionHeader>
 
-      <MCluster class="samples">
-        <MButton
+      <UiCluster class="samples">
+        <UiButton
           v-for="tone in tones"
           :key="tone"
           :aria-label="`${tone} action`"
@@ -30,70 +30,72 @@
           :tone
           variant="icon"
         >
-          <MIcon :icon="UserIcon" size="1rem" />
-        </MButton>
-      </MCluster>
+          <UiIcon :icon="UserIcon" size="1rem" />
+        </UiButton>
+      </UiCluster>
     </section>
 
     <section>
-      <MSectionHeader description="Disabled state across regular button variants and tones"> Disabled </MSectionHeader>
+      <UiSectionHeader description="Disabled state across regular button variants and tones">
+        Disabled
+      </UiSectionHeader>
 
       <div v-for="variant in regularVariants" :key="variant" class="variant-group">
         <strong>{{ variant }}</strong>
-        <MCluster class="samples">
-          <MButton v-for="tone in tones" :key="tone" :tone :variant disabled @click="() => console.debug('click')">
+        <UiCluster class="samples">
+          <UiButton v-for="tone in tones" :key="tone" :tone :variant disabled @click="() => console.debug('click')">
             {{ tone }}
-          </MButton>
-        </MCluster>
+          </UiButton>
+        </UiCluster>
       </div>
     </section>
 
     <section>
-      <MSectionHeader description="Loading state keeps button geometry stable while replacing its content state">
+      <UiSectionHeader description="Loading state keeps button geometry stable while replacing its content state">
         Loading
-      </MSectionHeader>
+      </UiSectionHeader>
 
       <div v-for="variant in regularVariants" :key="variant" class="variant-group">
         <strong>{{ variant }}</strong>
-        <MCluster class="samples">
-          <MButton v-for="tone in tones" :key="tone" :tone :variant loading>{{ tone }}</MButton>
-        </MCluster>
+        <UiCluster class="samples">
+          <UiButton v-for="tone in tones" :key="tone" :tone :variant loading>{{ tone }}</UiButton>
+        </UiCluster>
       </div>
     </section>
 
     <section>
-      <MSectionHeader description="Small, medium, and large sizing is independent from presentation variant">
+      <UiSectionHeader description="Small, medium, and large sizing is independent from presentation variant">
         Sizes
-      </MSectionHeader>
+      </UiSectionHeader>
 
       <div v-for="variant in regularVariants" :key="variant" class="variant-group">
         <strong>{{ variant }}</strong>
-        <MCluster align="baseline" class="samples">
-          <MButton v-for="size in sizes" :key="size" :size :variant tone="primary">{{ size }}</MButton>
-        </MCluster>
+        <UiCluster align="baseline" class="samples">
+          <UiButton v-for="size in sizes" :key="size" :size :variant tone="primary">{{ size }}</UiButton>
+        </UiCluster>
       </div>
     </section>
 
     <section>
-      <MSectionHeader description="Tooltip attached to an external focusable anchor"> Tooltip </MSectionHeader>
+      <UiSectionHeader description="Tooltip attached to an external focusable anchor"> Tooltip </UiSectionHeader>
 
       <span ref="tooltipAnchor" class="tooltip-anchor" tabindex="0">Hover or focus</span>
-      <MTooltip :anchor="tooltipAnchor" text="Tooltip attached to an external anchor" />
+      <UiTooltip :anchor="tooltipAnchor" text="Tooltip attached to an external anchor" />
     </section>
 
     <section>
-      <MSectionHeader description="Click any button to exercise the transient loading state">
+      <UiSectionHeader description="Click any button to exercise the transient loading state">
         Interactive
-      </MSectionHeader>
+      </UiSectionHeader>
 
       <div v-for="variant in regularVariants" :key="variant" class="variant-group">
         <strong>{{ variant }}</strong>
-        <MCluster class="samples">
-          <MButton v-for="tone in tones" :key="tone" :loading :tone :variant @click="setLoading">
-            <MIcon :icon="UserIcon" size="1rem" />
+        <UiCluster class="samples">
+          <UiButton v-for="tone in tones" :key="tone" :loading :tone :variant @click="setLoading">
+            <UiIcon :icon="UserIcon" size="1rem" />
             {{ tone }}
-          </MButton>
-        </MCluster>
+          </UiButton>
+        </UiCluster>
       </div>
     </section>
   </div>
@@ -103,12 +105,12 @@
 import { ref, useTemplateRef } from 'vue'
 import { UserIcon } from '@lucide/vue'
 
-import MButton, { type Size, type Variant } from '@/lib/components/buttons/MButton.vue'
+import UiButton, { type Size, type Variant } from '@/lib/components/buttons/UiButton.vue'
 import type { ComponentTone } from '@/lib/components/component.types'
-import MCluster from '@/lib/components/layout/MCluster.vue'
-import MIcon from '@/lib/components/MIcon.vue'
-import MTooltip from '@/lib/components/overlay/MTooltip.vue'
-import MSectionHeader from '@/lib/components/section/MSectionHeader.vue'
+import UiCluster from '@/lib/components/layout/UiCluster.vue'
+import UiTooltip from '@/lib/components/overlay/UiTooltip.vue'
+import UiSectionHeader from '@/lib/components/section/UiSectionHeader.vue'
+import UiIcon from '@/lib/components/UiIcon.vue'
 
 const regularVariants: Variant[] = ['outlined', 'filled', 'text', 'tonal']
 const tones: ComponentTone[] = ['primary', 'info', 'success', 'warning', 'danger', 'neutral']

@@ -1,38 +1,38 @@
 <template>
   <div class="chips-view">
     <section>
-      <MSectionHeader description="Tone and variant combinations with leading, trailing, and close affordances">
+      <UiSectionHeader description="Tone and variant combinations with leading, trailing, and close affordances">
         Medium chips
-      </MSectionHeader>
+      </UiSectionHeader>
 
-      <MCluster class="samples">
-        <MChip v-for="{ tone, variant } in combinations" :key="`${tone}-${variant}`" :tone :variant closable>
-          <template #leading><MIcon :icon="UserIcon" size="0.75rem" /></template>
-          <template #trailing><MIcon :icon="LockOpenIcon" size="0.75rem" /></template>
+      <UiCluster class="samples">
+        <UiChip v-for="{ tone, variant } in combinations" :key="`${tone}-${variant}`" :tone :variant closable>
+          <template #leading><UiIcon :icon="UserIcon" size="0.75rem" /></template>
+          <template #trailing><UiIcon :icon="LockOpenIcon" size="0.75rem" /></template>
           {{ `${tone} ${variant}` }}
-        </MChip>
-      </MCluster>
+        </UiChip>
+      </UiCluster>
     </section>
 
     <section>
-      <MSectionHeader description="Dense chips retain chip behavior without doubling as superscript badges">
+      <UiSectionHeader description="Dense chips retain chip behavior without doubling as superscript badges">
         Small chips
-      </MSectionHeader>
+      </UiSectionHeader>
 
-      <MCluster class="samples">
-        <MChip v-for="{ tone, variant } in combinations" :key="`${tone}-${variant}`" :tone :variant size="small">
+      <UiCluster class="samples">
+        <UiChip v-for="{ tone, variant } in combinations" :key="`${tone}-${variant}`" :tone :variant size="small">
           {{ `${tone} ${variant}` }}
-        </MChip>
-      </MCluster>
+        </UiChip>
+      </UiCluster>
     </section>
 
     <section>
-      <MSectionHeader description="Large chips retain the same content and close-button behavior">
+      <UiSectionHeader description="Large chips retain the same content and close-button behavior">
         Large chips
-      </MSectionHeader>
+      </UiSectionHeader>
 
-      <MCluster class="samples">
-        <MChip
+      <UiCluster class="samples">
+        <UiChip
           v-for="{ tone, variant } in combinations"
           :key="`${tone}-${variant}`"
           :tone
@@ -41,22 +41,22 @@
           size="large"
           @close="() => console.debug('close pressed')"
         >
-          <template #leading><MIcon :icon="UserIcon" size="0.75rem" /></template>
-          <template #trailing><MIcon :icon="LockOpenIcon" size="0.75rem" /></template>
+          <template #leading><UiIcon :icon="UserIcon" size="0.75rem" /></template>
+          <template #trailing><UiIcon :icon="LockOpenIcon" size="0.75rem" /></template>
           {{ `${tone} ${variant}` }}
-        </MChip>
-      </MCluster>
+        </UiChip>
+      </UiCluster>
     </section>
 
     <section>
-      <MSectionHeader description="Passive count and status annotations are rendered by the dedicated badge component">
+      <UiSectionHeader description="Passive count and status annotations are rendered by the dedicated badge component">
         Badges
-      </MSectionHeader>
+      </UiSectionHeader>
 
-      <MCluster align="baseline" class="samples">
-        <span v-for="tone in tones" :key="`badge-${tone}`">Notifications<MBadge :label="3" :tone tag="sup" /></span>
-        <MBadge label="FAILOVER" size="large" tone="success" />
-      </MCluster>
+      <UiCluster align="baseline" class="samples">
+        <span v-for="tone in tones" :key="`badge-${tone}`">Notifications<UiBadge :label="3" :tone tag="sup" /></span>
+        <UiBadge label="FAILOVER" size="large" tone="success" />
+      </UiCluster>
     </section>
   </div>
 </template>
@@ -65,11 +65,11 @@
 import { LockOpenIcon, UserIcon } from '@lucide/vue'
 
 import type { ComponentTone } from '@/lib/components/component.types'
-import MCluster from '@/lib/components/layout/MCluster.vue'
-import MBadge from '@/lib/components/MBadge.vue'
-import MChip, { type Variant } from '@/lib/components/MChip.vue'
-import MIcon from '@/lib/components/MIcon.vue'
-import MSectionHeader from '@/lib/components/section/MSectionHeader.vue'
+import UiCluster from '@/lib/components/layout/UiCluster.vue'
+import UiSectionHeader from '@/lib/components/section/UiSectionHeader.vue'
+import UiBadge from '@/lib/components/UiBadge.vue'
+import UiChip, { type Variant } from '@/lib/components/UiChip.vue'
+import UiIcon from '@/lib/components/UiIcon.vue'
 
 const variants = ['outlined', 'filled', 'text', 'tonal'] as const
 const tones = ['primary', 'info', 'success', 'warning', 'danger', 'neutral'] as const

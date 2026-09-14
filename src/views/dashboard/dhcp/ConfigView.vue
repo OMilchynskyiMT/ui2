@@ -1,6 +1,6 @@
 <template>
   <div style="display: grid; gap: var(--space-xl)">
-    <MTable
+    <UiTable
       v-model:sort="sortV4"
       :columns="dhcpV4Columns"
       :loading
@@ -10,21 +10,21 @@
       row-key="interface"
     >
       <template #cell-status="{ value }">
-        <MIcon v-if="value" :icon="CheckIcon" :style="{ '--color': 'var(--green-500)' }" />
-        <MIcon v-else :icon="XIcon" :style="{ '--color': 'var(--red-500)' }" />
+        <UiIcon v-if="value" :icon="CheckIcon" :style="{ '--color': 'var(--green-500)' }" />
+        <UiIcon v-else :icon="XIcon" :style="{ '--color': 'var(--red-500)' }" />
       </template>
 
       <template #cell-actions>
-        <MButton aria-label="Edit DHCP server" tone="neutral" variant="icon">
-          <MIcon :icon="PencilIcon" />
-        </MButton>
-        <MButton aria-label="Remove DHCP server" tone="warning" variant="icon" @click="confirmDeleteDialog?.confirm">
-          <MIcon :icon="TrashIcon" />
-        </MButton>
+        <UiButton aria-label="Edit DHCP server" tone="neutral" variant="icon">
+          <UiIcon :icon="PencilIcon" />
+        </UiButton>
+        <UiButton aria-label="Remove DHCP server" tone="warning" variant="icon" @click="confirmDeleteDialog?.confirm">
+          <UiIcon :icon="TrashIcon" />
+        </UiButton>
       </template>
-    </MTable>
+    </UiTable>
 
-    <MTable
+    <UiTable
       v-model:sort="sortV6"
       :columns="dhcpV6Columns"
       :loading
@@ -34,27 +34,27 @@
       row-key="interface"
     >
       <template #cell-status="{ value }">
-        <MIcon v-if="value" :icon="CheckIcon" :style="{ '--color': 'var(--green-500)' }" />
-        <MIcon v-else :icon="XIcon" :style="{ '--color': 'var(--red-500)' }" />
+        <UiIcon v-if="value" :icon="CheckIcon" :style="{ '--color': 'var(--green-500)' }" />
+        <UiIcon v-else :icon="XIcon" :style="{ '--color': 'var(--red-500)' }" />
       </template>
 
       <template #cell-raMode="{ value }">
-        <MBadge tone="success">{{ value }}</MBadge>
+        <UiBadge tone="success">{{ value }}</UiBadge>
       </template>
 
       <template #cell-actions>
-        <MButton aria-label="Edit DHCP server" tone="neutral" variant="icon">
-          <MIcon :icon="PencilIcon" />
-        </MButton>
-        <MButton aria-label="Remove DHCP server" tone="warning" variant="icon" @click="confirmDeleteDialog?.confirm">
-          <MIcon :icon="TrashIcon" />
-        </MButton>
+        <UiButton aria-label="Edit DHCP server" tone="neutral" variant="icon">
+          <UiIcon :icon="PencilIcon" />
+        </UiButton>
+        <UiButton aria-label="Remove DHCP server" tone="warning" variant="icon" @click="confirmDeleteDialog?.confirm">
+          <UiIcon :icon="TrashIcon" />
+        </UiButton>
       </template>
-    </MTable>
+    </UiTable>
 
-    <MConfirmDialog ref="confirm-delete-dialog" accept-text="Remove">
+    <UiConfirmDialog ref="confirm-delete-dialog" accept-text="Remove">
       Are you sure you want to remove this DHCP server?
-    </MConfirmDialog>
+    </UiConfirmDialog>
   </div>
 </template>
 
@@ -62,12 +62,12 @@
 import { onMounted, ref, useTemplateRef } from 'vue'
 import { CheckIcon, PencilIcon, TrashIcon, XIcon } from '@lucide/vue'
 
-import MButton from '@/lib/components/buttons/MButton.vue'
-import MConfirmDialog, { type Exposed as ConfirmExposed } from '@/lib/components/dialog/MConfirmDialog.vue'
-import MBadge from '@/lib/components/MBadge.vue'
-import MIcon from '@/lib/components/MIcon.vue'
-import type { TableColumn, TableSort } from '@/lib/components/table/mtable.types'
-import MTable from '@/lib/components/table/MTable.vue'
+import UiButton from '@/lib/components/buttons/UiButton.vue'
+import UiConfirmDialog, { type Exposed as ConfirmExposed } from '@/lib/components/dialog/UiConfirmDialog.vue'
+import type { TableColumn, TableSort } from '@/lib/components/table/table.types'
+import UiTable from '@/lib/components/table/UiTable.vue'
+import UiBadge from '@/lib/components/UiBadge.vue'
+import UiIcon from '@/lib/components/UiIcon.vue'
 
 type DhcpV4 = {
   status: boolean

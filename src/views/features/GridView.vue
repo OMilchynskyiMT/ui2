@@ -1,36 +1,36 @@
 <template>
   <div class="grid-view">
     <section>
-      <MSectionHeader description="A basic responsive form grid that grows from one to two columns">
+      <UiSectionHeader description="A basic responsive form grid that grows from one to two columns">
         Responsive columns
-      </MSectionHeader>
+      </UiSectionHeader>
 
-      <MFormGrid :columns="{ small: 1, medium: 2 }">
-        <MCard v-for="i of blocks" :key="i" :style="`--bg: hsl(${(i * blocks) / 0.5}, 70%, 65%)`" class="sample-card">
+      <UiFormGrid :columns="{ small: 1, medium: 2 }">
+        <UiCard v-for="i of blocks" :key="i" :style="`--bg: hsl(${(i * blocks) / 0.5}, 70%, 65%)`" class="sample-card">
           lorem ipsum <br v-if="i % 3" />
           {{ i }}
-        </MCard>
-      </MFormGrid>
+        </UiCard>
+      </UiFormGrid>
     </section>
 
     <section>
-      <MSectionHeader description="Per-breakpoint column counts passed through the public columns property">
+      <UiSectionHeader description="Per-breakpoint column counts passed through the public columns property">
         Configured columns
-      </MSectionHeader>
+      </UiSectionHeader>
 
-      <MFormGrid :columns="{ small: 1, medium: 2, large: 4, extraLarge: 5 }">
-        <MSwitch v-for="i of blocks" :key="i" v-model="toggle" :label="`Toggle ${i}`" />
-      </MFormGrid>
+      <UiFormGrid :columns="{ small: 1, medium: 2, large: 4, extraLarge: 5 }">
+        <UiSwitch v-for="i of blocks" :key="i" v-model="toggle" :label="`Toggle ${i}`" />
+      </UiFormGrid>
     </section>
 
     <section>
-      <MSectionHeader description="The same responsive grid can be tuned through its CSS custom-property API">
+      <UiSectionHeader description="The same responsive grid can be tuned through its CSS custom-property API">
         CSS variable overrides
-      </MSectionHeader>
+      </UiSectionHeader>
 
-      <MFormGrid style="--columns-md: 2; --columns-lg: 3; --columns-xl: 4">
-        <MNumber v-for="i of blocks" :key="i" v-model="numberModel" :label="`Number ${i}`" />
-      </MFormGrid>
+      <UiFormGrid style="--columns-md: 2; --columns-lg: 3; --columns-xl: 4">
+        <UiNumberField v-for="i of blocks" :key="i" v-model="numberModel" :label="`Number ${i}`" />
+      </UiFormGrid>
     </section>
   </div>
 </template>
@@ -38,11 +38,11 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 
-import MNumber from '@/lib/components/fields/MNumber.vue'
-import MSwitch from '@/lib/components/fields/MSwitch.vue'
-import MFormGrid from '@/lib/components/grid/MFormGrid.vue'
-import MCard from '@/lib/components/section/MCard.vue'
-import MSectionHeader from '@/lib/components/section/MSectionHeader.vue'
+import UiNumberField from '@/lib/components/fields/UiNumberField.vue'
+import UiSwitch from '@/lib/components/fields/UiSwitch.vue'
+import UiFormGrid from '@/lib/components/grid/UiFormGrid.vue'
+import UiCard from '@/lib/components/section/UiCard.vue'
+import UiSectionHeader from '@/lib/components/section/UiSectionHeader.vue'
 
 const blocks = 10
 const toggle = ref(false)

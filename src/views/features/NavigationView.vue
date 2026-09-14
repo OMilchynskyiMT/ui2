@@ -1,9 +1,11 @@
 <template>
   <div class="navigation-examples">
     <section>
-      <MSectionHeader description="Typed actions exposed through an anchored menu surface">Menu button</MSectionHeader>
+      <UiSectionHeader description="Typed actions exposed through an anchored menu surface"
+        >Menu button</UiSectionHeader
+      >
 
-      <MMenuButton
+      <UiMenuButton
         :items="menuItems"
         :offset="8"
         menu-aria-label="Example actions"
@@ -12,67 +14,67 @@
         @select="selectedAction = $event.value"
       >
         Actions
-      </MMenuButton>
+      </UiMenuButton>
       <div v-if="selectedAction" class="result">Selected: {{ selectedAction }}</div>
     </section>
 
     <section>
-      <MSectionHeader description="Compact page navigation that adapts its visible range">Pagination</MSectionHeader>
+      <UiSectionHeader description="Compact page navigation that adapts its visible range">Pagination</UiSectionHeader>
 
-      <MPagination v-model="page" :page-count="18" />
+      <UiPagination v-model="page" :page-count="18" />
       <div class="result">Current page: {{ page }}</div>
     </section>
 
     <section>
-      <MSectionHeader description="Independent native disclosure state with leading and trailing content"
-        >Disclosures</MSectionHeader
+      <UiSectionHeader description="Independent native disclosure state with leading and trailing content"
+        >Disclosures</UiSectionHeader
       >
 
       <div class="disclosures">
-        <MDisclosure
+        <UiDisclosure
           v-model="firstDisclosureOpen"
           description="Native details/summary semantics"
           title="Network options"
         >
           <template #leading>
-            <MIcon :icon="TableConfigIcon" size="36px" style="--color: var(--accent)" />
+            <UiIcon :icon="TableConfigIcon" size="36px" style="--color: var(--accent)" />
           </template>
           <template #trailing>
-            <MCluster>
-              <MButton size="small" tone="neutral" variant="tonal">
-                <MIcon :icon="RefreshCwIcon" size="1rem" />
+            <UiCluster>
+              <UiButton size="small" tone="neutral" variant="tonal">
+                <UiIcon :icon="RefreshCwIcon" size="1rem" />
                 Refresh
-              </MButton>
-              <MButton size="small" tone="danger" variant="tonal">
-                <MIcon :icon="TrashIcon" size="1rem" />
+              </UiButton>
+              <UiButton size="small" tone="danger" variant="tonal">
+                <UiIcon :icon="TrashIcon" size="1rem" />
                 Purge all
-              </MButton>
-            </MCluster>
+              </UiButton>
+            </UiCluster>
           </template>
           <p>Advanced network configuration can be placed here without introducing an accordion abstraction.</p>
-        </MDisclosure>
+        </UiDisclosure>
 
-        <MDisclosure
+        <UiDisclosure
           description="Independent disclosure state"
           style="--accent: var(--tone-success)"
           title="Diagnostics"
         >
           <p>Each disclosure can be controlled independently through v-model when necessary.</p>
-        </MDisclosure>
+        </UiDisclosure>
       </div>
     </section>
 
     <section>
-      <MSectionHeader description="Route-aware hierarchy with custom item rendering">Breadcrumbs</MSectionHeader>
+      <UiSectionHeader description="Route-aware hierarchy with custom item rendering">Breadcrumbs</UiSectionHeader>
 
-      <MBreadcrumbs :items="breadcrumbs">
+      <UiBreadcrumbs :items="breadcrumbs">
         <template #item="{ item, current }">
           <span v-if="current" aria-current="page">{{ item.label }}</span>
           <RouterLink v-else-if="item.target" :to="item.target">{{ item.label }}</RouterLink>
           <a v-else-if="item.href" :href="item.href">{{ item.label }}</a>
           <span v-else>{{ item.label }}</span>
         </template>
-      </MBreadcrumbs>
+      </UiBreadcrumbs>
     </section>
   </div>
 </template>
@@ -81,15 +83,15 @@
 import { ref } from 'vue'
 import { LogOutIcon, PaletteIcon, RefreshCwIcon, SaveIcon, TableConfigIcon, TrashIcon } from '@lucide/vue'
 
-import MButton from '@/lib/components/buttons/MButton.vue'
-import MDisclosure from '@/lib/components/disclosure/MDisclosure.vue'
-import MCluster from '@/lib/components/layout/MCluster.vue'
-import type { MMenuItem } from '@/lib/components/menu/MMenu.vue'
-import MMenuButton from '@/lib/components/menu/MMenuButton.vue'
-import MIcon from '@/lib/components/MIcon.vue'
-import MBreadcrumbs from '@/lib/components/navigation/MBreadcrumbs.vue'
-import MPagination from '@/lib/components/navigation/MPagination.vue'
-import MSectionHeader from '@/lib/components/section/MSectionHeader.vue'
+import UiButton from '@/lib/components/buttons/UiButton.vue'
+import UiDisclosure from '@/lib/components/disclosure/UiDisclosure.vue'
+import UiCluster from '@/lib/components/layout/UiCluster.vue'
+import type { UiMenuItem } from '@/lib/components/menu/UiMenu.vue'
+import UiMenuButton from '@/lib/components/menu/UiMenuButton.vue'
+import UiBreadcrumbs from '@/lib/components/navigation/UiBreadcrumbs.vue'
+import UiPagination from '@/lib/components/navigation/UiPagination.vue'
+import UiSectionHeader from '@/lib/components/section/UiSectionHeader.vue'
+import UiIcon from '@/lib/components/UiIcon.vue'
 import { useBreadcrumbs } from '@/composables/useBreadcrumbs'
 
 const page = ref(7)
@@ -97,7 +99,7 @@ const firstDisclosureOpen = ref(true)
 const selectedAction = ref<string>()
 const { breadcrumbs } = useBreadcrumbs()
 
-const menuItems: MMenuItem<string>[] = [
+const menuItems: UiMenuItem<string>[] = [
   { title: 'Save changes', icon: SaveIcon, value: 'save' },
   { title: 'Switch color scheme', icon: PaletteIcon, value: 'switch-color-scheme' },
   { title: 'Logout', icon: LogOutIcon, value: 'logout' },

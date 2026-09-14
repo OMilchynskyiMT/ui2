@@ -1,5 +1,5 @@
 <template>
-  <MScrollArea class="listbox-scroll" fade-edges overscroll="contain" scrollbar-gutter="auto">
+  <UiScrollArea class="listbox-scroll" fade-edges overscroll="contain" scrollbar-gutter="auto">
     <ul
       :id="id"
       ref="list"
@@ -54,7 +54,7 @@
         </ListboxOptionRow>
       </template>
     </ul>
-  </MScrollArea>
+  </UiScrollArea>
 </template>
 
 <script lang="ts">
@@ -78,7 +78,7 @@ export type ListboxContentProperties<V> = {
 <script generic="V extends string | number" lang="ts" setup>
 import { computed, nextTick, useAttrs, useTemplateRef, watch } from 'vue'
 
-import MScrollArea from '../../layout/MScrollArea.vue'
+import UiScrollArea from '../../layout/UiScrollArea.vue'
 import { flattenListboxOptions, getListboxOptionId, isListboxGroup } from '../listbox.shared'
 import ListboxOptionRow from './ListboxOptionRow.vue'
 

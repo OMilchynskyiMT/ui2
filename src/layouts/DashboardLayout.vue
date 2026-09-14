@@ -1,9 +1,9 @@
 <template>
-  <MShell>
+  <Shell>
     <template #header>
-      <MTopBar>
+      <TopBar>
         <template #leading>
-          <MButton
+          <UiButton
             aria-label="Open navigation"
             class="u-hidden-above-md"
             style="--padding-inline: 0.5rem"
@@ -11,17 +11,17 @@
             variant="text"
             @click="mainMenuDialog?.show()"
           >
-            <MIcon :icon="MenuIcon" style="--color: var(--blue-500)" />
-          </MButton>
+            <UiIcon :icon="MenuIcon" style="--color: var(--blue-500)" />
+          </UiButton>
         </template>
 
         <template #trailing>
-          <MButton aria-label="Save & Restart" tone="danger" variant="tonal" @click="saveAndApplyConfirm?.confirm">
-            <MIcon :icon="SaveCheckIcon" />
+          <UiButton aria-label="Save & Restart" tone="danger" variant="tonal" @click="saveAndApplyConfirm?.confirm">
+            <UiIcon :icon="SaveCheckIcon" />
             <span class="u-hidden-below-lg">Save & Apply</span>
-          </MButton>
+          </UiButton>
 
-          <MMenuButton
+          <UiMenuButton
             :items="commandsOptions"
             :menu-style="{ '--menu-icon-color': 'var(--lime-600)' }"
             :offset="10"
@@ -31,11 +31,11 @@
             tone="neutral"
             variant="icon"
           >
-            <MIcon :icon="SquareTerminalIcon" style="--color: var(--lime-600)" />
+            <UiIcon :icon="SquareTerminalIcon" style="--color: var(--lime-600)" />
             <span class="u-hidden-below-lg">Commands</span>
-          </MMenuButton>
+          </UiMenuButton>
 
-          <MMenuButton
+          <UiMenuButton
             :items="userMenuOptions"
             :menu-style="{ '--menu-icon-color': 'var(--blue-500)' }"
             :offset="10"
@@ -46,24 +46,24 @@
             variant="icon"
             @select="userMenuHandler($event.value)"
           >
-            <MUserAvatar size="1rem" style="--accent: var(--purple-500)" />
+            <UserAvatar size="1rem" style="--accent: var(--purple-500)" />
             <span class="u-hidden-below-lg">admin</span>
 
             <template #menu-header>
-              <MBar style="--sections-gap: 1rem">
+              <UiBar style="--sections-gap: 1rem">
                 <template #leading>
-                  <MUserAvatar :style="{ '--accent': 'var(--purple-500)' }" size="2rem" />
+                  <UserAvatar :style="{ '--accent': 'var(--purple-500)' }" size="2rem" />
                 </template>
 
                 <div class="user">
                   <div class="username">admin</div>
                   <div class="role">Administrator</div>
                 </div>
-              </MBar>
+              </UiBar>
             </template>
-          </MMenuButton>
+          </UiMenuButton>
         </template>
-      </MTopBar>
+      </TopBar>
     </template>
 
     <template #footer>
@@ -80,7 +80,7 @@
     <div class="content">
       <aside aria-label="Main navigation" class="u-hidden-below-md">
         <Teleport :disabled="!isCompact" defer to="#compact-navigation-content">
-          <MNavigationTree
+          <NavigationTree
             :class="{ 'compact-navigation-tree': isCompact }"
             :items="navigationOptions"
             @navigate="mainMenuDialog?.close()"
@@ -89,47 +89,47 @@
       </aside>
 
       <main>
-        <MBreadcrumbs :items="breadcrumbs">
+        <UiBreadcrumbs :items="breadcrumbs">
           <template #item="{ current, item }">
             <span v-if="current" aria-current="page">{{ item.label }}</span>
             <RouterLink v-else-if="item.target" :to="item.target">{{ item.label }}</RouterLink>
             <a v-else-if="item.href" :href="item.href">{{ item.label }}</a>
             <span v-else>{{ item.label }}</span>
           </template>
-        </MBreadcrumbs>
+        </UiBreadcrumbs>
 
         <RouterView />
       </main>
     </div>
 
-    <MDialog id="compact-navigation" ref="mainMenuDialog" aria-label="Main navigation" fullscreen>
+    <UiDialog id="compact-navigation" ref="mainMenuDialog" aria-label="Main navigation" fullscreen>
       <div class="compact-navigation">
-        <MBar class="compact-navigation-header">
+        <UiBar class="compact-navigation-header">
           <img v-if="resolvedScheme === 'light'" alt="MultiTech" src="/images/MT-logo.svg" width="180" />
           <img v-else alt="MultiTech" src="/images/MT-logo-light.svg" width="180" />
           <template #trailing>
-            <MButton
+            <UiButton
               aria-label="Close navigation"
               class="close-button"
               tone="danger"
               variant="icon"
               @click="mainMenuDialog?.close()"
             >
-              <MIcon :icon="XIcon" />
-            </MButton>
+              <UiIcon :icon="XIcon" />
+            </UiButton>
           </template>
-        </MBar>
+        </UiBar>
 
-        <MScrollArea class="compact-navigation-scroll" fade-edges>
+        <UiScrollArea class="compact-navigation-scroll" fade-edges>
           <div id="compact-navigation-content" />
-        </MScrollArea>
+        </UiScrollArea>
       </div>
-    </MDialog>
+    </UiDialog>
 
-    <MConfirmDialog ref="saveAndApplyConfirm">
+    <UiConfirmDialog ref="saveAndApplyConfirm">
       Current configuration will be saved and applied. Continue?
-    </MConfirmDialog>
-  </MShell>
+    </UiConfirmDialog>
+  </Shell>
 </template>
 
 <script lang="ts" setup>
@@ -150,19 +150,19 @@ import {
   XIcon,
 } from '@lucide/vue'
 
-import MBar from '@/lib/components/bars/MBar.vue'
-import MButton from '@/lib/components/buttons/MButton.vue'
-import MConfirmDialog, { type Exposed as ConfirmExposed } from '@/lib/components/dialog/MConfirmDialog.vue'
-import MDialog, { type Exposed as DialogExposed } from '@/lib/components/dialog/MDialog.vue'
-import MScrollArea from '@/lib/components/layout/MScrollArea.vue'
-import type { MMenuItem } from '@/lib/components/menu/MMenu.vue'
-import MMenuButton from '@/lib/components/menu/MMenuButton.vue'
-import MIcon from '@/lib/components/MIcon.vue'
-import MBreadcrumbs from '@/lib/components/navigation/MBreadcrumbs.vue'
-import MShell from '@/components/application/MShell.vue'
-import MTopBar from '@/components/bars/MTopBar.vue'
-import MUserAvatar from '@/components/MUserAvatar.vue'
-import MNavigationTree, { type MNavigationTreeItem } from '@/components/navigation/MNavigationTree.vue'
+import UiBar from '@/lib/components/bars/UiBar.vue'
+import UiButton from '@/lib/components/buttons/UiButton.vue'
+import UiConfirmDialog, { type Exposed as ConfirmExposed } from '@/lib/components/dialog/UiConfirmDialog.vue'
+import UiDialog, { type Exposed as DialogExposed } from '@/lib/components/dialog/UiDialog.vue'
+import UiScrollArea from '@/lib/components/layout/UiScrollArea.vue'
+import type { UiMenuItem } from '@/lib/components/menu/UiMenu.vue'
+import UiMenuButton from '@/lib/components/menu/UiMenuButton.vue'
+import UiBreadcrumbs from '@/lib/components/navigation/UiBreadcrumbs.vue'
+import UiIcon from '@/lib/components/UiIcon.vue'
+import Shell from '@/components/application/AppShell.vue'
+import TopBar from '@/components/bars/TopBar.vue'
+import NavigationTree, { type NavigationTreeItem } from '@/components/navigation/NavigationTree.vue'
+import UserAvatar from '@/components/UserAvatar.vue'
 import { useBreadcrumbs } from '@/composables/useBreadcrumbs'
 import { useColorScheme } from '@/composables/useColorScheme'
 import { remToPixels, useViewportSizeListener } from '@/composables/useViewportSizeListener'
@@ -176,7 +176,7 @@ let stopResizeSubscription: (() => void) | undefined
 const { toggleScheme, scheme: resolvedScheme } = useColorScheme()
 const { breadcrumbs } = useBreadcrumbs()
 
-const navigationOptions: MNavigationTreeItem[] = [
+const navigationOptions: NavigationTreeItem[] = [
   { title: 'Dashboard', icon: LayoutDashboardIcon, to: { name: 'dashboard' } },
   {
     title: 'Setup',
@@ -197,13 +197,13 @@ const navigationOptions: MNavigationTreeItem[] = [
   },
 ]
 
-const userMenuOptions: MMenuItem<string>[] = [
+const userMenuOptions: UiMenuItem<string>[] = [
   { title: 'Change password', icon: UserKeyIcon, value: 'change-password' },
   { title: 'Switch color scheme', icon: PaletteIcon, value: 'switch-color-scheme' },
   { title: 'Logout', icon: LogOutIcon, value: 'logout' },
 ]
 
-const commandsOptions: MMenuItem<string>[] = [
+const commandsOptions: UiMenuItem<string>[] = [
   { title: 'Save changes', icon: SaveIcon, value: 'save' },
   { title: 'Revert changes', icon: Undo2Icon, value: 'revert' },
   { title: 'Restart device', icon: RefreshCcwDotIcon, value: 'restart' },

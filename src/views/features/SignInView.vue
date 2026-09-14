@@ -7,34 +7,34 @@
       </header>
 
       <div :class="{ 'has-policy': usagePolicy }" class="content">
-        <MCard v-if="usagePolicy" class="policy-card">
+        <UiCard v-if="usagePolicy" class="policy-card">
           <section aria-label="Usage policy" class="policy">
-            <MSectionHeader
+            <UiSectionHeader
               description="Review the policy for use of this device before signing in."
               style="--sections-gap: var(--space-md)"
             >
               <template #leading>
-                <MIcon :icon="ScaleIcon" size="32px" style="--color: var(--tone-primary)" />
+                <UiIcon :icon="ScaleIcon" size="32px" style="--color: var(--tone-primary)" />
               </template>
               Usage Policy
-            </MSectionHeader>
+            </UiSectionHeader>
 
-            <MScrollArea class="policy-content" fade-edges overscroll="contain">
+            <UiScrollArea class="policy-content" fade-edges overscroll="contain">
               <p>{{ usagePolicy }}</p>
-            </MScrollArea>
+            </UiScrollArea>
           </section>
-        </MCard>
+        </UiCard>
 
-        <MCard class="sign-in-card">
+        <UiCard class="sign-in-card">
           <form class="sign-in-form" @submit.prevent="submit">
-            <MSectionHeader description="Sign in with your device credentials">Sign In</MSectionHeader>
+            <UiSectionHeader description="Sign in with your device credentials">Sign In</UiSectionHeader>
 
-            <MAlert v-if="submitted" tone="info">
+            <UiAlert v-if="submitted" tone="info">
               This is a component demo. No authentication request was sent.
-            </MAlert>
+            </UiAlert>
 
             <div class="fields">
-              <MTextField
+              <UiTextField
                 v-model="username"
                 autocapitalize="none"
                 autocomplete="username"
@@ -43,19 +43,19 @@
                 spellcheck="false"
               >
                 <template #leading>
-                  <MIcon :icon="UserIcon" aria-hidden="true" />
+                  <UiIcon :icon="UserIcon" aria-hidden="true" />
                 </template>
-              </MTextField>
+              </UiTextField>
 
-              <MPasswordField v-model="password" autocomplete="current-password" label="Password" required />
+              <UiPasswordField v-model="password" autocomplete="current-password" label="Password" required />
             </div>
 
-            <MButton class="submit" type="submit">
-              <MIcon :icon="LogInIcon" aria-hidden="true" />
+            <UiButton class="submit" type="submit">
+              <UiIcon :icon="LogInIcon" aria-hidden="true" />
               Sign in
-            </MButton>
+            </UiButton>
           </form>
-        </MCard>
+        </UiCard>
       </div>
     </div>
   </section>
@@ -65,14 +65,14 @@
 import { ref } from 'vue'
 import { LogInIcon, ScaleIcon, UserIcon } from '@lucide/vue'
 
-import MButton from '@/lib/components/buttons/MButton.vue'
-import MPasswordField from '@/lib/components/fields/MPasswordField.vue'
-import MTextField from '@/lib/components/fields/MTextField.vue'
-import MScrollArea from '@/lib/components/layout/MScrollArea.vue'
-import MIcon from '@/lib/components/MIcon.vue'
-import MCard from '@/lib/components/section/MCard.vue'
-import MSectionHeader from '@/lib/components/section/MSectionHeader.vue'
-import MAlert from '@/lib/components/status/MAlert.vue'
+import UiButton from '@/lib/components/buttons/UiButton.vue'
+import UiPasswordField from '@/lib/components/fields/UiPasswordField.vue'
+import UiTextField from '@/lib/components/fields/UiTextField.vue'
+import UiScrollArea from '@/lib/components/layout/UiScrollArea.vue'
+import UiCard from '@/lib/components/section/UiCard.vue'
+import UiSectionHeader from '@/lib/components/section/UiSectionHeader.vue'
+import UiAlert from '@/lib/components/status/UiAlert.vue'
+import UiIcon from '@/lib/components/UiIcon.vue'
 import { useColorScheme } from '@/composables/useColorScheme'
 
 const { scheme: resolvedScheme } = useColorScheme()
@@ -99,11 +99,7 @@ const submit = (): void => {
     border: 1px solid var(--divider-color);
     border-radius: var(--radius-lg);
     background:
-      radial-gradient(
-        circle at 50% 15%,
-        oklch(from var(--tone-primary) l c h / 0.12),
-        var(--bg) 60%
-      ),
+      radial-gradient(circle at 50% 15%, oklch(from var(--tone-primary) l c h / 0.12), var(--bg) 60%),
       url('/images/noise.svg') repeat,
       var(--bg);
   }

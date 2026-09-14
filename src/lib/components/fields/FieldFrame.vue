@@ -66,9 +66,9 @@ export type FieldFrameExpose = {
 <script lang="ts" setup>
 import { computed, onMounted, ref, useSlots, useTemplateRef } from 'vue'
 
-import { interactiveSelector as fieldInteractiveSelector, type MFieldProperties } from './mfield.shared'
+import { interactiveSelector as fieldInteractiveSelector, type UiFieldProperties } from './field.shared'
 
-type Properties = MFieldProperties
+type Properties = UiFieldProperties
 
 const {
   id,

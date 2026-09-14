@@ -1,16 +1,16 @@
 <template>
   <div class="notifications-view">
     <section>
-      <MSectionHeader description="Immediate notifications for each feedback tone and a custom icon/title example">
+      <UiSectionHeader description="Immediate notifications for each feedback tone and a custom icon/title example">
         Notifications
-      </MSectionHeader>
+      </UiSectionHeader>
 
-      <MCluster>
-        <MButton @click.prevent="error('Error message')">Error</MButton>
-        <MButton @click.prevent="warning('Warning message')">Warning</MButton>
-        <MButton @click.prevent="success('Success message')">Success</MButton>
-        <MButton @click.prevent="info('Info message')">Info</MButton>
-        <MButton
+      <UiCluster>
+        <UiButton @click.prevent="error('Error message')">Error</UiButton>
+        <UiButton @click.prevent="warning('Warning message')">Warning</UiButton>
+        <UiButton @click.prevent="success('Success message')">Success</UiButton>
+        <UiButton @click.prevent="info('Info message')">Info</UiButton>
+        <UiButton
           @click.prevent="
             notify('Notify message', {
               title: 'Custom notification',
@@ -20,20 +20,20 @@
           "
         >
           Custom
-        </MButton>
-      </MCluster>
+        </UiButton>
+      </UiCluster>
     </section>
 
     <section>
-      <MSectionHeader description="Timed notifications with progress indication and optional title/icon content">
+      <UiSectionHeader description="Timed notifications with progress indication and optional title/icon content">
         Timeouts
-      </MSectionHeader>
+      </UiSectionHeader>
 
-      <MCluster>
-        <MButton tone="danger" @click.prevent="error('Notification with timeout', { timeout: 2000 })">
+      <UiCluster>
+        <UiButton tone="danger" @click.prevent="error('Notification with timeout', { timeout: 2000 })">
           Error with timeout
-        </MButton>
-        <MButton
+        </UiButton>
+        <UiButton
           tone="warning"
           @click.prevent="
             warning(
@@ -43,22 +43,22 @@
           "
         >
           Warning with timeout
-        </MButton>
-        <MButton
+        </UiButton>
+        <UiButton
           tone="success"
           @click.prevent="success('Notification with timeout', { timeout: 4000, icon: ClockCheckIcon })"
         >
           Success with timeout
-        </MButton>
-        <MButton
+        </UiButton>
+        <UiButton
           tone="info"
           @click.prevent="
             info('Notification with timeout', { timeout: 5000, title: 'And title', icon: ClockCheckIcon })
           "
         >
           Info with timeout
-        </MButton>
-      </MCluster>
+        </UiButton>
+      </UiCluster>
     </section>
   </div>
 </template>
@@ -66,9 +66,9 @@
 <script lang="ts" setup>
 import { ClockCheckIcon } from '@lucide/vue'
 
-import MButton from '@/lib/components/buttons/MButton.vue'
-import MCluster from '@/lib/components/layout/MCluster.vue'
-import MSectionHeader from '@/lib/components/section/MSectionHeader.vue'
+import UiButton from '@/lib/components/buttons/UiButton.vue'
+import UiCluster from '@/lib/components/layout/UiCluster.vue'
+import UiSectionHeader from '@/lib/components/section/UiSectionHeader.vue'
 import { useNotifications } from '@/components/notifications'
 
 const { error, warning, success, info, notify } = useNotifications()

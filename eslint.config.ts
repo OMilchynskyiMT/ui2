@@ -45,15 +45,6 @@ export default defineConfigWithVueTs(
 
       'unicorn/prevent-abbreviations': 'off',
       'unicorn/no-null': 'off',
-      'unicorn/filename-case': [
-        'error',
-        {
-          cases: {
-            camelCase: true,
-            pascalCase: true,
-          },
-        },
-      ],
 
       '@typescript-eslint/no-unused-vars': [
         'error',
@@ -102,13 +93,37 @@ export default defineConfigWithVueTs(
     files: ['**/*.vue'],
     rules: {
       'unicorn/no-top-level-assignment-in-function': 'off',
+      'unicorn/filename-case': [
+        'error',
+        {
+          cases: {
+            pascalCase: true,
+          },
+          checkDirectories: false,
+        },
+      ],
+    },
+  },
+  {
+    files: ['**/*.ts'],
+    rules: {
+      'unicorn/no-top-level-assignment-in-function': 'off',
+      'unicorn/filename-case': [
+        'error',
+        {
+          cases: {
+            camelCase: true,
+          },
+          checkDirectories: false,
+        },
+      ],
     },
   },
   {
     files: ['@types/**/*.d.ts'],
     rules: {
       '@typescript-eslint/consistent-type-definitions': 'off',
-    }
+    },
   },
 
   eslintConfigPrettier
