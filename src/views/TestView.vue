@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts" setup>
-import { BusFrontIcon, ChartBarIcon, FormInputIcon, GlobeIcon, LogInIcon, SmartphoneIcon } from '@lucide/vue'
+import { BusFrontIcon, ChartBarIcon, FormInputIcon, GaugeIcon, GlobeIcon, LogInIcon, SmartphoneIcon } from '@lucide/vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import UiTabs, { type UiTabItem } from '@/lib/components/tabs/UiTabs.vue'
@@ -43,6 +43,7 @@ const tabs: UiTabItem<string>[] = [
   { title: 'Navigation', value: 'navigation' },
   { icon: SmartphoneIcon, title: 'Mobile', value: 'mobile' },
   { icon: ChartBarIcon, title: 'Charts', value: 'bar-chart' },
+  { icon: GaugeIcon, title: 'Dashboard', value: 'dashboard-widgets' },
 ]
 
 const router = useRouter()

@@ -193,6 +193,12 @@ const routes: RouterOptions['routes'] = [
             component: () => import('@/views/features/ChartsView.vue'),
             meta: { title: 'Bar Chart' },
           },
+          {
+            path: 'dashboard-widgets',
+            name: 'dashboard-widgets',
+            component: () => import('@/views/features/DashboardWidgetsView.vue'),
+            meta: { title: 'Dashboard Widgets' },
+          },
         ],
       },
     ],
