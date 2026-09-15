@@ -1,10 +1,6 @@
-import type { Validator, ValidatorOptions } from '../types'
+import { formatBytes } from '@/lib/format/bytes'
 
-const formatBytes = (bytes: number): string => {
-  if (bytes < 1024) return `${bytes} B`
-  if (bytes < 1024 * 1024) return `${bytes / 1024} KiB`
-  return `${bytes / (1024 * 1024)} MiB`
-}
+import type { Validator, ValidatorOptions } from '../types'
 
 export const nonEmptyFile = (options?: ValidatorOptions): Validator<File> => {
   return {

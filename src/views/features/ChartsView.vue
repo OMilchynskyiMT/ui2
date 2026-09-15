@@ -9,7 +9,7 @@
         <Chart
           :chart="trafficChart"
           :format-label="formatDate"
-          :format-value="formatBytes"
+          :format-value="formatTrafficBytes"
           label="Received and transmitted network traffic by day"
         />
       </div>
@@ -19,6 +19,7 @@
 
 <script lang="ts" setup>
 import UiSectionHeader from '@/lib/components/section/UiSectionHeader.vue'
+import { formatBytes } from '@/lib/format/bytes'
 import { Chart } from '@/components/chart'
 import type { ChartDefinition, ChartLabel } from '@/components/chart/types'
 
@@ -64,17 +65,7 @@ const formatDate = (value: ChartLabel): string => {
   }).format(value)
 }
 
-const formatBytes = (value: number): string => {
-  if (value === 0) return '0 B'
-
-  const units = ['B', 'KB', 'MB', 'GB', 'TB']
-  const unit = Math.min(Math.floor(Math.log(value) / Math.log(1000)), units.length - 1)
-  const size = value / 1000 ** unit
-
-  return `${new Intl.NumberFormat(undefined, {
-    maximumFractionDigits: 1,
-  }).format(size)} ${units[unit]}`
-}
+const formatTrafficBytes = (value: number): string => formatBytes(value, { unitSystem: 'decimal' })
 </script>
 
 <style scoped>

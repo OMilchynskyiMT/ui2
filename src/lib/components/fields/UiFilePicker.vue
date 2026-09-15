@@ -96,13 +96,13 @@
           <li v-for="(file, index) in model" :key="`${getFileKey(file)}:${index}`" class="file">
             <slot
               :file="file"
-              :formatted-size="formatFileSize(file.size)"
+              :formatted-size="formatBytes(file.size)"
               :index="index"
               :remove="() => remove(index)"
               name="file"
             >
               <span :title="file.name" class="file-name">{{ file.name }}</span>
-              <span class="file-size">{{ formatFileSize(file.size) }}</span>
+              <span class="file-size">{{ formatBytes(file.size) }}</span>
             </slot>
 
             <button
@@ -176,6 +176,7 @@ export type UiFilePickerExpose = {
 import { computed, onMounted, ref, useAttrs, useSlots, useTemplateRef, watch } from 'vue'
 import { FileUpIcon, XIcon } from '@lucide/vue'
 
+import { formatBytes } from '@/lib/format/bytes'
 import { useId } from '@/composables/useId'
 
 import UiIcon from '../UiIcon.vue'
@@ -183,7 +184,6 @@ import { type UiFieldProperties, useFieldState } from './field.shared'
 import FieldFrame from './FieldFrame.vue'
 import {
   filterSelectedFiles,
-  formatFileSize,
   getFileKey,
   parseAccept,
   type UiFilePickerChangeSource,
@@ -265,13 +265,13 @@ const summaryText = computed(() => {
   if (model.value.length === 1) {
     const [file] = model.value
     if (!file) return placeholder
-    return `${file.name} - ${formatFileSize(file.size)}`
+    return `${file.name} - ${formatBytes(file.size)}`
   }
 
-  return `${model.value.length} files - ${formatFileSize(totalSize.value)}`
+  return `${model.value.length} files - ${formatBytes(totalSize.value)}`
 })
 
-const selectedTitle = computed(() => model.value.map(file => `${file.name} - ${formatFileSize(file.size)}`).join('\n'))
+const selectedTitle = computed(() => model.value.map(file => `${file.name} - ${formatBytes(file.size)}`).join('\n'))
 
 const resolvedAreaText = computed(() => {
   if (areaText !== undefined) return areaText

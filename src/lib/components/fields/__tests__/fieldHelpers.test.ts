@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import { isHexColorValid, normalizeHexColor } from '../color.shared'
-import { filterSelectedFiles, formatFileSize, isAcceptableFile, parseAccept } from '../filePicker.shared'
+import { filterSelectedFiles, isAcceptableFile, parseAccept } from '../filePicker.shared'
 import { clampNumber, formatNumber, parseNumberText } from '../number.shared'
 
 const file = (name: string, type: string): File => ({ name, type, size: 100, lastModified: 1 }) as File
@@ -52,11 +52,5 @@ describe('file picker helpers', () => {
       { file: image, reason: 'accept' },
       { file: second, reason: 'multiple' },
     ])
-  })
-
-  it('formats file sizes using binary units', () => {
-    expect(formatFileSize(1000)).toBe('1000 B')
-    expect(formatFileSize(1024)).toBe('1 KB')
-    expect(formatFileSize(1536)).toBe('1.5 KB')
   })
 })

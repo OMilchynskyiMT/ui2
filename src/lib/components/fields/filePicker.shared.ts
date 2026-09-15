@@ -7,17 +7,6 @@ export type UiFileRejection = {
   reason: UiFileRejectionReason
 }
 
-export const formatFileSize = (size: number): string => {
-  if (size < 1024) return `${size} B`
-
-  const units = ['KB', 'MB', 'GB', 'TB']
-  const exponent = Math.min(Math.floor(Math.log(size) / Math.log(1024)), units.length)
-  const value = size / 1024 ** exponent
-  const formatted = value >= 10 ? Math.round(value).toString() : value.toFixed(1).replace(/\.0$/, '')
-
-  return `${formatted} ${units[exponent - 1]}`
-}
-
 export const getFileKey = (file: File): string => `${file.name}:${file.size}:${file.lastModified}:${file.type}`
 
 export const parseAccept = (accept: string): string[] => {
