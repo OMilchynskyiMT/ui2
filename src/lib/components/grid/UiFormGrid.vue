@@ -47,7 +47,7 @@ const styles = computed(() =>
     --columns-lg: 2;
     --columns-xl: 4;
 
-    max-inline-size: min(100%, var(--container-xl));
+    /* max-inline-size: min(100%, var(--container-xl)); */
     container-type: inline-size;
 
     & > div.grid {

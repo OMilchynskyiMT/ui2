@@ -1,14 +1,6 @@
 <template>
   <UiBar class="top-bar">
     <template #leading>
-      <img
-        v-if="resolvedScheme === 'light'"
-        alt="MultiTech"
-        class="u-hidden-below-md"
-        src="/images/MT-logo.svg"
-        width="180"
-      />
-      <img v-else alt="MultiTech" class="u-hidden-below-md" src="/images/MT-logo-light.svg" width="180" />
       <slot name="leading" />
     </template>
 
@@ -28,9 +20,6 @@
 
 <script lang="ts" setup>
 import UiBar from '@/lib/components/bars/UiBar.vue'
-import { useColorScheme } from '@/composables/useColorScheme'
-
-const { scheme: resolvedScheme } = useColorScheme()
 </script>
 
 <style scoped>

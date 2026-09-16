@@ -47,6 +47,14 @@ textarea {
   resize: vertical;
 }
 
+button {
+  appearance: none;
+}
+
+ul > li {
+  list-style: none;
+}
+
 /*
  * NOTE: normalize the internal value box used by WebKit date/time controls
  */
