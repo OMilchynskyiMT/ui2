@@ -209,11 +209,12 @@ watch(() => [model.value, items] as const, syncIndicator, { flush: 'post' })
     --gap: var(--space-sm);
     --tab-gap: var(--space-xs);
 
-    --tab-height: calc(var(--font-size) * 3);
+    --tab-height: 2.5rem;
     --tab-padding-inline: var(--space-sm);
     --tab-font-size: var(--font-size-md);
     --tab-color: var(--text-color);
     --tab-color-active: var(--link-color);
+    --tab-bg: transparent;
     --tab-opacity: 1;
 
     position: relative;
@@ -247,20 +248,31 @@ watch(() => [model.value, items] as const, syncIndicator, { flush: 'post' })
       inline-size: auto;
       padding-inline: var(--tab-padding-inline);
       border: 0;
+      border-radius: var(--radius-md);
       color: var(--tab-color);
-      background: transparent;
+      background: var(--tab-bg);
       font-size: var(--tab-font-size);
       opacity: var(--tab-opacity);
       user-select: none;
       cursor: pointer;
       overflow: hidden;
 
-      transition-property: color, opacity;
+      transition-property: background-color, color, opacity;
       transition-duration: var(--duration-md);
       transition-timing-function: var(--bezier-smooth);
 
       &.active {
         --tab-color: var(--tab-color-active);
+      }
+
+      &:focus-visible {
+        --tab-bg: color-mix(in oklch, var(--tab-color-active) 8%, transparent);
+      }
+
+      @media (hover: hover) {
+        &:hover:not(:disabled) {
+          --tab-bg: color-mix(in oklch, var(--tab-color-active) 6%, transparent);
+        }
       }
 
       &:disabled {

@@ -77,7 +77,7 @@ const emit = defineEmits<{
         justify-content: space-between;
         overflow-x: hidden;
         flex-wrap: nowrap;
-        gap: calc(var(--font-size-md) / 2);
+        gap: var(--space-sm);
 
         & .title,
         & .value {

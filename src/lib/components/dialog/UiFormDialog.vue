@@ -178,9 +178,9 @@ defineExpose<Exposed>({
     max-block-size: inherit;
     display: flex;
     flex-direction: column;
-    gap: var(--form-gap, var(--space-xxl));
+    gap: var(--form-gap, var(--space-xl));
     overflow: clip;
-    padding: var(--form-padding, var(--space-xxl));
+    padding: var(--form-padding, var(--space-xl));
 
     .title {
       font-size: var(--title-font-size, var(--font-size-lg));
@@ -190,11 +190,11 @@ defineExpose<Exposed>({
     .content {
       min-block-size: 0;
       flex: 1 1 auto;
-      --scroll-area-fade-color: var(--dialog-bg, var(--bg));
+      --scroll-area-fade-color: var(--dialog-bg, var(--surface-bg));
 
       & .content-layout {
         display: grid;
-        gap: var(--form-content-gap, var(--space-xxl));
+        gap: var(--form-content-gap, var(--space-xl));
       }
     }
 
@@ -207,7 +207,7 @@ defineExpose<Exposed>({
       display: flex;
       flex-wrap: wrap;
       flex-direction: row-reverse;
-      gap: var(--actions-gap, var(--space-lg));
+      gap: var(--actions-gap, var(--space-sm));
     }
   }
 }

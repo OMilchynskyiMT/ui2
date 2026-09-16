@@ -10,12 +10,9 @@
         <UiCard v-if="usagePolicy" class="policy-card">
           <section aria-label="Usage policy" class="policy">
             <UiSectionHeader
+              :icon="ScaleIcon"
               description="Review the policy for use of this device before signing in."
-              style="--sections-gap: var(--space-md)"
             >
-              <template #leading>
-                <UiIcon :icon="ScaleIcon" size="32px" style="--color: var(--tone-primary)" />
-              </template>
               Usage Policy
             </UiSectionHeader>
 

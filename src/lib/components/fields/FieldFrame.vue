@@ -153,10 +153,10 @@ onMounted(() => {
   .field {
     --font-size: var(--font-size-md);
     --line-height: 1.5;
-    --control-height: max(var(--touch-target-min), calc(3.5 * var(--font-size)));
-    --gap-x: calc(var(--font-size) / 2);
-    --gap-y: calc(var(--font-size) / 4);
-    --padding-inline: var(--font-size);
+    --control-height: 3rem;
+    --gap-x: var(--space-sm);
+    --gap-y: var(--space-xs);
+    --padding-inline: var(--space-md);
     --border-width: 2px;
     --border-radius: var(--radius-md);
     --border-color: light-dark(var(--gray-300), var(--gray-600));
@@ -169,13 +169,13 @@ onMounted(() => {
     --label-color: light-dark(var(--gray-800), var(--gray-300));
     --label-active-color: light-dark(var(--blue-600), var(--blue-300));
     --error-color: var(--error-text-color);
-    --details-font-size: calc(var(--font-size) * 0.875);
+    --details-font-size: var(--font-size-xs);
     --hint-color: var(--text-color-dimmed);
     --cursor: text;
 
     --label-color-current: var(--label-color);
     --label-font-size: var(--font-size);
-    --label-font-size-active: calc(var(--font-size) * 0.875);
+    --label-font-size-active: var(--font-size-xs);
     --label-inline-start: 0px;
     --border-color-current: var(--border-color);
     --container-bg: var(--bg);
@@ -207,8 +207,8 @@ onMounted(() => {
     }
 
     &:is([data-size='small']) {
-      --control-height: max(var(--touch-target-min), calc(3 * var(--font-size)));
-      --padding-inline: calc(var(--font-size) * 0.75);
+      --control-height: var(--touch-target-min);
+      --padding-inline: var(--space-md);
     }
 
     &:is([data-variant='filled']) {
@@ -260,7 +260,7 @@ onMounted(() => {
       text-overflow: ellipsis;
       pointer-events: none;
       user-select: none;
-      line-height: 1.25;
+      line-height: 1.33;
     }
 
     & > label {
@@ -347,7 +347,7 @@ onMounted(() => {
     column-gap: var(--gap-x);
     min-inline-size: 0;
     font-size: var(--details-font-size);
-    line-height: 1.25;
+    line-height: var(--line-height-compact);
 
     & > .messages {
       display: flex;

@@ -113,7 +113,7 @@ onBeforeUnmount(stop)
   .popover {
     inline-size: 100%;
     background-color: var(--popover-bg, var(--surface-bg));
-    border-radius: var(--popover-radius, var(--radius-md));
+    border-radius: var(--popover-radius, var(--radius-lg));
     box-shadow: var(--popover-shadow, var(--shadow-sm));
   }
 

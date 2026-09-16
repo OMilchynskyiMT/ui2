@@ -60,6 +60,7 @@ const onPointerEnter = (): void => {
     display: flex;
     align-items: center;
     padding-inline: calc(var(--item-padding-inline) + var(--list-level, 0) * 1rem) var(--item-padding-inline);
+    border-radius: var(--radius-md);
     cursor: pointer;
     user-select: none;
     background-color: var(--item-bg);

@@ -41,7 +41,7 @@ const { scheme: resolvedScheme } = useColorScheme()
   --padding-inline-start: max(var(--space-md), var(--safe-area-left));
   --padding-inline-end: max(var(--space-md), var(--safe-area-right));
   --bg: var(--surface-bg);
-  border-bottom: 1px solid light-dark(var(--gray-200), var(--gray-700));
+  border-bottom: 1px solid var(--divider-color);
   isolation: isolate;
 }
 
@@ -53,7 +53,7 @@ div.product {
     display: flex;
     gap: var(--space-md);
     font-size: var(--font-size-sm);
-    color: var(--gray-500);
+    color: var(--text-color-dimmed);
   }
 
   & * {

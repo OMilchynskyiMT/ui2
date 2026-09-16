@@ -45,7 +45,7 @@ const { adaptive = false, sticky = true } = defineProps<UiBottomActionsPropertie
           max(var(--bottom-actions-padding-block, var(--space-md)), var(--safe-area-bottom))
           max(var(--bottom-actions-padding-inline, var(--space-md)), var(--safe-area-left));
         border: var(--bottom-actions-border-width, 0px) solid var(--bottom-actions-border-color, var(--divider-color));
-        border-radius: var(--bottom-actions-radius, var(--radius-md));
+        border-radius: var(--bottom-actions-radius, var(--radius-lg));
         background-color: var(--bottom-actions-bg, color-mix(in oklch, var(--surface-bg) 92%, transparent));
         backdrop-filter: var(--bottom-actions-backdrop-filter, blur(0.5rem));
       }

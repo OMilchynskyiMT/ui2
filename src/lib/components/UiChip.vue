@@ -62,14 +62,14 @@ const emit = defineEmits<{
 @layer components {
   .chip {
     --accent-color: var(--tone-color);
+    --chip-block-size: 1.5rem;
     --bg: transparent;
     --border-width: 0;
-    --border-color: oklch(from var(--accent-color) l c h / 0.25);
-    --padding-inline: var(--space-sm);
-    --padding-block: 0;
-    --gap-x: var(--space-xs);
+    --border-color: oklch(from var(--accent-color) l c h / 0.3);
+    --padding-inline: 0.5rem;
+    --gap-x: 0.375rem;
     --radius: var(--radius-md);
-    --font-size: var(--font-size-sm);
+    --font-size: var(--font-size-xs);
 
     position: relative;
     display: inline-flex;
@@ -77,26 +77,28 @@ const emit = defineEmits<{
     justify-content: center;
     min-inline-size: 0;
     max-inline-size: 100%;
-
+    block-size: var(--chip-block-size);
     padding-inline: var(--padding-inline);
-    padding-block: var(--padding-block);
-    column-gap: var(--gap-x);
-    border-radius: var(--radius);
-    cursor: var(--cursor, default);
-    font-size: var(--font-size);
     border: var(--border-width) solid var(--border-color);
+    border-radius: var(--radius);
     background-color: var(--bg);
     color: var(--color, var(--accent-color));
+    font-size: var(--font-size);
+    line-height: var(--line-height-tight);
+    cursor: var(--cursor, default);
+    column-gap: var(--gap-x);
+    vertical-align: middle;
 
     & > :is(.button.close) {
-      --padding-inline: 0;
-      --padding-block: 0;
-      --font-size: var(--font-size);
+      --icon-block-size: calc(var(--chip-block-size) - 0.25rem);
+      --font-size: 0.625rem;
       --color: currentColor;
+
+      margin-inline-end: -0.25rem;
     }
 
     & > :is(.leading, .main, .trailing) {
-      block-size: 100%;
+      min-inline-size: 0;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -108,47 +110,42 @@ const emit = defineEmits<{
 
     & > .main {
       flex: 1 1 auto;
-      min-inline-size: 0;
 
       & > span.label {
         display: block;
-        align-content: center;
         min-inline-size: 0;
         max-inline-size: 100%;
-        block-size: 100%;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-        line-height: normal;
+        line-height: inherit;
       }
     }
 
     &[data-size='small'] {
-      --radius: var(--radius-sm);
+      --chip-block-size: 1.25rem;
       --font-size: var(--font-size-xxs);
-      --padding-inline: var(--space-xxs);
+      --padding-inline: 0.375rem;
       --gap-x: var(--space-xxs);
     }
-    &[data-size='medium'] {
-      --padding-block: var(--space-xxs);
-      --padding-inline: var(--space-xs);
-      --font-size: var(--font-size-xs);
-    }
+
     &[data-size='large'] {
-      --radius: var(--radius-lg);
+      --chip-block-size: 1.75rem;
       --font-size: var(--font-size-sm);
-      --padding-inline: var(--space-sm);
-      --padding-block: var(--space-xs);
+      --padding-inline: 0.625rem;
       --gap-x: var(--space-xs);
+      --radius: var(--radius-lg);
     }
 
     &[data-variant='outlined'] {
       --border-width: 1px;
     }
+
     &[data-variant='filled'] {
       --bg: var(--accent-color);
       --color: var(--white);
     }
+
     &[data-variant='tonal'] {
       --bg: oklch(from var(--accent-color) l c h / 0.2);
     }

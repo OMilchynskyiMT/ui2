@@ -194,6 +194,10 @@ watch(() => [route.fullPath, items] as const, syncExpandedItems, { immediate: tr
       transition-duration: var(--duration-sm);
       transition-timing-function: var(--bezier-smooth);
 
+      &:focus-visible {
+        --item-bg: color-mix(in oklch, var(--accent) 8%, transparent);
+      }
+
       &::before {
         content: '';
         position: absolute;

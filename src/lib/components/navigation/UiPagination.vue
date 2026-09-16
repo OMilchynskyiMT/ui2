@@ -198,7 +198,7 @@ const getPageLabel = (page: number): string => {
       place-items: center;
       padding-inline: var(--space-xs);
       border: 0;
-      border-radius: var(--radius-md);
+      border-radius: var(--radius-full);
       color: currentColor;
       background: transparent;
       font: inherit;

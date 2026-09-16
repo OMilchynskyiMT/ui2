@@ -233,7 +233,7 @@ defineExpose<Exposed>({ show, close, isVisible })
     opacity: 0;
     overflow: visible;
     transform: translateY(var(--initial-translate-y));
-    border-radius: var(--dialog-radius, var(--radius-md));
+    border-radius: var(--dialog-radius, var(--radius-lg));
     box-shadow: var(--dialog-shadow, var(--shadow-md));
 
     transition-property: opacity, transform;
@@ -272,7 +272,7 @@ defineExpose<Exposed>({ show, close, isVisible })
       overflow: clip;
 
       border-radius: inherit;
-      background-color: var(--dialog-bg, var(--bg));
+      background-color: var(--dialog-bg, var(--surface-bg));
     }
 
     &::backdrop {

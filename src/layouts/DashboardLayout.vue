@@ -29,7 +29,7 @@
             menu-aria-label="Commands"
             placement="bottom-end"
             tone="neutral"
-            variant="icon"
+            variant="text"
           >
             <UiIcon :icon="SquareTerminalIcon" style="--color: var(--lime-600)" />
             <span class="u-hidden-below-lg">Commands</span>
@@ -43,7 +43,7 @@
             menu-aria-label="User actions"
             placement="bottom-end"
             tone="neutral"
-            variant="icon"
+            variant="text"
             @select="userMenuHandler($event.value)"
           >
             <UserAvatar size="1rem" style="--accent: var(--purple-500)" />

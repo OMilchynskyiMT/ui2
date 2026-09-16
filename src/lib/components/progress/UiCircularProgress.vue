@@ -55,7 +55,7 @@ const strokeDashOffset = computed(() => 100 - normalizedValue.value)
   svg {
     --size: var(--spinner-size, v-bind(size));
     --font-size: var(--spinner-font-size, v-bind(fontSize));
-    --stroke-width: var(--spinner-stroke-width, v-bind(strokeWidth));
+    --stroke-width: var(--spinner-stroke-width, calc(v-bind(strokeWidth) * 1px));
     --animation-speed: var(--spinner-animation-speed, 1.1s);
 
     position: relative;
@@ -64,8 +64,6 @@ const strokeDashOffset = computed(() => 100 - normalizedValue.value)
     display: inline-grid;
     place-items: center;
 
-    shape-rendering: geometricPrecision;
-
     & > circle.track,
     & > circle.progress {
       stroke-width: var(--stroke-width);
@@ -73,7 +71,7 @@ const strokeDashOffset = computed(() => 100 - normalizedValue.value)
       cy: 50%;
       fill: none;
       stroke: currentColor;
-      stroke-linecap: square;
+      shape-rendering: geometricPrecision;
     }
 
     & > circle.track {
@@ -83,7 +81,7 @@ const strokeDashOffset = computed(() => 100 - normalizedValue.value)
     & > circle.progress {
       transform: rotate(-90deg);
       transform-origin: center;
-      stroke-linecap: square;
+      stroke-linecap: round;
 
       transition-property: stroke-dashoffset, stroke-dasharray, stroke-width, transform;
       transition-duration: var(--duration-lg);

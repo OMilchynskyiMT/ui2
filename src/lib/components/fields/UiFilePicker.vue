@@ -105,33 +105,37 @@
               <span class="file-size">{{ formatBytes(file.size) }}</span>
             </slot>
 
-            <button
+            <UiButton
               v-if="clearable && !disabled && !readonly"
               :aria-label="`Remove ${file.name}`"
               :title="`Remove ${file.name}`"
               class="remove"
-              type="button"
+              size="small"
+              tone="danger"
+              variant="icon"
               @click.stop="remove(index)"
               @pointerdown.stop
             >
               <UiIcon :icon="XIcon" size="1.25rem" />
-            </button>
+            </UiButton>
           </li>
         </ul>
       </div>
 
       <template v-if="variant === 'field' && (slots.trailing || showClear)" #trailing>
         <slot :clear="clear" :files="model" name="trailing">
-          <button
+          <UiButton
             :aria-label="multiple ? 'Clear selected files' : 'Clear selected file'"
             :title="multiple ? 'Clear selected files' : 'Clear selected file'"
             class="clear"
-            type="button"
+            size="small"
+            tone="danger"
+            variant="icon"
             @click.stop="clear"
             @pointerdown.stop
           >
             <UiIcon :icon="XIcon" />
-          </button>
+          </UiButton>
         </slot>
       </template>
 
@@ -179,6 +183,7 @@ import { FileUpIcon, XIcon } from '@lucide/vue'
 import { formatBytes } from '@/lib/format/bytes'
 import { useId } from '@/composables/useId'
 
+import UiButton from '../buttons/UiButton.vue'
 import UiIcon from '../UiIcon.vue'
 import { type UiFieldProperties, useFieldState } from './field.shared'
 import FieldFrame from './FieldFrame.vue'
@@ -451,7 +456,7 @@ onMounted(() => syncNativeFiles(model.value))
       }
     }
 
-    & :is(.upload-icon, .clear, .remove) {
+    & .upload-icon {
       cursor: pointer;
     }
 
@@ -462,9 +467,6 @@ onMounted(() => syncNativeFiles(model.value))
       color: var(--text-color-dimmed);
     }
 
-    :is(.clear, .remove) {
-      color: var(--red-500);
-    }
   }
 
   .file-upload-area {

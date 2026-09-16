@@ -59,11 +59,13 @@
         </div>
 
         <template #actions="{ close }">
-          <UiButton tone="neutral" variant="tonal" @click="close">Cancel</UiButton>
-          <UiButton tone="primary" @click="close">
-            <UiIcon :icon="CheckIcon" size="1rem" />
-            Apply
-          </UiButton>
+          <UiBottomActions adaptive>
+            <UiButton tone="neutral" variant="tonal" @click="close">Cancel</UiButton>
+            <UiButton tone="primary" @click="close">
+              <UiIcon :icon="CheckIcon" size="1rem" />
+              Apply
+            </UiButton>
+          </UiBottomActions>
         </template>
       </UiBottomSheet>
     </section>

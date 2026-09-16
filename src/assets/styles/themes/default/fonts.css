@@ -5,13 +5,13 @@
   --font-mono: 'SFMono-Regular', 'JetBrains Mono', Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
 
   --font-size: 0.875rem;
-  --font-size-xxs: calc(var(--font-size) * 0.625);
-  --font-size-xs: calc(var(--font-size) * 0.75);
-  --font-size-sm: calc(var(--font-size) * 0.875);
+  --font-size-xxs: 0.6875rem;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.8125rem;
   --font-size-md: var(--font-size);
-  --font-size-lg: calc(var(--font-size) * 1.25);
-  --font-size-xl: calc(var(--font-size) * 1.5);
-  --font-size-xxl: calc(var(--font-size) * 2.25);
+  --font-size-lg: 1rem;
+  --font-size-xl: 1.25rem;
+  --font-size-xxl: 1.75rem;
 
   --font-weight-bold: 600;
   --font-weight-semibold: 500;
@@ -19,4 +19,6 @@
   --font-weight-light: 300;
 
   --line-height: 1.43;
+  --line-height-tight: 1.2;
+  --line-height-compact: 1.35;
 }

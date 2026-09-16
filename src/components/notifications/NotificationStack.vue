@@ -168,7 +168,7 @@ const timeoutStyle = (item: Notification): Record<string, string> => {
         background-color: color-mix(in oklch, var(--surface-bg) 90%, transparent);
         backdrop-filter: blur(3px);
         box-shadow: var(--shadow-sm);
-        border-radius: var(--radius-md);
+        border-radius: var(--radius-lg);
 
         pointer-events: auto;
 

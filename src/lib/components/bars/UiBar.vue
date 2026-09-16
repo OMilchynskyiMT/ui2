@@ -27,7 +27,7 @@ const { as = 'div' } = defineProps<{
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
-  column-gap: var(--sections-gap);
+  column-gap: 0;
   inline-size: 100%;
   min-block-size: var(--height);
   min-inline-size: 0;
@@ -54,6 +54,10 @@ const { as = 'div' } = defineProps<{
   & > .leading {
     grid-column: 1;
     justify-self: start;
+
+    &:not(:empty) {
+      margin-inline-end: var(--sections-gap);
+    }
   }
 
   & > .main {
@@ -68,6 +72,10 @@ const { as = 'div' } = defineProps<{
   & > .trailing {
     grid-column: 3;
     justify-self: end;
+
+    &:not(:empty) {
+      margin-inline-start: var(--sections-gap);
+    }
   }
 }
 </style>

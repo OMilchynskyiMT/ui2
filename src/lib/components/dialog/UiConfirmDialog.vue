@@ -140,9 +140,9 @@ onBeforeUnmount(() => settle(false))
     max-block-size: inherit;
     display: flex;
     flex-direction: column;
-    gap: var(--gap, var(--space-xxl));
+    gap: var(--gap, var(--space-xl));
     overflow: clip;
-    padding: var(--padding, var(--space-xxl));
+    padding: var(--padding, var(--space-xl));
 
     & > header,
     & > footer.actions {
@@ -159,12 +159,12 @@ onBeforeUnmount(() => settle(false))
     & > .message-scroll {
       min-block-size: 0;
       flex: 1 1 auto;
-      --scroll-area-fade-color: var(--dialog-bg, var(--bg));
+      --scroll-area-fade-color: var(--dialog-bg, var(--surface-bg));
 
       & .message {
         display: grid;
         grid-template-columns: var(--icon-size) minmax(0, 1fr);
-        gap: var(--gap, var(--space-xxl));
+        gap: var(--message-gap, var(--space-lg));
 
         & > .message-icon {
           --color: var(--icon-color, var(--orange-400));
@@ -182,7 +182,7 @@ onBeforeUnmount(() => settle(false))
       display: flex;
       flex-wrap: wrap;
       flex-direction: row-reverse;
-      gap: var(--actions-gap, var(--space-lg));
+      gap: var(--actions-gap, var(--space-sm));
     }
   }
 }

@@ -6,7 +6,7 @@
       </UiSectionHeader>
 
       <UiFormGrid :columns="{ small: 1, medium: 2 }">
-        <UiCard v-for="i of blocks" :key="i" :style="`--bg: hsl(${(i * blocks) / 0.5}, 70%, 65%)`" class="sample-card">
+        <UiCard v-for="i of blocks" :key="i" :style="`--card-bg: hsl(${(i * blocks) / 0.5}, 70%, 65%)`" class="sample-card">
           lorem ipsum <br v-if="i % 3" />
           {{ i }}
         </UiCard>

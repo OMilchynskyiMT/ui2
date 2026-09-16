@@ -67,7 +67,7 @@ const actualIcon = computed((): Component => {
     padding: var(--space-md) var(--space-lg);
 
     border: var(--border-width) solid color-mix(in srgb, var(--accent) 20%, transparent);
-    border-radius: var(--radius-xl);
+    border-radius: var(--radius-lg);
 
     background-color: color-mix(in oklch, var(--accent) 8%, transparent);
 

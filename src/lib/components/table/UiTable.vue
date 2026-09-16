@@ -195,7 +195,7 @@ div.table {
 
   --border-width: 0px;
   --border-color: var(--divider-color);
-  --border-radius: var(--radius-md);
+  --border-radius: var(--radius-lg);
 
   --divider-width: 1px;
 
@@ -332,7 +332,7 @@ div.table {
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 1rem;
+      gap: var(--space-lg);
     }
 
     &:is(.loading, .empty) {

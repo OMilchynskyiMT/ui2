@@ -161,6 +161,11 @@ onBeforeUnmount(clearResetTimer)
       transition-timing-function: var(--bezier-bounce);
     }
 
+    &:focus-visible {
+      --outline-bg: oklch(from var(--accent-color) l c h / 0.08);
+      --outline-border-color: oklch(from var(--accent-color) l c h / 0.24);
+    }
+
     &.copied {
       --outline-bg: oklch(from var(--accent-color) l c h / 0.1);
       --outline-border-color: oklch(from var(--accent-color) l c h / 0.2);

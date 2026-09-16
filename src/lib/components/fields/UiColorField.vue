@@ -145,7 +145,7 @@ defineExpose<UiFieldExpose>(createFieldExpose(() => fieldReference.value))
     position: relative;
     display: inline-grid;
     place-items: center;
-    padding: var(--space-xxs);
+    padding: 0;
     border-radius: var(--radius-md);
     cursor: pointer;
 

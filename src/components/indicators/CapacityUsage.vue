@@ -116,10 +116,10 @@ const formattedUsed = computed(() => formatBytes(used.value))
 <style scoped>
 @layer components {
   .capacity-usage {
-    --track-height: clamp(12px, var(--font-size), 16px);
+    --track-height: 0.875rem;
     --track-bg: oklch(from currentColor l c h / 0.03);
 
-    --card-radius: var(--radius-xl);
+    --card-radius: var(--radius-lg);
 
     display: grid;
     gap: var(--space-md);
@@ -150,7 +150,7 @@ const formattedUsed = computed(() => formatBytes(used.value))
         block-size: 3.25rem;
         display: grid;
         place-items: center;
-        border-radius: var(--radius-xl);
+        border-radius: var(--radius-lg);
         background: color-mix(in oklch, var(--tone-primary) 14%, transparent);
         color: var(--tone-primary);
       }

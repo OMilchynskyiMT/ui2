@@ -42,8 +42,8 @@ const { label = 'Internet', online } = defineProps<{
     --status-container: color-mix(in oklch, var(--status-color) 14%, transparent);
 
     --display: grid;
-    --card-radius: var(--radius-xl);
-    --card-bg: color-mix(in oklch, var(--status-color) 6%);
+    --card-radius: var(--radius-lg);
+    --card-bg: color-mix(in oklch, var(--status-color) 6%, transparent);
 
     grid-template-columns: auto minmax(0, 1fr) auto;
     align-items: center;
@@ -54,7 +54,7 @@ const { label = 'Internet', online } = defineProps<{
       block-size: 3.25rem;
       display: grid;
       place-items: center;
-      border-radius: var(--radius-xl);
+      border-radius: var(--radius-lg);
       background: var(--status-container);
       color: var(--status-color);
     }

@@ -148,8 +148,8 @@ defineExpose<ListboxContentExpose>({
   }
 
   .list {
-    --item-min-block-size: calc(var(--font-size-md) * 3);
-    --item-padding-inline: var(--font-size-md);
+    --item-min-block-size: 2.5rem;
+    --item-padding-inline: var(--space-md);
 
     --item-opacity: 1;
     --item-bg: transparent;
@@ -163,8 +163,9 @@ defineExpose<ListboxContentExpose>({
 
     display: flex;
     flex-direction: column;
+    gap: var(--space-xxs);
     margin: 0;
-    padding: 0;
+    padding: var(--space-xs);
     list-style: none;
     background-color: var(--list-bg);
     border-radius: inherit;
@@ -178,10 +179,10 @@ defineExpose<ListboxContentExpose>({
       flex-direction: column;
 
       & > .group-label {
-        min-block-size: calc(var(--item-min-block-size) * 0.75);
+        min-block-size: 1.75rem;
         display: flex;
         align-items: end;
-        padding-block-end: calc(var(--item-padding-inline) / 4);
+        padding-block-end: var(--space-xs);
         padding-inline: var(--item-padding-inline);
         color: var(--group-color);
         font-size: var(--font-size-sm);
@@ -191,6 +192,7 @@ defineExpose<ListboxContentExpose>({
 
       & > .group-items {
         display: flex;
+        gap: var(--space-xxs);
         margin: 0;
         padding: 0;
         list-style: none;

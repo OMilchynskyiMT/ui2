@@ -75,6 +75,12 @@ const getItemKey = (item: UiBreadcrumbItem<T>, index: number): string | number =
         min-inline-size: 0;
       }
 
+      & > a:focus-visible {
+        text-decoration: underline;
+        text-decoration-thickness: 2px;
+        text-underline-offset: 0.2em;
+      }
+
       & > span[aria-current='page'] {
         color: var(--text-color);
         font-weight: var(--font-weight-semibold);
