@@ -1,19 +1,26 @@
 <template>
-  <div :data-adaptive="adaptive || undefined" :data-align="align" :data-justify="justify" class="cluster">
+  <component
+    :is="tag"
+    :data-adaptive="adaptive || undefined"
+    :data-align="align"
+    :data-justify="justify"
+    class="cluster"
+  >
     <slot />
-  </div>
+  </component>
 </template>
 
 <script lang="ts">
 export type UiClusterProperties = {
   adaptive?: boolean
+  tag?: string
   align?: 'start' | 'center' | 'end' | 'baseline' | 'stretch'
   justify?: 'start' | 'center' | 'end' | 'between'
 }
 </script>
 
 <script lang="ts" setup>
-const { adaptive = false, align = 'center', justify = 'start' } = defineProps<UiClusterProperties>()
+const { adaptive = false, align = 'center', justify = 'start', tag = 'div' } = defineProps<UiClusterProperties>()
 </script>
 
 <style scoped>
