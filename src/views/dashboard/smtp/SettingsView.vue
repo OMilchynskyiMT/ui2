@@ -45,7 +45,7 @@
 
           <div class="grid-align-center">
             <UiButton tone="primary" variant="tonal">
-              <UiIcon :icon="MailCheckIcon" />
+              <template #leading><UiIcon :icon="MailCheckIcon" /></template>
               Send Test Email
             </UiButton>
           </div>
@@ -65,7 +65,7 @@
 
     <UiBottomActions adaptive>
       <UiButton tone="primary">
-        <UiIcon :icon="CheckIcon" />
+        <template #leading><UiIcon :icon="CheckIcon" /></template>
         Save
       </UiButton>
     </UiBottomActions>

@@ -48,7 +48,7 @@
             </div>
 
             <UiButton class="submit" type="submit">
-              <UiIcon :icon="LogInIcon" aria-hidden="true" />
+              <template #leading><UiIcon :icon="LogInIcon" aria-hidden="true" /></template>
               Sign in
             </UiButton>
           </form>

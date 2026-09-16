@@ -27,7 +27,7 @@
           :variant="action.variant"
           @click="select(action)"
         >
-          <UiIcon v-if="action.icon" :icon="action.icon" />
+          <template #leading><UiIcon v-if="action.icon" :icon="action.icon" /></template>
           <span>{{ action.label }}</span>
         </UiButton>
       </slot>
@@ -49,13 +49,16 @@
           :menu-aria-label="overflowAriaLabel"
           :offset="offset"
           :placement="placement"
+          layout="icon"
           tone="neutral"
-          variant="icon"
+          variant="text"
           @select="select($event.value)"
         >
-          <slot :count="overflowedActions.length" name="overflow-trigger">
-            <UiIcon :icon="EllipsisVerticalIcon" />
-          </slot>
+          <template #leading>
+            <slot :count="overflowedActions.length" name="overflow-trigger">
+              <UiIcon :icon="EllipsisVerticalIcon" />
+            </slot>
+          </template>
         </UiMenuButton>
       </slot>
     </div>

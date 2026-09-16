@@ -25,8 +25,8 @@
         </div>
 
         <slot :close="close" name="header-actions">
-          <UiButton v-if="closeButton" aria-label="Close" tone="neutral" variant="icon" @click="close">
-            <UiIcon :icon="XIcon" size="1rem" />
+          <UiButton v-if="closeButton" aria-label="Close" layout="icon" tone="neutral" variant="text" @click="close">
+            <template #leading><UiIcon :icon="XIcon" size="1rem" /></template>
           </UiButton>
         </slot>
       </header>

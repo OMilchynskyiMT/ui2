@@ -39,13 +39,14 @@
           :aria-label="clearLabel"
           :disabled="disabled || readonly"
           :title="clearLabel"
+          layout="icon"
           size="small"
           tone="neutral"
           type="button"
-          variant="icon"
+          variant="text"
           @click="clear"
         >
-          <UiIcon :icon="XIcon" aria-hidden="true" />
+          <template #leading><UiIcon :icon="XIcon" aria-hidden="true" /></template>
         </UiButton>
       </span>
     </template>

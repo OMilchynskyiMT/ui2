@@ -16,8 +16,8 @@
         </template>
 
         <template #cell-actions>
-          <UiButton aria-label="Edit WAN" tone="neutral" variant="icon">
-            <UiIcon :icon="PencilIcon" />
+          <UiButton aria-label="Edit WAN" tone="neutral" variant="text" layout="icon">
+            <template #leading><UiIcon :icon="PencilIcon" /></template>
           </UiButton>
         </template>
 

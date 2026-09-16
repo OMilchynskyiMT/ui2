@@ -6,6 +6,7 @@
     :aria-expanded="open"
     :disabled="disabled"
     :label="label"
+    :layout
     :loading="loading"
     :ripple="ripple"
     :size="size"
@@ -17,7 +18,9 @@
     @click="toggle"
     @keydown="onButtonKeydown"
   >
-    <slot>{{ label ?? '' }}</slot>
+    <template v-if="slots.leading" #leading><slot name="leading" /></template>
+    <slot v-if="slots.default">{{ label ?? '' }}</slot>
+    <template v-if="slots.trailing" #trailing><slot name="trailing" /></template>
   </UiButton>
 
   <UiMenu
@@ -43,7 +46,11 @@
 <script lang="ts">
 import type { HTMLAttributes } from 'vue'
 
-import type { Size as UiButtonSize, Variant as UiButtonVariant } from '../buttons/UiButton.vue'
+import type {
+  Layout as UiButtonLayout,
+  Size as UiButtonSize,
+  Variant as UiButtonVariant,
+} from '../buttons/UiButton.vue'
 import type { ComponentTone } from '../component.types'
 import type { OverlayPlacement } from '../overlay/UiPopover.vue'
 
@@ -59,6 +66,7 @@ export type UiMenuButtonProperties<V> = {
   variant?: UiButtonVariant
   tone?: ComponentTone
   size?: UiButtonSize
+  layout?: UiButtonLayout
   ripple?: boolean
   disabled?: boolean
   loading?: boolean
@@ -74,13 +82,14 @@ export type UiMenuButtonExposed = {
 </script>
 
 <script generic="V" lang="ts" setup>
-import { computed, ref, useAttrs, useTemplateRef, watch } from 'vue'
+import { computed, ref, useAttrs, useSlots, useTemplateRef, watch } from 'vue'
 
 import { useId } from '@/composables/useId'
 
 import UiButton from '../buttons/UiButton.vue'
 import UiMenu, { type UiMenuItem } from './UiMenu.vue'
 
+const slots = useSlots()
 const {
   items,
   id,
@@ -93,6 +102,7 @@ const {
   variant = 'filled',
   tone = 'primary',
   size = 'medium',
+  layout = 'standard',
   ripple = true,
   disabled = false,
   loading = false,

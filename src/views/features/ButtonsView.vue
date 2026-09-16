@@ -1,15 +1,15 @@
 <template>
   <div class="buttons-view">
     <section>
-      <UiSectionHeader description="All button tones across outlined, filled, text, and tonal presentations">
+      <UiSectionHeader description="All button tones across outlined, filled, text, and tonal presentations. Adaptive.">
         Regular buttons
       </UiSectionHeader>
 
       <div v-for="variant in regularVariants" :key="variant" class="variant-group">
         <strong>{{ variant }}</strong>
         <UiCluster class="samples">
-          <UiButton v-for="tone in tones" :key="tone" :tone :variant>
-            <UiIcon :icon="UserIcon" size="1rem" />
+          <UiButton v-for="tone in tones" :key="tone" :tone :variant layout="adaptive">
+            <template #leading><UiIcon :icon="UserIcon" size="1rem" /></template>
             {{ tone }}
           </UiButton>
         </UiCluster>
@@ -28,9 +28,10 @@
           :aria-label="`${tone} action`"
           :title="`${tone} action`"
           :tone
-          variant="icon"
+          layout="icon"
+          variant="text"
         >
-          <UiIcon :icon="UserIcon" size="1rem" />
+          <template #leading><UiIcon :icon="UserIcon" size="1rem" /></template>
         </UiButton>
       </UiCluster>
     </section>
@@ -92,7 +93,7 @@
         <strong>{{ variant }}</strong>
         <UiCluster class="samples">
           <UiButton v-for="tone in tones" :key="tone" :loading :tone :variant @click="setLoading">
-            <UiIcon :icon="UserIcon" size="1rem" />
+            <template #leading><UiIcon :icon="UserIcon" size="1rem" /></template>
             {{ tone }}
           </UiButton>
         </UiCluster>

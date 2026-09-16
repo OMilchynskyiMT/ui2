@@ -42,11 +42,11 @@
           <template #trailing>
             <UiCluster>
               <UiButton size="small" tone="neutral" variant="tonal">
-                <UiIcon :icon="RefreshCwIcon" size="1rem" />
+                <template #leading><UiIcon :icon="RefreshCwIcon" size="1rem" /></template>
                 Refresh
               </UiButton>
               <UiButton size="small" tone="danger" variant="tonal">
-                <UiIcon :icon="TrashIcon" size="1rem" />
+                <template #leading><UiIcon :icon="TrashIcon" size="1rem" /></template>
                 Purge all
               </UiButton>
             </UiCluster>

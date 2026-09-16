@@ -35,7 +35,7 @@
 
     <UiBottomActions adaptive>
       <UiButton>
-        <UiIcon :icon="CheckIcon" />
+        <template #leading><UiIcon :icon="CheckIcon" /></template>
         Save
       </UiButton>
     </UiBottomActions>

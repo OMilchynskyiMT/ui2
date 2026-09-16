@@ -20,12 +20,13 @@
         <div class="close">
           <UiButton
             aria-label="Dismiss notification"
+            layout="icon"
             size="small"
             tone="neutral"
-            variant="icon"
+            variant="text"
             @click.prevent="remove(item.id)"
           >
-            <UiIcon :icon="XIcon" size="1rem" />
+            <template #leading><UiIcon :icon="XIcon" size="1rem" /></template>
           </UiButton>
         </div>
 

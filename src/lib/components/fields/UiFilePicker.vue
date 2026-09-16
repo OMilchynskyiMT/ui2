@@ -110,13 +110,14 @@
               :aria-label="`Remove ${file.name}`"
               :title="`Remove ${file.name}`"
               class="remove"
+              layout="icon"
               size="small"
               tone="danger"
-              variant="icon"
+              variant="text"
               @click.stop="remove(index)"
               @pointerdown.stop
             >
-              <UiIcon :icon="XIcon" size="1.25rem" />
+              <template #leading><UiIcon :icon="XIcon" size="1.25rem" /></template>
             </UiButton>
           </li>
         </ul>
@@ -128,13 +129,14 @@
             :aria-label="multiple ? 'Clear selected files' : 'Clear selected file'"
             :title="multiple ? 'Clear selected files' : 'Clear selected file'"
             class="clear"
+            layout="icon"
             size="small"
             tone="danger"
-            variant="icon"
+            variant="text"
             @click.stop="clear"
             @pointerdown.stop
           >
-            <UiIcon :icon="XIcon" />
+            <template #leading><UiIcon :icon="XIcon" /></template>
           </UiButton>
         </slot>
       </template>
@@ -466,7 +468,6 @@ onMounted(() => syncNativeFiles(model.value))
     &:is(.file-upload-area) .upload-icon {
       color: var(--text-color-dimmed);
     }
-
   }
 
   .file-upload-area {

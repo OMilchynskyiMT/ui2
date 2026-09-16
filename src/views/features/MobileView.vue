@@ -15,7 +15,7 @@
         <UiBottomActions adaptive>
           <UiButton tone="neutral" variant="tonal">Cancel</UiButton>
           <UiButton tone="primary">
-            <UiIcon :icon="CheckIcon" size="1rem" />
+            <template #leading><UiIcon :icon="CheckIcon" size="1rem" /></template>
             Save changes
           </UiButton>
         </UiBottomActions>
@@ -39,7 +39,7 @@
       </UiSectionHeader>
 
       <UiButton tone="primary" variant="tonal" @click="bottomSheet?.show()">
-        <UiIcon :icon="PanelBottomOpenIcon" size="1rem" />
+        <template #leading><UiIcon :icon="PanelBottomOpenIcon" size="1rem" /></template>
         Open bottom sheet
       </UiButton>
 
@@ -62,7 +62,7 @@
           <UiBottomActions adaptive>
             <UiButton tone="neutral" variant="tonal" @click="close">Cancel</UiButton>
             <UiButton tone="primary" @click="close">
-              <UiIcon :icon="CheckIcon" size="1rem" />
+              <template #leading><UiIcon :icon="CheckIcon" size="1rem" /></template>
               Apply
             </UiButton>
           </UiBottomActions>

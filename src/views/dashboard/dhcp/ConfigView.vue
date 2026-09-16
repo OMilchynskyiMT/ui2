@@ -15,11 +15,17 @@
       </template>
 
       <template #cell-actions>
-        <UiButton aria-label="Edit DHCP server" tone="neutral" variant="icon">
-          <UiIcon :icon="PencilIcon" />
+        <UiButton aria-label="Edit DHCP server" layout="icon" tone="neutral" variant="text">
+          <template #leading><UiIcon :icon="PencilIcon" /></template>
         </UiButton>
-        <UiButton aria-label="Remove DHCP server" tone="warning" variant="icon" @click="confirmDeleteDialog?.confirm">
-          <UiIcon :icon="TrashIcon" />
+        <UiButton
+          aria-label="Remove DHCP server"
+          layout="icon"
+          tone="warning"
+          variant="text"
+          @click="confirmDeleteDialog?.confirm"
+        >
+          <template #leading><UiIcon :icon="TrashIcon" /></template>
         </UiButton>
       </template>
     </UiTable>
@@ -43,11 +49,17 @@
       </template>
 
       <template #cell-actions>
-        <UiButton aria-label="Edit DHCP server" tone="neutral" variant="icon">
-          <UiIcon :icon="PencilIcon" />
+        <UiButton aria-label="Edit DHCP server" layout="icon" tone="neutral" variant="text">
+          <template #leading><UiIcon :icon="PencilIcon" /></template>
         </UiButton>
-        <UiButton aria-label="Remove DHCP server" tone="warning" variant="icon" @click="confirmDeleteDialog?.confirm">
-          <UiIcon :icon="TrashIcon" />
+        <UiButton
+          aria-label="Remove DHCP server"
+          layout="icon"
+          tone="warning"
+          variant="text"
+          @click="confirmDeleteDialog?.confirm"
+        >
+          <template #leading><UiIcon :icon="TrashIcon" /></template>
         </UiButton>
       </template>
     </UiTable>

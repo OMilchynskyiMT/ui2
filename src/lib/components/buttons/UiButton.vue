@@ -4,6 +4,7 @@
     :aria-busy="loading || undefined"
     :aria-disabled="disabled || loading || undefined"
     :class="['button', { disabled, loading }]"
+    :data-layout="layout"
     :data-size="size"
     :data-tone="tone"
     :data-variant="variant"
@@ -12,9 +13,16 @@
     :title="title"
     :type="type"
   >
-    <span class="area">
+    <span v-if="slots.leading" class="leading">
+      <slot name="leading" />
+    </span>
+    <span v-if="slots.default ?? label" class="label">
       <slot name="default">{{ label ?? '' }}</slot>
     </span>
+    <span v-if="slots.trailing" class="trailing">
+      <slots name="trailing" />
+    </span>
+
     <span v-if="loading" class="progress">
       <UiSpinner :stroke-width="4" />
     </span>
@@ -24,14 +32,16 @@
 <script lang="ts">
 import type { ComponentTone } from '../component.types'
 
-export type Variant = 'outlined' | 'filled' | 'text' | 'tonal' | 'icon'
+export type Variant = 'outlined' | 'filled' | 'text' | 'tonal'
 export type Size = 'small' | 'medium' | 'large'
+export type Layout = 'standard' | 'icon' | 'adaptive'
 
 export type Properties = {
   type?: 'button' | 'submit' | 'reset'
   variant?: Variant
   tone?: ComponentTone
   size?: Size
+  layout?: Layout
   ripple?: boolean
   disabled?: boolean
   loading?: boolean
@@ -41,13 +51,17 @@ export type Properties = {
 </script>
 
 <script lang="ts" setup>
+import { useSlots } from 'vue'
+
 import UiSpinner from '@/lib/components/progress/UiSpinner.vue'
 
+const slots = useSlots()
 const {
   tone = 'primary',
   variant = 'filled',
   size = 'medium',
   type = 'button',
+  layout = 'standard',
   label,
   title,
   ripple = true,
@@ -77,14 +91,20 @@ const {
     --opacity: 1;
     --accent-color: var(--tone-color);
     --color: var(--button-text-color);
+    --gap: var(--space-sm);
+
+    --label-display: flex;
+    --inline-size: auto;
 
     position: relative;
     overflow: hidden;
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    gap: var(--gap);
     min-inline-size: 0;
     block-size: var(--block-size);
+    inline-size: var(--inline-size);
     padding-inline: var(--padding-inline);
     padding-block: var(--padding-block);
     border: var(--border-width) solid var(--border-color);
@@ -93,31 +113,38 @@ const {
     background: var(--bg);
     box-shadow: var(--shadow);
     font-size: var(--font-size);
-    line-height: var(--line-height-compact);
     cursor: pointer;
     opacity: var(--opacity);
     user-select: none;
-    vertical-align: middle;
 
     transition-property: background-color, opacity, color, border-color, box-shadow;
     transition-duration: var(--duration-md);
     transition-timing-function: var(--bezier-smooth);
 
-    & > span.area {
+    & > :is(span.trailing, span.label) {
+      display: var(--label-display);
+    }
+
+    & > :is(span.leading) {
+      display: flex;
+    }
+
+    & > :is(span.leading, span.trailing, span.label) {
       --scale: 1;
       --opacity: 1;
 
-      min-inline-size: 0;
+      line-height: var(--line-height);
       block-size: 100%;
-      display: flex;
       align-items: center;
-      justify-content: center;
-      column-gap: var(--button-gap);
       opacity: var(--opacity);
       transform: scale(var(--scale));
       transition-property: opacity, transform;
       transition-duration: var(--duration-lg);
       transition-timing-function: var(--bezier-bounce);
+    }
+
+    & > span.label {
+      min-inline-size: 0;
     }
 
     & > span.progress {
@@ -138,7 +165,7 @@ const {
       pointer-events: none;
       cursor: wait;
 
-      & > span.area {
+      & > :is(span.label, span.leading, span.trailing) {
         --scale: 0.85;
         --opacity: 0;
       }
@@ -149,6 +176,7 @@ const {
       --icon-block-size: 1.5rem;
       --padding-inline: 0.625rem;
       --font-size: var(--font-size-sm);
+      --gap: var(--space-xs);
     }
 
     &:is([data-size='large']) {
@@ -156,6 +184,7 @@ const {
       --icon-block-size: 2rem;
       --padding-inline: 1rem;
       --font-size: var(--font-size-lg);
+      --gap: var(--space-md);
     }
 
     &:is([data-variant='outlined']) {
@@ -170,7 +199,7 @@ const {
 
     &:is([data-variant='text']) {
       --color: light-dark(
-        oklch(from var(--accent-color) calc(l - 0.15) c h),
+        oklch(from var(--accent-color) calc(l - 0.1) c h),
         oklch(from var(--accent-color) calc(l + 0.25) c h)
       );
     }
@@ -183,18 +212,24 @@ const {
       );
     }
 
-    &:is([data-variant='icon']) {
-      --block-size: var(--icon-block-size);
+    &:is([data-layout='icon']) {
       --padding-inline: 0px;
       --padding-block: 0px;
+      --block-size: var(--icon-block-size);
       --border-radius: var(--radius-full);
-      --color: light-dark(
-        oklch(from var(--accent-color) calc(l - 0.33) c h),
-        oklch(from var(--accent-color) calc(l + 0.33) c h)
-      );
+      --label-display: none;
+      --inline-size: var(--block-size);
+    }
 
-      inline-size: var(--block-size);
-      flex: 0 0 auto;
+    @media (width < container-token(--container-md)) {
+      &:is([data-layout='adaptive']) {
+        --padding-inline: 0px;
+        --padding-block: 0px;
+        --block-size: var(--icon-block-size);
+        --border-radius: var(--radius-full);
+        --label-display: none;
+        --inline-size: var(--block-size);
+      }
     }
 
     &:where(:not(:disabled, .disabled, .loading)):focus-visible {

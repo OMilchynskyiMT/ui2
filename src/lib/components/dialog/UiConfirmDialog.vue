@@ -24,11 +24,11 @@
 
       <footer class="actions">
         <UiButton tone="neutral" variant="tonal" @click="decline">
-          <UiIcon :icon="XIcon" :size="actionIconSize" />
+          <template #leading><UiIcon :icon="XIcon" :size="actionIconSize" /></template>
           <span>{{ declineText }}</span>
         </UiButton>
         <UiButton tone="primary" type="submit" variant="outlined">
-          <UiIcon :icon="CheckIcon" :size="actionIconSize" />
+          <template #leading><UiIcon :icon="CheckIcon" :size="actionIconSize" /></template>
           <span>{{ acceptText }}</span>
         </UiButton>
       </footer>

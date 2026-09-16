@@ -4,11 +4,11 @@
       Mail Log
       <template #actions>
         <UiButton size="small" tone="neutral" variant="tonal">
-          <UiIcon :icon="RefreshCwIcon" size="1rem" />
+          <template #leading><UiIcon :icon="RefreshCwIcon" size="1rem" /></template>
           Refresh
         </UiButton>
         <UiButton size="small" tone="warning" variant="tonal">
-          <UiIcon :icon="TrashIcon" size="1rem" />
+          <template #leading><UiIcon :icon="TrashIcon" size="1rem" /></template>
           Purge
         </UiButton>
       </template>

@@ -30,7 +30,7 @@
       <footer class="actions">
         <slot :cancel="cancel" :close="close" :submit="submitForm" :submitting="submitting" name="actions">
           <UiButton :disabled="submitting" tone="neutral" type="reset" variant="tonal">
-            <UiIcon :icon="XIcon" size="1rem" />
+            <template #leading><UiIcon :icon="XIcon" size="1rem" /></template>
             {{ cancelText }}
           </UiButton>
           <UiButton
@@ -40,7 +40,7 @@
             type="submit"
             variant="filled"
           >
-            <UiIcon :icon="CheckIcon" size="1rem" />
+            <template #leading><UiIcon :icon="CheckIcon" size="1rem" /></template>
             {{ submitting && submittingText ? submittingText : submitText }}
           </UiButton>
         </slot>

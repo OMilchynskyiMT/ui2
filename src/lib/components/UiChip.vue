@@ -16,7 +16,7 @@
       size="small"
       title="Close"
       tone="neutral"
-      variant="icon"
+      variant="text"
       @click.prevent="emit('close')"
     />
   </span>
