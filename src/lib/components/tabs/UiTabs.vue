@@ -25,10 +25,12 @@
       @click="activate(tab)"
       @focus="focusedIndex = index"
     >
-      <slot :name="`tab-${tab.value}`" :tab="tab">
-        <UiIcon v-if="tab.icon" :icon="tab.icon" />
-        <span>{{ tab.title }}</span>
-      </slot>
+      <span class="content">
+        <slot :name="`tab-${tab.value}`" :tab="tab">
+          <UiIcon v-if="tab.icon" :icon="tab.icon" :size="iconSize" />
+          <span class="label">{{ tab.title }}</span>
+        </slot>
+      </span>
     </button>
 
     <span ref="indicator" aria-hidden="true" class="indicator" />
@@ -54,6 +56,7 @@ export type UiTabsProperties<Value extends string | number> = {
   items: UiTabItem<Value>[]
   activation?: 'automatic' | 'manual'
   ariaLabel?: string
+  iconSize?: string
 }
 </script>
 
@@ -64,7 +67,13 @@ import { useId } from '@/composables/useId'
 
 import UiIcon from '../UiIcon.vue'
 
-const { id = useId(), items, activation = 'automatic', ariaLabel } = defineProps<UiTabsProperties<Value>>()
+const {
+  id = useId(),
+  items,
+  activation = 'automatic',
+  ariaLabel,
+  iconSize = '1.25rem',
+} = defineProps<UiTabsProperties<Value>>()
 
 const emit = defineEmits<{
   change: [tab: UiTabItem<Value>]
@@ -207,7 +216,8 @@ watch(() => [model.value, items] as const, syncIndicator, { flush: 'post' })
     --indicator-y: 0;
 
     --gap: var(--space-sm);
-    --tab-gap: var(--space-xs);
+    --tab-gap: var(--space-sm);
+    --icon-size: v-bind(iconSize);
 
     --tab-height: 2.5rem;
     --tab-padding-inline: var(--space-sm);
@@ -233,6 +243,8 @@ watch(() => [model.value, items] as const, syncIndicator, { flush: 'post' })
       background-color: var(--indicator-color);
       border-radius: var(--radius-full);
       transform: translate(var(--indicator-x), var(--indicator-y));
+
+      will-change: transform, width;
       transition-property: transform, width;
       transition-duration: var(--duration-lg);
       transition-timing-function: var(--bezier-magnetic);
@@ -256,7 +268,9 @@ watch(() => [model.value, items] as const, syncIndicator, { flush: 'post' })
       user-select: none;
       cursor: pointer;
       overflow: hidden;
+      line-height: 1;
 
+      will-change: background-color, color, opacity;
       transition-property: background-color, color, opacity;
       transition-duration: var(--duration-md);
       transition-timing-function: var(--bezier-smooth);
@@ -280,12 +294,23 @@ watch(() => [model.value, items] as const, syncIndicator, { flush: 'post' })
         cursor: not-allowed;
       }
 
-      & > span {
-        display: block;
-        inline-size: 100%;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
+      & > span.content {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--tab-gap);
+
+        min-inline-size: 0;
+        max-inline-size: 100%;
+
+        line-height: var(--icon-size);
+
+        & > span.label {
+          min-inline-size: 0;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
       }
     }
   }
