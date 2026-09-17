@@ -37,18 +37,15 @@
           :aria-label="visible ? hidePasswordLabel : showPasswordLabel"
           :aria-pressed="visible"
           :disabled="disabled"
+          :icon="visible ? EyeOffIcon : EyeIcon"
           :title="visible ? hidePasswordLabel : showPasswordLabel"
           layout="icon"
-          size="small"
+          size="large"
           tone="neutral"
           type="button"
           variant="text"
           @click="visible = !visible"
-        >
-          <template #leading>
-            <UiIcon :icon="visible ? EyeOffIcon : EyeIcon" style="--color: var(--gray-500)" />
-          </template>
-        </UiButton>
+        />
       </span>
     </template>
 

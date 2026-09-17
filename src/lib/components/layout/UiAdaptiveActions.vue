@@ -20,6 +20,7 @@
       <slot :action="action" :overflowed="isOverflowed(index)" :select="() => select(action)" name="action">
         <UiButton
           :disabled="action.disabled"
+          :icon="action.icon"
           :loading="action.loading"
           :size="action.size"
           :title="action.hint"
@@ -27,8 +28,7 @@
           :variant="action.variant"
           @click="select(action)"
         >
-          <template #leading><UiIcon v-if="action.icon" :icon="action.icon" /></template>
-          <span>{{ action.label }}</span>
+          {{ action.label }}
         </UiButton>
       </slot>
     </div>
@@ -45,6 +45,7 @@
         <UiMenuButton
           v-model:open="overflowOpen"
           :aria-label="overflowAriaLabel"
+          :icon="EllipsisVerticalIcon"
           :items="overflowMenuItems"
           :menu-aria-label="overflowAriaLabel"
           :offset="offset"
@@ -53,13 +54,7 @@
           tone="neutral"
           variant="text"
           @select="select($event.value)"
-        >
-          <template #leading>
-            <slot :count="overflowedActions.length" name="overflow-trigger">
-              <UiIcon :icon="EllipsisVerticalIcon" />
-            </slot>
-          </template>
-        </UiMenuButton>
+        />
       </slot>
     </div>
   </div>
@@ -117,7 +112,6 @@ import { EllipsisVerticalIcon } from '@lucide/vue'
 import UiButton from '../buttons/UiButton.vue'
 import type { UiMenuItem } from '../menu/UiMenu.vue'
 import UiMenuButton from '../menu/UiMenuButton.vue'
-import UiIcon from '../UiIcon.vue'
 
 const {
   items,

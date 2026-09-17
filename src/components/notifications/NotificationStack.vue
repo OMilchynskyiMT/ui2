@@ -19,15 +19,14 @@
 
         <div class="close">
           <UiButton
+            :icon="XIcon"
             aria-label="Dismiss notification"
             layout="icon"
             size="small"
             tone="neutral"
             variant="text"
             @click.prevent="remove(item.id)"
-          >
-            <template #leading><UiIcon :icon="XIcon" size="1rem" /></template>
-          </UiButton>
+          />
         </div>
 
         <div

@@ -23,13 +23,11 @@
       </UiScrollArea>
 
       <footer class="actions">
-        <UiButton tone="neutral" variant="tonal" @click="decline">
-          <template #leading><UiIcon :icon="XIcon" :size="actionIconSize" /></template>
-          <span>{{ declineText }}</span>
+        <UiButton :icon="XIcon" tone="neutral" variant="tonal" @click="decline">
+          {{ declineText }}
         </UiButton>
-        <UiButton tone="primary" type="submit" variant="outlined">
-          <template #leading><UiIcon :icon="CheckIcon" :size="actionIconSize" /></template>
-          <span>{{ acceptText }}</span>
+        <UiButton :icon="CheckIcon" tone="primary" type="submit" variant="outlined">
+          {{ acceptText }}
         </UiButton>
       </footer>
     </form>
@@ -88,7 +86,6 @@ const {
   declineText = 'Cancel',
   icon = MessageSquareWarningIcon,
   iconSize = '3rem',
-  actionIconSize = '1rem',
 } = defineProps<Properties>()
 
 const confirm = (): Promise<boolean> => {

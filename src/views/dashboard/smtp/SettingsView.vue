@@ -44,10 +44,7 @@
           <UiTextField v-model="form.auth.email" label="Email" />
 
           <div class="grid-align-center">
-            <UiButton tone="primary" variant="tonal">
-              <template #leading><UiIcon :icon="MailCheckIcon" /></template>
-              Send Test Email
-            </UiButton>
+            <UiButton :icon="MailCheckIcon" tone="primary" variant="tonal">Send Test Email</UiButton>
           </div>
         </UiFormGrid>
       </UiFormGrid>
@@ -64,10 +61,7 @@
     </UiCard>
 
     <UiBottomActions adaptive>
-      <UiButton tone="primary">
-        <template #leading><UiIcon :icon="CheckIcon" /></template>
-        Save
-      </UiButton>
+      <UiButton :icon="CheckIcon" tone="primary">Save</UiButton>
     </UiBottomActions>
   </UiFormGrid>
 </template>

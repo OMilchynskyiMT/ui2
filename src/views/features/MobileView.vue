@@ -14,10 +14,7 @@
 
         <UiBottomActions adaptive>
           <UiButton tone="neutral" variant="tonal">Cancel</UiButton>
-          <UiButton tone="primary">
-            <template #leading><UiIcon :icon="CheckIcon" size="1rem" /></template>
-            Save changes
-          </UiButton>
+          <UiButton :icon="CheckIcon" tone="primary">Save changes</UiButton>
         </UiBottomActions>
       </UiCard>
     </section>
@@ -38,8 +35,7 @@
         Bottom sheet
       </UiSectionHeader>
 
-      <UiButton tone="primary" variant="tonal" @click="bottomSheet?.show()">
-        <template #leading><UiIcon :icon="PanelBottomOpenIcon" size="1rem" /></template>
+      <UiButton :icon="PanelBottomOpenIcon" tone="primary" variant="tonal" @click="bottomSheet?.show()">
         Open bottom sheet
       </UiButton>
 
@@ -61,10 +57,7 @@
         <template #actions="{ close }">
           <UiBottomActions adaptive>
             <UiButton tone="neutral" variant="tonal" @click="close">Cancel</UiButton>
-            <UiButton tone="primary" @click="close">
-              <template #leading><UiIcon :icon="CheckIcon" size="1rem" /></template>
-              Apply
-            </UiButton>
+            <UiButton :icon="CheckIcon" tone="primary" @click="close">Apply</UiButton>
           </UiBottomActions>
         </template>
       </UiBottomSheet>
@@ -111,7 +104,6 @@ import UiScrollArea from '@/lib/components/layout/UiScrollArea.vue'
 import UiPropertyList, { type Item as PropertyListItem } from '@/lib/components/list/UiPropertyList.vue'
 import UiCard from '@/lib/components/section/UiCard.vue'
 import UiSectionHeader from '@/lib/components/section/UiSectionHeader.vue'
-import UiIcon from '@/lib/components/UiIcon.vue'
 import { useVisualViewport } from '@/composables/useVisualViewport'
 
 const bottomSheet = useTemplateRef<UiBottomSheetExposed>('bottomSheet')

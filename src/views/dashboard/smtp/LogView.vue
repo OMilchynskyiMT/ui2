@@ -3,14 +3,8 @@
     <UiSectionHeader>
       Mail Log
       <template #actions>
-        <UiButton size="small" tone="neutral" variant="tonal">
-          <template #leading><UiIcon :icon="RefreshCwIcon" size="1rem" /></template>
-          Refresh
-        </UiButton>
-        <UiButton size="small" tone="warning" variant="tonal">
-          <template #leading><UiIcon :icon="TrashIcon" size="1rem" /></template>
-          Purge
-        </UiButton>
+        <UiButton :icon="RefreshCwIcon" size="small" tone="neutral" variant="tonal">Refresh</UiButton>
+        <UiButton :icon="TrashIcon" size="small" tone="warning" variant="tonal">Purge</UiButton>
       </template>
     </UiSectionHeader>
     <UiTable v-model:sort="sort" :columns :rows="[]" />
@@ -26,7 +20,6 @@ import UiFormGrid from '@/lib/components/grid/UiFormGrid.vue'
 import UiSectionHeader from '@/lib/components/section/UiSectionHeader.vue'
 import { type TableColumn, type TableSort } from '@/lib/components/table/table.types'
 import UiTable from '@/lib/components/table/UiTable.vue'
-import UiIcon from '@/lib/components/UiIcon.vue'
 
 type Log = {
   date: string

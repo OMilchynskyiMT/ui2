@@ -108,6 +108,7 @@
             <UiButton
               v-if="clearable && !disabled && !readonly"
               :aria-label="`Remove ${file.name}`"
+              :icon="XIcon"
               :title="`Remove ${file.name}`"
               class="remove"
               layout="icon"
@@ -116,9 +117,7 @@
               variant="text"
               @click.stop="remove(index)"
               @pointerdown.stop
-            >
-              <template #leading><UiIcon :icon="XIcon" size="1.25rem" /></template>
-            </UiButton>
+            />
           </li>
         </ul>
       </div>
@@ -127,6 +126,7 @@
         <slot :clear="clear" :files="model" name="trailing">
           <UiButton
             :aria-label="multiple ? 'Clear selected files' : 'Clear selected file'"
+              :icon="XIcon"
             :title="multiple ? 'Clear selected files' : 'Clear selected file'"
             class="clear"
             layout="icon"
@@ -135,9 +135,7 @@
             variant="text"
             @click.stop="clear"
             @pointerdown.stop
-          >
-            <template #leading><UiIcon :icon="XIcon" /></template>
-          </UiButton>
+          />
         </slot>
       </template>
 

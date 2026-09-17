@@ -21,15 +21,14 @@
 
         <UiButton
           id="navigation-close"
+          :icon="XIcon"
           aria-label="Close navigation"
           class="u-hidden-above-lg close"
           layout="icon"
           tone="neutral"
           variant="text"
           @click="closeCompactNavigation(true)"
-        >
-          <template #leading><UiIcon :icon="XIcon" /></template>
-        </UiButton>
+        />
       </div>
 
       <UiScrollArea class="scroll" fade-edges overscroll="contain">
@@ -47,18 +46,18 @@
               id="navigation-toggle"
               :aria-expanded="navigationVisible"
               :aria-label="navigationVisible ? 'Hide navigation' : 'Show navigation'"
+              :icon="MenuIcon"
               aria-controls="main-navigation"
               style="--padding-inline: 0.5rem"
               tone="neutral"
               variant="text"
               @click="toggleNavigation"
-            >
-              <UiIcon :icon="MenuIcon" style="--color: var(--blue-500)" />
-            </UiButton>
+            />
           </template>
 
           <template #trailing>
             <UiButton
+              :icon="SaveCheckIcon"
               aria-label="Save & Restart"
               layout="adaptive"
               title="Save and Apply"
@@ -66,11 +65,11 @@
               variant="tonal"
               @click="saveAndApplyConfirm?.confirm"
             >
-              <template #leading><UiIcon :icon="SaveCheckIcon" /></template>
               Save & Apply
             </UiButton>
 
             <UiMenuButton
+              :icon="TerminalIcon"
               :items="commandsOptions"
               :menu-style="{ '--menu-icon-color': 'var(--green-600)' }"
               :offset="10"
@@ -82,11 +81,11 @@
               tone="success"
               variant="text"
             >
-              <template #leading><UiIcon :icon="TerminalIcon" /></template>
               Commands
             </UiMenuButton>
 
             <UiMenuButton
+              :icon="UserIcon"
               :items="userMenuOptions"
               :menu-style="{ '--menu-icon-color': 'var(--blue-500)' }"
               :offset="10"
@@ -97,12 +96,10 @@
               title="User actions"
               tone="neutral"
               variant="text"
+              style="--icon-color: var(--tone-primary);"
               @select="userMenuHandler($event.value)"
             >
-              <template #leading>
-                <UiIcon :icon="UserIcon" />
-              </template>
-              admin
+              <strong>admin</strong>
 
               <template #menu-header>
                 <UiBar style="--sections-gap: 1rem">
@@ -180,7 +177,6 @@ import UiScrollArea from '@/lib/components/layout/UiScrollArea.vue'
 import type { UiMenuItem } from '@/lib/components/menu/UiMenu.vue'
 import UiMenuButton from '@/lib/components/menu/UiMenuButton.vue'
 import UiBreadcrumbs from '@/lib/components/navigation/UiBreadcrumbs.vue'
-import UiIcon from '@/lib/components/UiIcon.vue'
 import Shell from '@/components/application/AppShell.vue'
 import TopBar from '@/components/bars/TopBar.vue'
 import NavigationTree, { type NavigationTreeItem } from '@/components/navigation/NavigationTree.vue'

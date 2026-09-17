@@ -29,18 +29,17 @@
 
       <footer class="actions">
         <slot :cancel="cancel" :close="close" :submit="submitForm" :submitting="submitting" name="actions">
-          <UiButton :disabled="submitting" tone="neutral" type="reset" variant="tonal">
-            <template #leading><UiIcon :icon="XIcon" size="1rem" /></template>
+          <UiButton :disabled="submitting" :icon="XIcon" tone="neutral" type="reset" variant="tonal">
             {{ cancelText }}
           </UiButton>
           <UiButton
             :disabled="submitting || submitDisabled"
+            :icon="CheckIcon"
             :loading="submitting && !submittingText"
             tone="primary"
             type="submit"
             variant="filled"
           >
-            <template #leading><UiIcon :icon="CheckIcon" size="1rem" /></template>
             {{ submitting && submittingText ? submittingText : submitText }}
           </UiButton>
         </slot>
@@ -68,7 +67,6 @@ import { useId } from '@/composables/useId'
 
 import UiButton from '../buttons/UiButton.vue'
 import UiScrollArea from '../layout/UiScrollArea.vue'
-import UiIcon from '../UiIcon.vue'
 import type { Exposed as DialogExposed } from './UiDialog.vue'
 import UiDialog from './UiDialog.vue'
 

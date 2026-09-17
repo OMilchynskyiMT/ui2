@@ -23,10 +23,7 @@
     </UiFormGrid>
 
     <UiBottomActions adaptive>
-      <UiButton>
-        <template #leading><UiIcon :icon="CheckIcon" /></template>
-        Save
-      </UiButton>
+      <UiButton :icon="CheckIcon">Save</UiButton>
     </UiBottomActions>
   </UiFormGrid>
 </template>

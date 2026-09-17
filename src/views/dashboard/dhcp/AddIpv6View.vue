@@ -34,10 +34,7 @@
     </UiCard>
 
     <UiBottomActions adaptive>
-      <UiButton>
-        <template #leading><UiIcon :icon="CheckIcon" /></template>
-        Save
-      </UiButton>
+      <UiButton :icon="CheckIcon">Save</UiButton>
     </UiBottomActions>
   </UiFormGrid>
 </template>
@@ -53,7 +50,6 @@ import UiTextField from '@/lib/components/fields/UiTextField.vue'
 import UiFormGrid from '@/lib/components/grid/UiFormGrid.vue'
 import UiBottomActions from '@/lib/components/layout/UiBottomActions.vue'
 import UiCard from '@/lib/components/section/UiCard.vue'
-import UiIcon from '@/lib/components/UiIcon.vue'
 
 const form = ref<{
   status: boolean

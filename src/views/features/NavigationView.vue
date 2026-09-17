@@ -41,14 +41,8 @@
           </template>
           <template #trailing>
             <UiCluster>
-              <UiButton size="small" tone="neutral" variant="tonal">
-                <template #leading><UiIcon :icon="RefreshCwIcon" size="1rem" /></template>
-                Refresh
-              </UiButton>
-              <UiButton size="small" tone="danger" variant="tonal">
-                <template #leading><UiIcon :icon="TrashIcon" size="1rem" /></template>
-                Purge all
-              </UiButton>
+              <UiButton :icon="RefreshCwIcon" size="small" tone="neutral" variant="tonal">Refresh</UiButton>
+              <UiButton :icon="TrashIcon" size="small" tone="danger" variant="tonal">Purge all</UiButton>
             </UiCluster>
           </template>
           <p>Advanced network configuration can be placed here without introducing an accordion abstraction.</p>

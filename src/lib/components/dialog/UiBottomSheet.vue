@@ -25,9 +25,15 @@
         </div>
 
         <slot :close="close" name="header-actions">
-          <UiButton v-if="closeButton" aria-label="Close" layout="icon" tone="neutral" variant="text" @click="close">
-            <template #leading><UiIcon :icon="XIcon" size="1rem" /></template>
-          </UiButton>
+          <UiButton
+            v-if="closeButton"
+            :icon="XIcon"
+            aria-label="Close"
+            layout="icon"
+            tone="neutral"
+            variant="text"
+            @click="close"
+          />
         </slot>
       </header>
 
@@ -76,7 +82,6 @@ import { useId } from '@/composables/useId'
 import UiButton from '../buttons/UiButton.vue'
 import UiBottomActions from '../layout/UiBottomActions.vue'
 import UiScrollArea from '../layout/UiScrollArea.vue'
-import UiIcon from '../UiIcon.vue'
 import UiDialog, { type Exposed as DialogExposed } from './UiDialog.vue'
 
 defineOptions({ inheritAttrs: false })

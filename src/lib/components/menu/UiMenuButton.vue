@@ -5,6 +5,8 @@
     v-bind="attributes"
     :aria-expanded="open"
     :disabled="disabled"
+    :icon
+    :icon-position
     :label="label"
     :layout
     :loading="loading"
@@ -18,9 +20,9 @@
     @click="toggle"
     @keydown="onButtonKeydown"
   >
-    <template v-if="slots.leading" #leading><slot name="leading" /></template>
-    <slot v-if="slots.default">{{ label ?? '' }}</slot>
-    <template v-if="slots.trailing" #trailing><slot name="trailing" /></template>
+    <template v-if="slots.default || label" #default>
+      <slot>{{ label ?? '' }}</slot>
+    </template>
   </UiButton>
 
   <UiMenu
@@ -44,9 +46,10 @@
 </template>
 
 <script lang="ts">
-import type { HTMLAttributes } from 'vue'
+import type { Component, HTMLAttributes } from 'vue'
 
 import type {
+  IconPosition as UiButtonIconPosition,
   Layout as UiButtonLayout,
   Size as UiButtonSize,
   Variant as UiButtonVariant,
@@ -72,6 +75,8 @@ export type UiMenuButtonProperties<V> = {
   loading?: boolean
   label?: string
   title?: string
+  icon?: Component
+  iconPosition?: UiButtonIconPosition
 }
 
 export type UiMenuButtonExposed = {
@@ -108,6 +113,8 @@ const {
   loading = false,
   label,
   title,
+  icon,
+  iconPosition,
 } = defineProps<UiMenuButtonProperties<V>>()
 
 const emit = defineEmits<{

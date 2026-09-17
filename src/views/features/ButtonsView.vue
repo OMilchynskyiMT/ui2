@@ -8,8 +8,7 @@
       <div v-for="variant in regularVariants" :key="variant" class="variant-group">
         <strong>{{ variant }}</strong>
         <UiCluster class="samples">
-          <UiButton v-for="tone in tones" :key="tone" :tone :variant layout="adaptive">
-            <template #leading><UiIcon :icon="UserIcon" size="1rem" /></template>
+          <UiButton v-for="tone in tones" :key="tone" :icon="UserIcon" :tone :variant layout="adaptive">
             {{ tone }}
           </UiButton>
         </UiCluster>
@@ -26,13 +25,12 @@
           v-for="tone in tones"
           :key="tone"
           :aria-label="`${tone} action`"
+          :icon="UserIcon"
           :title="`${tone} action`"
           :tone
           layout="icon"
           variant="text"
-        >
-          <template #leading><UiIcon :icon="UserIcon" size="1rem" /></template>
-        </UiButton>
+        />
       </UiCluster>
     </section>
 
@@ -92,8 +90,7 @@
       <div v-for="variant in regularVariants" :key="variant" class="variant-group">
         <strong>{{ variant }}</strong>
         <UiCluster class="samples">
-          <UiButton v-for="tone in tones" :key="tone" :loading :tone :variant @click="setLoading">
-            <template #leading><UiIcon :icon="UserIcon" size="1rem" /></template>
+          <UiButton v-for="tone in tones" :key="tone" :icon="UserIcon" :loading :tone :variant @click="setLoading">
             {{ tone }}
           </UiButton>
         </UiCluster>
@@ -111,7 +108,6 @@ import type { ComponentTone } from '@/lib/components/component.types'
 import UiCluster from '@/lib/components/layout/UiCluster.vue'
 import UiTooltip from '@/lib/components/overlay/UiTooltip.vue'
 import UiSectionHeader from '@/lib/components/section/UiSectionHeader.vue'
-import UiIcon from '@/lib/components/UiIcon.vue'
 
 const regularVariants: Variant[] = ['outlined', 'filled', 'text', 'tonal']
 const tones: ComponentTone[] = ['primary', 'info', 'success', 'warning', 'danger', 'neutral']

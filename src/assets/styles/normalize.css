@@ -41,6 +41,11 @@ textarea {
   background-color: transparent;
   line-height: inherit;
   border: 0 none;
+
+  &::-moz-focus-inner {
+    padding: 0;
+    border: 0;
+  }
 }
 
 textarea {

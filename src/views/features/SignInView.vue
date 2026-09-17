@@ -47,10 +47,7 @@
               <UiPasswordField v-model="password" autocomplete="current-password" label="Password" required />
             </div>
 
-            <UiButton class="submit" type="submit">
-              <template #leading><UiIcon :icon="LogInIcon" aria-hidden="true" /></template>
-              Sign in
-            </UiButton>
+            <UiButton :icon="LogInIcon" class="submit" type="submit">Sign in</UiButton>
           </form>
         </UiCard>
       </div>

@@ -2,39 +2,45 @@
   <button
     v-ripple="{ disabled: !ripple || disabled || loading }"
     :aria-busy="loading || undefined"
-    :aria-disabled="disabled || loading || undefined"
-    :class="['button', { disabled, loading }]"
+    :class="{ loading }"
     :data-layout="layout"
     :data-size="size"
     :data-tone="tone"
     :data-variant="variant"
-    :disabled="disabled || loading || undefined"
-    :tabindex="disabled || loading ? -1 : undefined"
+    :disabled="disabled || loading"
     :title="title"
     :type="type"
+    class="button"
   >
-    <span v-if="slots.leading" class="leading">
-      <slot name="leading" />
-    </span>
-    <span v-if="slots.default ?? label" class="label">
-      <slot name="default">{{ label ?? '' }}</slot>
-    </span>
-    <span v-if="slots.trailing" class="trailing">
-      <slot name="trailing" />
+    <span class="content">
+      <span v-if="icon && iconPosition === 'leading'" class="icon-frame">
+        <UiIcon :icon class="button-icon" color="var(--icon-color, currentColor)" size="var(--icon-size)" />
+      </span>
+
+      <span v-if="slots.default || label !== undefined" class="label">
+        <slot>{{ label ?? '' }}</slot>
+      </span>
+
+      <span v-if="icon && iconPosition === 'trailing'" class="icon-frame">
+        <UiIcon :icon class="button-icon" color="var(--icon-color, currentColor)" size="var(--icon-size)" />
+      </span>
     </span>
 
     <span v-if="loading" class="progress">
-      <UiSpinner :stroke-width="4" />
+      <UiSpinner :stroke-width="4" aria-hidden="true" />
     </span>
   </button>
 </template>
 
 <script lang="ts">
+import type { Component } from 'vue'
+
 import type { ComponentTone } from '../component.types'
 
 export type Variant = 'outlined' | 'filled' | 'text' | 'tonal'
 export type Size = 'small' | 'medium' | 'large'
 export type Layout = 'standard' | 'icon' | 'adaptive'
+export type IconPosition = 'leading' | 'trailing'
 
 export type Properties = {
   type?: 'button' | 'submit' | 'reset'
@@ -42,6 +48,8 @@ export type Properties = {
   tone?: ComponentTone
   size?: Size
   layout?: Layout
+  icon?: Component
+  iconPosition?: IconPosition
   ripple?: boolean
   disabled?: boolean
   loading?: boolean
@@ -53,15 +61,19 @@ export type Properties = {
 <script lang="ts" setup>
 import { useSlots } from 'vue'
 
-import UiSpinner from '@/lib/components/progress/UiSpinner.vue'
+import UiSpinner from '../progress/UiSpinner.vue'
+import UiIcon from '../UiIcon.vue'
 
 const slots = useSlots()
+
 const {
   tone = 'primary',
   variant = 'filled',
   size = 'medium',
   type = 'button',
   layout = 'standard',
+  icon,
+  iconPosition = 'leading',
   label,
   title,
   ripple = true,
@@ -75,11 +87,11 @@ const {
   .button {
     --button-border-width: 2px;
     --button-border-radius: var(--radius-md);
-    --button-gap: var(--space-sm);
     --button-text-color: light-dark(var(--gray-900), var(--gray-100));
 
     --block-size: 2.25rem;
     --icon-block-size: 1.75rem;
+    --icon-size: 1.125rem;
     --padding-inline: var(--space-md);
     --padding-block: 0px;
     --border-width: 0px;
@@ -91,119 +103,132 @@ const {
     --opacity: 1;
     --accent-color: var(--tone-color);
     --color: var(--button-text-color);
+    --icon-color: currentColor;
     --gap: var(--space-sm);
-
-    --label-display: block;
     --inline-size: auto;
 
     position: relative;
+    isolation: isolate;
     overflow: hidden;
+
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: var(--gap);
+
     min-inline-size: 0;
     block-size: var(--block-size);
     inline-size: var(--inline-size);
+
     padding-inline: var(--padding-inline);
     padding-block: var(--padding-block);
+
     border: var(--border-width) solid var(--border-color);
     border-radius: var(--border-radius);
+
     color: var(--color);
     background: var(--bg);
     box-shadow: var(--shadow);
+
     font-size: var(--font-size);
+    line-height: var(--icon-size);
+    text-align: center;
+    white-space: nowrap;
+
     cursor: pointer;
     opacity: var(--opacity);
     user-select: none;
 
-    transition-property: background-color, opacity, color, border-color, box-shadow;
+    transition-property: background-color, border-color, box-shadow, color, opacity;
     transition-duration: var(--duration-md);
     transition-timing-function: var(--bezier-smooth);
 
-    & > :is(span.trailing, span.label) {
-      display: var(--label-display);
-    }
+    & > span.content {
+      position: relative;
+      z-index: 1;
 
-    & > :is(span.leading) {
-      display: flex;
-    }
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--gap);
 
-    & > :is(span.leading, span.trailing, span.label) {
-      --scale: 1;
-      --opacity: 1;
-
-      opacity: var(--opacity);
-      transform: scale(var(--scale));
-      transition-property: opacity, transform;
-      transition-duration: var(--duration-lg);
-      transition-timing-function: var(--bezier-bounce);
-    }
-
-    & > span.label {
       min-inline-size: 0;
-      line-height: var(--line-height);
-      text-box: trim-both cap alphabetic;
+      max-inline-size: 100%;
+
+      & > span.icon-frame {
+        flex: 0 0 var(--icon-size);
+        display: grid;
+        place-items: center;
+        inline-size: var(--icon-size);
+        block-size: var(--icon-size);
+      }
+
+      & > span.label {
+        min-inline-size: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
     }
 
     & > span.progress {
       position: absolute;
+      z-index: 1;
       inset: 0;
+
       display: grid;
       place-items: center;
+
       pointer-events: none;
       animation: progress-enter var(--duration-lg) var(--bezier-bounce);
 
       & > svg {
-        --spinner-size: calc(var(--font-size) * 1.5);
+        --spinner-size: var(--icon-size);
       }
     }
 
-    &:is(.loading) {
-      --opacity: 1;
-      pointer-events: none;
+    &.loading {
       cursor: wait;
 
-      & > :is(span.label, span.leading, span.trailing) {
-        --scale: 0.85;
-        --opacity: 0;
+      & > span.content {
+        opacity: 0;
       }
     }
 
-    &:is([data-size='small']) {
+    &[data-size='small'] {
       --block-size: 2rem;
       --icon-block-size: 1.5rem;
+      --icon-size: 1rem;
       --padding-inline: 0.625rem;
       --font-size: var(--font-size-sm);
       --gap: var(--space-xs);
     }
 
-    &:is([data-size='large']) {
+    &[data-size='large'] {
       --block-size: 2.5rem;
       --icon-block-size: 2rem;
+      --icon-size: 1.25rem;
       --padding-inline: 1rem;
       --font-size: var(--font-size-lg);
       --gap: var(--space-md);
     }
 
-    &:is([data-variant='outlined']) {
+    &[data-variant='outlined'] {
       --border-width: var(--button-border-width);
       --border-color: var(--accent-color);
     }
 
-    &:is([data-variant='filled']) {
+    &[data-variant='filled'] {
       --bg: var(--accent-color);
       --color: oklch(from var(--accent-color) calc(l + 0.65) c h);
     }
 
-    &:is([data-variant='text']) {
+    &[data-variant='text'] {
       --color: light-dark(
         oklch(from var(--accent-color) calc(l - 0.1) c h),
         oklch(from var(--accent-color) calc(l + 0.25) c h)
       );
     }
 
-    &:is([data-variant='tonal']) {
+    &[data-variant='tonal'] {
       --bg: oklch(from var(--accent-color) l c h / 0.25);
       --color: light-dark(
         oklch(from var(--accent-color) calc(l - 0.15) c h),
@@ -211,50 +236,80 @@ const {
       );
     }
 
-    &:is([data-layout='icon']) {
-      --padding-inline: 0px;
-      --padding-block: 0px;
+    &[data-layout='icon'] {
       --block-size: var(--icon-block-size);
+      --padding-inline: 0px;
       --border-radius: var(--radius-full);
-      --label-display: none;
+      --gap: 0px;
       --inline-size: var(--block-size);
-    }
 
-    @media (width < container-token(--container-md)) {
-      &:is([data-layout='adaptive']) {
-        --padding-inline: 0px;
-        --padding-block: 0px;
-        --block-size: var(--icon-block-size);
-        --border-radius: var(--radius-full);
-        --label-display: none;
-        --inline-size: var(--block-size);
+      & > span.content > span.label {
+        position: absolute;
+        inline-size: 1px;
+        block-size: 1px;
+        overflow: hidden;
+        clip-path: inset(50%);
       }
     }
 
-    &:where(:not(:disabled, .disabled, .loading)):focus-visible {
+    @media (width < container-token(--container-md)) {
+      &[data-layout='adaptive'] {
+        --block-size: var(--icon-block-size);
+        --padding-inline: 0px;
+        --border-radius: var(--radius-full);
+        --gap: 0px;
+        --inline-size: var(--block-size);
+
+        & > span.content > span.label {
+          position: absolute;
+          inline-size: 1px;
+          block-size: 1px;
+          overflow: hidden;
+          clip-path: inset(50%);
+        }
+      }
+    }
+
+    &:enabled:focus-visible {
       --shadow: inset 0 0 0 2px oklch(from var(--accent-color) l c h / 0.28);
     }
 
     @media (hover: hover) {
-      &:where(:not(:disabled, .disabled, .loading)):hover {
+      &:enabled:hover {
         --opacity: 0.9;
       }
 
-      &:where(:not(:disabled, .disabled, .loading))[data-variant='icon']:hover {
+      &:enabled[data-layout='icon'][data-variant='text']:hover {
         --opacity: 1;
         --bg: oklch(from var(--accent-color) l c h / 0.1);
       }
+
+      @media (width < container-token(--container-md)) {
+        &:enabled[data-layout='adaptive'][data-variant='text']:hover {
+          --opacity: 1;
+          --bg: oklch(from var(--accent-color) l c h / 0.1);
+        }
+      }
     }
 
-    &:where(:not(:disabled, .disabled, .loading)):active {
+    &:enabled:active {
       --opacity: 1;
     }
 
-    &:is(:disabled, .disabled):not(.loading) {
+    &:disabled:not(.loading) {
       --opacity: 0.5;
       --shadow: none;
+
       cursor: not-allowed;
       filter: grayscale(0.33);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      transition: none;
+
+      & > span.progress {
+        animation: none;
+      }
     }
   }
 

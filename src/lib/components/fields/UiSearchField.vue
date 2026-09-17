@@ -38,6 +38,7 @@
           :aria-controls="id"
           :aria-label="clearLabel"
           :disabled="disabled || readonly"
+          :icon="XIcon"
           :title="clearLabel"
           layout="icon"
           size="small"
@@ -45,9 +46,7 @@
           type="button"
           variant="text"
           @click="clear"
-        >
-          <template #leading><UiIcon :icon="XIcon" aria-hidden="true" /></template>
-        </UiButton>
+        />
       </span>
     </template>
 

@@ -16,9 +16,7 @@
         </template>
 
         <template #cell-actions>
-          <UiButton aria-label="Edit WAN" tone="neutral" variant="text" layout="icon">
-            <template #leading><UiIcon :icon="PencilIcon" /></template>
-          </UiButton>
+          <UiButton :icon="PencilIcon" aria-label="Edit WAN" layout="icon" tone="neutral" variant="text" />
         </template>
 
         <template #cell-type="{ value }">
