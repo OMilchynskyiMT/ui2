@@ -79,6 +79,11 @@
   --ripple-color: currentColor;
   --ripple-bezier: var(--bezier-smooth-entrance);
 
+  --blur-size-xs: 1px;
+  --blur-size-sm: 2px;
+  --blur-size-md: 4px;
+  --blue-size-lg: 10px;
+
   --container-sm: container-token(--container-sm);
   --container-md: container-token(--container-md);
   --container-lg: container-token(--container-lg);

@@ -47,7 +47,7 @@ const { adaptive = false, sticky = true } = defineProps<UiBottomActionsPropertie
         border: var(--bottom-actions-border-width, 0px) solid var(--bottom-actions-border-color, var(--divider-color));
         border-radius: var(--bottom-actions-radius, var(--radius-lg));
         background-color: var(--bottom-actions-bg, color-mix(in oklch, var(--surface-bg) 92%, transparent));
-        backdrop-filter: var(--bottom-actions-backdrop-filter, blur(0.5rem));
+        backdrop-filter: var(--bottom-actions-backdrop-filter, blur(var(--blur-size-md)));
       }
 
       &[data-adaptive] {

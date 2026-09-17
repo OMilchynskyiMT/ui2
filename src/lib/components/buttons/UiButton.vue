@@ -80,7 +80,7 @@ const {
 
     --block-size: 2.25rem;
     --icon-block-size: 1.75rem;
-    --padding-inline: 0.875rem;
+    --padding-inline: var(--space-md);
     --padding-block: 0px;
     --border-width: 0px;
     --border-color: transparent;

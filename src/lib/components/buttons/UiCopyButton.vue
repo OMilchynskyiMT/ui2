@@ -95,7 +95,6 @@ onBeforeUnmount(clearResetTimer)
     --shadow-opacity: transparent;
     --icon-size: 1rem;
 
-    appearance: none;
     -webkit-tap-highlight-color: var(--outline-bg);
     position: relative;
     display: inline-flex;

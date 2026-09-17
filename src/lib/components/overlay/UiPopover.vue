@@ -112,9 +112,10 @@ onBeforeUnmount(stop)
 @layer components {
   .popover {
     inline-size: 100%;
-    background-color: var(--popover-bg, var(--surface-bg));
+    background-color: var(--popover-bg, oklch(from var(--surface-bg) l c h / 0.9));
     border-radius: var(--popover-radius, var(--radius-lg));
     box-shadow: var(--popover-shadow, var(--shadow-sm));
+    backdrop-filter: blur(var(--blur-size-md));
   }
 
   .anchored-overlay.popover-enter-active,

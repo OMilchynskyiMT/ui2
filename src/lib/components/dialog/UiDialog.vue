@@ -286,7 +286,7 @@ defineExpose<Exposed>({ show, close, isVisible })
 
     &[data-phase='opened']::backdrop {
       background-color: var(--dialog-backdrop-bg, oklch(0 0 0 / 0.25));
-      backdrop-filter: var(--dialog-backdrop-filter, blur(0.15rem));
+      backdrop-filter: var(--dialog-backdrop-filter, blur(var(--blur-size-sm)));
     }
 
     &[data-phase='closing']::backdrop {

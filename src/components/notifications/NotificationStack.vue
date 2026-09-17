@@ -167,7 +167,7 @@ const timeoutStyle = (item: Notification): Record<string, string> => {
         padding: var(--space-sm) var(--space-sm) var(--space-sm) var(--space-md);
 
         background-color: color-mix(in oklch, var(--surface-bg) 90%, transparent);
-        backdrop-filter: blur(3px);
+        backdrop-filter: blur(var(--blur-size-sm));
         box-shadow: var(--shadow-sm);
         border-radius: var(--radius-lg);
 
