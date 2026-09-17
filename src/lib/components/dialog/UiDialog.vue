@@ -272,7 +272,7 @@ defineExpose<Exposed>({ show, close, isVisible })
       overflow: clip;
 
       border-radius: inherit;
-      background-color: var(--dialog-bg, var(--surface-bg));
+      background-color: var(--dialog-bg, var(--popup-bg));
     }
 
     &::backdrop {
@@ -285,8 +285,8 @@ defineExpose<Exposed>({ show, close, isVisible })
     }
 
     &[data-phase='opened']::backdrop {
-      background-color: var(--dialog-backdrop-bg, oklch(0 0 0 / 0.25));
-      backdrop-filter: var(--dialog-backdrop-filter, blur(var(--blur-size-sm)));
+      background-color: var(--dialog-backdrop-bg, oklch(from var(--black) l c h / 0.2));
+      backdrop-filter: var(--dialog-backdrop-filter, blur(var(--blur-size-sm)) grayscale(33%));
     }
 
     &[data-phase='closing']::backdrop {

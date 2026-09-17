@@ -18,7 +18,7 @@ const { as = 'div' } = defineProps<{
   --padding-inline: 0;
   --padding-block: 0;
 
-  --sections-gap: 0;
+  --sections-gap: var(--space-sm);
   --items-gap: var(--space-sm);
 
   --bg: transparent;
@@ -40,39 +40,29 @@ const { as = 'div' } = defineProps<{
   color: var(--color);
 
   & > :is(.leading, .main, .trailing) {
-    display: flex;
-    align-items: center;
-    column-gap: var(--items-gap);
-    flex-wrap: nowrap;
     min-inline-size: 0;
   }
 
   & > :is(.leading, .trailing) {
-    flex: none;
+    display: flex;
+    align-items: center;
+    gap: var(--items-gap);
+    white-space: nowrap;
   }
 
   & > .leading {
-    grid-column: 1;
-    justify-self: start;
-
     &:not(:empty) {
       margin-inline-end: var(--sections-gap);
     }
   }
 
   & > .main {
-    grid-column: 2;
-    justify-self: start;
-
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
   & > .trailing {
-    grid-column: 3;
-    justify-self: end;
-
     &:not(:empty) {
       margin-inline-start: var(--sections-gap);
     }

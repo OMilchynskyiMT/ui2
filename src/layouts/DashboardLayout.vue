@@ -100,9 +100,9 @@
               @select="userMenuHandler($event.value)"
             >
               <template #leading>
-                <UserAvatar size="1.15rem" />
+                <UiIcon :icon="UserIcon" />
               </template>
-              <strong>admin</strong>
+              admin
 
               <template #menu-header>
                 <UiBar style="--sections-gap: 1rem">
@@ -134,7 +134,7 @@
 
       <div class="content">
         <main>
-          <UiBreadcrumbs :items="breadcrumbs">
+          <UiBreadcrumbs :items="breadcrumbs" class="page-breadcrumbs">
             <template #item="{ current, item }">
               <span v-if="current" aria-current="page">{{ item.label }}</span>
               <RouterLink v-else-if="item.target" :to="item.target">{{ item.label }}</RouterLink>
@@ -168,6 +168,7 @@ import {
   TerminalIcon,
   Undo2Icon,
   UserCog2Icon,
+  UserIcon,
   UserKeyIcon,
   XIcon,
 } from '@lucide/vue'
@@ -301,6 +302,10 @@ onBeforeUnmount(() => {
   }
 }
 
+.page-breadcrumbs {
+  font-size: var(--font-size-xs);
+}
+
 .panel {
   position: sticky;
   z-index: 2;
@@ -386,7 +391,7 @@ onBeforeUnmount(() => {
 
 .content {
   min-block-size: 100%;
-  padding-block-start: var(--space-xxl);
+  padding-block-start: var(--space-xl);
   padding-block-end: var(--space-xxl);
   padding-inline-start: max(var(--space-xxl), var(--safe-area-left));
   padding-inline-end: max(var(--space-xxl), var(--safe-area-right));

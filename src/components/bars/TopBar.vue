@@ -36,16 +36,15 @@ import UiBar from '@/lib/components/bars/UiBar.vue'
 
 div.product {
   display: grid;
-  gap: var(--space-xxs);
 
   & > div.info {
     display: flex;
     gap: var(--space-md);
-    font-size: var(--font-size-sm);
+    font-size: var(--font-size-xs);
     color: var(--text-color-dimmed);
   }
 
-  & * {
+  & > * {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
