@@ -20,7 +20,7 @@
       <slot name="default">{{ label ?? '' }}</slot>
     </span>
     <span v-if="slots.trailing" class="trailing">
-      <slots name="trailing" />
+      <slot name="trailing" />
     </span>
 
     <span v-if="loading" class="progress">
@@ -93,7 +93,7 @@ const {
     --color: var(--button-text-color);
     --gap: var(--space-sm);
 
-    --label-display: flex;
+    --label-display: block;
     --inline-size: auto;
 
     position: relative;
@@ -133,9 +133,6 @@ const {
       --scale: 1;
       --opacity: 1;
 
-      line-height: var(--line-height);
-      block-size: 100%;
-      align-items: center;
       opacity: var(--opacity);
       transform: scale(var(--scale));
       transition-property: opacity, transform;
@@ -145,6 +142,8 @@ const {
 
     & > span.label {
       min-inline-size: 0;
+      line-height: var(--line-height);
+      text-box: trim-both cap alphabetic;
     }
 
     & > span.progress {
