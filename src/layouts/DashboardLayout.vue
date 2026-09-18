@@ -40,7 +40,7 @@
 
     <Shell :inert="(isCompact && mobileNavigationOpen) || undefined" class="page-shell">
       <template #header>
-        <TopBar :show-brand="true">
+        <TopBar>
           <template #leading>
             <UiButton
               id="navigation-toggle"
@@ -104,7 +104,7 @@
               <template #menu-header>
                 <UiBar style="--sections-gap: 1rem">
                   <template #leading>
-                    <UserAvatar :style="{ '--accent': 'var(--purple-500)' }" size="2rem" />
+                    <UiAvatar :style="{ '--accent': 'var(--purple-500)' }" size="2rem" />
                   </template>
 
                   <div class="user">
@@ -179,11 +179,11 @@ import UiScrollArea from '@/lib/components/layout/UiScrollArea.vue'
 import type { UiMenuItem } from '@/lib/components/menu/UiMenu.vue'
 import UiMenuButton from '@/lib/components/menu/UiMenuButton.vue'
 import UiBreadcrumbs from '@/lib/components/navigation/UiBreadcrumbs.vue'
+import UiAvatar from '@/lib/components/UiAvatar.vue'
 import UiIcon from '@/lib/components/UiIcon.vue'
 import Shell from '@/components/application/AppShell.vue'
 import TopBar from '@/components/bars/TopBar.vue'
 import NavigationTree, { type NavigationTreeItem } from '@/components/navigation/NavigationTree.vue'
-import UserAvatar from '@/components/UserAvatar.vue'
 import { useBreadcrumbs } from '@/composables/useBreadcrumbs'
 import { useColorScheme } from '@/composables/useColorScheme'
 import { getViewportSize, remToPixels, useViewportSizeListener } from '@/composables/useViewportSizeListener'
