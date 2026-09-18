@@ -252,23 +252,30 @@ watch(() => [model.value, items] as const, syncIndicator, { flush: 'post' })
 
     & > .tab {
       position: relative;
-      display: flex;
+      isolation: isolate;
+      overflow: hidden;
+
+      display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: var(--tab-gap);
+
       block-size: var(--tab-height);
       inline-size: auto;
+
       padding-inline: var(--tab-padding-inline);
       border: 0;
       border-radius: var(--radius-md);
       color: var(--tab-color);
       background: var(--tab-bg);
       font-size: var(--tab-font-size);
+      line-height: var(--icon-size);
       opacity: var(--tab-opacity);
       user-select: none;
       cursor: pointer;
-      overflow: hidden;
-      line-height: 1;
+
+      min-inline-size: 0;
+      max-inline-size: 100%;
 
       will-change: background-color, color, opacity;
       transition-property: background-color, color, opacity;
@@ -303,7 +310,11 @@ watch(() => [model.value, items] as const, syncIndicator, { flush: 'post' })
         min-inline-size: 0;
         max-inline-size: 100%;
 
-        line-height: var(--icon-size);
+        & > svg.icon {
+          flex: 0 0 var(--icon-size);
+          inline-size: var(--icon-size);
+          block-size: var(--icon-size);
+        }
 
         & > span.label {
           min-inline-size: 0;
