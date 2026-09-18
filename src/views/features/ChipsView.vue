@@ -6,7 +6,7 @@
       </UiSectionHeader>
 
       <UiCluster class="samples">
-        <UiChip v-for="{ tone, variant } in combinations" :key="`${tone}-${variant}`" :tone :variant closable>
+        <UiChip v-for="{ tone, variant } in combinations" :key="`${tone}-${variant}`" :tone :variant>
           <template #leading><UiIcon :icon="UserIcon" size="0.75rem" /></template>
           <template #trailing><UiIcon :icon="LockOpenIcon" size="0.75rem" /></template>
           {{ `${tone} ${variant}` }}
@@ -37,7 +37,6 @@
           :key="`${tone}-${variant}`"
           :tone
           :variant
-          closable
           size="large"
           @close="() => console.debug('close pressed')"
         >

@@ -7,18 +7,6 @@
       </span>
     </span>
     <span v-if="slots.trailing" class="trailing"><slot name="trailing" /></span>
-
-    <UiButton
-      v-if="closable"
-      aria-label="Close"
-      class="close"
-      label="✕"
-      size="small"
-      title="Close"
-      tone="neutral"
-      variant="text"
-      @click.prevent="emit('close')"
-    />
   </span>
 </template>
 
@@ -32,7 +20,6 @@ export type Properties = {
   variant?: Variant
   tone?: ComponentTone
   size?: Size
-  closable?: boolean
   label?: string
   title?: string
 }
@@ -41,8 +28,6 @@ export type Properties = {
 <script lang="ts" setup>
 import { useSlots } from 'vue'
 
-import UiButton from './buttons/UiButton.vue'
-
 const slots = useSlots()
 const {
   variant = 'outlined',
@@ -50,12 +35,7 @@ const {
   size = 'medium',
   label,
   title,
-  closable = false,
 } = defineProps<Properties>()
-
-const emit = defineEmits<{
-  close: []
-}>()
 </script>
 
 <style scoped>
@@ -68,7 +48,7 @@ const emit = defineEmits<{
     --border-color: oklch(from var(--accent-color) l c h / 0.3);
     --padding-inline: 0.5rem;
     --gap-x: 0.375rem;
-    --radius: var(--radius-md);
+    --radius: var(--radius-lg);
     --font-size: var(--font-size-xs);
 
     position: relative;
@@ -87,15 +67,6 @@ const emit = defineEmits<{
     line-height: var(--line-height-tight);
     cursor: var(--cursor, default);
     column-gap: var(--gap-x);
-    vertical-align: middle;
-
-    & > :is(.button.close) {
-      --icon-block-size: calc(var(--chip-block-size) - 0.25rem);
-      --font-size: 0.625rem;
-      --color: currentColor;
-
-      margin-inline-end: -0.25rem;
-    }
 
     & > :is(.leading, .main, .trailing) {
       min-inline-size: 0;
@@ -118,7 +89,6 @@ const emit = defineEmits<{
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-        line-height: inherit;
       }
     }
 
@@ -127,6 +97,7 @@ const emit = defineEmits<{
       --font-size: var(--font-size-xxs);
       --padding-inline: 0.375rem;
       --gap-x: var(--space-xxs);
+      --radius: var(--radius-md);
     }
 
     &[data-size='large'] {
@@ -134,7 +105,6 @@ const emit = defineEmits<{
       --font-size: var(--font-size-sm);
       --padding-inline: 0.625rem;
       --gap-x: var(--space-xs);
-      --radius: var(--radius-lg);
     }
 
     &[data-variant='outlined'] {
@@ -147,7 +117,11 @@ const emit = defineEmits<{
     }
 
     &[data-variant='tonal'] {
-      --bg: oklch(from var(--accent-color) l c h / 0.2);
+      --bg: oklch(from var(--accent-color) l c h / 0.15);
+      --color: light-dark(
+        oklch(from var(--accent-color) calc(l - 0.1) c h),
+        oklch(from var(--accent-color) calc(l + 0.1) c h)
+      );
     }
   }
 }
