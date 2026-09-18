@@ -2,6 +2,8 @@ import type { Component } from 'vue'
 
 import type { FeedbackTone } from '@/lib/components/component.types'
 
+export type NotificationPauseReason = 'pointer' | 'focus'
+
 export type NotificationOptions = {
   id?: string
   title?: string
@@ -20,6 +22,7 @@ export type Notification = {
   // Runtime timeout state
   timeoutRemaining?: number
   expiresAt?: number
+  paused?: boolean
 
   icon?: Component
   createdAt: Date

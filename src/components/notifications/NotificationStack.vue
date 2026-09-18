@@ -1,13 +1,20 @@
 <template>
   <TransitionGroup :style="viewportStyle" appear class="notifications" name="notification" tag="div">
     <div
-      v-for="item in latests"
+      v-for="item in visibleNotifications"
       :key="item.id"
       :aria-atomic="true"
       :role="item.tone === 'danger' ? 'alert' : 'status'"
       class="item"
     >
-      <div :data-tone="item.tone" class="notification">
+      <div
+        :class="['notification', { paused: item.paused }]"
+        :data-tone="item.tone"
+        @focusin="pause(item.id, 'focus')"
+        @focusout="onFocusOut(item.id, $event)"
+        @pointerenter="pause(item.id, 'pointer')"
+        @pointerleave="resume(item.id, 'pointer')"
+      >
         <div v-if="item.icon" class="icon">
           <UiIcon :icon="item.icon as Component" />
         </div>
@@ -50,7 +57,7 @@ import { useVisualViewport } from '@/composables/useVisualViewport'
 
 import { type Notification, useNotifications } from '.'
 
-const { latests, remove } = useNotifications()
+const { visibleNotifications, pause, remove, resume } = useNotifications()
 const visualViewport = useVisualViewport()
 const viewportStyle = computed((): CSSProperties => {
   if (!visualViewport.supported.value) return {}
@@ -62,6 +69,15 @@ const viewportStyle = computed((): CSSProperties => {
     '--notifications-viewport-inset-inline-end': `${visualViewport.insetRight.value}px`,
   }
 })
+
+const onFocusOut = (id: string, event: FocusEvent): void => {
+  const currentTarget = event.currentTarget as HTMLElement
+  const relatedTarget = event.relatedTarget
+  if (relatedTarget instanceof Node && currentTarget.contains(relatedTarget)) return
+
+  resume(id, 'focus')
+}
+
 const timeoutStyle = (item: Notification): Record<string, string> => {
   if (!item.timeout) return {}
 
@@ -209,6 +225,10 @@ const timeoutStyle = (item: Notification): Record<string, string> => {
             --size: var(--x-icon-size);
             --color: var(--x-icon-color);
           }
+        }
+
+        &.paused > div.progress::after {
+          animation-play-state: paused;
         }
 
         & > div.progress {
