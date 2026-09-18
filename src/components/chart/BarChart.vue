@@ -17,12 +17,7 @@ type Properties = {
   formatValue?: ChartValueFormatter
 }
 
-const {
-  chart,
-  label,
-  formatLabel: formatLabelFunction,
-  formatValue: formatValueFunction,
-} = defineProps<Properties>()
+const { chart, label, formatLabel: formatLabelFunction, formatValue: formatValueFunction } = defineProps<Properties>()
 
 const canvas = ref<HTMLCanvasElement>()
 let renderer: ReturnType<typeof createChartRenderer> | undefined

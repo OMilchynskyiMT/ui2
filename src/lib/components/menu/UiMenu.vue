@@ -12,6 +12,7 @@
 
     <UiScrollArea class="menu-scroll" fade-edges overscroll="contain" scrollbar-gutter="auto">
       <ul
+        :id="id"
         ref="menu"
         role="menu"
         :aria-label="ariaLabel"
@@ -25,7 +26,7 @@
             role="menuitem"
             :aria-disabled="item.disabled || undefined"
             :data-tone="item.tone"
-            :disabled="item.disabled"
+            :tabindex="index === activeIndex ? 0 : -1"
             :title="item.hint"
             type="button"
             @click="selectItem(item)"
@@ -57,6 +58,7 @@ export type UiMenuItem<V> = {
 }
 
 export type UiMenuProperties<V> = {
+  id?: string
   open: boolean
   anchor: HTMLElement | null
   items: UiMenuItem<V>[]
@@ -79,6 +81,7 @@ import UiPopover, { type PopoverDismissReason } from '../overlay/UiPopover.vue'
 import UiIcon from '../UiIcon.vue'
 
 const {
+  id,
   open,
   anchor,
   items,
@@ -105,12 +108,10 @@ const setItemReference = (element: Element | ComponentPublicInstance | null, ind
   itemReferences.value[index] = element instanceof HTMLButtonElement ? element : undefined
 }
 
-const enabledIndexes = (): number[] => {
-  return items.flatMap((item, index) => (item.disabled ? [] : [index]))
-}
+const itemIndexes = (): number[] => items.map((_, index) => index)
 
 const focusItem = (index: number): void => {
-  if (items[index]?.disabled) return
+  if (!Object.hasOwn(items, index)) return
   activeIndex.value = index
   itemReferences.value[index]?.focus()
 }
@@ -121,13 +122,13 @@ const onItemPointerEnter = (index: number): void => {
 }
 
 const focusEdge = (edge: 'first' | 'last'): void => {
-  const indexes = enabledIndexes()
+  const indexes = itemIndexes()
   const index = edge === 'first' ? indexes[0] : indexes.at(-1)
   if (index !== undefined) focusItem(index)
 }
 
 const moveFocus = (delta: -1 | 1): void => {
-  const indexes = enabledIndexes()
+  const indexes = itemIndexes()
   if (indexes.length === 0) return
 
   const current = indexes.indexOf(activeIndex.value)
@@ -138,14 +139,14 @@ const moveFocus = (delta: -1 | 1): void => {
 }
 
 const typeahead = useTypeahead<number>({
-  items: enabledIndexes,
-  activeIndex: () => enabledIndexes().indexOf(activeIndex.value),
+  items: itemIndexes,
+  activeIndex: () => itemIndexes().indexOf(activeIndex.value),
   getText: index => items[index]?.title ?? '',
   onMatch: focusItem,
 })
 
 const focusAnchor = (): void => {
-  anchor?.focus()
+  anchor?.focus({ preventScroll: true })
 }
 
 const close = (restoreFocus = false): void => {
@@ -185,6 +186,15 @@ const onKeydown = (event: KeyboardEvent): void => {
   if (event.key === 'End') {
     event.preventDefault()
     focusEdge('last')
+    return
+  }
+
+  if (event.key === 'Tab') {
+    // A popup menu is a composite widget: Tab/Shift+Tab leave it rather than
+    // walking its menuitems. Move focus back to the anchor synchronously and
+    // let the browser perform the normal Tab step from there.
+    close()
+    focusAnchor()
     return
   }
 
@@ -279,7 +289,7 @@ watch(
         --item-bg: color-mix(in oklch, var(--accent) 6%, transparent);
       }
 
-      &:disabled {
+      &[aria-disabled='true'] {
         opacity: 0.5;
         cursor: not-allowed;
       }

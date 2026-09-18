@@ -170,10 +170,6 @@ defineExpose<ListboxContentExpose>({
     background-color: var(--list-bg);
     border-radius: inherit;
 
-    &:focus {
-      outline: none;
-    }
-
     & > .group {
       display: flex;
       flex-direction: column;

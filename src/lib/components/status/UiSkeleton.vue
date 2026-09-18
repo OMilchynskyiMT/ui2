@@ -1,12 +1,12 @@
 <template>
   <component
     :is="tag"
-    aria-hidden="true"
     :class="['skeleton', variant, { animated }]"
     :style="{
       '--skeleton-inline-size': resolvedInlineSize,
       '--skeleton-block-size': resolvedBlockSize,
     }"
+    aria-hidden="true"
   />
 </template>
 
@@ -23,19 +23,13 @@ export type UiSkeletonProperties = {
 <script lang="ts" setup>
 import { computed } from 'vue'
 
-const {
-  tag = 'div',
-  variant = 'block',
-  inlineSize,
-  blockSize,
-  animated = true,
-} = defineProps<UiSkeletonProperties>()
+const { tag = 'div', variant = 'block', inlineSize, blockSize, animated = true } = defineProps<UiSkeletonProperties>()
 
 const resolvedInlineSize = computed(() => {
-  return inlineSize ?? (variant === 'circle' ? blockSize ?? '2.5rem' : '100%')
+  return inlineSize ?? (variant === 'circle' ? (blockSize ?? '2.5rem') : '100%')
 })
 const resolvedBlockSize = computed(() => {
-  return blockSize ?? (variant === 'circle' ? inlineSize ?? '2.5rem' : undefined)
+  return blockSize ?? (variant === 'circle' ? (inlineSize ?? '2.5rem') : undefined)
 })
 </script>
 

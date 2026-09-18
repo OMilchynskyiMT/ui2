@@ -166,6 +166,15 @@ defineExpose<UiFieldExpose>(createFieldExpose(() => fieldReference.value))
     border: 0;
     opacity: 0;
     cursor: inherit;
+
+    &:focus-visible {
+      outline: none;
+    }
+  }
+
+  .color-picker:has(.native-color-input:focus-visible) > .swatch {
+    outline: var(--focus-ring-width) solid var(--focus-ring-color);
+    outline-offset: var(--focus-ring-offset);
   }
 
   .swatch {

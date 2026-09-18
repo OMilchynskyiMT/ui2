@@ -84,11 +84,7 @@ const isLegacyNetworkMaskValid = (networkValue: number, maskValue: number): bool
   return networkValue !== broadcast
 }
 
-const checkIpv4InNetwork = (
-  address: string,
-  network: string,
-  mask: string | number
-): boolean | undefined => {
+const checkIpv4InNetwork = (address: string, network: string, mask: string | number): boolean | undefined => {
   const addressValue = ipv4ToNumber(address)
   const networkValue = ipv4ToNumber(network)
   const maskValue = maskToNumber(mask)
@@ -194,11 +190,7 @@ export const ipv4InNetwork = (
     code: 'network.ipv4InNetwork',
     message: options?.message ?? 'Must be a usable IPv4 address in the selected network',
     validate: (value, context) =>
-      checkIpv4InNetwork(
-        value,
-        resolveContextValue(network, context),
-        resolveContextValue(mask, context)
-      ) ?? true,
+      checkIpv4InNetwork(value, resolveContextValue(network, context), resolveContextValue(mask, context)) ?? true,
   }
 }
 

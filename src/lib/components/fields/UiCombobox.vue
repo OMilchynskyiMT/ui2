@@ -41,6 +41,7 @@
       :value="text"
       aria-autocomplete="list"
       aria-haspopup="listbox"
+      data-ui-field-control
       type="text"
       @blur="onBlur"
       @change="onChange"

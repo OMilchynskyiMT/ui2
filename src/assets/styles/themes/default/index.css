@@ -22,6 +22,10 @@
   --link-color: light-dark(var(--blue-500), var(--blue-400));
   --link-hover-color: light-dark(var(--blue-600), var(--blue-500));
 
+  --focus-ring-color: oklch(from var(--tone-primary) l c h / 0.25);
+  --focus-ring-width: 2px;
+  --focus-ring-offset: 0px;
+
   --tone-neutral: light-dark(var(--gray-500), var(--gray-500));
   --tone-primary: light-dark(var(--blue-500), var(--blue-600));
   --tone-info: light-dark(var(--cyan-600), var(--cyan-500));

@@ -23,13 +23,7 @@ import { User2Icon } from '@lucide/vue'
 
 import UiIcon from './UiIcon.vue'
 
-const {
-  src,
-  alt = '',
-  initials,
-  icon,
-  size = '1.5rem',
-} = defineProps<UiAvatarProperties>()
+const { src, alt = '', initials, icon, size = '1.5rem' } = defineProps<UiAvatarProperties>()
 </script>
 
 <style scoped>

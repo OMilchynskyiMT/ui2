@@ -126,14 +126,21 @@ const sheetForm = reactive({
 
 const formatPixels = (value: number): string => `${Math.round(value)}px`
 
-const viewportItems: PropertyListItem[] = [
+type ViewportData = {
+  supported: string
+  size: string
+  offset: string
+  scale: string
+}
+
+const viewportItems = [
   { field: 'supported', label: 'VisualViewport API' },
   { field: 'size', label: 'Visible size' },
   { field: 'offset', label: 'Offset' },
   { field: 'scale', label: 'Scale' },
-]
+] satisfies readonly PropertyListItem<ViewportData>[]
 
-const viewportData = computed(() => ({
+const viewportData = computed<ViewportData>(() => ({
   supported: viewport.supported.value ? 'Supported' : 'Fallback',
   size: `${formatPixels(viewport.width.value)} × ${formatPixels(viewport.height.value)}`,
   offset: `${formatPixels(viewport.offsetLeft.value)}, ${formatPixels(viewport.offsetTop.value)}`,

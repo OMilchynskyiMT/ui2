@@ -24,6 +24,7 @@ export default defineConfig({
         'src/composables/usePageModel.ts',
         'src/composables/usePageNavigationGuard.ts',
         'src/composables/usePolling.ts',
+        'src/components/notifications/useNotifications.ts',
       ],
       exclude: [
         'src/lib/validation/index.ts',

@@ -47,6 +47,7 @@
         :disabled="disabled"
         :title="selectedTitle || undefined"
         class="field-control"
+        data-ui-field-control
         type="button"
         @click="browse"
       >
@@ -75,6 +76,7 @@
           :aria-readonly="readonly || undefined"
           :disabled="disabled"
           class="drop-zone"
+          data-ui-field-control
           type="button"
           @click="browse"
         >
@@ -126,7 +128,7 @@
         <slot :clear="clear" :files="model" name="trailing">
           <UiButton
             :aria-label="multiple ? 'Clear selected files' : 'Clear selected file'"
-              :icon="XIcon"
+            :icon="XIcon"
             :title="multiple ? 'Clear selected files' : 'Clear selected file'"
             class="clear"
             layout="icon"
@@ -149,7 +151,7 @@
       ref="input"
       :accept="accept || undefined"
       :capture="capture"
-      :disabled="disabled || readonly"
+      :disabled="disabled"
       :form="form"
       :multiple="multiple"
       :name="name"
@@ -177,10 +179,11 @@ export type UiFilePickerExpose = {
 </script>
 
 <script lang="ts" setup>
-import { computed, onMounted, ref, useAttrs, useSlots, useTemplateRef, watch } from 'vue'
+import { computed, nextTick, onMounted, ref, useAttrs, useSlots, useTemplateRef, watch } from 'vue'
 import { FileUpIcon, XIcon } from '@lucide/vue'
 
 import { formatBytes } from '@/lib/format/bytes'
+import { useEventListeners } from '@/composables/useEventListeners'
 import { useId } from '@/composables/useId'
 
 import UiButton from '../buttons/UiButton.vue'
@@ -297,7 +300,7 @@ const showClear = computed(() => clearable && model.value.length > 0 && !disable
 
 const acceptTokens = computed(() => parseAccept(accept))
 
-const syncNativeFiles = (files: File[]): void => {
+const syncNativeFiles = (files: readonly File[]): void => {
   const input = inputReference.value
   if (!input) return
 
@@ -306,16 +309,27 @@ const syncNativeFiles = (files: File[]): void => {
     return
   }
 
-  if (typeof DataTransfer === 'undefined') return
-
-  try {
-    const transfer = new DataTransfer()
-    for (const file of files) transfer.items.add(file)
-    input.files = transfer.files
-  } catch {
-    // The File[] model remains authoritative if a browser rejects FileList assignment
-  }
+  const transfer = new DataTransfer()
+  for (const file of files) transfer.items.add(file)
+  input.files = transfer.files
 }
+
+const onFormReset = (event: Event): void => {
+  queueMicrotask(() => {
+    if (event.defaultPrevented) return
+
+    model.value = []
+    syncNativeFiles([])
+  })
+}
+
+const { start: startFormResetListener } = useEventListeners(() => [
+  {
+    target: inputReference.value?.form,
+    type: 'reset',
+    listener: onFormReset,
+  },
+])
 
 const commit = (files: File[], source: UiFilePickerChangeSource, event?: Event): void => {
   model.value = files
@@ -419,9 +433,19 @@ defineExpose<UiFilePickerExpose>({
   focus: options => controlReference.value?.focus(options),
 })
 
-watch(model, files => syncNativeFiles(files), { flush: 'post' })
+watch(model, files => syncNativeFiles(files), { deep: true, flush: 'post' })
+watch(
+  () => form,
+  async () => {
+    await nextTick()
+    startFormResetListener()
+  }
+)
 
-onMounted(() => syncNativeFiles(model.value))
+onMounted(() => {
+  syncNativeFiles(model.value)
+  startFormResetListener()
+})
 </script>
 
 <style scoped>

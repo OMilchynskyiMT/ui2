@@ -129,10 +129,7 @@ export const ipsecId = (options?: ValidatorOptions): Validator<string> => {
   }
 }
 
-export const passwordComplexity = (
-  rules: PasswordComplexityRules,
-  options?: ValidatorOptions
-): Validator<string> => {
+export const passwordComplexity = (rules: PasswordComplexityRules, options?: ValidatorOptions): Validator<string> => {
   assertPasswordComplexityRules(rules)
 
   return {

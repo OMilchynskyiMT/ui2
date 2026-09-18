@@ -40,6 +40,7 @@
       :disabled="disabled"
       aria-haspopup="listbox"
       class="select-trigger"
+      data-ui-field-control
       type="button"
       @blur="onBlur"
       @click="toggle"

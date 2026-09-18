@@ -105,7 +105,7 @@ const {
   () => hint,
   slots
 )
-const hasBody = computed((): boolean => (label !== '' || Boolean(slots.default)) || hasError.value || hasHint.value)
+const hasBody = computed((): boolean => label !== '' || Boolean(slots.default) || hasError.value || hasHint.value)
 
 watchEffect(() => {
   if (inputReference.value) {
@@ -207,6 +207,11 @@ defineExpose<SelectionControlExpose>({
       }
     }
 
+    &:has(> .input:focus-visible) > .indicator {
+      outline: var(--focus-ring-width) solid var(--focus-ring-color);
+      outline-offset: var(--focus-ring-offset);
+    }
+
     & > .input {
       position: absolute;
       z-index: 1;
@@ -217,6 +222,10 @@ defineExpose<SelectionControlExpose>({
       margin: 0;
       opacity: 0;
       cursor: inherit;
+
+      &:focus-visible {
+        outline: none;
+      }
     }
 
     &.checkbox {

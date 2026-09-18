@@ -41,10 +41,7 @@ export const uniqueBy = <T>(
   }
 }
 
-export const greaterThanOrEqual = (
-  expected: ContextValue<number>,
-  options?: ValidatorOptions
-): Validator<number> => {
+export const greaterThanOrEqual = (expected: ContextValue<number>, options?: ValidatorOptions): Validator<number> => {
   return {
     code: 'relational.greaterThanOrEqual',
     message: options?.message ?? 'Must not be lower than the related value',
@@ -55,10 +52,7 @@ export const greaterThanOrEqual = (
   }
 }
 
-export const lessThanOrEqual = (
-  expected: ContextValue<number>,
-  options?: ValidatorOptions
-): Validator<number> => {
+export const lessThanOrEqual = (expected: ContextValue<number>, options?: ValidatorOptions): Validator<number> => {
   return {
     code: 'relational.lessThanOrEqual',
     message: options?.message ?? 'Must not be greater than the related value',

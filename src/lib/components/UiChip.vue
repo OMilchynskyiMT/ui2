@@ -29,13 +29,7 @@ export type Properties = {
 import { useSlots } from 'vue'
 
 const slots = useSlots()
-const {
-  variant = 'outlined',
-  tone = 'primary',
-  size = 'medium',
-  label,
-  title,
-} = defineProps<Properties>()
+const { variant = 'outlined', tone = 'primary', size = 'medium', label, title } = defineProps<Properties>()
 </script>
 
 <style scoped>

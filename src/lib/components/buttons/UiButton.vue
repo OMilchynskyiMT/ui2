@@ -270,10 +270,6 @@ const {
       }
     }
 
-    &:enabled:focus-visible {
-      --shadow: inset 0 0 0 2px oklch(from var(--accent-color) l c h / 0.28);
-    }
-
     @media (hover: hover) {
       &:enabled:hover {
         --opacity: 0.9;

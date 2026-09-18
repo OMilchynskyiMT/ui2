@@ -26,7 +26,7 @@
 import { UserIcon } from '@lucide/vue'
 
 import UiCopyButton from '@/lib/components/buttons/UiCopyButton.vue'
-import UiPropertyList from '@/lib/components/list/UiPropertyList.vue'
+import UiPropertyList, { type Item as PropertyListItem } from '@/lib/components/list/UiPropertyList.vue'
 import UiSectionHeader from '@/lib/components/section/UiSectionHeader.vue'
 import UiIcon from '@/lib/components/UiIcon.vue'
 import SignalStrength from '@/components/SignalStrength.vue'
@@ -43,7 +43,7 @@ const items = [
   { field: 'testTwo', label: 'Test #2 field name' },
   { field: 'someTestThree' },
   { field: 'test4', label: 'Test #4 field name' },
-]
+] satisfies readonly PropertyListItem<typeof data>[]
 </script>
 
 <style scoped>

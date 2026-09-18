@@ -15,10 +15,7 @@ export const findNextTypeaheadMatch = <T>(
   if (items.length === 0) return undefined
 
   const normalizedQuery = query.toLocaleLowerCase()
-  const orderedItems =
-    activeIndex < 0
-      ? items
-      : [...items.slice(activeIndex + 1), ...items.slice(0, activeIndex + 1)]
+  const orderedItems = activeIndex < 0 ? items : [...items.slice(activeIndex + 1), ...items.slice(0, activeIndex + 1)]
 
   return orderedItems.find(item => getText(item).toLocaleLowerCase().startsWith(normalizedQuery))
 }

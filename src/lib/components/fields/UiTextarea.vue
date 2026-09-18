@@ -45,6 +45,7 @@
       :readonly="readonly"
       :rows="rows"
       :value="currentValue"
+      data-ui-field-control
       @blur="onBlur"
       @change="onChange"
       @focus="onFocus"

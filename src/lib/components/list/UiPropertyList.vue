@@ -22,25 +22,27 @@
 
 <script lang="ts">
 export type Data = Readonly<Record<string, unknown>>
-export type Item = Readonly<{
-  field: keyof Data
+export type DataField<T extends object> = Extract<keyof T, string>
+
+export type Item<T extends object = Data> = Readonly<{
+  field: DataField<T>
   label?: string
   hint?: string
 }>
 
-export type Properties = {
-  data: Data
-  items: Item[]
+export type Properties<T extends object = Data> = {
+  data: T
+  items: readonly Item<T>[]
   emptyValue?: string
-  formatValue?: (value: unknown) => string
+  formatValue?: (value: T[DataField<T>]) => string
 }
 </script>
 
-<script lang="ts" setup>
-type SlotProperties = {
-  field: string
-  value: unknown
-}
+<script generic="T extends object" lang="ts" setup>
+type SlotProperties = Readonly<{
+  field: DataField<T>
+  value: T[DataField<T>]
+}>
 
 type Slots = {
   field?: (properties: SlotProperties) => unknown
@@ -49,7 +51,17 @@ type Slots = {
   [key: `value-${string}`]: ((properties: SlotProperties) => unknown) | undefined
 }
 
-const { data, items, emptyValue = '-', formatValue } = defineProps<Properties>()
+const {
+  data,
+  items,
+  emptyValue = '-',
+  formatValue,
+} = defineProps<{
+  data: T
+  items: readonly Item<T>[]
+  emptyValue?: string
+  formatValue?: (value: T[DataField<T>]) => string
+}>()
 
 defineSlots<Slots>()
 

@@ -16,7 +16,7 @@
       pathLength="100"
       stroke-dasharray="100"
     />
-    <text v-if="value !== undefined" :x="halfBoxSize" :y="halfBoxSize">
+    <text v-if="!indeterminate && value !== undefined" :x="halfBoxSize" :y="halfBoxSize">
       {{ normalizedValue }}
     </text>
   </svg>
@@ -42,9 +42,10 @@ const {
 }>()
 
 const initialBoxSize = 48
-const viewBoxSize = initialBoxSize + strokeWidth * 2
-const halfBoxSize = viewBoxSize / 2
-const radius = halfBoxSize - strokeWidth
+const normalizedStrokeWidth = computed(() => Math.max(0, strokeWidth))
+const viewBoxSize = computed(() => initialBoxSize + normalizedStrokeWidth.value * 2)
+const halfBoxSize = computed(() => viewBoxSize.value / 2)
+const radius = computed(() => halfBoxSize.value - normalizedStrokeWidth.value)
 
 const normalizedValue = computed(() => Math.min(100, Math.max(0, value ?? 0)))
 const strokeDashOffset = computed(() => 100 - normalizedValue.value)
@@ -55,7 +56,7 @@ const strokeDashOffset = computed(() => 100 - normalizedValue.value)
   svg {
     --size: var(--spinner-size, v-bind(size));
     --font-size: var(--spinner-font-size, v-bind(fontSize));
-    --stroke-width: var(--spinner-stroke-width, calc(v-bind(strokeWidth) * 1px));
+    --stroke-width: var(--spinner-stroke-width, calc(v-bind(normalizedStrokeWidth) * 1px));
     --animation-speed: var(--spinner-animation-speed, 1.1s);
 
     position: relative;

@@ -1,20 +1,22 @@
 <template>
   <div
     role="progressbar"
-    :aria-valuemax="indeterminate ? undefined : max"
+    :aria-valuemax="indeterminate ? undefined : normalizedMax"
     :aria-valuemin="indeterminate ? undefined : min"
-    :aria-valuenow="summarizeValue"
+    :aria-valuenow="summarizedValue"
     class="linear-progress"
   >
     <div v-if="indeterminate" class="indicator indeterminate" />
-    <template v-else-if="typeof value === 'number'">
-      <div :style="{ '--progress': `${progress(value)}%` }" class="indicator" />
-    </template>
+    <div v-else-if="typeof value === 'number'" :style="{ '--progress': `${progress(value)}%` }" class="indicator" />
     <div
-      v-for="(val, index) in value"
-      v-else-if="typeof value === 'object'"
+      v-for="(segment, index) in normalizedSegments"
+      v-else
       :key="index"
-      :style="{ '--progress': `${progress(val)}%`, '--indicator-color': colors?.[index], '--color-index': index }"
+      :style="{
+        '--progress': `${segment.percentage}%`,
+        '--indicator-color': colors?.[index],
+        '--color-index': index,
+      }"
       class="indicator"
     />
   </div>
@@ -24,27 +26,56 @@
 import { computed } from 'vue'
 
 type Properties = {
-  value?: number | number[]
+  /**
+   * A number is an absolute value in the [min, max] range.
+   * An array represents ordered segment amounts that consume the available
+   * range (max - min). Segments are clamped in order and never flex-shrunk.
+   */
+  value?: number | readonly number[]
   min?: number
   max?: number
-  colors?: string[]
+  colors?: readonly string[]
 }
+
+type NormalizedSegment = Readonly<{
+  amount: number
+  percentage: number
+}>
 
 const { value, min = 0, max = 100 } = defineProps<Properties>()
 
-const progress = (value: number): number => {
-  if (max <= min) return 0
+const normalizedMax = computed(() => Math.max(min, max))
+const range = computed(() => normalizedMax.value - min)
+const indeterminate = computed((): boolean => value === undefined)
 
-  const clampedValue = Math.min(Math.max(value, min), max)
-  return ((clampedValue - min) / (max - min)) * 100
+const progress = (currentValue: number): number => {
+  if (range.value <= 0) return 0
+
+  const clampedValue = Math.min(Math.max(currentValue, min), normalizedMax.value)
+  return ((clampedValue - min) / range.value) * 100
 }
 
-const indeterminate = computed((): boolean => value === undefined)
-const summarizeValue = computed((): number | undefined => {
-  if (value === undefined || max <= min) return
+const normalizedSegments = computed<readonly NormalizedSegment[]>(() => {
+  if (!Array.isArray(value) || range.value <= 0) return []
 
-  const total = typeof value === 'number' ? value : value.reduce((sum, item) => sum + item, 0)
-  return Math.min(Math.max(total, min), max)
+  let remaining = range.value
+  return value.map(segment => {
+    const amount = Math.min(Math.max(segment, 0), remaining)
+    remaining -= amount
+
+    return {
+      amount,
+      percentage: (amount / range.value) * 100,
+    }
+  })
+})
+
+const summarizedValue = computed((): number | undefined => {
+  if (value === undefined || range.value <= 0) return
+  if (typeof value === 'number') return Math.min(Math.max(value, min), normalizedMax.value)
+
+  const total = normalizedSegments.value.reduce((sum, segment) => sum + segment.amount, 0)
+  return min + total
 })
 </script>
 
@@ -67,15 +98,17 @@ const summarizeValue = computed((): number | undefined => {
     & > .indicator {
       --generated-color: oklch(from var(--accent) l c calc(h + var(--color-index) * 137.508));
 
-      width: var(--progress);
+      flex: 0 0 var(--progress);
+      min-inline-size: 0;
       height: 100%;
       background: var(--indicator-color, var(--generated-color));
-      transition: width var(--duration-lg) ease;
+      transition: flex-basis var(--duration-lg) ease;
 
       &:first-child {
         --generated-color: var(--accent);
         border-radius: var(--radius) 0 0 var(--radius);
       }
+
       &:last-child {
         border-radius: 0 var(--radius) var(--radius) 0;
       }

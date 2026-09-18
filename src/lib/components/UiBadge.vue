@@ -1,5 +1,5 @@
 <template>
-  <component :is="tag" :data-tone="tone" :data-size="size" class="badge">
+  <component :is="tag" :data-size="size" :data-tone="tone" class="badge">
     <slot>{{ label }}</slot>
   </component>
 </template>
@@ -16,12 +16,7 @@ export type UiBadgeProperties = {
 </script>
 
 <script lang="ts" setup>
-const {
-  tag = 'span',
-  tone = 'neutral',
-  size = 'medium',
-  label = '',
-} = defineProps<UiBadgeProperties>()
+const { tag = 'span', tone = 'neutral', size = 'medium', label = '' } = defineProps<UiBadgeProperties>()
 </script>
 
 <style scoped>

@@ -3,6 +3,7 @@
     :id="resolvedButtonId"
     ref="button"
     v-bind="attributes"
+    :aria-controls="resolvedMenuId"
     :aria-expanded="open"
     :disabled="disabled"
     :icon
@@ -26,6 +27,7 @@
   </UiButton>
 
   <UiMenu
+    :id="resolvedMenuId"
     v-model:open="open"
     :anchor="anchor"
     :aria-label="menuAriaLabel"
@@ -128,6 +130,7 @@ defineOptions({ inheritAttrs: false })
 const attributes = useAttrs()
 const generatedButtonId = useId()
 const resolvedButtonId = id ?? generatedButtonId
+const resolvedMenuId = `${resolvedButtonId}-menu`
 const buttonReference = useTemplateRef<InstanceType<typeof UiButton>>('button')
 const initialFocus = ref<'first' | 'last'>('first')
 

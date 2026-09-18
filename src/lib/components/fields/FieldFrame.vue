@@ -17,6 +17,7 @@
     :data-size="size"
     :data-variant="variant"
     :title="title"
+    data-ui-field-frame
   >
     <div ref="container" class="container" @pointerdown="onPointerDown">
       <div class="area">
@@ -451,6 +452,14 @@ onMounted(() => {
     & > .container {
       pointer-events: none;
     }
+  }
+}
+</style>
+
+<style>
+@layer components {
+  [data-ui-field-frame] [data-ui-field-control]:focus-visible {
+    outline: none;
   }
 }
 </style>

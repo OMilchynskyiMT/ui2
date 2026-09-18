@@ -35,6 +35,7 @@
       :readonly="readonly"
       :type="type"
       :value="model"
+      data-ui-field-control
       @blur="onBlur"
       @change="onChange"
       @focus="onFocus"

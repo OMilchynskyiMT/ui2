@@ -18,7 +18,6 @@ export const uplinkPayload = (options?: ValidatorOptions): Validator<string> => 
     code: 'scada.uplinkPayload',
     message: options?.message ?? 'Must contain hexadecimal or Base64 payload data',
     validate: (value, context) =>
-      value.length > 0 &&
-      (hexadecimalPayload.validate(value, context) || base64Payload.validate(value, context)),
+      value.length > 0 && (hexadecimalPayload.validate(value, context) || base64Payload.validate(value, context)),
   }
 }

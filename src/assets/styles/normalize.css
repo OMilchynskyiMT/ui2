@@ -103,15 +103,6 @@ fieldset {
   }
 }
 
-input,
-textarea,
-select,
-button,
-dialog,
-a {
-  outline: none;
-}
-
 input[type='number'] {
   -moz-appearance: textfield;
   appearance: textfield;
