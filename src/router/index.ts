@@ -5,6 +5,7 @@ import { applyPageMetadata } from './metadata'
 const routes: RouterOptions['routes'] = [
   {
     path: '/',
+    name: 'home',
     component: () => import('@/layouts/DashboardLayout.vue'),
     redirect: { name: 'dashboard' },
     children: [

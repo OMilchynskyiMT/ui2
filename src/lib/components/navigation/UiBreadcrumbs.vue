@@ -1,8 +1,13 @@
 <template>
   <nav v-if="items.length > 0" :aria-label="ariaLabel" class="breadcrumbs">
     <ol>
+      <li v-if="slots.leading" class="breadcrumb-item">
+        <slot name="leading" />
+        <UiIcon :icon="ChevronRightIcon" :size="separatorSize" aria-hidden="true" class="separator" />
+      </li>
+
       <li v-for="(item, index) in items" :key="getItemKey(item, index)" class="breadcrumb-item">
-        <UiIcon v-if="index > 0" :icon="ChevronRightIcon" aria-hidden="true" class="separator" />
+        <UiIcon v-if="index > 0" :icon="ChevronRightIcon" :size="separatorSize" aria-hidden="true" class="separator" />
 
         <slot :current="index === items.length - 1" :index="index" :item="item" name="item">
           <span
@@ -13,6 +18,11 @@
           </span>
           <a v-else :href="item.href">{{ item.label }}</a>
         </slot>
+      </li>
+
+      <li v-if="slots.trailing" class="breadcrumb-item">
+        <UiIcon :icon="ChevronRightIcon" :size="separatorSize" aria-hidden="true" class="separator" />
+        <slot name="trailing" />
       </li>
     </ol>
   </nav>
@@ -29,15 +39,18 @@ export type UiBreadcrumbItem<T = unknown> = {
 export type UiBreadcrumbsProperties<T = unknown> = {
   items: UiBreadcrumbItem<T>[]
   ariaLabel?: string
+  separatorSize?: string
 }
 </script>
 
 <script generic="T" lang="ts" setup>
+import { useSlots } from 'vue'
 import { ChevronRightIcon } from '@lucide/vue'
 
 import UiIcon from '../UiIcon.vue'
 
-const { items, ariaLabel = 'Breadcrumb' } = defineProps<UiBreadcrumbsProperties<T>>()
+const slots = useSlots()
+const { items, ariaLabel = 'Breadcrumb', separatorSize = '1em' } = defineProps<UiBreadcrumbsProperties<T>>()
 
 const getItemKey = (item: UiBreadcrumbItem<T>, index: number): string | number => item.key ?? `${index}-${item.label}`
 </script>

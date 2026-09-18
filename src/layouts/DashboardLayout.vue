@@ -93,10 +93,10 @@
               layout="adaptive"
               menu-aria-label="User actions"
               placement="bottom-end"
+              style="--icon-color: var(--tone-primary)"
               title="User actions"
               tone="neutral"
               variant="text"
-              style="--icon-color: var(--tone-primary);"
               @select="userMenuHandler($event.value)"
             >
               <strong>admin</strong>
@@ -116,6 +116,18 @@
             </UiMenuButton>
           </template>
         </TopBar>
+
+        <UiBreadcrumbs :items="breadcrumbs" class="page-breadcrumbs">
+          <template #leading>
+            <RouterLink :to="{ name: 'home' }"><UiIcon :icon="HomeIcon" size="1em" /></RouterLink>
+          </template>
+          <template #item="{ current, item }">
+            <span v-if="current" aria-current="page">{{ item.label }}</span>
+            <RouterLink v-else-if="item.target" :to="item.target">{{ item.label }}</RouterLink>
+            <a v-else-if="item.href" :href="item.href">{{ item.label }}</a>
+            <span v-else>{{ item.label }}</span>
+          </template>
+        </UiBreadcrumbs>
       </template>
 
       <template #footer>
@@ -130,18 +142,7 @@
       </template>
 
       <div class="content">
-        <main>
-          <UiBreadcrumbs :items="breadcrumbs" class="page-breadcrumbs">
-            <template #item="{ current, item }">
-              <span v-if="current" aria-current="page">{{ item.label }}</span>
-              <RouterLink v-else-if="item.target" :to="item.target">{{ item.label }}</RouterLink>
-              <a v-else-if="item.href" :href="item.href">{{ item.label }}</a>
-              <span v-else>{{ item.label }}</span>
-            </template>
-          </UiBreadcrumbs>
-
-          <RouterView />
-        </main>
+        <main><RouterView /></main>
       </div>
 
       <UiConfirmDialog ref="saveAndApplyConfirm">
@@ -155,6 +156,7 @@
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, useTemplateRef } from 'vue'
 import {
   CogIcon,
+  HomeIcon,
   LayoutDashboardIcon,
   LogOutIcon,
   MenuIcon,
@@ -177,6 +179,7 @@ import UiScrollArea from '@/lib/components/layout/UiScrollArea.vue'
 import type { UiMenuItem } from '@/lib/components/menu/UiMenu.vue'
 import UiMenuButton from '@/lib/components/menu/UiMenuButton.vue'
 import UiBreadcrumbs from '@/lib/components/navigation/UiBreadcrumbs.vue'
+import UiIcon from '@/lib/components/UiIcon.vue'
 import Shell from '@/components/application/AppShell.vue'
 import TopBar from '@/components/bars/TopBar.vue'
 import NavigationTree, { type NavigationTreeItem } from '@/components/navigation/NavigationTree.vue'
@@ -300,6 +303,10 @@ onBeforeUnmount(() => {
 
 .page-breadcrumbs {
   font-size: var(--font-size-xs);
+  background-color: oklch(from var(--surface-bg) l c h / 0.5);
+  padding-inline: var(--space-sm);
+  padding-block: var(--space-xxs);
+  color: var(--text-color-dimmed);
 }
 
 .panel {
