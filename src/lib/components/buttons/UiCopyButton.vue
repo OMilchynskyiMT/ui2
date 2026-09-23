@@ -2,18 +2,17 @@
   <button
     :aria-label="label"
     :class="{ copied }"
-    :data-direction="direction"
     :disabled
     class="copy"
     title="Copy to clipboard"
     type="button"
     @click="copy"
   >
-    <slot :copied />
     <span class="icon-frame">
       <UiIcon :icon="CheckIcon" class="check" />
       <UiIcon :icon="CopyIcon" class="copy" />
     </span>
+    <slot :copied>{{ label ?? '' }}</slot>
   </button>
 </template>
 
@@ -23,7 +22,6 @@ type Properties = {
   label?: string
   resetAfter?: number
   disabled?: boolean
-  direction?: 'ltr' | 'rtl'
 }
 
 type Slots = {
@@ -42,7 +40,7 @@ import { CheckIcon, CopyIcon } from '@lucide/vue'
 
 import UiIcon from '../UiIcon.vue'
 
-const { text, label = 'Copy', resetAfter = 2500, disabled = false, direction = 'ltr' } = defineProps<Properties>()
+const { text, label = 'Copy', resetAfter = 2500, disabled = false } = defineProps<Properties>()
 
 const copied = ref(false)
 const resetTimer = shallowRef<number>()
@@ -93,7 +91,7 @@ onBeforeUnmount(clearResetTimer)
     --cover-width: 100%;
     --cover-height: 100%;
     --shadow-opacity: transparent;
-    --icon-size: 1rem;
+    --icon-size: 1.25em;
 
     -webkit-tap-highlight-color: var(--outline-bg);
     position: relative;
@@ -102,14 +100,8 @@ onBeforeUnmount(clearResetTimer)
     align-items: center;
     justify-content: center;
     column-gap: var(--space-xs);
+    vertical-align: middle;
     cursor: pointer;
-
-    &[data-direction='ltr'] {
-      direction: ltr;
-    }
-    &[data-direction='rtl'] {
-      direction: rtl;
-    }
 
     &:disabled {
       cursor: default;
@@ -155,6 +147,11 @@ onBeforeUnmount(clearResetTimer)
       background-color: var(--outline-bg);
       border: 1px solid var(--outline-border-color);
 
+      inset-block-start: 50%;
+      inset-inline-start: 50%;
+      translate: -50% -50%;
+      pointer-events: none;
+
       transition-property: box-shadow, width, height, background-color, border-color;
       transition-duration: var(--duration-lg);
       transition-timing-function: var(--bezier-bounce);
@@ -169,8 +166,8 @@ onBeforeUnmount(clearResetTimer)
       --outline-bg: oklch(from var(--accent-color) l c h / 0.1);
       --outline-border-color: oklch(from var(--accent-color) l c h / 0.2);
       --shadow-opacity: var(--shadow-md-opacity);
-      --cover-width: calc(100% + var(--space-sm) * 2);
-      --cover-height: calc(100% + var(--space-sm));
+      --cover-width: calc(100% + var(--space-sm));
+      --cover-height: calc(100% + var(--space-xs));
 
       & > span.icon-frame {
         & > svg.icon.copy {

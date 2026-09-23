@@ -7,7 +7,7 @@
 
       <UiPropertyList :data :items empty-value="+">
         <template #value-test1="{ value }">
-          <UiCopyButton :text="String(value)" direction="rtl">{{ value }}</UiCopyButton>
+          <UiCopyButton :text="String(value)">{{ value }}</UiCopyButton>
         </template>
         <template #value-someTestThree="{ value }">
           <UiIcon :icon="UserIcon" color="red" />
