@@ -1,18 +1,11 @@
 <template>
-  <component
-    :is="tag"
-    :data-adaptive="adaptive || undefined"
-    :data-align="align"
-    :data-justify="justify"
-    class="cluster"
-  >
+  <component :is="tag" :data-align="align" :data-justify="justify" class="cluster">
     <slot />
   </component>
 </template>
 
 <script lang="ts">
 export type UiClusterProperties = {
-  adaptive?: boolean
   tag?: string
   align?: 'start' | 'center' | 'end' | 'baseline' | 'stretch'
   justify?: 'start' | 'center' | 'end' | 'between'
@@ -20,7 +13,7 @@ export type UiClusterProperties = {
 </script>
 
 <script lang="ts" setup>
-const { adaptive = false, align = 'center', justify = 'start', tag = 'div' } = defineProps<UiClusterProperties>()
+const { align = 'center', justify = 'start', tag = 'div' } = defineProps<UiClusterProperties>()
 </script>
 
 <style scoped>
@@ -67,12 +60,6 @@ const { adaptive = false, align = 'center', justify = 'start', tag = 'div' } = d
 
     &[data-justify='between'] {
       justify-content: space-between;
-    }
-
-    &[data-adaptive] {
-      & > :deep(*) {
-        flex: 1 1 var(--cluster-item-min-size, 10rem);
-      }
     }
   }
 }
