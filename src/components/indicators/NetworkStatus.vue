@@ -8,24 +8,32 @@
     padding="medium"
     variant="filled"
   >
-    <span aria-hidden="true" class="visual">
-      <UiIcon :icon="Globe2Icon" size="1.75rem" />
-    </span>
+    <UiBar class="status-content">
+      <template #leading>
+        <span aria-hidden="true" class="visual">
+          <UiIcon :icon="Globe2Icon" size="1.75rem" />
+        </span>
+      </template>
 
-    <span class="heading">
-      <span class="label">{{ label }}</span>
-      <strong class="value">{{ online ? 'Online' : 'Offline' }}</strong>
-    </span>
+      <UiStack class="heading" gap="var(--space-xxs)" tag="span">
+        <span class="label">{{ label }}</span>
+        <strong class="value">{{ online ? 'Online' : 'Offline' }}</strong>
+      </UiStack>
 
-    <span aria-hidden="true" class="state">
-      <UiIcon :icon="online ? CheckIcon : XIcon" :stroke-width="2.5" size="1rem" />
-    </span>
+      <template #trailing>
+        <span aria-hidden="true" class="state">
+          <UiIcon :icon="online ? CheckIcon : XIcon" :stroke-width="2.5" size="1rem" />
+        </span>
+      </template>
+    </UiBar>
   </UiCard>
 </template>
 
 <script lang="ts" setup>
 import { CheckIcon, Globe2Icon, XIcon } from '@lucide/vue'
 
+import UiBar from '@/lib/components/bars/UiBar.vue'
+import UiStack from '@/lib/components/layout/UiStack.vue'
 import UiCard from '@/lib/components/section/UiCard.vue'
 import UiIcon from '@/lib/components/UiIcon.vue'
 
@@ -41,15 +49,14 @@ const { label = 'Internet', online } = defineProps<{
     --status-color: var(--tone-color);
     --status-container: color-mix(in oklch, var(--status-color) 14%, transparent);
 
-    --display: grid;
     --card-radius: var(--radius-lg);
     --card-bg: color-mix(in oklch, var(--status-color) 6%, transparent);
 
-    grid-template-columns: auto minmax(0, 1fr) auto;
-    align-items: center;
-    gap: var(--space-md);
+    & .status-content {
+      --sections-gap: var(--space-md);
+    }
 
-    & > .visual {
+    & .visual {
       inline-size: 3.25rem;
       block-size: 3.25rem;
       display: grid;
@@ -59,10 +66,8 @@ const { label = 'Internet', online } = defineProps<{
       color: var(--status-color);
     }
 
-    & > .heading {
+    & .heading {
       min-inline-size: 0;
-      display: grid;
-      gap: var(--space-xxs);
 
       & > .label {
         color: var(--text-color-dimmed);
@@ -79,7 +84,7 @@ const { label = 'Internet', online } = defineProps<{
       }
     }
 
-    & > .state {
+    & .state {
       inline-size: 2rem;
       block-size: 2rem;
       display: grid;
