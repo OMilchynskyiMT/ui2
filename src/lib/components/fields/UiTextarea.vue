@@ -32,7 +32,6 @@
       :id="id"
       ref="textarea"
       v-bind="controlAttributes"
-      v-resize="onResize"
       :aria-describedby="description"
       :aria-disabled="disabled"
       :aria-errormessage="isInvalid && hasError ? `${id}-error` : undefined"
@@ -64,7 +63,7 @@ export type UiTextareaExpose = {
 </script>
 
 <script lang="ts" setup>
-import { computed, nextTick, onMounted, ref, useSlots, useTemplateRef, watch } from 'vue'
+import { computed, ref, useSlots, useTemplateRef, watch } from 'vue'
 
 import { useId } from '@/composables/useId'
 
@@ -144,19 +143,6 @@ defineExpose<UiTextareaExpose>({
   },
 })
 
-const updateBlockSize = (): void => {
-  const textarea = textareaReference.value
-  if (!textarea) return
-
-  if (!autoGrow) {
-    textarea.style.removeProperty('block-size')
-    return
-  }
-
-  textarea.style.setProperty('block-size', 'auto')
-  textarea.style.setProperty('block-size', `${textarea.scrollHeight}px`)
-}
-
 const onFocus = (event: FocusEvent): void => {
   isFocused.value = true
   emit('focus', event)
@@ -171,7 +157,6 @@ const getValue = (event: Event): string => (event.currentTarget as HTMLTextAreaE
 
 const onInput = (event: InputEvent): void => {
   currentValue.value = getValue(event)
-  updateBlockSize()
 
   if (!lazy && !event.isComposing) {
     model.value = currentValue.value
@@ -190,29 +175,9 @@ const onChange = (event: Event): void => {
   emit('change', event)
 }
 
-let observedInlineSize = 0
-const onResize = (entry: ResizeObserverEntry): void => {
-  const inlineSize = entry.contentRect.width
-  if (inlineSize === observedInlineSize) return
-
-  observedInlineSize = inlineSize
-  updateBlockSize()
-}
-
-onMounted(() => {
-  void nextTick(updateBlockSize)
+watch(model, value => {
+  currentValue.value = value
 })
-
-watch(
-  model,
-  value => {
-    currentValue.value = value
-    void nextTick(updateBlockSize)
-  },
-  { flush: 'post' }
-)
-
-watch([() => autoGrow, () => rows], () => void nextTick(updateBlockSize), { flush: 'post' })
 </script>
 
 <style scoped>
@@ -223,7 +188,7 @@ watch([() => autoGrow, () => rows], () => void nextTick(updateBlockSize), { flus
     box-sizing: border-box;
     min-inline-size: 0;
     inline-size: 100%;
-    min-block-size: calc(var(--font-size) * 1.5);
+    min-block-size: 1lh;
     max-block-size: var(--textarea-max-block-size, none);
     overflow: auto;
     resize: var(--textarea-resize, block);
@@ -234,8 +199,12 @@ watch([() => autoGrow, () => rows], () => void nextTick(updateBlockSize), { flus
       opacity: 1;
       color: var(--hint-color);
     }
+  }
 
-    &:is(.auto-grow) {
+  @supports (field-sizing: content) {
+    textarea:is(.auto-grow) {
+      field-sizing: content;
+      min-block-size: calc(var(--textarea-rows, 3) * 1lh);
       resize: none;
     }
   }
