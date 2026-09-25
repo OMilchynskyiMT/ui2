@@ -7,11 +7,21 @@ import {
   type ChartOptions as ChartJsOptions,
   Legend,
   LinearScale,
+  LineController,
+  LineElement,
+  PointElement,
   Tooltip,
 } from 'chart.js'
 
 import { resolveColor } from './helpers'
-import type { BarChart, ChartDefinition, ChartLabelFormatter, ChartValue, ChartValueFormatter } from './types'
+import type {
+  BarChart,
+  ChartDefinition,
+  ChartLabelFormatter,
+  ChartValue,
+  ChartValueFormatter,
+  LineChart,
+} from './types'
 
 type RendererOptions = Readonly<{
   formatLabel: ChartLabelFormatter
@@ -23,7 +33,7 @@ type Renderer = Readonly<{
   destroy: () => void
 }>
 
-const validateBarChart = (chart: BarChart): void => {
+const validateChart = (chart: ChartDefinition): void => {
   const seriesIds = new Set<string>()
   const labelsCount = chart.labels.length
 
@@ -67,6 +77,7 @@ const createBarOptions = (chart: BarChart, options: RendererOptions): ChartJsOpt
 
   return {
     responsive: true,
+    maintainAspectRatio: false,
     interaction: {
       mode: 'index',
       intersect: false,
@@ -111,7 +122,7 @@ const createBarOptions = (chart: BarChart, options: RendererOptions): ChartJsOpt
 }
 
 const createBarRenderer = (canvas: HTMLCanvasElement, chart: BarChart, options: RendererOptions): Renderer => {
-  validateBarChart(chart)
+  validateChart(chart)
   Chart.register(BarController, BarElement, CategoryScale, Legend, LinearScale, Tooltip)
   const instance = new Chart<'bar', ChartValue[], string>(canvas, {
     type: 'bar',
@@ -122,9 +133,109 @@ const createBarRenderer = (canvas: HTMLCanvasElement, chart: BarChart, options: 
   // eslint-disable-next-line unicorn/consistent-boolean-name
   const update = (nextChart: ChartDefinition): boolean => {
     if (nextChart.type !== 'bar') return false
-    validateBarChart(nextChart)
+    validateChart(nextChart)
     instance.data = createBarData(nextChart, options)
     instance.options = createBarOptions(nextChart, options)
+    instance.update('none')
+    return true
+  }
+
+  const destroy = (): void => {
+    instance.destroy()
+  }
+
+  return {
+    update,
+    destroy,
+  }
+}
+
+const createLineData = (chart: LineChart, options: RendererOptions): ChartJsData<'line', ChartValue[], string> => {
+  return {
+    labels: chart.labels.map(element => options.formatLabel(element)),
+    datasets: chart.series.map(series => {
+      const color = series.color ? resolveColor(series.color) : undefined
+
+      return {
+        label: series.label,
+        data: [...series.values],
+        borderColor: color,
+        backgroundColor: color,
+        borderWidth: 2,
+        pointRadius: chart.points === true ? 2.5 : 0,
+        pointHoverRadius: 4,
+        pointHitRadius: 8,
+        tension: 0.28,
+      }
+    }),
+  }
+}
+
+const createLineOptions = (chart: LineChart, options: RendererOptions): ChartJsOptions<'line'> => {
+  return {
+    responsive: true,
+    maintainAspectRatio: false,
+    interaction: {
+      mode: 'index',
+      intersect: false,
+    },
+    plugins: {
+      legend: {
+        display: chart.series.length > 1,
+        labels: {
+          usePointStyle: true,
+          pointStyle: 'line',
+        },
+      },
+      tooltip: {
+        callbacks: {
+          label: context => {
+            const label = context.dataset.label
+            const value = context.parsed.y === null ? String() : options.formatValue(context.parsed.y)
+
+            return label ? `${label}: ${value}` : value
+          },
+        },
+      },
+    },
+    scales: {
+      x: {
+        grid: {
+          display: false,
+        },
+        ticks: {
+          autoSkip: true,
+          maxRotation: 0,
+          maxTicksLimit: 7,
+        },
+      },
+      y: {
+        beginAtZero: true,
+        ticks: {
+          callback: value => {
+            return typeof value === 'number' ? options.formatValue(value) : value
+          },
+        },
+      },
+    },
+  }
+}
+
+const createLineRenderer = (canvas: HTMLCanvasElement, chart: LineChart, options: RendererOptions): Renderer => {
+  validateChart(chart)
+  Chart.register(CategoryScale, Legend, LinearScale, LineController, LineElement, PointElement, Tooltip)
+  const instance = new Chart<'line', ChartValue[], string>(canvas, {
+    type: 'line',
+    data: createLineData(chart, options),
+    options: createLineOptions(chart, options),
+  })
+
+  // eslint-disable-next-line unicorn/consistent-boolean-name
+  const update = (nextChart: ChartDefinition): boolean => {
+    if (nextChart.type !== 'line') return false
+    validateChart(nextChart)
+    instance.data = createLineData(nextChart, options)
+    instance.options = createLineOptions(nextChart, options)
     instance.update('none')
     return true
   }
@@ -144,11 +255,8 @@ const createRenderer = (canvas: HTMLCanvasElement, chart: ChartDefinition, optio
     case 'bar': {
       return createBarRenderer(canvas, chart, options)
     }
-
-    // NOTE: future chart types: linear, pie, etc...
-
-    default: {
-      throw new Error(`Unsupported chart definition: ${JSON.stringify(chart.type)}`)
+    case 'line': {
+      return createLineRenderer(canvas, chart, options)
     }
   }
 }

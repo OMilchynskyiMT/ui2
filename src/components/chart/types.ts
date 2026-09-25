@@ -19,7 +19,12 @@ export type BarChart = BaseChart<'bar'> &
     stacked?: boolean
   }>
 
-export type ChartDefinition = BarChart
+export type LineChart = BaseChart<'line'> &
+  Readonly<{
+    points?: boolean
+  }>
+
+export type ChartDefinition = BarChart | LineChart
 
 export type ChartLabelFormatter = (value: ChartLabel) => string
 export type ChartValueFormatter = (value: number) => string

@@ -1,4 +1,4 @@
-export { default as Chart } from './BarChart.vue'
+export { default as Chart } from './DataChart.vue'
 export { resolveColor } from './helpers'
 export type {
   BarChart,
@@ -8,4 +8,5 @@ export type {
   ChartSeries,
   ChartValue,
   ChartValueFormatter,
+  LineChart,
 } from './types'

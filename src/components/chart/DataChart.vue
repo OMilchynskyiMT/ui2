@@ -45,6 +45,8 @@ onScopeDispose(() => renderer?.destroy())
 <style scoped>
 .chart {
   position: relative;
+  inline-size: 100%;
+  block-size: 100%;
   min-inline-size: 0;
   min-block-size: 0;
 
