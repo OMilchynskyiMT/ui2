@@ -1,54 +1,63 @@
 <template>
   <UiCard class="capacity-usage" padding="medium" variant="filled">
-    <div class="header">
-      <span aria-hidden="true" class="visual">
-        <UiIcon :icon="icon" size="1.75rem" />
-      </span>
+    <UiStack class="content" gap="var(--space-md)">
+      <UiBar class="header">
+        <template #leading>
+          <span aria-hidden="true" class="visual">
+            <UiIcon :icon="icon" size="2rem" />
+          </span>
+        </template>
 
-      <span class="heading">
-        <strong v-if="title" class="title">{{ title }}</strong>
-        <span class="summary">{{ formattedUsed }} of {{ formattedTotal }}</span>
-      </span>
+        <UiStack class="heading" gap="var(--space-xxs)" tag="span">
+          <strong v-if="title" class="title">{{ title }}</strong>
+          <span class="summary">{{ formattedUsed }} of {{ formattedTotal }}</span>
+        </UiStack>
 
-      <strong class="percentage">{{ usedPercent }}%</strong>
-    </div>
+        <template #trailing>
+          <strong class="percentage">{{ usedPercent }}%</strong>
+        </template>
+      </UiBar>
 
-    <div
-      role="meter"
-      :aria-label="title ? `${title} usage` : 'Capacity usage'"
-      :aria-valuemax="meterMaximum"
-      :aria-valuenow="meterValue"
-      :aria-valuetext="`${formattedUsed} used of ${formattedTotal}`"
-      :title="`Total: ${formattedTotal}`"
-      aria-valuemin="0"
-      class="track"
-    >
-      <span
-        v-for="segment in renderedSegments"
-        :key="segment.key"
-        :data-color-index="segment.colorIndex"
-        :style="{ '--progress': `${segment.percent}%`, '--segment-color': segment.color }"
-        :title="segment.meterTitle"
-        class="segment"
+      <div
+        role="meter"
+        :aria-label="title ? `${title} usage` : 'Capacity usage'"
+        :aria-valuemax="meterMaximum"
+        :aria-valuenow="meterValue"
+        :aria-valuetext="`${formattedUsed} used of ${formattedTotal}`"
+        :title="`Total: ${formattedTotal}`"
+        aria-valuemin="0"
+        class="track"
       >
-        <span v-if="segment.percent >= minimumLabelPercent">{{ Math.round(segment.percent) }}%</span>
-      </span>
-    </div>
+        <span
+          v-for="segment in renderedSegments"
+          :key="segment.key"
+          :style="{
+            '--progress': `${segment.percent}%`,
+            '--segment-color': segment.color,
+            '--color-index': segment.colorIndex,
+          }"
+          :title="segment.meterTitle"
+          class="segment"
+        >
+          <span v-if="segment.percent >= minimumLabelPercent">{{ Math.round(segment.percent) }}%</span>
+        </span>
+      </div>
 
-    <div class="legend">
-      <span
-        v-for="segment in renderedSegments"
-        :key="segment.key"
-        :data-color-index="segment.colorIndex"
-        :style="{ '--segment-color': segment.color }"
-        :title="segment.hint"
-        class="item"
-      >
-        <span aria-hidden="true" class="marker" />
-        <span class="label">{{ segment.label }}</span>
-        <strong class="value">{{ segment.formattedValue }}</strong>
-      </span>
-    </div>
+      <UiCluster class="legend">
+        <span
+          v-for="segment in renderedSegments"
+          :key="segment.key"
+          :data-color-index="segment.colorIndex"
+          :style="{ '--segment-color': segment.color, '--color-index': segment.colorIndex }"
+          :title="segment.hint"
+          class="item"
+        >
+          <span aria-hidden="true" class="marker" />
+          <span class="label">{{ segment.label }}</span>
+          <strong class="value">{{ segment.formattedValue }}</strong>
+        </span>
+      </UiCluster>
+    </UiStack>
   </UiCard>
 </template>
 
@@ -74,6 +83,9 @@ export type CapacityUsageProperties = Readonly<{
 import { computed } from 'vue'
 import { HardDriveIcon } from '@lucide/vue'
 
+import UiBar from '@/lib/components/bars/UiBar.vue'
+import UiCluster from '@/lib/components/layout/UiCluster.vue'
+import UiStack from '@/lib/components/layout/UiStack.vue'
 import UiCard from '@/lib/components/section/UiCard.vue'
 import UiIcon from '@/lib/components/UiIcon.vue'
 import { formatBytes } from '@/lib/format/bytes'
@@ -116,49 +128,34 @@ const formattedUsed = computed(() => formatBytes(used.value))
 <style scoped>
 @layer components {
   .capacity-usage {
-    --track-height: 0.875rem;
+    --accent-color: var(--tone-primary);
+    --track-height: 1em;
     --track-bg: oklch(from currentColor l c h / 0.03);
 
     --card-radius: var(--radius-lg);
 
-    display: grid;
-    gap: var(--space-md);
-
     & :is(.segment, .item) {
-      &[data-color-index='0'] {
-        --default-segment-color: light-dark(var(--blue-500), var(--blue-600));
-      }
-
-      &[data-color-index='1'] {
-        --default-segment-color: light-dark(var(--orange-500), var(--orange-600));
-      }
-
-      &[data-color-index='2'] {
-        --default-segment-color: light-dark(var(--indigo-500), var(--indigo-600));
-      }
+      --generated-color: oklch(from var(--accent-color) l c calc(h + var(--color-index) * 138));
+      --resolved-segment-color: var(--segment-color, var(--generated-color));
     }
 
-    & > .header {
-      min-inline-size: 0;
-      display: grid;
-      grid-template-columns: auto minmax(0, 1fr) auto;
-      align-items: center;
-      gap: var(--space-md);
+    & .header {
+      --sections-gap: var(--space-md);
 
-      & > .visual {
-        inline-size: 3.25rem;
-        block-size: 3.25rem;
+      min-inline-size: 0;
+
+      & .visual {
+        inline-size: 3rem;
+        block-size: 3rem;
         display: grid;
         place-items: center;
         border-radius: var(--radius-lg);
-        background: color-mix(in oklch, var(--tone-primary) 14%, transparent);
-        color: var(--tone-primary);
+        background: color-mix(in oklch, var(--accent-color) 12%, transparent);
+        color: var(--accent-color);
       }
 
-      & > .heading {
+      & .heading {
         min-inline-size: 0;
-        display: grid;
-        gap: var(--space-xxs);
 
         & > .title {
           overflow: hidden;
@@ -173,14 +170,14 @@ const formattedUsed = computed(() => formatBytes(used.value))
           overflow: hidden;
           color: var(--text-color-dimmed);
           font-size: var(--font-size-sm);
-          line-height: 1.25;
+          line-height: var(--line-height-tight);
           text-overflow: ellipsis;
           white-space: nowrap;
         }
       }
 
-      & > .percentage {
-        color: var(--tone-primary);
+      & .percentage {
+        color: var(--accent-color);
         font-size: var(--font-size-xl);
         font-weight: var(--font-weight-semibold);
         line-height: 1;
@@ -188,7 +185,7 @@ const formattedUsed = computed(() => formatBytes(used.value))
       }
     }
 
-    & > .track {
+    & .track {
       position: relative;
       isolation: isolate;
       display: flex;
@@ -199,8 +196,6 @@ const formattedUsed = computed(() => formatBytes(used.value))
       box-shadow: inset 0 0 0 1px color-mix(in oklch, var(--text-color) 5%, transparent);
 
       & > .segment {
-        --resolved-segment-color: var(--segment-color, var(--default-segment-color));
-
         z-index: 0;
         min-inline-size: 0;
         block-size: 100%;
@@ -243,20 +238,17 @@ const formattedUsed = computed(() => formatBytes(used.value))
           overflow: visible;
           box-shadow: var(--shadow-sm);
           filter: saturate(1.08) brightness(1.04);
-          transform: scaleY(1.28);
+          transform: scaleY(1.2);
         }
       }
     }
 
-    & > .legend {
+    & .legend {
+      --cluster-gap: var(--space-xs) var(--space-lg);
+
       min-inline-size: 0;
-      display: flex;
-      flex-wrap: wrap;
-      gap: var(--space-xs) var(--space-lg);
 
       & > .item {
-        --resolved-segment-color: var(--segment-color, var(--default-segment-color));
-
         min-inline-size: 0;
         display: inline-grid;
         grid-template-columns: auto auto auto;
@@ -288,11 +280,11 @@ const formattedUsed = computed(() => formatBytes(used.value))
     }
 
     @media (width < container-token(--container-sm)) {
-      & > .header > .percentage {
+      & .header .percentage {
         font-size: var(--font-size-lg);
       }
 
-      & > .legend {
+      & .legend {
         display: grid;
         gap: var(--space-xs);
 
