@@ -92,7 +92,7 @@ const wait = (ms: number): Promise<void> => {
 
 const log = (message: string): void => {
   console.debug('[dialog form]', new Date().toLocaleTimeString(), message)
-  logs.value.unshift(`${new Date().toLocaleTimeString()} — ${message}`)
+  logs.value.unshift(`${new Date().toLocaleTimeString()} - ${message}`)
 }
 
 const submit = async (): Promise<boolean | void> => {

@@ -77,8 +77,8 @@ const internalFormatField = (field: string): string => {
 .property-list {
   --field-size: min(12rem, 38%);
   --column-gap: var(--space-md);
-  --row-gap: var(--space-md);
-  --row-padding: 0 var(--space-xs);
+  --row-gap: var(--space-sm);
+  --row-padding: var(--space-xxs) var(--space-xs);
   --field-color: color-mix(in srgb, currentColor 68%, transparent);
   --border-style: dashed;
 
@@ -96,7 +96,7 @@ const internalFormatField = (field: string): string => {
     grid-template-columns: subgrid;
     grid-column: 1 / -1;
     align-items: center;
-    padding-block: var(--row-padding);
+    padding: var(--row-padding);
     border-block-end: 1px var(--border-style) var(--divider-color);
 
     > .field,
