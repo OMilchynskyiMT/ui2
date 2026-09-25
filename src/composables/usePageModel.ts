@@ -1,4 +1,4 @@
-import { computed, reactive, shallowReadonly, shallowRef, toRaw } from 'vue'
+import { computed, onScopeDispose, reactive, readonly, ref, shallowReadonly, shallowRef, toRaw, watch } from 'vue'
 
 import { type AsyncResourceLoader, useAsyncResource } from './useAsyncResource'
 import { type ChangeTrackerOptions, useChangeTracker } from './useChangeTracker'
@@ -10,10 +10,13 @@ export type PageLoadOptions = {
   discardChanges?: boolean
 }
 
-export type PageNavigationOptions = Omit<PageNavigationGuardOptions, 'confirm'>
+export type PageNavigationOptions = Omit<PageNavigationGuardOptions, 'confirm' | 'blocked'>
 
 export type PageModelOptions<T extends object, TTracked = T> = {
   load: AsyncResourceLoader<T>
+  // Returns the complete persisted model, including server normalization
+  // Receives an isolated snapshot; failures must reject
+  save?: (value: T) => Promise<T>
   // Overrides the default structured-clone behavior
   clone?: (value: T) => T
   // Configures which model state participates in dirty tracking
@@ -32,20 +35,17 @@ const cloneData = <T extends object>(value: T): T => {
 
 /**
  * Provides the common lifecycle for page data: loading, refreshing,
- * dirty tracking, reset, commit and navigation protection
+ * saving, dirty tracking, reset, commit and navigation protection
  *
  * @example
  * const page = usePageModel({
  *   load: ({ signal }) => getSettings({ signal }),
+ *   save: value => saveSettings(value),
  *   confirmDiscard: () => confirmUnsavedChanges(),
  * })
  *
- * const save = async () => {
- *   if (!page.data.value) return
- *
- *   const saved = await saveSettings(page.data.value)
- *   page.commit(saved)
- * }
+ * await page.save()
+ * // Bind saveError inline, keeping the form mounted while saving
  */
 export const usePageModel = <T extends object, TTracked = T>(options: PageModelOptions<T, TTracked>) => {
   const clone = options.clone ?? cloneData
@@ -56,6 +56,23 @@ export const usePageModel = <T extends object, TTracked = T>(options: PageModelO
   const changes = useChangeTracker(data, baseline, ready, options.changes)
   const loadError = computed(() => (resource.ready.value ? undefined : resource.error.value))
   const refreshError = computed(() => (resource.ready.value ? resource.error.value : undefined))
+  const saving = ref(false)
+  const saveError = shallowRef<unknown>()
+  const pending = computed(() => resource.pending.value || saving.value)
+  let isDisposed = false
+  let revision = 0
+  let operation = 0
+  let currentSave: Promise<boolean> | undefined
+
+  // Track all edits, including fields excluded from dirty tracking.
+  watch(
+    data,
+    () => {
+      ++revision
+    },
+    { deep: true, flush: 'sync' }
+  )
+
   let discardConfirmation: Promise<boolean> | undefined
 
   const replaceData = (value: T): void => {
@@ -63,8 +80,11 @@ export const usePageModel = <T extends object, TTracked = T>(options: PageModelO
   }
 
   const acceptData = (value: T): void => {
-    baseline.value = clone(value)
-    replaceData(value)
+    const accepted = clone(value)
+    const draft = reactive(clone(value)) as T
+    baseline.value = accepted
+    data.value = draft
+    saveError.value = undefined
   }
 
   // eslint-disable-next-line unicorn/consistent-boolean-name
@@ -90,22 +110,25 @@ export const usePageModel = <T extends object, TTracked = T>(options: PageModelO
 
   // eslint-disable-next-line unicorn/consistent-boolean-name
   const load = async (loadOptions: PageLoadOptions = {}): Promise<boolean> => {
+    if (isDisposed || saving.value) return false
+    const currentOperation = ++operation
+    const confirmationRevision = revision
     const canDiscardChanges = loadOptions.discardChanges === true
     const isAllowed = await canReplaceData(canDiscardChanges)
-    if (!isAllowed) return false
-
-    const current = data.value
-    const snapshot = current === undefined ? undefined : clone(toRaw(current))
-
-    const result = await resource.load()
-    if (result === undefined) return false
 
     if (
-      !canDiscardChanges &&
-      snapshot !== undefined &&
-      data.value !== undefined &&
-      changes.isChanged(data.value, snapshot)
+      !isAllowed ||
+      isDisposed ||
+      currentOperation !== operation ||
+      confirmationRevision !== revision ||
+      saving.value
     ) {
+      return false
+    }
+
+    const loadRevision = revision
+    const result = await resource.load()
+    if (isDisposed || result === undefined || currentOperation !== operation || loadRevision !== revision) {
       return false
     }
 
@@ -119,17 +142,32 @@ export const usePageModel = <T extends object, TTracked = T>(options: PageModelO
     return load(loadOptions)
   }
 
+  const cancel = (): void => {
+    ++operation
+    resource.cancel()
+  }
+
+  const assertMutable = (): void => {
+    if (isDisposed || saving.value) throw new Error('Cannot replace page data while saving or after disposal')
+  }
+
   const reset = (): void => {
+    assertMutable()
+    cancel()
     const value = baseline.value
     if (value === undefined) return
 
     replaceData(value)
+    saveError.value = undefined
   }
 
   const commit = (value?: T): void => {
+    assertMutable()
+    cancel()
     const current = value ?? data.value
     if (current === undefined) return
 
+    saveError.value = undefined
     const committed = clone(toRaw(current))
     resource.replace(committed)
     baseline.value = clone(committed)
@@ -139,14 +177,63 @@ export const usePageModel = <T extends object, TTracked = T>(options: PageModelO
     }
   }
 
+  // repeated submission joins the active write instead of sending another request
+  const save = (): Promise<boolean> => {
+    if (currentSave) return currentSave
+    if (isDisposed || !ready.value || data.value === undefined) return Promise.resolve(false)
+    const saver = options.save
+    if (!saver) return Promise.reject(new Error('No page saver configured'))
+
+    cancel()
+    const snapshot = clone(toRaw(data.value))
+    const saveRevision = revision
+    saveError.value = undefined
+    saving.value = true
+
+    // eslint-disable-next-line unicorn/consistent-boolean-name
+    const execute = async (): Promise<boolean> => {
+      // install currentSave before invoking application code, including synchronous failures
+      await Promise.resolve()
+      try {
+        if (isDisposed) return false
+        const value = await saver(snapshot)
+        if (isDisposed) return false
+        // prepare clones before changing the accepted baseline
+        const accepted = clone(value)
+        const draft = revision === saveRevision ? (reactive(clone(value)) as T) : undefined
+        resource.replace(accepted)
+        baseline.value = accepted
+        if (draft !== undefined) data.value = draft
+        return true
+      } catch (error) {
+        if (!isDisposed) saveError.value = error
+        throw error
+      } finally {
+        saving.value = false
+        currentSave = undefined
+      }
+    }
+    currentSave = execute()
+    return currentSave
+  }
+
+  onScopeDispose(() => {
+    isDisposed = true
+    cancel()
+  })
+
   const navigation = options.navigation === false ? undefined : (options.navigation ?? {})
 
-  if (navigation && options.confirmDiscard) {
-    usePageNavigationGuard(changes.dirty, {
-      confirm: confirmDiscard,
-      routeUpdates: navigation.routeUpdates,
-      browserUnload: navigation.browserUnload,
-    })
+  if (navigation) {
+    usePageNavigationGuard(
+      computed(() => changes.dirty.value || saving.value),
+      {
+        confirm: confirmDiscard,
+        blocked: saving,
+        routeUpdates: navigation.routeUpdates,
+        browserUnload: navigation.browserUnload,
+      }
+    )
   }
 
   if (options.immediate !== false) {
@@ -163,6 +250,9 @@ export const usePageModel = <T extends object, TTracked = T>(options: PageModelO
     ready,
     loading: resource.loading,
     refreshing: resource.refreshing,
+    saving: readonly(saving),
+    pending,
+    saveError: shallowReadonly(saveError),
 
     error: resource.error,
     loadError,
@@ -174,7 +264,8 @@ export const usePageModel = <T extends object, TTracked = T>(options: PageModelO
     reload,
     reset,
     commit,
+    save,
 
-    cancel: resource.cancel,
+    cancel,
   }
 }

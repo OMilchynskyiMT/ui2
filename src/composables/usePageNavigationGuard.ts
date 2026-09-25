@@ -6,6 +6,8 @@ type Awaitable<T> = T | Promise<T>
 export type PageNavigationGuardOptions = {
   confirm: () => Awaitable<boolean>
 
+  // hard block route navigation during a write, including after a pending confirmation
+  blocked?: MaybeRefOrGetter<boolean>
   routeUpdates?: boolean
   browserUnload?: boolean
 }
@@ -24,20 +26,25 @@ export const usePageNavigationGuard = (dirty: MaybeRefOrGetter<boolean>, options
   let isBeforeUnloadAttached = false
 
   const canLeave = async (): Promise<boolean> => {
+    if (toValue(options.blocked)) return false
     if (!toValue(dirty)) return true
     if (confirmation) return confirmation
-    confirmation = Promise.resolve(options.confirm())
-
-    try {
-      const isConfirmed = await confirmation
-      return isConfirmed || !toValue(dirty)
-    } finally {
-      confirmation = undefined
+    const canConfirmLeave = async (): Promise<boolean> => {
+      await Promise.resolve()
+      try {
+        if (toValue(options.blocked)) return false
+        const isConfirmed = await options.confirm()
+        return !toValue(options.blocked) && (isConfirmed || !toValue(dirty))
+      } finally {
+        confirmation = undefined
+      }
     }
+    confirmation = canConfirmLeave()
+    return confirmation
   }
 
   const handleBeforeUnload = (event: BeforeUnloadEvent): void => {
-    if (!toValue(dirty)) return
+    if (!toValue(dirty) && !toValue(options.blocked)) return
     event.preventDefault()
     // NOTE: for legacy support, e.g. Chrome/Edge < 119
     event.returnValue = true
@@ -64,10 +71,11 @@ export const usePageNavigationGuard = (dirty: MaybeRefOrGetter<boolean>, options
 
   if (options.browserUnload !== false) {
     watch(
-      () => toValue(dirty),
+      () => toValue(dirty) || !!toValue(options.blocked),
       value => setBeforeUnload(value),
       {
         immediate: true,
+        flush: 'sync',
       }
     )
   }

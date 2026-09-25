@@ -50,6 +50,7 @@ it('uses one confirmation for concurrent leave checks', async () => {
   const first = guard.canLeave()
   const second = guard.canLeave()
 
+  await Promise.resolve()
   expect(confirm).toHaveBeenCalledTimes(1)
   deferred.resolve(true)
 
@@ -80,5 +81,26 @@ it('allows navigation if the page becomes clean while confirmation is open', asy
   deferred.resolve(false)
 
   await expect(result).resolves.toBe(true)
+  scope.stop()
+})
+
+it('blocks every pending navigation check when saving starts', async () => {
+  const dirty = ref(true)
+  const blocked = ref(false)
+  const deferred = Promise.withResolvers<boolean>()
+  const confirm = vi.fn(() => deferred.promise)
+  const scope = effectScope()
+  const guard = scope.run(() => usePageNavigationGuard(dirty, { confirm, blocked, browserUnload: false }))!
+  const first = guard.canLeave()
+  const second = guard.canLeave()
+  await Promise.resolve()
+  blocked.value = true
+  deferred.resolve(true)
+  await expect(first).resolves.toBe(false)
+  await expect(second).resolves.toBe(false)
+  dirty.value = false
+  await expect(guard.canLeave()).resolves.toBe(false)
+  blocked.value = false
+  await expect(guard.canLeave()).resolves.toBe(true)
   scope.stop()
 })
