@@ -1,0 +1,78 @@
+<template>
+  <UiCard class="service-status-list" padding="medium" variant="filled">
+    <UiAutoGrid class="services" gap="var(--space-sm)" min-item-size="13.5rem">
+      <UiBar v-for="service in services" :key="service.label" class="service">
+        <template #leading>
+          <span :class="['indicator', { active: service.active }]" aria-hidden="true" />
+        </template>
+
+        <strong>{{ service.label }}</strong>
+
+        <template #trailing>
+          <UiChip
+            :label="service.active ? 'Active' : 'Inactive'"
+            :tone="service.active ? 'success' : 'neutral'"
+            size="small"
+            variant="tonal"
+          />
+        </template>
+      </UiBar>
+    </UiAutoGrid>
+  </UiCard>
+</template>
+
+<script lang="ts">
+export type DashboardService = Readonly<{
+  label: string
+  active: boolean
+}>
+</script>
+
+<script lang="ts" setup>
+import UiBar from '@/lib/components/bars/UiBar.vue'
+import UiAutoGrid from '@/lib/components/grid/UiAutoGrid.vue'
+import UiCard from '@/lib/components/section/UiCard.vue'
+import UiChip from '@/lib/components/UiChip.vue'
+
+const { services } = defineProps<{
+  services: readonly DashboardService[]
+}>()
+</script>
+
+<style scoped>
+@layer components {
+  .services {
+    & > .service {
+      --sections-gap: var(--space-sm);
+      --items-gap: var(--space-sm);
+      --padding-block: var(--space-xs);
+      --padding-inline: var(--space-sm);
+
+      min-block-size: 2.5rem;
+      border: 1px solid var(--divider-color);
+      border-radius: var(--radius-lg);
+      background: var(--surface-bg);
+
+      & > :deep(.main) > strong {
+        display: block;
+        overflow: hidden;
+        font-size: var(--font-size-sm);
+        font-weight: var(--font-weight-semibold);
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      & .indicator {
+        inline-size: 0.5em;
+        block-size: 0.5em;
+        border-radius: var(--radius-full);
+        background: var(--tone-neutral);
+
+        &.active {
+          background: var(--tone-success);
+        }
+      }
+    }
+  }
+}
+</style>
