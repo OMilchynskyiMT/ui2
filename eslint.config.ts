@@ -59,6 +59,131 @@ export default defineConfigWithVueTs(
   },
 
   {
+    name: 'architecture/lib',
+    files: ['src/lib/**/*.{ts,vue}'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: [
+                '@/api/**',
+                '@/components/**',
+                '@/composables/**',
+                '@/layouts/**',
+                '@/models/**',
+                '@/router/**',
+                '@/state/**',
+                '@/views/**',
+              ],
+              message: 'src/lib must not depend on application layers',
+            },
+          ],
+        },
+      ],
+    },
+  },
+
+  {
+    name: 'architecture/composables',
+    files: ['src/composables/**/*.ts'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['@/api/**', '@/components/**', '@/layouts/**', '@/models/**', '@/state/**', '@/views/**'],
+              message: 'generic composables must not depend on application domains or UI',
+            },
+          ],
+        },
+      ],
+    },
+  },
+
+  {
+    name: 'architecture/state',
+    files: ['src/state/**/*.ts'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: [
+                '@/api/**',
+                '@/components/**',
+                '@/composables/**',
+                '@/layouts/**',
+                '@/models/**',
+                '@/router/**',
+                '@/views/**',
+              ],
+              message: 'state must not depend on API, models, router, and UI layers',
+            },
+          ],
+        },
+      ],
+    },
+  },
+
+  {
+    name: 'architecture/api',
+    files: ['src/api/**/*.ts'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['@/components/**', '@/layouts/**', '@/models/**', '@/router/**', '@/views/**'],
+              message: 'API modules must not depend on models, router, or UI components',
+            },
+          ],
+        },
+      ],
+    },
+  },
+
+  {
+    name: 'architecture/models',
+    files: ['src/models/**/*.ts'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['@/components/**', '@/layouts/**', '@/router/**', '@/views/**'],
+              message: 'models must not depend on router or UI things',
+            },
+          ],
+        },
+      ],
+    },
+  },
+
+  {
+    name: 'architecture/ui',
+    files: ['src/components/**/*.{ts,vue}', 'src/layouts/**/*.{ts,vue}', 'src/views/**/*.{ts,vue}'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['@/api/**', '@/router/**'],
+              message: 'UI must use models for API access and vue-router APIs for navigation',
+            },
+          ],
+        },
+      ],
+    },
+  },
+
+  {
     name: 'app/test-rules',
     files: ['src/**/__tests__/**/*.ts'],
     rules: {

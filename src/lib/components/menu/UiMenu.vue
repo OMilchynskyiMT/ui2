@@ -74,7 +74,7 @@ export type UiMenuProperties<V> = {
 <script generic="V" lang="ts" setup>
 import { type ComponentPublicInstance, nextTick, ref, useAttrs, watch } from 'vue'
 
-import { isTypeaheadKey, useTypeahead } from '@/composables/useTypeahead'
+import { isTypeaheadKey, useTypeahead } from '@/lib/composables/useTypeahead'
 
 import UiScrollArea from '../layout/UiScrollArea.vue'
 import UiPopover, { type PopoverDismissReason } from '../overlay/UiPopover.vue'

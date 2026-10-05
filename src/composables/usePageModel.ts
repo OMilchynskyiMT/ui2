@@ -7,7 +7,9 @@ import { type PageNavigationGuardOptions, usePageNavigationGuard } from './usePa
 type Awaitable<T> = T | Promise<T>
 
 export type PageLoadOptions = {
-  discardChanges?: boolean
+  // How a replacement load behaves when the current model has unsaved changes.
+  // Defaults to 'confirm'. 'skip' is intended for automatic refresh/polling.
+  ifDirty?: 'confirm' | 'discard' | 'skip'
 }
 
 export type PageNavigationOptions = Omit<PageNavigationGuardOptions, 'confirm' | 'blocked'>
@@ -21,7 +23,8 @@ export type PageModelOptions<T extends object, TTracked = T> = {
   clone?: (value: T) => T
   // Configures which model state participates in dirty tracking
   changes?: ChangeTrackerOptions<T, TTracked>
-  // Confirms whether unsaved changes may be discarded
+  // Confirms whether unsaved changes may be discarded. When provided,
+  // navigation protection also guards dirty data
   confirmDiscard?: () => Awaitable<boolean>
   // Configures navigation protection, or disables it
   navigation?: false | PageNavigationOptions
@@ -103,8 +106,9 @@ export const usePageModel = <T extends object, TTracked = T>(options: PageModelO
     }
   }
 
-  const canReplaceData = async (canDiscardChanges: boolean): Promise<boolean> => {
-    if (canDiscardChanges || !ready.value || !changes.dirty.value) return true
+  const canReplaceData = async (ifDirty: NonNullable<PageLoadOptions['ifDirty']>): Promise<boolean> => {
+    if (ifDirty === 'discard' || !ready.value || !changes.dirty.value) return true
+    if (ifDirty === 'skip') return false
     return confirmDiscard()
   }
 
@@ -113,8 +117,7 @@ export const usePageModel = <T extends object, TTracked = T>(options: PageModelO
     if (isDisposed || saving.value) return false
     const currentOperation = ++operation
     const confirmationRevision = revision
-    const canDiscardChanges = loadOptions.discardChanges === true
-    const isAllowed = await canReplaceData(canDiscardChanges)
+    const isAllowed = await canReplaceData(loadOptions.ifDirty ?? 'confirm')
 
     if (
       !isAllowed ||
@@ -137,12 +140,7 @@ export const usePageModel = <T extends object, TTracked = T>(options: PageModelO
     return true
   }
 
-  // eslint-disable-next-line unicorn/consistent-boolean-name
-  const reload = async (loadOptions: PageLoadOptions = {}): Promise<boolean> => {
-    return load(loadOptions)
-  }
-
-  const cancel = (): void => {
+  const cancelLoad = (): void => {
     ++operation
     resource.cancel()
   }
@@ -153,7 +151,7 @@ export const usePageModel = <T extends object, TTracked = T>(options: PageModelO
 
   const reset = (): void => {
     assertMutable()
-    cancel()
+    cancelLoad()
     const value = baseline.value
     if (value === undefined) return
 
@@ -163,7 +161,7 @@ export const usePageModel = <T extends object, TTracked = T>(options: PageModelO
 
   const commit = (value?: T): void => {
     assertMutable()
-    cancel()
+    cancelLoad()
     const current = value ?? data.value
     if (current === undefined) return
 
@@ -184,7 +182,7 @@ export const usePageModel = <T extends object, TTracked = T>(options: PageModelO
     const saver = options.save
     if (!saver) return Promise.reject(new Error('No page saver configured'))
 
-    cancel()
+    cancelLoad()
     const snapshot = clone(toRaw(data.value))
     const saveRevision = revision
     saveError.value = undefined
@@ -219,14 +217,14 @@ export const usePageModel = <T extends object, TTracked = T>(options: PageModelO
 
   onScopeDispose(() => {
     isDisposed = true
-    cancel()
+    cancelLoad()
   })
 
   const navigation = options.navigation === false ? undefined : (options.navigation ?? {})
 
   if (navigation) {
     usePageNavigationGuard(
-      computed(() => changes.dirty.value || saving.value),
+      computed(() => (options.confirmDiscard ? changes.dirty.value : false) || saving.value),
       {
         confirm: confirmDiscard,
         blocked: saving,
@@ -238,7 +236,7 @@ export const usePageModel = <T extends object, TTracked = T>(options: PageModelO
 
   if (options.immediate !== false) {
     void load({
-      discardChanges: true,
+      ifDirty: 'discard',
     }).catch(() => {
       // empty
     })
@@ -254,18 +252,16 @@ export const usePageModel = <T extends object, TTracked = T>(options: PageModelO
     pending,
     saveError: shallowReadonly(saveError),
 
-    error: resource.error,
     loadError,
     refreshError,
 
     dirty: changes.dirty,
 
     load,
-    reload,
     reset,
     commit,
     save,
 
-    cancel,
+    cancelLoad,
   }
 }

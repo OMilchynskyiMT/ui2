@@ -1,5 +1,7 @@
-import { type MaybeRefOrGetter, onScopeDispose, toValue, watch } from 'vue'
+import { type MaybeRefOrGetter, toValue, watch } from 'vue'
 import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
+
+import { useEventListeners } from '@/lib/composables/useEventListeners'
 
 type Awaitable<T> = T | Promise<T>
 
@@ -23,7 +25,6 @@ export type PageNavigationGuardOptions = {
  */
 export const usePageNavigationGuard = (dirty: MaybeRefOrGetter<boolean>, options: PageNavigationGuardOptions) => {
   let confirmation: Promise<boolean> | undefined
-  let isBeforeUnloadAttached = false
 
   const canLeave = async (): Promise<boolean> => {
     if (toValue(options.blocked)) return false
@@ -43,25 +44,22 @@ export const usePageNavigationGuard = (dirty: MaybeRefOrGetter<boolean>, options
     return confirmation
   }
 
-  const handleBeforeUnload = (event: BeforeUnloadEvent): void => {
+  const handleBeforeUnload = (event: Event): void => {
     if (!toValue(dirty) && !toValue(options.blocked)) return
-    event.preventDefault()
+
+    const beforeUnloadEvent = event
+    beforeUnloadEvent.preventDefault()
     // NOTE: for legacy support, e.g. Chrome/Edge < 119
-    event.returnValue = true
+    beforeUnloadEvent.returnValue = true
   }
 
-  const setBeforeUnload = (isEnabled: boolean): void => {
-    if (typeof window === 'undefined') return
-    if (isEnabled === isBeforeUnloadAttached) return
-
-    if (isEnabled) {
-      window.addEventListener('beforeunload', handleBeforeUnload)
-    } else {
-      window.removeEventListener('beforeunload', handleBeforeUnload)
-    }
-
-    isBeforeUnloadAttached = isEnabled
-  }
+  const beforeUnload = useEventListeners(() => [
+    {
+      target: typeof globalThis === 'undefined' ? undefined : globalThis,
+      type: 'beforeunload',
+      listener: handleBeforeUnload,
+    },
+  ])
 
   onBeforeRouteLeave(() => canLeave())
 
@@ -72,15 +70,13 @@ export const usePageNavigationGuard = (dirty: MaybeRefOrGetter<boolean>, options
   if (options.browserUnload !== false) {
     watch(
       () => toValue(dirty) || !!toValue(options.blocked),
-      value => setBeforeUnload(value),
+      enabled => (enabled ? beforeUnload.start() : beforeUnload.stop()),
       {
         immediate: true,
         flush: 'sync',
       }
     )
   }
-
-  onScopeDispose(() => setBeforeUnload(false))
 
   return {
     canLeave,

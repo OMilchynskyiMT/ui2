@@ -32,7 +32,7 @@ import UiFormGrid from '@/lib/components/grid/UiFormGrid.vue'
 import UiSectionHeader from '@/lib/components/section/UiSectionHeader.vue'
 import UiTabs, { type UiTabItem } from '@/lib/components/tabs/UiTabs.vue'
 import PageTransition from '@/components/transitions/PageTransition.vue'
-import { useTabNavigation } from '@/composables/useTabNavigation'
+import { useTabNavigation } from '@/components/transitions/useTabNavigation'
 
 const tabs: UiTabItem<string>[] = [
   { title: 'DHCP Configuration', icon: CogIcon, value: 'dhcp-config' },

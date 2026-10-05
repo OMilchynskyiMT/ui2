@@ -28,7 +28,7 @@ export type Exposed = {
 <script lang="ts" setup>
 import { computed, type CSSProperties, onBeforeUnmount, ref, type TeleportProps, useAttrs, useTemplateRef } from 'vue'
 
-import { useVisualViewport } from '@/composables/useVisualViewport'
+import { useVisualViewport } from '@/lib/composables/useVisualViewport'
 
 defineOptions({ inheritAttrs: false })
 

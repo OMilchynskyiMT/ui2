@@ -1,3 +1,7 @@
+import { onScopeDispose } from 'vue'
+
+import { useEventListeners } from '@/lib/composables/useEventListeners'
+
 export type ViewportSize = Readonly<{
   width: number
   height: number
@@ -33,11 +37,28 @@ export const useViewportSizeListener = (listener: (size: ViewportSize) => void):
     })
   }
 
-  addEventListener('resize', update)
-  update()
+  const events = useEventListeners(() => [
+    {
+      target: globalThis,
+      type: 'resize',
+      listener: update,
+    },
+  ])
 
-  return () => {
-    removeEventListener('resize', update)
-    if (animationFrame !== undefined) cancelAnimationFrame(animationFrame)
+  const cancelUpdate = (): void => {
+    if (animationFrame === undefined) return
+    cancelAnimationFrame(animationFrame)
+    animationFrame = undefined
   }
+
+  const stop = (): void => {
+    events.stop()
+    cancelUpdate()
+  }
+
+  events.start()
+  update()
+  onScopeDispose(cancelUpdate)
+
+  return stop
 }

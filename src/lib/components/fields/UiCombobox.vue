@@ -105,7 +105,7 @@ export type UiComboboxExpose = UiFieldExpose
 <script generic="V extends string | number" lang="ts" setup>
 import { computed, nextTick, ref, useSlots, useTemplateRef, watch } from 'vue'
 
-import { useId } from '@/composables/useId'
+import { useId } from '@/lib/composables/useId'
 
 import { useSplitAttributes } from '../component.shared'
 import {

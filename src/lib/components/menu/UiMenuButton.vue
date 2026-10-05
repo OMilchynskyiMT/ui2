@@ -91,7 +91,7 @@ export type UiMenuButtonExposed = {
 <script generic="V" lang="ts" setup>
 import { computed, ref, useAttrs, useSlots, useTemplateRef, watch } from 'vue'
 
-import { useId } from '@/composables/useId'
+import { useId } from '@/lib/composables/useId'
 
 import UiButton from '../buttons/UiButton.vue'
 import UiMenu, { type UiMenuItem } from './UiMenu.vue'

@@ -76,7 +76,7 @@ export type UiRadioGroupProperties<V extends RadioValue> = {
 <script generic="V extends RadioValue" lang="ts" setup>
 import { computed, useSlots } from 'vue'
 
-import { useId } from '@/composables/useId'
+import { useId } from '@/lib/composables/useId'
 
 import { useFieldState } from './field.shared'
 import type { RadioValue } from './selection.shared'

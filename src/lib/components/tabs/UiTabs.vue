@@ -63,7 +63,7 @@ export type UiTabsProperties<Value extends string | number> = {
 <script generic="Value extends string | number" lang="ts" setup>
 import { computed, nextTick, onMounted, ref, useSlots, useTemplateRef, watch } from 'vue'
 
-import { useId } from '@/composables/useId'
+import { useId } from '@/lib/composables/useId'
 
 import UiIcon from '../UiIcon.vue'
 

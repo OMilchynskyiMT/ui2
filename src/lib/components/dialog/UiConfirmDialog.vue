@@ -66,7 +66,7 @@ type PendingConfirmation = {
 import { onBeforeUnmount, useSlots, useTemplateRef } from 'vue'
 import { CheckIcon, MessageSquareWarningIcon, XIcon } from '@lucide/vue'
 
-import { useId } from '@/composables/useId'
+import { useId } from '@/lib/composables/useId'
 
 import UiButton from '../buttons/UiButton.vue'
 import UiScrollArea from '../layout/UiScrollArea.vue'

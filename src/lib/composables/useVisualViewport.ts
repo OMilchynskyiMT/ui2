@@ -1,5 +1,7 @@
 import { onMounted, onScopeDispose, readonly, type Ref, shallowRef } from 'vue'
 
+import { useEventListeners } from './useEventListeners'
+
 export type UseVisualViewport = {
   supported: Readonly<Ref<boolean>>
   width: Readonly<Ref<number>>
@@ -51,35 +53,25 @@ export const useVisualViewport = (): UseVisualViewport => {
     })
   }
 
-  const stop = (): void => {
-    if (viewport) {
-      viewport.removeEventListener('resize', update)
-      viewport.removeEventListener('scroll', update)
-    } else {
-      window.removeEventListener('resize', update)
-    }
-
-    if (animationFrame !== undefined) {
-      cancelAnimationFrame(animationFrame)
-      animationFrame = undefined
-    }
-  }
+  const events = useEventListeners(() =>
+    viewport
+      ? [
+          { target: viewport, type: 'resize', listener: update },
+          { target: viewport, type: 'scroll', listener: update },
+        ]
+      : [{ target: globalThis, type: 'resize', listener: update }]
+  )
 
   onMounted(() => {
-    viewport = window.visualViewport
+    viewport = visualViewport
     supported.value = Boolean(viewport)
-
-    if (viewport) {
-      viewport.addEventListener('resize', update)
-      viewport.addEventListener('scroll', update)
-    } else {
-      window.addEventListener('resize', update)
-    }
-
+    events.start()
     update()
   })
 
-  onScopeDispose(stop)
+  onScopeDispose(() => {
+    if (animationFrame !== undefined) cancelAnimationFrame(animationFrame)
+  })
 
   return {
     supported: readonly(supported),

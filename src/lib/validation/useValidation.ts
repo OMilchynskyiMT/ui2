@@ -1,4 +1,4 @@
-import { computed, type MaybeRefOrGetter, shallowRef, toValue } from 'vue'
+import { computed, type MaybeRefOrGetter, shallowRef, toValue, watch } from 'vue'
 
 import type { ValidationErrors, ValidationIssue, ValidationResult } from './types'
 
@@ -14,9 +14,19 @@ export const useValidation = <T extends object>(schema: ValidationSchema<T>, sou
   const errors = computed<ValidationErrors<T>>(() => result.value?.errors ?? {})
   const issues = computed<readonly ValidationIssue[]>(() => result.value?.issues ?? [])
 
-  const validate = (): void => {
-    result.value = schema.validate(toValue(source))
+  const validate = (): ValidationResult<T> => {
+    const validationResult = schema.validate(toValue(source))
+    result.value = validationResult
+    return validationResult
   }
+
+  watch(
+    () => toValue(source),
+    () => {
+      if (result.value !== undefined) validate()
+    },
+    { deep: true, flush: 'sync' }
+  )
 
   const clear = (): void => {
     result.value = undefined

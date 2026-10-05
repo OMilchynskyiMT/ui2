@@ -29,8 +29,8 @@ export type UiTooltipProperties = {
 <script lang="ts" setup>
 import { onBeforeUnmount, ref, watch } from 'vue'
 
-import { useEventListeners } from '@/composables/useEventListeners'
-import { useId } from '@/composables/useId'
+import { useEventListeners } from '@/lib/composables/useEventListeners'
+import { useId } from '@/lib/composables/useId'
 
 import UiPopover from './UiPopover.vue'
 
@@ -147,7 +147,6 @@ watch(
 
 onBeforeUnmount(() => {
   clearOpenTimer()
-  stop()
   if (describedElement) updateDescription(describedElement, false)
 })
 </script>

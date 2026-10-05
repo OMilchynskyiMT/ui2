@@ -1,6 +1,6 @@
 import { computed, type MaybeRefOrGetter, shallowRef, toValue } from 'vue'
 
-import { findNextTypeaheadMatch } from '@/composables/useTypeahead'
+import { findNextTypeaheadMatch } from '@/lib/composables/useTypeahead'
 
 import type { ListboxEntry, ListboxGroup, ListboxOption } from './listbox.types'
 

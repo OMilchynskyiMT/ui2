@@ -38,14 +38,14 @@ export type UiListboxExpose = {
   focus: (options?: FocusOptions) => void
 }
 
-export { TYPEAHEAD_RESET_TIMEOUT } from '@/composables/useTypeahead'
+export { TYPEAHEAD_RESET_TIMEOUT } from '@/lib/composables/useTypeahead'
 </script>
 
 <script generic="V extends string | number" lang="ts" setup>
 import { computed, shallowRef, useTemplateRef } from 'vue'
 
-import { useId } from '@/composables/useId'
-import { isTypeaheadKey, useTypeahead } from '@/composables/useTypeahead'
+import { useId } from '@/lib/composables/useId'
+import { isTypeaheadKey, useTypeahead } from '@/lib/composables/useTypeahead'
 
 import ListboxContent, { type ListboxContentExpose } from './internal/ListboxContent.vue'
 import { getListboxOptionText, useListboxNavigation } from './listbox.shared'

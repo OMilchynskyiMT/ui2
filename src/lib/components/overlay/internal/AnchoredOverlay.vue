@@ -19,8 +19,8 @@ export type AnchoredOverlayProperties = {
 <script lang="ts" setup>
 import { nextTick, onBeforeUnmount, onMounted, ref, useTemplateRef, watch } from 'vue'
 
-import { useSnapToDevicePixel } from '@/composables/useDeviceHardwareHelpers'
-import { useEventListeners } from '@/composables/useEventListeners'
+import { useSnapToDevicePixel } from '@/lib/composables/useDeviceHardwareHelpers'
+import { useEventListeners } from '@/lib/composables/useEventListeners'
 
 const {
   anchor,
@@ -196,7 +196,7 @@ const requestPositionUpdate = (): void => {
   frame = requestAnimationFrame(updatePosition)
 }
 
-const { start, stop } = useEventListeners(() => [
+const { start } = useEventListeners(() => [
   {
     target: globalThis,
     type: 'resize',
@@ -260,7 +260,6 @@ watch(
 onBeforeUnmount(() => {
   cancelAnimationFrame(frame)
   resizeObserver?.disconnect()
-  stop()
 })
 </script>
 

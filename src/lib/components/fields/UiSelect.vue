@@ -105,15 +105,15 @@ export type UiSelectExpose = {
   close: () => void
 }
 
-export { TYPEAHEAD_RESET_TIMEOUT } from '@/composables/useTypeahead'
+export { TYPEAHEAD_RESET_TIMEOUT } from '@/lib/composables/useTypeahead'
 </script>
 
 <script generic="V extends string | number" lang="ts" setup>
 import { computed, nextTick, ref, useSlots, useTemplateRef } from 'vue'
 import { ChevronDownIcon } from '@lucide/vue'
 
-import { useId } from '@/composables/useId'
-import { isTypeaheadKey, useTypeahead } from '@/composables/useTypeahead'
+import { useId } from '@/lib/composables/useId'
+import { isTypeaheadKey, useTypeahead } from '@/lib/composables/useTypeahead'
 
 import { useSplitAttributes } from '../component.shared'
 import { getListboxOptionText, useListboxNavigation } from '../list/listbox.shared'

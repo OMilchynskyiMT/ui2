@@ -65,7 +65,7 @@ export type UiTextareaExpose = {
 <script lang="ts" setup>
 import { computed, ref, useSlots, useTemplateRef, watch } from 'vue'
 
-import { useId } from '@/composables/useId'
+import { useId } from '@/lib/composables/useId'
 
 import { useSplitAttributes } from '../component.shared'
 import { type UiFieldProperties, useFieldState } from './field.shared'

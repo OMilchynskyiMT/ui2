@@ -182,9 +182,9 @@ export type UiFilePickerExpose = {
 import { computed, nextTick, onMounted, ref, useAttrs, useSlots, useTemplateRef, watch } from 'vue'
 import { FileUpIcon, XIcon } from '@lucide/vue'
 
+import { useEventListeners } from '@/lib/composables/useEventListeners'
+import { useId } from '@/lib/composables/useId'
 import { formatBytes } from '@/lib/format/bytes'
-import { useEventListeners } from '@/composables/useEventListeners'
-import { useId } from '@/composables/useId'
 
 import UiButton from '../buttons/UiButton.vue'
 import UiIcon from '../UiIcon.vue'

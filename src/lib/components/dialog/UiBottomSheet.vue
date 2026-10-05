@@ -77,7 +77,7 @@ export type UiBottomSheetExposed = {
 import { computed, useAttrs, useSlots, useTemplateRef } from 'vue'
 import { XIcon } from '@lucide/vue'
 
-import { useId } from '@/composables/useId'
+import { useId } from '@/lib/composables/useId'
 
 import UiButton from '../buttons/UiButton.vue'
 import UiBottomActions from '../layout/UiBottomActions.vue'

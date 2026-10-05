@@ -69,7 +69,7 @@ export type UiSearchFieldProperties = Omit<UiTextFieldProperties, 'type'> & {
 import { computed, useAttrs, useSlots, useTemplateRef } from 'vue'
 import { SearchIcon, XIcon } from '@lucide/vue'
 
-import { useId } from '@/composables/useId'
+import { useId } from '@/lib/composables/useId'
 
 import UiButton from '../buttons/UiButton.vue'
 import { getForwardedSlotNames } from '../component.shared'

@@ -2,10 +2,15 @@ import '@/assets/styles/index.css'
 
 import { createApp } from 'vue'
 
+import { createResizeDirective } from '@/lib/directives/resize'
+import { ripple } from '@/lib/directives/ripple'
 import App from '@/App.vue'
-import { createResizeDirective } from '@/directives/resize'
-import { ripple } from '@/directives/ripple'
+import { initializeColorScheme } from '@/composables/useColorScheme'
 import { createAppRouter } from '@/router'
+import { useUserSession } from '@/state/userSession'
+
+initializeColorScheme()
+useUserSession().restore()
 
 const app = createApp(App)
 

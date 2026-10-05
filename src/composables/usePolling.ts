@@ -1,6 +1,6 @@
 import { onScopeDispose, readonly, ref } from 'vue'
 
-import { useEventListeners } from './useEventListeners'
+import { useEventListeners } from '@/lib/composables/useEventListeners'
 
 export type PollingOptions = {
   interval: number

@@ -104,7 +104,7 @@ import UiScrollArea from '@/lib/components/layout/UiScrollArea.vue'
 import UiPropertyList, { type Item as PropertyListItem } from '@/lib/components/list/UiPropertyList.vue'
 import UiCard from '@/lib/components/section/UiCard.vue'
 import UiSectionHeader from '@/lib/components/section/UiSectionHeader.vue'
-import { useVisualViewport } from '@/composables/useVisualViewport'
+import { useVisualViewport } from '@/lib/composables/useVisualViewport'
 
 const bottomSheet = useTemplateRef<UiBottomSheetExposed>('bottomSheet')
 const viewport = useVisualViewport()

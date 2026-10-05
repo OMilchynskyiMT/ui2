@@ -43,7 +43,7 @@ export type UiCheckboxExpose = SelectionControlExpose
 <script lang="ts" setup>
 import { ref, useAttrs, useSlots } from 'vue'
 
-import { useId } from '@/composables/useId'
+import { useId } from '@/lib/composables/useId'
 
 import type { SelectionControlCommonProperties, SelectionControlExpose } from './selection.shared'
 import SelectionControl from './SelectionControl.vue'

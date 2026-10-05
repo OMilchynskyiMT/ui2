@@ -23,7 +23,7 @@ import { useRoute, useRouter } from 'vue-router'
 
 import UiTabs, { type UiTabItem } from '@/lib/components/tabs/UiTabs.vue'
 import PageTransition from '@/components/transitions/PageTransition.vue'
-import { useTabNavigation } from '@/composables/useTabNavigation'
+import { useTabNavigation } from '@/components/transitions/useTabNavigation'
 
 const tabs: UiTabItem<string>[] = [
   { icon: FormInputIcon, title: 'Inputs', value: 'inputs' },

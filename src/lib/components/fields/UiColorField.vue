@@ -70,7 +70,7 @@ export { isHexColorValid, normalizeHexColor } from './color.shared'
 import { computed, useAttrs, useSlots, useTemplateRef } from 'vue'
 import { PaletteIcon } from '@lucide/vue'
 
-import { useId } from '@/composables/useId'
+import { useId } from '@/lib/composables/useId'
 
 import { getForwardedSlotNames } from '../component.shared'
 import UiIcon from '../UiIcon.vue'

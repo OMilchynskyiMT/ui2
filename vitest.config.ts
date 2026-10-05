@@ -21,10 +21,12 @@ export default defineConfig({
         'src/lib/validation/**/*.ts',
         'src/composables/useAsyncResource.ts',
         'src/composables/useChangeTracker.ts',
+        'src/composables/useColorScheme.ts',
         'src/composables/usePageModel.ts',
         'src/composables/usePageNavigationGuard.ts',
         'src/composables/usePolling.ts',
         'src/components/notifications/useNotifications.ts',
+        'src/state/userSession.ts',
       ],
       exclude: [
         'src/lib/validation/index.ts',

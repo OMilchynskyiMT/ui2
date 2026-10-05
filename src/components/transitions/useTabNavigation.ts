@@ -1,6 +1,6 @@
 import { type MaybeRefOrGetter, ref, toValue } from 'vue'
 
-import type { TransitionName } from '@/components/transitions/PageTransition.vue'
+import type { TransitionName } from './PageTransition.vue'
 
 export const useTabNavigation = <T>(ids: readonly T[], currentId: MaybeRefOrGetter<T | undefined>) => {
   const transitionName = ref<TransitionName>('page-enter')

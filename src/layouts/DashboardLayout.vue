@@ -153,7 +153,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, nextTick, onBeforeUnmount, onMounted, ref, useTemplateRef } from 'vue'
+import { computed, nextTick, ref, useTemplateRef } from 'vue'
 import {
   CogIcon,
   HomeIcon,
@@ -195,7 +195,6 @@ const isCompact = ref(getViewportSize().width < compactBreakpoint())
 const desktopNavigationVisible = ref(true)
 const mobileNavigationOpen = ref(false)
 const saveAndApplyConfirm = useTemplateRef<ConfirmExposed>('saveAndApplyConfirm')
-let stopResizeSubscription: (() => void) | undefined
 
 const { toggleScheme, scheme: resolvedScheme } = useColorScheme()
 const { breadcrumbs } = useBreadcrumbs()
@@ -268,16 +267,10 @@ const userMenuHandler = (value: string): void => {
   toggleScheme()
 }
 
-onMounted(() => {
-  stopResizeSubscription = useViewportSizeListener(({ width }) => {
-    const isCompact_ = width < compactBreakpoint()
-    if (isCompact_ !== isCompact.value) mobileNavigationOpen.value = false
-    isCompact.value = isCompact_
-  })
-})
-
-onBeforeUnmount(() => {
-  stopResizeSubscription?.()
+useViewportSizeListener(({ width }) => {
+  const isCompact_ = width < compactBreakpoint()
+  if (isCompact_ !== isCompact.value) mobileNavigationOpen.value = false
+  isCompact.value = isCompact_
 })
 </script>
 

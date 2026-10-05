@@ -1,7 +1,7 @@
 import { computed, ref } from 'vue'
 import { CheckIcon, LightbulbIcon, OctagonXIcon, TriangleAlertIcon } from '@lucide/vue'
 
-import { useId } from '@/composables/useId'
+import { useId } from '@/lib/composables/useId'
 
 import type { Notification, NotificationOptions, NotificationPauseReason } from './types'
 

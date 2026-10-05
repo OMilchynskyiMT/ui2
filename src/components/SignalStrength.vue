@@ -28,7 +28,7 @@
 <script lang="ts" setup>
 import { computed, useTemplateRef } from 'vue'
 
-import { useElementDevicePixelSize } from '@/composables/useDeviceHardwareHelpers'
+import { useElementDevicePixelSize } from '@/lib/composables/useDeviceHardwareHelpers'
 
 const {
   level = 0,

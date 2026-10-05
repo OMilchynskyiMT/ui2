@@ -51,7 +51,7 @@ it('loads data, tracks edits, resets them, and commits a new baseline', async ()
   scope.stop()
 })
 
-it('does not reload dirty data when discard confirmation is rejected', async () => {
+it('does not replace dirty data when discard confirmation is rejected', async () => {
   const loader = vi.fn<() => Promise<Settings>>().mockResolvedValue({ hostname: 'router', enabled: true })
   const confirmDiscard = vi.fn(() => false)
   const { page, scope } = createPage({ load: loader, confirmDiscard })
@@ -59,7 +59,7 @@ it('does not reload dirty data when discard confirmation is rejected', async () 
   await page.load()
   page.data.value!.hostname = 'unsaved'
 
-  await expect(page.reload()).resolves.toBe(false)
+  await expect(page.load()).resolves.toBe(false)
   expect(confirmDiscard).toHaveBeenCalledTimes(1)
   expect(loader).toHaveBeenCalledTimes(1)
   expect(page.data.value?.hostname).toBe('unsaved')
@@ -79,10 +79,26 @@ it('can explicitly discard dirty data without asking for confirmation', async ()
   await page.load()
   page.data.value!.hostname = 'unsaved'
 
-  await expect(page.reload({ discardChanges: true })).resolves.toBe(true)
+  await expect(page.load({ ifDirty: 'discard' })).resolves.toBe(true)
   expect(confirmDiscard).not.toHaveBeenCalled()
   expect(page.data.value).toEqual({ hostname: 'server', enabled: false })
   expect(page.dirty.value).toBe(false)
+
+  scope.stop()
+})
+
+it('can skip an automatic refresh while the page is dirty', async () => {
+  const loader = vi.fn<() => Promise<Settings>>().mockResolvedValue({ hostname: 'router', enabled: true })
+  const confirmDiscard = vi.fn(() => true)
+  const { page, scope } = createPage({ load: loader, confirmDiscard })
+
+  await page.load()
+  page.data.value!.hostname = 'unsaved'
+
+  await expect(page.load({ ifDirty: 'skip' })).resolves.toBe(false)
+  expect(confirmDiscard).not.toHaveBeenCalled()
+  expect(loader).toHaveBeenCalledTimes(1)
+  expect(page.data.value?.hostname).toBe('unsaved')
 
   scope.stop()
 })
@@ -96,14 +112,14 @@ it('preserves edits made while a refresh is in flight', async () => {
   const { page, scope } = createPage({ load: loader })
 
   await page.load()
-  const reload = page.reload()
+  const reading = page.load()
 
   await Promise.resolve()
   expect(page.refreshing.value).toBe(true)
   page.data.value!.hostname = 'edited-while-loading'
   refresh.resolve({ hostname: 'server', enabled: false })
 
-  await expect(reload).resolves.toBe(false)
+  await expect(reading).resolves.toBe(false)
   expect(page.data.value).toEqual({ hostname: 'edited-while-loading', enabled: true })
   expect(page.dirty.value).toBe(true)
 
@@ -127,7 +143,7 @@ it('distinguishes initial load failures from refresh failures', async () => {
   await expect(page.load()).resolves.toBe(true)
   expect(page.ready.value).toBe(true)
 
-  await expect(page.reload()).rejects.toBe(refreshFailure)
+  await expect(page.load()).rejects.toBe(refreshFailure)
   expect(page.loadError.value).toBeUndefined()
   expect(page.refreshError.value).toBe(refreshFailure)
   expect(page.data.value).toEqual({ hostname: 'router', enabled: true })
@@ -211,13 +227,13 @@ it('invalidates an older refresh and blocks replacement while saving', async () 
     .mockReturnValueOnce(refresh.promise)
   const { page, scope } = createPage({ load: loader, save: () => saved.promise })
   await page.load()
-  const reading = page.reload()
+  const reading = page.load()
   await Promise.resolve()
   const writing = page.save()
-  await expect(page.reload({ discardChanges: true })).resolves.toBe(false)
+  await expect(page.load({ ifDirty: 'discard' })).resolves.toBe(false)
   expect(() => page.reset()).toThrow()
   expect(() => page.commit()).toThrow()
-  page.cancel()
+  page.cancelLoad()
   expect(page.saving.value).toBe(true)
   saved.resolve({ hostname: 'saved', enabled: true })
   await writing
@@ -237,7 +253,7 @@ it('invalidates pending discard confirmation when a save starts', async () => {
   })
   await page.load()
   page.data.value!.hostname = 'edited'
-  const reading = page.reload()
+  const reading = page.load()
   await page.save()
   confirmation.resolve(true)
   await expect(reading).resolves.toBe(false)
@@ -245,7 +261,7 @@ it('invalidates pending discard confirmation when a save starts', async () => {
   scope.stop()
 })
 
-it('does not discard edits made during an explicitly requested reload', async () => {
+it('does not discard edits made during an explicitly requested replacement load', async () => {
   const refresh = Promise.withResolvers<Settings>()
   const loader = vi
     .fn()
@@ -253,7 +269,7 @@ it('does not discard edits made during an explicitly requested reload', async ()
     .mockReturnValueOnce(refresh.promise)
   const { page, scope } = createPage({ load: loader })
   await page.load()
-  const reading = page.reload({ discardChanges: true })
+  const reading = page.load({ ifDirty: 'discard' })
   await Promise.resolve()
   page.data.value!.hostname = 'new edit'
   refresh.resolve({ hostname: 'server', enabled: true })
@@ -325,7 +341,7 @@ it('cancels a deferred load before the loader starts', async () => {
   const loader = vi.fn(() => Promise.resolve({ hostname: 'router', enabled: true }))
   const { page, scope } = createPage({ load: loader })
   const loading = page.load()
-  page.cancel()
+  page.cancelLoad()
   await expect(loading).resolves.toBe(false)
   expect(loader).not.toHaveBeenCalled()
   scope.stop()

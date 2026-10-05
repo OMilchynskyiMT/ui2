@@ -5,17 +5,10 @@ import {
   signIn as requestSignIn,
   signOut as requestSignOut,
 } from '@/api/user'
-import { useUserSession } from '@/state/userSession'
+import { type UserSession, useUserSession } from '@/state/userSession'
 
-export type SystemUserRole = 'admin' | 'user' | 'guest'
-export type UserRole = SystemUserRole | (string & {})
-
-export type User = {
-  readonly user: string
-  readonly role: UserRole
-  readonly isRemote: boolean
-  readonly isPasswordExpired: boolean
-}
+export type { SystemUserRole, UserRole } from '@/state/userSession'
+export type User = UserSession
 
 export type SignInErrorReason = 'invalid-credentials' | 'session-conflict' | 'maximum-users'
 

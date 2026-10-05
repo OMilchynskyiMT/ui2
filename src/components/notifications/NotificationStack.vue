@@ -53,7 +53,7 @@ import { XIcon } from '@lucide/vue'
 
 import UiButton from '@/lib/components/buttons/UiButton.vue'
 import UiIcon from '@/lib/components/UiIcon.vue'
-import { useVisualViewport } from '@/composables/useVisualViewport'
+import { useVisualViewport } from '@/lib/composables/useVisualViewport'
 
 import { type Notification, useNotifications } from '.'
 

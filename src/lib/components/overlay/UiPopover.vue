@@ -35,9 +35,9 @@ export type { OverlayPlacement } from './internal/AnchoredOverlay.vue'
 </script>
 
 <script lang="ts" setup>
-import { onBeforeUnmount, useAttrs, useTemplateRef, watch } from 'vue'
+import { useAttrs, useTemplateRef, watch } from 'vue'
 
-import { useEventListeners } from '@/composables/useEventListeners'
+import { useEventListeners } from '@/lib/composables/useEventListeners'
 
 import AnchoredOverlay from './internal/AnchoredOverlay.vue'
 
@@ -104,8 +104,6 @@ watch(
   },
   { immediate: true }
 )
-
-onBeforeUnmount(stop)
 </script>
 
 <style>

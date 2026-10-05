@@ -35,7 +35,7 @@
 <script generic="V extends RadioValue" lang="ts" setup>
 import { computed, ref, useAttrs, useSlots } from 'vue'
 
-import { useId } from '@/composables/useId'
+import { useId } from '@/lib/composables/useId'
 
 import type { RadioValue, SelectionControlExpose, UiRadioExpose, UiRadioProperties } from './selection.shared'
 import SelectionControl from './SelectionControl.vue'

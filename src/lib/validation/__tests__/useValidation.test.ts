@@ -11,14 +11,15 @@ it('validates the current source value', () => {
   expect(validation.validated.value).toBe(false)
   expect(validation.valid.value).toBeUndefined()
 
-  validation.validate()
+  const result = validation.validate()
+  expect(result.valid).toBe(false)
   expect(validation.validated.value).toBe(true)
   expect(validation.valid.value).toBe(false)
   expect(validation.errors.value.name?.[0]).toBe('This field is required')
 
   source.name = 'Router'
 
-  validation.validate()
+  expect(validation.valid.value).toBe(true)
   expect(validation.errors.value.name?.[0]).toBeUndefined()
 })
 
@@ -53,4 +54,7 @@ it('clears the current validation result', () => {
   expect(validation.valid.value).toBeUndefined()
   expect(validation.errors.value).toEqual({})
   expect(validation.issues.value).toEqual([])
+
+  source.name = 'Router'
+  expect(validation.validated.value).toBe(false)
 })

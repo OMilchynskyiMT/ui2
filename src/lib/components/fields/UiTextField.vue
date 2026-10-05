@@ -64,7 +64,7 @@ export type UiTextFieldProperties = Omit<UiFieldProperties, 'id' | 'focused' | '
 <script lang="ts" setup>
 import { computed, ref, useSlots, useTemplateRef } from 'vue'
 
-import { useId } from '@/composables/useId'
+import { useId } from '@/lib/composables/useId'
 
 import { useSplitAttributes } from '../component.shared'
 import { type UiFieldExpose, useFieldState } from './field.shared'

@@ -45,7 +45,7 @@ export type UiNumberProperties = Omit<UiFieldProperties, 'id' | 'focused' | 'pop
 <script lang="ts" setup>
 import { computed, ref, useAttrs, useSlots, watch } from 'vue'
 
-import { useId } from '@/composables/useId'
+import { useId } from '@/lib/composables/useId'
 
 import { createFieldExpose, type UiFieldExpose } from './field.shared'
 import { clampNumber, formatNumber, type NumberModel, parseNumberText } from './number.shared'
