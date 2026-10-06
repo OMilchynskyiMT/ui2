@@ -19,4 +19,8 @@
   --line-height: 1.43;
   --line-height-tight: 1.25;
   --line-height-compact: 1.35;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
 }
