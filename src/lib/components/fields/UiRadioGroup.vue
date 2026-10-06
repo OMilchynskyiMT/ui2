@@ -119,7 +119,7 @@ const { hasError, hasHint, isInvalid, description } = useFieldState(
   .radio-group {
     --group-gap: var(--space-md);
     --group-option-gap: var(--space-lg);
-    --group-label-color: light-dark(var(--gray-800), var(--gray-300));
+    --group-label-color: var(--text-color-secondary);
     --group-hint-color: var(--text-color-dimmed);
     --group-error-color: var(--error-text-color);
     --group-details-font-size: var(--font-size-sm);

@@ -24,18 +24,18 @@ const { tag = 'div', variant = 'filled', padding = 'large' } = defineProps<UiCar
     --card-padding-inline: var(--space-xl);
     --card-border-width: 0px;
     --card-border-color: transparent;
-    --card-bg: var(--surface-bg);
+    --card-bg: var(--surface-card);
     --card-shadow: var(--shadow-xs);
     --card-radius: var(--radius-lg);
 
     display: var(--display, block);
     min-inline-size: 0;
-    padding-block: var(--padding-block, var(--card-padding-block));
-    padding-inline: var(--padding-inline, var(--card-padding-inline));
+    padding-block: var(--card-padding-block);
+    padding-inline: var(--card-padding-inline);
     border: var(--border-width, var(--card-border-width)) solid var(--border-color, var(--card-border-color));
     border-radius: var(--card-radius);
     background: var(--card-bg);
-    box-shadow: var(--shadow, var(--card-shadow));
+    box-shadow: var(--card-shadow);
 
     &[data-padding='none'] {
       --card-padding-block: 0px;
@@ -57,7 +57,7 @@ const { tag = 'div', variant = 'filled', padding = 'large' } = defineProps<UiCar
     }
 
     &[data-variant='outlined'] {
-      --card-border-width: 1px;
+      --card-border-width: var(--border-width-thin);
       --card-border-color: var(--divider-color);
       --card-shadow: none;
     }

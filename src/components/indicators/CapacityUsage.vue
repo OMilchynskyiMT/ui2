@@ -205,7 +205,7 @@ const formattedUsed = computed(() => formatBytes(used.value))
         justify-content: center;
         overflow: hidden;
         background: var(--resolved-segment-color);
-        color: var(--white);
+        color: var(--on-accent-color);
         font-size: var(--font-size-xxs);
         font-weight: var(--font-weight-semibold);
         font-variant-numeric: tabular-nums;

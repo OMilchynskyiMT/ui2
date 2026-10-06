@@ -49,9 +49,9 @@ const { services } = defineProps<{
       --padding-inline: var(--space-sm);
 
       min-block-size: 2.5rem;
-      border: 1px solid var(--divider-color);
+      border: var(--border-width-thin) solid var(--divider-color);
       border-radius: var(--radius-lg);
-      background: var(--surface-bg);
+      background: var(--surface-card);
 
       & > :deep(.main) > strong {
         display: block;

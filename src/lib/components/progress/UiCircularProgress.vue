@@ -86,7 +86,7 @@ const strokeDashOffset = computed(() => 100 - normalizedValue.value)
 
       transition-property: stroke-dashoffset, stroke-dasharray, stroke-width, transform;
       transition-duration: var(--duration-lg);
-      transition-timing-function: var(--bezier-magnetic);
+      transition-timing-function: var(--bezier-emphasized);
     }
 
     & > text {

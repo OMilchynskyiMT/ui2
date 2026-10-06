@@ -10,8 +10,8 @@
       row-key="interface"
     >
       <template #cell-status="{ value }">
-        <UiIcon v-if="value" :icon="CheckIcon" :style="{ '--color': 'var(--green-500)' }" />
-        <UiIcon v-else :icon="XIcon" :style="{ '--color': 'var(--red-500)' }" />
+        <UiIcon v-if="value" :icon="CheckIcon" :style="{ '--color': 'var(--icon-color-success)' }" />
+        <UiIcon v-else :icon="XIcon" :style="{ '--color': 'var(--icon-color-danger)' }" />
       </template>
 
       <template #cell-actions>
@@ -37,8 +37,8 @@
       row-key="interface"
     >
       <template #cell-status="{ value }">
-        <UiIcon v-if="value" :icon="CheckIcon" :style="{ '--color': 'var(--green-500)' }" />
-        <UiIcon v-else :icon="XIcon" :style="{ '--color': 'var(--red-500)' }" />
+        <UiIcon v-if="value" :icon="CheckIcon" :style="{ '--color': 'var(--icon-color-success)' }" />
+        <UiIcon v-else :icon="XIcon" :style="{ '--color': 'var(--icon-color-danger)' }" />
       </template>
 
       <template #cell-raMode="{ value }">

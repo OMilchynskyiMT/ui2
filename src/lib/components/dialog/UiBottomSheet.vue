@@ -159,7 +159,7 @@ defineExpose<UiBottomSheetExposed>({ show, close, isVisible })
     display: grid;
     grid-template-rows: auto minmax(0, 1fr) auto;
     overflow: clip;
-    background-color: var(--bottom-sheet-bg, var(--surface-bg));
+    background-color: var(--bottom-sheet-bg, var(--surface-sheet));
 
     & > .header {
       min-inline-size: 0;
@@ -171,7 +171,7 @@ defineExpose<UiBottomSheetExposed>({ show, close, isVisible })
         max(var(--bottom-sheet-padding-inline, var(--space-md)), var(--safe-area-right))
         var(--bottom-sheet-padding-block, var(--space-md))
         max(var(--bottom-sheet-padding-inline, var(--space-md)), var(--safe-area-left));
-      border-block-end: 1px solid var(--divider-color);
+      border-block-end: var(--border-width-thin) solid var(--divider-color);
 
       & > .heading {
         min-inline-size: 0;
@@ -195,7 +195,7 @@ defineExpose<UiBottomSheetExposed>({ show, close, isVisible })
 
     & > .content {
       min-block-size: 0;
-      --scroll-area-fade-color: var(--bottom-sheet-bg, var(--surface-bg));
+      --scroll-area-fade-color: var(--bottom-sheet-bg, var(--surface-sheet));
 
       & .content-layout {
         padding: var(--bottom-sheet-content-padding-block, var(--space-lg))
@@ -210,7 +210,7 @@ defineExpose<UiBottomSheetExposed>({ show, close, isVisible })
         max(var(--bottom-sheet-footer-padding-inline, var(--space-md)), var(--safe-area-right))
         max(var(--bottom-sheet-footer-padding-block, var(--space-md)), var(--safe-area-bottom))
         max(var(--bottom-sheet-footer-padding-inline, var(--space-md)), var(--safe-area-left));
-      border-block-start: 1px solid var(--divider-color);
+      border-block-start: var(--border-width-thin) solid var(--divider-color);
     }
   }
 }

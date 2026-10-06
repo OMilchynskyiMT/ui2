@@ -112,7 +112,7 @@ defineExpose<UiScrollAreaExpose>({
 @layer components {
   .scroll-area {
     --scroll-area-fade-size: var(--space-xl);
-    --scroll-area-fade-color: var(--surface-bg);
+    --scroll-area-fade-color: var(--scroll-fade-color);
 
     position: relative;
     min-inline-size: 0;

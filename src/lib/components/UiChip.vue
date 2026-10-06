@@ -102,12 +102,12 @@ const { variant = 'outlined', tone = 'primary', size = 'medium', label, title } 
     }
 
     &[data-variant='outlined'] {
-      --border-width: 1px;
+      --border-width: var(--border-width-thin);
     }
 
     &[data-variant='filled'] {
       --bg: var(--accent-color);
-      --color: var(--white);
+      --color: var(--on-accent-color);
     }
 
     &[data-variant='tonal'] {

@@ -57,7 +57,7 @@ const actualIcon = computed((): Component => {
 <style scoped>
 @layer components {
   .alert {
-    --border-width: 1px;
+    --border-width: var(--border-width-thin);
     --icon-size: 1.5rem;
     --accent: var(--tone-color);
     display: grid;

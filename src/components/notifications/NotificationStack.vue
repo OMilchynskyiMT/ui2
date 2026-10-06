@@ -97,7 +97,7 @@ const timeoutStyle = (item: Notification): Record<string, string> => {
     --accent: currentColor;
     --border-width: 0px;
     --x-icon-size: 1rem;
-    --x-icon-color: var(--gray-500);
+    --x-icon-color: var(--icon-color-muted);
     --icon-size: 1.5rem;
     --progress-width: 1px;
 
@@ -181,7 +181,7 @@ const timeoutStyle = (item: Notification): Record<string, string> => {
         border-left: var(--border-width) solid var(--accent);
         padding: var(--space-sm) var(--space-sm) var(--space-sm) var(--space-md);
 
-        background-color: color-mix(in oklch, var(--surface-bg) 90%, transparent);
+        background-color: var(--background-notification);
         backdrop-filter: blur(var(--blur-size-sm));
         box-shadow: var(--shadow-sm);
         border-radius: var(--radius-lg);

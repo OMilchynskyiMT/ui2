@@ -65,7 +65,7 @@ const emit = defineEmits<{
 <style>
 @layer components {
   .popover.field-listbox-popup {
-    --bg: var(--surface-bg);
+    --bg: var(--surface-listbox);
     background-color: var(--bg);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-sm);
@@ -88,7 +88,7 @@ const emit = defineEmits<{
 
         & .value {
           font-size: var(--font-size-sm);
-          color: light-dark(oklch(from var(--gray-800) l c h / 0.5), oklch(from var(--gray-300) l c h / 0.5));
+          color: var(--text-color-quiet);
         }
       }
     }

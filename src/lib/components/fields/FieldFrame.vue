@@ -152,45 +152,44 @@ onMounted(() => {
   }
 
   .field {
-    --font-size: var(--font-size-md);
-    --line-height: 1.5;
+    --bg-hover: var(--bg);
+    --bg: transparent;
+    --border-active-color: var(--border-color-active);
+    --border-color-current: var(--border-color);
+    --border-color: var(--border-color-default);
+    --border-error-color: var(--border-color-error);
+    --border-hover-color: var(--border-color-hover);
+    --border-radius: var(--radius-md);
+    --border-width: var(--border-width-thick);
+    --container-bg: var(--bg);
     --control-height: 3rem;
+    --cursor: text;
+    --details-font-size: var(--font-size-xs);
+    --error-color: var(--error-text-color);
+    --filled-label-block-start: calc(var(--filled-label-space) / 2);
+    --filled-label-space: calc(var(--label-font-size-active) * 0.75);
+    --font-size: var(--font-size-md);
     --gap-x: var(--space-sm);
     --gap-y: var(--space-xs);
-    --padding-inline: var(--space-md);
-    --border-width: 2px;
-    --border-radius: var(--radius-md);
-    --border-color: light-dark(var(--gray-300), var(--gray-600));
-    --border-hover-color: light-dark(var(--gray-400), var(--gray-500));
-    --border-active-color: var(--blue-500);
-    --border-error-color: var(--red-500);
-    --bg: transparent;
-    --bg-hover: var(--bg);
-    --text-color: light-dark(var(--gray-900), var(--gray-100));
-    --label-color: light-dark(var(--gray-800), var(--gray-300));
-    --label-active-color: light-dark(var(--blue-600), var(--blue-300));
-    --error-color: var(--error-text-color);
-    --details-font-size: var(--font-size-xs);
     --hint-color: var(--text-color-dimmed);
-    --cursor: text;
-
-    --label-color-current: var(--label-color);
-    --label-font-size: var(--font-size);
-    --label-font-size-active: var(--font-size-xs);
-    --label-inline-start: 0px;
-    --border-color-current: var(--border-color);
-    --container-bg: var(--bg);
-    --transition-duration: var(--duration-md);
-    --transition-func: var(--bezier-smooth);
+    --label-active-color: var(--field-label-active-color);
     --label-clearance: calc(var(--label-font-size-active) / 2 - var(--border-width) / 2);
-    --filled-label-space: calc(var(--label-font-size-active) * 0.75);
-    --filled-label-block-start: calc(var(--filled-label-space) / 2);
-    --multiline-padding-block: calc(var(--padding-inline) * 0.75);
+    --label-color-current: var(--label-color);
+    --label-color: var(--text-color-secondary);
+    --label-font-size-active: var(--font-size-xs);
+    --label-font-size: var(--font-size);
+    --label-inline-start: 0px;
+    --line-height: 1.5;
     --multiline-label-block-start: calc(var(--multiline-padding-block) + var(--font-size) * 0.75);
+    --multiline-padding-block: calc(var(--padding-inline) * 0.75);
+    --opacity: 1;
+    --padding-inline: var(--space-md);
     --prefix-color: oklch(from var(--text-color) l c h / 0.5);
     --prefix-opacity: 0;
     --prefix-scale: 0.75;
-    --opacity: 1;
+    --text-color: var(--text-color-strong);
+    --transition-duration: var(--duration-md);
+    --transition-func: var(--bezier-smooth);
 
     display: flex;
     flex-direction: column;
@@ -215,7 +214,7 @@ onMounted(() => {
     &:is([data-variant='filled']) {
       --bg: color-mix(in oklch, var(--text-color) 6%, transparent);
       --bg-hover: color-mix(in oklch, var(--bg) 97%, var(--text-color) 3%);
-      --filled-border-width: max(1px, calc(var(--border-width) / 2));
+      --filled-border-width: max(var(--border-width-thin), calc(var(--border-width) / 2));
     }
   }
 

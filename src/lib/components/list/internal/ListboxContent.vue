@@ -139,7 +139,7 @@ defineExpose<ListboxContentExpose>({
 @layer components {
   .listbox-scroll {
     --max-block-size: min(16rem, var(--overlay-available-block-size, 16rem));
-    --list-bg: var(--surface-bg);
+    --list-bg: var(--surface-listbox);
 
     max-block-size: var(--max-block-size);
     border-radius: inherit;

@@ -91,7 +91,7 @@ const { label = 'Internet', online } = defineProps<{
       place-items: center;
       border-radius: var(--radius-full);
       background: var(--status-color);
-      color: var(--white);
+      color: var(--on-accent-color);
       box-shadow: 0 0 0 0.25rem var(--status-container);
     }
   }

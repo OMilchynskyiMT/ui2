@@ -154,7 +154,7 @@ watch(() => [route.fullPath, items] as const, syncExpandedItems, { immediate: tr
   --item-gap: var(--space-sm);
   --item-padding-inline: var(--space-sm);
   --item-padding-block: var(--space-sm);
-  --accent: var(--blue-500);
+  --accent: var(--brand-color);
   --padding: 0px;
 
   list-style: none;
@@ -167,7 +167,7 @@ watch(() => [route.fullPath, items] as const, syncExpandedItems, { immediate: tr
   & > li.item {
     --item-cursor: pointer;
     --item-bg: transparent;
-    --icon-color: var(--gray-500);
+    --icon-color: var(--icon-color-muted);
     --arrow-color: oklch(from currentColor l c h / 0.25);
     --indicator-color: transparent;
 
@@ -272,7 +272,7 @@ watch(() => [route.fullPath, items] as const, syncExpandedItems, { immediate: tr
         position: absolute;
         inset-block: 0;
         inset-inline-start: calc(var(--icon-size) / 2 + var(--item-gap));
-        border-inline-start: 1px dashed oklch(from currentColor l c h / 0.2);
+        border-inline-start: var(--border-width-thin) dashed oklch(from currentColor l c h / 0.2);
       }
 
       & > .navigation-tree {

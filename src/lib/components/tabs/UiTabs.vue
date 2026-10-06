@@ -247,7 +247,7 @@ watch(() => [model.value, items] as const, syncIndicator, { flush: 'post' })
       will-change: transform, width;
       transition-property: transform, width;
       transition-duration: var(--duration-lg);
-      transition-timing-function: var(--bezier-magnetic);
+      transition-timing-function: var(--bezier-emphasized);
     }
 
     & > .tab {

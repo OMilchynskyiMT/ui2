@@ -85,9 +85,9 @@ const {
 <style scoped>
 @layer components {
   .button {
-    --button-border-width: 2px;
+    --button-border-width: var(--border-width-thick);
     --button-border-radius: var(--radius-md);
-    --button-text-color: light-dark(var(--gray-900), var(--gray-100));
+    --button-text-color: var(--text-color-strong);
 
     --block-size: 2.25rem;
     --icon-block-size: 1.75rem;
@@ -178,7 +178,7 @@ const {
       place-items: center;
 
       pointer-events: none;
-      animation: progress-enter var(--duration-lg) var(--bezier-bounce);
+      animation: progress-enter var(--duration-lg) var(--bezier-emphasized);
 
       & > svg {
         --spinner-size: var(--icon-size);

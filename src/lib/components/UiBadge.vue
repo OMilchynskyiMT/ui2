@@ -33,7 +33,7 @@ const { tag = 'span', tone = 'neutral', size = 'medium', label = '' } = definePr
     padding-inline: var(--badge-padding-inline);
     border-radius: var(--radius-full);
     background-color: var(--tone-color);
-    color: var(--white);
+    color: var(--on-accent-color);
     font-size: var(--font-size-xs);
     font-weight: var(--font-weight-semibold);
     line-height: 1;

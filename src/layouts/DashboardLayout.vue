@@ -71,7 +71,7 @@
             <UiMenuButton
               :icon="TerminalIcon"
               :items="commandsOptions"
-              :menu-style="{ '--menu-icon-color': 'var(--green-600)' }"
+              :menu-style="{ '--menu-icon-color': 'var(--command-icon-color)' }"
               :offset="10"
               aria-label="Commands"
               layout="adaptive"
@@ -87,7 +87,7 @@
             <UiMenuButton
               :icon="UserIcon"
               :items="userMenuOptions"
-              :menu-style="{ '--menu-icon-color': 'var(--blue-500)' }"
+              :menu-style="{ '--menu-icon-color': 'var(--brand-color)' }"
               :offset="10"
               aria-label="User actions"
               layout="adaptive"
@@ -104,7 +104,7 @@
               <template #menu-header>
                 <UiBar style="--sections-gap: 1rem">
                   <template #leading>
-                    <UiAvatar :style="{ '--accent': 'var(--purple-500)' }" size="2rem" />
+                    <UiAvatar :style="{ '--accent': 'var(--avatar-accent-color)' }" size="2rem" />
                   </template>
 
                   <div class="user">
@@ -296,7 +296,7 @@ useViewportSizeListener(({ width }) => {
 
 .page-breadcrumbs {
   font-size: var(--font-size-xs);
-  background-color: oklch(from var(--surface-bg) l c h / 0.5);
+  background-color: var(--background-breadcrumbs);
   padding-inline: var(--space-sm);
   padding-block: var(--space-xxs);
   color: var(--text-color-dimmed);
@@ -313,8 +313,8 @@ useViewportSizeListener(({ width }) => {
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
   overflow: clip;
-  border-inline-end: 1px solid var(--divider-color);
-  background: var(--surface-bg);
+  border-inline-end: var(--border-width-thin) solid var(--divider-color);
+  background: var(--surface-navigation);
 
   transition-property: transform;
   transition-duration: var(--duration-lg);
@@ -348,7 +348,7 @@ useViewportSizeListener(({ width }) => {
   }
 
   & > .scroll {
-    --scroll-area-fade-color: var(--bg);
+    --scroll-area-fade-color: var(--surface-page);
 
     min-block-size: 0;
   }
@@ -375,7 +375,7 @@ useViewportSizeListener(({ width }) => {
 
   & > div.copyright {
     text-align: center;
-    color: var(--gray-500);
+    color: var(--text-color-dimmed);
   }
 
   & > div.links {
@@ -407,7 +407,7 @@ useViewportSizeListener(({ width }) => {
 
   .role {
     font-size: var(--font-size-sm);
-    color: var(--gray-500);
+    color: var(--text-color-dimmed);
   }
 }
 
@@ -429,7 +429,7 @@ useViewportSizeListener(({ width }) => {
       border-inline-end: 0;
       border-start-end-radius: var(--radius-xl);
       border-end-end-radius: var(--radius-xl);
-      background: var(--surface-bg);
+      background: var(--surface-navigation);
       transform: translate3d(-100%, 0, 0);
       box-shadow: var(--shadow-xl);
       will-change: transform;
@@ -468,7 +468,7 @@ useViewportSizeListener(({ width }) => {
     }
 
     & > .scroll {
-      --scroll-area-fade-color: var(--surface-bg);
+      --scroll-area-fade-color: var(--surface-navigation);
     }
   }
 }

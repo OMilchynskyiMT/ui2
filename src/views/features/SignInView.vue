@@ -7,7 +7,7 @@
       </UiStack>
 
       <div :class="{ 'has-policy': usagePolicy }" class="content">
-        <UiCard v-if="usagePolicy" class="policy-card">
+        <UiCard v-if="usagePolicy" class="policy-card" tag="article" variant="elevated">
           <UiStack aria-label="Usage policy" class="policy" gap="var(--space-xxl)" tag="section">
             <UiSectionHeader
               :icon="ScaleIcon"
@@ -22,7 +22,7 @@
           </UiStack>
         </UiCard>
 
-        <UiCard class="sign-in-card">
+        <UiCard class="sign-in-card" tag="section" variant="elevated">
           <UiStack class="sign-in-form" gap="var(--space-xxl)" tag="form" @submit.prevent="submit">
             <UiSectionHeader description="Sign in with your device credentials">Sign In</UiSectionHeader>
 
@@ -85,87 +85,77 @@ const submit = (): void => {
 </script>
 
 <style scoped>
-@layer components {
-  .sign-in-demo {
-    min-block-size: min(42rem, calc(100dvh - 10rem));
-    display: grid;
-    place-items: center;
-    padding: var(--space-xxl);
-    border: 1px solid var(--divider-color);
-    border-radius: var(--radius-lg);
-    background:
-      radial-gradient(circle at 50% 15%, oklch(from var(--tone-primary) l c h / 0.12), var(--bg) 60%),
-      url('/images/noise.svg') repeat,
-      var(--bg);
-  }
+.sign-in-demo {
+  min-block-size: min(42rem, calc(100dvh - 10rem));
+  display: grid;
+  place-items: center;
+  padding: var(--space-xxl);
+  border: 1px solid var(--divider-color);
+  border-radius: var(--radius-lg);
+  background:
+    radial-gradient(circle at 50% 15%, oklch(from var(--tone-primary) l c h / 0.12), var(--surface-page) 60%),
+    url('/images/noise.svg') repeat,
+    var(--surface-page);
+}
 
+.sign-in-panel {
+  inline-size: min(100%, 62rem);
+}
+
+.brand {
+  text-align: center;
+
+  & > img {
+    inline-size: min(13rem, 65%);
+    block-size: auto;
+  }
+}
+
+.content {
+  display: grid;
+  grid-template-columns: minmax(0, 28rem);
+  align-items: start;
+  justify-content: center;
+  gap: var(--space-xxl);
+
+  &.has-policy {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 28rem);
+  }
+}
+
+.sign-in-card,
+.policy-card {
+  --card-padding-block: var(--space-xxl);
+  --card-padding-inline: var(--space-xxl);
+}
+
+.submit {
+  inline-size: 100%;
+}
+
+.policy-content {
+  max-block-size: 15rem;
+
+  & p {
+    white-space: pre-wrap;
+    line-height: 1.6;
+  }
+}
+
+@media (width < container-token(--container-lg)) {
   .sign-in-panel {
-    inline-size: min(100%, 62rem);
+    inline-size: min(100%, 32rem);
   }
 
-  .brand {
-    text-align: center;
-
-    & > img {
-      inline-size: min(13rem, 65%);
-      block-size: auto;
-    }
+  .content.has-policy {
+    grid-template-columns: minmax(0, 1fr);
   }
+}
 
-  .content {
-    display: grid;
-    grid-template-columns: minmax(0, 28rem);
-    align-items: start;
-    justify-content: center;
-    gap: var(--space-xxl);
-
-    &.has-policy {
-      grid-template-columns: minmax(0, 1fr) minmax(0, 28rem);
-    }
-  }
-
-  .sign-in-card,
-  .policy-card {
-    --padding-block: var(--space-xxl);
-    --padding-inline: var(--space-xxl);
-    --radius: var(--radius-lg);
-    --shadow: var(--shadow-md);
-  }
-
-  .submit {
-    inline-size: 100%;
-  }
-
-  .policy-content {
-    max-block-size: 15rem;
-
-    & p {
-      white-space: pre-wrap;
-      line-height: 1.6;
-    }
-  }
-
-  @media (width < container-token(--container-lg)) {
-    .sign-in-panel {
-      inline-size: min(100%, 32rem);
-    }
-
-    .content.has-policy {
-      grid-template-columns: minmax(0, 1fr);
-    }
-  }
-
-  @media (width < container-token(--container-sm)) {
-    .sign-in-demo {
-      min-block-size: auto;
-      padding: var(--space-lg);
-    }
-
-    .sign-in-card,
-    .policy-card {
-      --padding-block: var(--space-xl);
-      --padding-inline: var(--space-xl);
-    }
+@media (width < container-token(--container-sm)) {
+  .sign-in-demo {
+    min-block-size: auto;
+    padding: var(--space-lg);
   }
 }
 </style>

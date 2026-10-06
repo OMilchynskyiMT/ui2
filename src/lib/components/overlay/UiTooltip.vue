@@ -157,8 +157,8 @@ onBeforeUnmount(() => {
     max-inline-size: min(20rem, calc(100dvw - 2rem));
     padding: var(--space-xs) var(--space-sm);
     border-radius: var(--radius-md);
-    background-color: light-dark(var(--gray-900), var(--gray-100));
-    color: light-dark(var(--gray-100), var(--gray-900));
+    background-color: var(--surface-tooltip);
+    color: var(--text-color-inverse);
     box-shadow: var(--shadow-sm);
     font-size: var(--font-size-sm);
     pointer-events: none;

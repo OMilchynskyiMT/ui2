@@ -81,7 +81,7 @@ const { customName, modelNumber, serialNumber, imei, firmwareVersion, uptime, cu
       place-items: center;
       overflow: hidden;
       border-radius: var(--radius-lg);
-      background: color-mix(in oklch, var(--tone-primary) 5%, var(--surface-bg));
+      background: color-mix(in oklch, var(--tone-primary) 5%, var(--surface-card));
 
       & > img {
         inline-size: 100%;
@@ -136,7 +136,7 @@ const { customName, modelNumber, serialNumber, imei, firmwareVersion, uptime, cu
           display: grid;
           gap: var(--space-xxs);
           padding-inline-start: var(--space-lg);
-          border-inline-start: 1px solid var(--divider-color);
+          border-inline-start: var(--border-width-thin) solid var(--divider-color);
 
           &:first-child {
             padding-inline-start: 0;
@@ -164,7 +164,7 @@ const { customName, modelNumber, serialNumber, imei, firmwareVersion, uptime, cu
         --cluster-gap: var(--space-xs) var(--space-xl);
 
         padding-block-start: var(--space-md);
-        border-block-start: 1px solid var(--divider-color);
+        border-block-start: var(--border-width-thin) solid var(--divider-color);
         color: var(--text-color-dimmed);
         font-size: var(--font-size-xs);
 

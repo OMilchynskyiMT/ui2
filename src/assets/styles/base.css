@@ -11,7 +11,7 @@ body {
   min-block-size: 100dvh;
   font: var(--font-weight-normal) var(--font-size) var(--font-sans);
   line-height: var(--line-height);
-  background-color: var(--bg);
+  background-color: var(--surface-page);
   color: var(--text-color);
 }
 

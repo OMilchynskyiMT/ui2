@@ -187,7 +187,7 @@ const toggleSort = (column: TableColumn<Row>): void => {
 <style scoped>
 div.table {
   --max-block-size: none;
-  --bg: var(--surface-bg);
+  --bg: var(--surface-table);
   --header-bg: var(--bg);
 
   --cell-padding-block: var(--space-md);
@@ -220,7 +220,7 @@ div.table {
         padding-block: var(--cell-padding-block);
         padding-inline: var(--cell-padding-inline);
         text-align: start;
-        color: light-dark(var(--cyan-800), var(--cyan-300));
+        color: var(--text-color-info);
         font-size: var(--font-size-lg);
       }
     }
@@ -298,7 +298,7 @@ div.table {
     cursor: pointer;
 
     & > .sort-indicator {
-      --color: var(--sort-indicator-color, var(--orange-500));
+      --color: var(--sort-indicator-color, var(--table-sort-indicator-color));
       --size: 1rem;
 
       flex: none;

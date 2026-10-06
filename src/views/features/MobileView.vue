@@ -181,8 +181,8 @@ const viewportData = computed<ViewportData>(() => ({
   max-block-size: 14rem;
   border: 1px solid var(--divider-color);
   border-radius: var(--radius-lg);
-  background-color: var(--surface-bg);
-  --scroll-area-fade-color: var(--surface-bg);
+  background-color: var(--surface-card);
+  --scroll-area-fade-color: var(--surface-card);
 }
 
 .scroll-demo-content > div {

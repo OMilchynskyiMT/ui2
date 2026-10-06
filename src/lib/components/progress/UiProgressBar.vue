@@ -82,10 +82,11 @@ const summarizedValue = computed((): number | undefined => {
 <style lang="css" scoped>
 @layer components {
   .linear-progress {
-    --accent: var(--blue-500);
+    --accent: var(--brand-color);
     --height: 0.25rem;
     --radius: max(1px, var(--height) / 2);
     --progress-bg: color-mix(in oklch, var(--accent) 20%, transparent);
+    --indeterminate-duration: 1.5s;
 
     position: relative;
     width: 100%;
@@ -102,7 +103,7 @@ const summarizedValue = computed((): number | undefined => {
       min-inline-size: 0;
       height: 100%;
       background: var(--indicator-color, var(--generated-color));
-      transition: flex-basis var(--duration-lg) ease;
+      transition: flex-basis var(--duration-lg) var(--bezier-smooth);
 
       &:first-child {
         --generated-color: var(--accent);
@@ -116,7 +117,7 @@ const summarizedValue = computed((): number | undefined => {
       &.indeterminate {
         position: absolute;
         width: 40%;
-        animation: indeterminate var(--duration-3xl) ease-in-out infinite;
+        animation: indeterminate var(--indeterminate-duration) ease-in-out infinite;
       }
     }
   }

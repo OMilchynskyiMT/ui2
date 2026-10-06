@@ -97,7 +97,7 @@ const internalFormatField = (field: string): string => {
     grid-column: 1 / -1;
     align-items: center;
     padding: var(--row-padding);
-    border-block-end: 1px var(--border-style) var(--divider-color);
+    border-block-end: var(--border-width-thin) var(--border-style) var(--divider-color);
 
     > .field,
     > .value {

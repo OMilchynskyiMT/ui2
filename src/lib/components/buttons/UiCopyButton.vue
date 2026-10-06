@@ -85,12 +85,12 @@ onBeforeUnmount(clearResetTimer)
 <style scoped>
 @layer components {
   button.copy {
-    --accent-color: var(--green-500);
+    --accent-color: var(--copy-accent-color);
     --outline-border-color: transparent;
     --outline-bg: transparent;
     --cover-width: 100%;
     --cover-height: 100%;
-    --shadow-opacity: transparent;
+    --feedback-shadow-color: transparent;
     --icon-size: 1.25em;
 
     -webkit-tap-highlight-color: var(--outline-bg);
@@ -143,9 +143,9 @@ onBeforeUnmount(clearResetTimer)
       width: var(--cover-width);
       height: var(--cover-height);
       border-radius: var(--radius-full);
-      box-shadow: var(--shadow-md-shape) oklch(from var(--black) l c h / var(--shadow-opacity));
+      box-shadow: 0 4px 8px -2px var(--feedback-shadow-color);
       background-color: var(--outline-bg);
-      border: 1px solid var(--outline-border-color);
+      border: var(--border-width-thin) solid var(--outline-border-color);
 
       inset-block-start: 50%;
       inset-inline-start: 50%;
@@ -154,7 +154,7 @@ onBeforeUnmount(clearResetTimer)
 
       transition-property: box-shadow, width, height, background-color, border-color;
       transition-duration: var(--duration-lg);
-      transition-timing-function: var(--bezier-bounce);
+      transition-timing-function: var(--bezier-emphasized);
     }
 
     &:focus-visible {
@@ -165,7 +165,7 @@ onBeforeUnmount(clearResetTimer)
     &.copied {
       --outline-bg: oklch(from var(--accent-color) l c h / 0.1);
       --outline-border-color: oklch(from var(--accent-color) l c h / 0.2);
-      --shadow-opacity: var(--shadow-md-opacity);
+      --feedback-shadow-color: var(--shadow-color-key);
       --cover-width: calc(100% + var(--space-sm));
       --cover-height: calc(100% + var(--space-xs));
 

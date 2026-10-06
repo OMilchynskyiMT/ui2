@@ -63,9 +63,9 @@ const open = defineModel<boolean>({ default: false })
     --summary-min-size: 12rem;
 
     overflow: clip;
-    border: 1px solid var(--border-color);
+    border: var(--border-width-thin) solid var(--border-color);
     border-radius: var(--radius-lg);
-    background-color: var(--surface-bg);
+    background-color: var(--surface-card);
 
     & > .header {
       display: flex;

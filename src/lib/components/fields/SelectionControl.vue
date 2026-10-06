@@ -139,12 +139,12 @@ defineExpose<SelectionControlExpose>({
 <style scoped>
 @layer components {
   .selection-control {
-    --control-color: var(--blue-500);
-    --control-container-color: light-dark(var(--gray-300), var(--gray-600));
+    --control-color: var(--interactive-control-color);
+    --control-container-color: var(--interactive-control-container-color);
     --control-container-hover-color: color-mix(in srgb, var(--control-container-color) 90%, currentColor);
-    --control-error-color: var(--red-500);
-    --control-mark-color: var(--surface-bg);
-    --control-text-color: light-dark(var(--gray-900), var(--gray-100));
+    --control-error-color: var(--interactive-control-error-color);
+    --control-mark-color: var(--interactive-control-mark-color);
+    --control-text-color: var(--text-color-strong);
     --control-hint-color: var(--text-color-dimmed);
     --control-error-text-color: var(--error-text-color);
     --control-font-size: var(--font-size-md);
@@ -153,7 +153,7 @@ defineExpose<SelectionControlExpose>({
     --control-size: 1.25rem;
     --control-inline-size: var(--control-size);
     --control-block-size: var(--control-size);
-    --control-radius: var(--radius-sm);
+    --control-radius: var(--radius-xs);
     --control-mark-width: max(2px, calc(var(--control-size) * 0.15));
     --control-align-offset: max(
       0px,
@@ -161,8 +161,8 @@ defineExpose<SelectionControlExpose>({
     );
     --control-opacity: 1;
     --control-cursor: pointer;
-    --control-transition-duration: var(--duration-md);
-    --control-transition-func: var(--bezier-magnetic);
+    --control-transition-duration: var(--duration-sm);
+    --control-transition-func: var(--bezier-smooth);
     --control-indicator-bg: var(--control-container-color);
 
     position: relative;
@@ -285,16 +285,16 @@ defineExpose<SelectionControlExpose>({
     }
 
     &.toggle {
-      --control-size: calc(var(--font-size-md) * 1.5);
-      --control-height: var(--control-size);
-      --control-width: calc(var(--control-height) * 1.9);
-      --control-padding: 2px;
-      --control-thumb-size: calc(var(--control-height) - var(--control-padding) * 2);
-      --control-inline-size: var(--control-width);
       --control-block-size: var(--control-height);
-      --control-thumb-color: var(--surface-bg);
-      --control-thumb-off-color: var(--surface-bg);
+      --control-height: var(--control-size);
+      --control-inline-size: var(--control-width);
+      --control-padding: 2px;
+      --control-size: calc(var(--font-size-md) * 1.5);
+      --control-thumb-color: var(--interactive-control-mark-color);
+      --control-thumb-off-color: var(--interactive-control-mark-color);
       --control-thumb-shadow: var(--shadow-xs);
+      --control-thumb-size: calc(var(--control-height) - var(--control-padding) * 2);
+      --control-width: calc(var(--control-height) * 1.9);
 
       & > .indicator {
         border-radius: var(--radius-full);

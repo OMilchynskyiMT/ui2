@@ -122,7 +122,7 @@ import TrafficOverview from '@/components/dashboard/TrafficOverview.vue'
 import type { NetworkAdapterCardProperties, NetworkBridgeCardProperties } from '@/components/dashboard/types'
 import CapacityUsage, { type CapacityUsageSegment } from '@/components/indicators/CapacityUsage.vue'
 
-const storages = ['var(--purple-600)', 'var(--teal-600)', 'var(--cyan-600)']
+const storages = ['var(--data-color-1)', 'var(--data-color-2)', 'var(--data-color-3)']
 const mebibytes = (value: number): number => value * 1024 ** 2
 const gibibytes = (value: number): number => value * 1024 ** 3
 
@@ -332,17 +332,6 @@ const services: DashboardService[] = [
 
   @media (width < container-token(--container-md)) {
     --stack-gap: var(--space-xxl);
-  }
-
-  &:deep(.card) {
-    --shadow: none;
-
-    box-shadow: var(--shadow);
-    transition: box-shadow var(--duration-md) var(--bezier-smooth);
-
-    &:hover {
-      --shadow: var(--shadow-md);
-    }
   }
 }
 </style>

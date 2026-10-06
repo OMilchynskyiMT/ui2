@@ -29,7 +29,7 @@ import UiBar from '@/lib/components/bars/UiBar.vue'
   --padding-block-start: var(--safe-area-top);
   --padding-inline-start: max(var(--space-md), var(--safe-area-left));
   --padding-inline-end: max(var(--space-md), var(--safe-area-right));
-  --bg: var(--surface-bg);
+  --bg: var(--surface-header);
   box-shadow: inset 0 -1px var(--divider-color);
   isolation: isolate;
 }

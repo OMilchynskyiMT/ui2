@@ -242,11 +242,11 @@ watch(
   .menu-scroll {
     min-block-size: 0;
     flex: 1 1 auto;
-    --scroll-area-fade-color: var(--popover-bg, var(--surface-bg));
+    --scroll-area-fade-color: var(--popover-bg, var(--scroll-fade-color));
   }
 
   .menu-list {
-    --accent: light-dark(var(--gray-600), var(--gray-400));
+    --accent: var(--icon-color-neutral);
     --item-gap: var(--space-sm);
     --item-padding-inline: var(--space-sm);
     --item-padding-block: var(--space-sm);

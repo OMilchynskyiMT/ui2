@@ -36,8 +36,8 @@ const resolvedBlockSize = computed(() => {
 <style scoped>
 @layer components {
   .skeleton {
-    --skeleton-bg: light-dark(var(--gray-200), var(--gray-700));
-    --skeleton-highlight: light-dark(var(--gray-100), var(--gray-600));
+    --skeleton-bg: var(--skeleton-color);
+    --skeleton-highlight: var(--skeleton-highlight-color);
 
     display: block;
     inline-size: var(--skeleton-inline-size);

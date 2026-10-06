@@ -156,7 +156,7 @@ onBeforeUnmount(() => settle(false))
     & > .message-scroll {
       min-block-size: 0;
       flex: 1 1 auto;
-      --scroll-area-fade-color: var(--dialog-bg, var(--surface-bg));
+      --scroll-area-fade-color: var(--dialog-bg, var(--scroll-fade-color));
 
       & .message {
         display: grid;
@@ -164,7 +164,7 @@ onBeforeUnmount(() => settle(false))
         gap: var(--message-gap, var(--space-lg));
 
         & > .message-icon {
-          --color: var(--icon-color, var(--orange-400));
+          --color: var(--icon-color, var(--confirm-icon-color));
         }
 
         & > div {
