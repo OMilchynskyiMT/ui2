@@ -1,5 +1,5 @@
 <template>
-  <UiFormGrid :columns="1">
+  <UiStack gap="var(--space-xxl)">
     <UiSectionHeader>
       Mail Log
       <template #actions>
@@ -8,7 +8,7 @@
       </template>
     </UiSectionHeader>
     <UiTable v-model:sort="sort" :columns :rows="[]" />
-  </UiFormGrid>
+  </UiStack>
 </template>
 
 <script lang="ts" setup>
@@ -16,7 +16,7 @@ import { ref } from 'vue'
 import { RefreshCwIcon, TrashIcon } from '@lucide/vue'
 
 import UiButton from '@/lib/components/buttons/UiButton.vue'
-import UiFormGrid from '@/lib/components/grid/UiFormGrid.vue'
+import UiStack from '@/lib/components/layout/UiStack.vue'
 import UiSectionHeader from '@/lib/components/section/UiSectionHeader.vue'
 import { type TableColumn, type TableSort } from '@/lib/components/table/table.types'
 import UiTable from '@/lib/components/table/UiTable.vue'

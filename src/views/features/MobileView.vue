@@ -1,36 +1,42 @@
 <template>
-  <div class="mobile-examples">
-    <section>
+  <UiStack class="mobile-examples" gap="var(--space-xxl)">
+    <UiStack align="start" gap="var(--space-md)" tag="section">
       <UiSectionHeader description="Responsive action rows with mobile safe-area handling">
         Bottom actions
       </UiSectionHeader>
 
       <UiCard class="actions-demo">
-        <p>
-          Resize the viewport below the medium breakpoint. The action area becomes sticky and can expand its actions
-          when
-          <code>adaptive</code> is enabled.
-        </p>
+        <UiStack gap="var(--space-xl)">
+          <p>
+            Resize the viewport below the medium breakpoint. The action area becomes sticky and can expand its actions
+            when
+            <code>adaptive</code> is enabled.
+          </p>
 
-        <UiBottomActions adaptive>
-          <UiButton tone="neutral" variant="tonal">Cancel</UiButton>
-          <UiButton :icon="CheckIcon" tone="primary">Save changes</UiButton>
-        </UiBottomActions>
+          <UiBottomActions adaptive>
+            <UiButton tone="neutral" variant="tonal">Cancel</UiButton>
+            <UiButton :icon="CheckIcon" tone="primary">Save changes</UiButton>
+          </UiBottomActions>
+        </UiStack>
       </UiCard>
-    </section>
+    </UiStack>
 
-    <section>
+    <UiStack align="start" gap="var(--space-md)" tag="section">
       <UiSectionHeader description="Measured action overflow without viewport breakpoints">
         Adaptive actions
       </UiSectionHeader>
 
       <UiCard class="adaptive-actions-demo">
-        <p>The highest-priority actions remain visible while actions that no longer fit move into the overflow menu.</p>
-        <UiAdaptiveActions :items="adaptiveActions" aria-label="Example adaptive actions" />
+        <UiStack gap="var(--space-xl)">
+          <p>
+            The highest-priority actions remain visible while actions that no longer fit move into the overflow menu.
+          </p>
+          <UiAdaptiveActions :items="adaptiveActions" aria-label="Example adaptive actions" />
+        </UiStack>
       </UiCard>
-    </section>
+    </UiStack>
 
-    <section>
+    <UiStack align="start" gap="var(--space-md)" tag="section">
       <UiSectionHeader description="Modal mobile surface built on the common dialog infrastructure">
         Bottom sheet
       </UiSectionHeader>
@@ -44,7 +50,7 @@
         description="The sheet keeps its header and actions outside the scrolling content region."
         title="Connection settings"
       >
-        <div class="sheet-form">
+        <UiStack class="sheet-form" gap="var(--space-lg)">
           <UiTextField v-model="sheetForm.hostname" label="Hostname" />
           <UiTextField v-model="sheetForm.username" label="Username" />
           <UiPasswordField v-model="sheetForm.password" label="Password" />
@@ -52,7 +58,7 @@
           <p class="hint">
             Focus a field on a phone to see the Visual Viewport values update while the software keyboard is open.
           </p>
-        </div>
+        </UiStack>
 
         <template #actions="{ close }">
           <UiBottomActions adaptive>
@@ -61,9 +67,9 @@
           </UiBottomActions>
         </template>
       </UiBottomSheet>
-    </section>
+    </UiStack>
 
-    <section>
+    <UiStack align="start" gap="var(--space-md)" tag="section">
       <UiSectionHeader description="Reusable vertical scrolling with edge fades and stable scrollbar layout">
         Scroll area
       </UiSectionHeader>
@@ -73,13 +79,13 @@
           <div v-for="item in scrollItems" :key="item">Scrollable item {{ item }}</div>
         </div>
       </UiScrollArea>
-    </section>
+    </UiStack>
 
-    <section>
+    <UiStack align="start" gap="var(--space-md)" tag="section">
       <UiSectionHeader description="Reactive browser Visual Viewport measurements"> Visual viewport </UiSectionHeader>
       <UiPropertyList :data="viewportData" :items="viewportItems" />
-    </section>
-  </div>
+    </UiStack>
+  </UiStack>
 </template>
 
 <script lang="ts" setup>
@@ -101,6 +107,7 @@ import UiTextField from '@/lib/components/fields/UiTextField.vue'
 import UiAdaptiveActions, { type UiAdaptiveAction } from '@/lib/components/layout/UiAdaptiveActions.vue'
 import UiBottomActions from '@/lib/components/layout/UiBottomActions.vue'
 import UiScrollArea from '@/lib/components/layout/UiScrollArea.vue'
+import UiStack from '@/lib/components/layout/UiStack.vue'
 import UiPropertyList, { type Item as PropertyListItem } from '@/lib/components/list/UiPropertyList.vue'
 import UiCard from '@/lib/components/section/UiCard.vue'
 import UiSectionHeader from '@/lib/components/section/UiSectionHeader.vue'
@@ -149,39 +156,24 @@ const viewportData = computed<ViewportData>(() => ({
 </script>
 
 <style scoped>
-.mobile-examples {
-  display: grid;
-  gap: var(--space-xxl);
-
-  & > section {
-    min-inline-size: 0;
-    display: grid;
-    justify-items: start;
-    gap: var(--space-md);
-    inline-size: min(100%, 52rem);
-  }
+.mobile-examples > section {
+  inline-size: min(100%, 52rem);
 }
 
 .actions-demo,
 .adaptive-actions-demo {
   inline-size: 100%;
-  display: grid;
-  gap: var(--space-xl);
   padding: var(--space-lg);
-
-  & > p {
-    color: var(--text-color-dimmed);
-  }
 }
 
-.sheet-form {
-  display: grid;
-  gap: var(--space-lg);
+.actions-demo p,
+.adaptive-actions-demo p,
+.sheet-form > .hint {
+  color: var(--text-color-dimmed);
+}
 
-  & > .hint {
-    color: var(--text-color-dimmed);
-    font-size: var(--font-size-sm);
-  }
+.sheet-form > .hint {
+  font-size: var(--font-size-sm);
 }
 
 .scroll-demo {
@@ -193,16 +185,12 @@ const viewportData = computed<ViewportData>(() => ({
   --scroll-area-fade-color: var(--surface-bg);
 }
 
-.scroll-demo-content {
-  display: grid;
+.scroll-demo-content > div {
+  padding: var(--space-sm) var(--space-md);
+  border-block-end: 1px solid var(--divider-color);
 
-  & > div {
-    padding: var(--space-sm) var(--space-md);
-    border-block-end: 1px solid var(--divider-color);
-
-    &:last-child {
-      border-block-end: 0;
-    }
+  &:last-child {
+    border-block-end: 0;
   }
 }
 </style>

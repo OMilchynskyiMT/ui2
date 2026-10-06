@@ -1,28 +1,30 @@
 <template>
-  <div class="inputs-view">
-    <section>
+  <UiStack gap="var(--space-xxl)">
+    <UiStack gap="var(--space-xl)" tag="section">
       <UiSectionHeader description="Text entry states, adornments, supporting text, and read-only behavior">
         Text fields
       </UiSectionHeader>
 
-      <UiFormGrid>
+      <UiGrid :columns="{ base: 1, medium: 2 }" gap="var(--space-xxl)">
         <UiTextField v-model="inputModel" label="Regular text field" title="Test title" />
         <UiTextField v-model="inputModel" label="With prefix and suffix" prefix="$" suffix=".00" />
 
         <UiTextField v-model="inputModel" disabled label="Disabled" />
         <UiTextField v-model="inputModel" label="Read only" readonly />
 
-        <UiTextField v-model="inputModel" class="grid-full" label="With error and hint" prefix="$" suffix=".00">
-          <template #leading>
-            <UiIcon :icon="MailPlusIcon" style="color: var(--green-500)" />
-          </template>
-          <template #hint>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste veritatis laborum amet quasi esse praesentium,
-            nesciunt possimus error odio omnis, itaque accusantium ab sapiente porro facere eaque eligendi, architecto
-            officia?
-          </template>
-          <template #error>Lorem ipsum dolor sit amet consectetur adipisicing elit.</template>
-        </UiTextField>
+        <UiGridItem span="full">
+          <UiTextField v-model="inputModel" label="With error and hint" prefix="$" suffix=".00">
+            <template #leading>
+              <UiIcon :icon="MailPlusIcon" style="color: var(--green-500)" />
+            </template>
+            <template #hint>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste veritatis laborum amet quasi esse
+              praesentium, nesciunt possimus error odio omnis, itaque accusantium ab sapiente porro facere eaque
+              eligendi, architecto officia?
+            </template>
+            <template #error>Lorem ipsum dolor sit amet consectetur adipisicing elit.</template>
+          </UiTextField>
+        </UiGridItem>
 
         <UiTextField v-model="inputModel" label="With spinner" placeholder="Loading...">
           <template #leading>
@@ -35,17 +37,17 @@
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste veritatis laborum amet quasi esse praesentium
           </template>
         </UiTextField>
-      </UiFormGrid>
-    </section>
+      </UiGrid>
+    </UiStack>
 
-    <section>
+    <UiStack gap="var(--space-xl)" tag="section">
       <UiSectionHeader
         description="Variant and size are independent presentation controls and keep outlined/medium defaults"
       >
         Field presentation
       </UiSectionHeader>
 
-      <UiFormGrid>
+      <UiGrid :columns="{ base: 1, medium: 2 }" gap="var(--space-xxl)">
         <UiSearchField v-model="searchModel" hint="Default outlined, medium search field" />
         <UiSearchField
           v-model="searchModel"
@@ -75,15 +77,15 @@
           size="small"
           variant="filled"
         />
-      </UiFormGrid>
-    </section>
+      </UiGrid>
+    </UiStack>
 
-    <section>
+    <UiStack gap="var(--space-xl)" tag="section">
       <UiSectionHeader description="Numeric, password, temporal, and color-specific field behavior">
         Specialized fields
       </UiSectionHeader>
 
-      <UiFormGrid>
+      <UiGrid :columns="{ base: 1, medium: 2 }" gap="var(--space-xxl)">
         <UiNumberField
           v-model="numberModel"
           :max="10"
@@ -103,15 +105,15 @@
         <UiColorField v-model="colorModel" label="Color picker" suffix="hex">
           <template #hint>Current value: {{ colorModel }}</template>
         </UiColorField>
-      </UiFormGrid>
-    </section>
+      </UiGrid>
+    </UiStack>
 
-    <section>
+    <UiStack gap="var(--space-xl)" tag="section">
       <UiSectionHeader description="Single- and multi-value selection fields with grouped options and custom values">
         Selection fields
       </UiSectionHeader>
 
-      <UiFormGrid>
+      <UiGrid :columns="{ base: 1, medium: 2 }" gap="var(--space-xxl)">
         <UiCombobox
           v-model="comboModel"
           :create-custom-value="value => value"
@@ -133,15 +135,15 @@
             <UiIcon :icon="EthernetPortIcon" style="color: var(--indigo-600)" />
           </template>
         </UiSelect>
-      </UiFormGrid>
-    </section>
+      </UiGrid>
+    </UiStack>
 
-    <section>
+    <UiStack gap="var(--space-xl)" tag="section">
       <UiSectionHeader description="Boolean and mutually-exclusive selection controls">
         Choice controls
       </UiSectionHeader>
 
-      <UiFormGrid :columns="{ small: 1, medium: 2, large: 3 }">
+      <UiGrid :columns="{ base: 1, medium: 2, large: 3 }" gap="var(--space-xxl)">
         <UiCheckbox v-model="checkboxModel" label="Checkbox" />
         <UiCheckbox
           v-model="checkboxModel"
@@ -151,14 +153,15 @@
         />
         <UiCheckbox v-model="indeterminateModel" indeterminate label="Indeterminate checkbox" />
 
-        <UiRadioGroup
-          v-model="radioModel"
-          :options="radioOptions"
-          class="grid-full"
-          hint="Select the protocol used by this service"
-          label="Protocol"
-          orientation="horizontal"
-        />
+        <UiGridItem span="full">
+          <UiRadioGroup
+            v-model="radioModel"
+            :options="radioOptions"
+            hint="Select the protocol used by this service"
+            label="Protocol"
+            orientation="horizontal"
+          />
+        </UiGridItem>
 
         <UiSwitch v-model="toggleModel" label="Toggle" />
         <UiSwitch
@@ -167,15 +170,15 @@
           label="Custom toggle"
           style="--control-color: var(--teal-500)"
         />
-      </UiFormGrid>
-    </section>
+      </UiGrid>
+    </UiStack>
 
-    <section>
+    <UiStack gap="var(--space-xl)" tag="section">
       <UiSectionHeader description="Fixed-height and auto-growing multiline text entry">
         Multiline fields
       </UiSectionHeader>
 
-      <UiFormGrid>
+      <UiGrid :columns="{ base: 1, medium: 2 }" gap="var(--space-xxl)">
         <UiTextarea v-model="textareaModel" counter hint="Lorem ipsum dolor sit amet" label="Textarea">
           <template #leading>
             <UiIcon :icon="MailPlusIcon" style="color: var(--green-500)" />
@@ -193,15 +196,15 @@
             <UiIcon :icon="MailPlusIcon" style="color: var(--green-500)" />
           </template>
         </UiTextarea>
-      </UiFormGrid>
-    </section>
+      </UiGrid>
+    </UiStack>
 
-    <section>
+    <UiStack gap="var(--space-xl)" tag="section">
       <UiSectionHeader description="Schema-backed validation mapped into field error presentation">
         Validation
       </UiSectionHeader>
 
-      <UiFormGrid :columns="1">
+      <UiStack gap="var(--space-xxl)">
         <UiTextField
           v-model="validationModel.email"
           :error="validation.errors.value.email?.at(0)"
@@ -212,15 +215,15 @@
             <UiButton size="small" tone="warning" variant="tonal" @click="validation.validate">Validate</UiButton>
           </template>
         </UiTextField>
-      </UiFormGrid>
-    </section>
+      </UiStack>
+    </UiStack>
 
-    <section>
+    <UiStack gap="var(--space-xl)" tag="section">
       <UiSectionHeader description="Compact field and drag-and-drop presentations for file selection">
         File upload
       </UiSectionHeader>
 
-      <UiFormGrid>
+      <UiGrid :columns="{ base: 1, medium: 2 }" gap="var(--space-xxl)">
         <UiFilePicker
           v-model="fileModel"
           accept="image/*"
@@ -230,20 +233,21 @@
           label="File upload"
           multiple
         />
-        <UiFilePicker
-          v-model="fileModel"
-          accept="image/*"
-          accept-text="Images only"
-          area-text="Drag and drop files here or click to upload"
-          class="grid-full"
-          hint="Lorem ipsum dolor sit amet"
-          label="File upload (area)"
-          multiple
-          variant="area"
-        />
-      </UiFormGrid>
-    </section>
-  </div>
+        <UiGridItem span="full">
+          <UiFilePicker
+            v-model="fileModel"
+            accept="image/*"
+            accept-text="Images only"
+            area-text="Drag and drop files here or click to upload"
+            hint="Lorem ipsum dolor sit amet"
+            label="File upload (area)"
+            multiple
+            variant="area"
+          />
+        </UiGridItem>
+      </UiGrid>
+    </UiStack>
+  </UiStack>
 </template>
 
 <script lang="ts" setup>
@@ -263,7 +267,9 @@ import UiSelect from '@/lib/components/fields/UiSelect.vue'
 import UiSwitch from '@/lib/components/fields/UiSwitch.vue'
 import UiTextarea from '@/lib/components/fields/UiTextarea.vue'
 import UiTextField from '@/lib/components/fields/UiTextField.vue'
-import UiFormGrid from '@/lib/components/grid/UiFormGrid.vue'
+import UiGrid from '@/lib/components/grid/UiGrid.vue'
+import UiGridItem from '@/lib/components/grid/UiGridItem.vue'
+import UiStack from '@/lib/components/layout/UiStack.vue'
 import type { ListboxEntry, ListboxOption } from '@/lib/components/list/listbox.types'
 import UiSpinner from '@/lib/components/progress/UiSpinner.vue'
 import UiSectionHeader from '@/lib/components/section/UiSectionHeader.vue'
@@ -340,17 +346,3 @@ const selectOptions: ListboxEntry<string>[] = [
   },
 ]
 </script>
-
-<style scoped>
-.inputs-view {
-  min-inline-size: 0;
-  display: grid;
-  gap: var(--space-xxl);
-
-  & > section {
-    min-inline-size: 0;
-    display: grid;
-    gap: var(--space-xl);
-  }
-}
-</style>

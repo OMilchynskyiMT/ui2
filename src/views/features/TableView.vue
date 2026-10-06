@@ -1,6 +1,6 @@
 <template>
-  <div class="table-view">
-    <section>
+  <UiStack gap="var(--space-xl)">
+    <UiStack gap="var(--space-xl)" tag="section">
       <UiSectionHeader description="Sortable data with sticky headers and responsive detail-column behavior">
         Responsive table
       </UiSectionHeader>
@@ -21,13 +21,14 @@
           {{ value ? 'Active' : 'Inactive' }}
         </template>
       </UiTable>
-    </section>
-  </div>
+    </UiStack>
+  </UiStack>
 </template>
 
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue'
 
+import UiStack from '@/lib/components/layout/UiStack.vue'
 import UiSectionHeader from '@/lib/components/section/UiSectionHeader.vue'
 import type { TableColumn, TableSort } from '@/lib/components/table/table.types'
 import UiTable from '@/lib/components/table/UiTable.vue'
@@ -90,11 +91,3 @@ onMounted(() => {
   }, 3000)
 })
 </script>
-
-<style scoped>
-.table-view > section {
-  min-inline-size: 0;
-  display: grid;
-  gap: var(--space-xl);
-}
-</style>

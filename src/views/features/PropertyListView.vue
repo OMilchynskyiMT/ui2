@@ -1,6 +1,6 @@
 <template>
-  <div class="property-list-view">
-    <section>
+  <UiStack gap="var(--space-xl)">
+    <UiStack class="property-section" gap="var(--space-xl)" tag="section">
       <UiSectionHeader description="Key/value data with per-field rendering overrides and reusable inline actions">
         Property list
       </UiSectionHeader>
@@ -18,14 +18,15 @@
           {{ value }}
         </template>
       </UiPropertyList>
-    </section>
-  </div>
+    </UiStack>
+  </UiStack>
 </template>
 
 <script lang="ts" setup>
 import { UserIcon } from '@lucide/vue'
 
 import UiCopyButton from '@/lib/components/buttons/UiCopyButton.vue'
+import UiStack from '@/lib/components/layout/UiStack.vue'
 import UiPropertyList, { type Item as PropertyListItem } from '@/lib/components/list/UiPropertyList.vue'
 import UiSectionHeader from '@/lib/components/section/UiSectionHeader.vue'
 import UiIcon from '@/lib/components/UiIcon.vue'
@@ -47,10 +48,7 @@ const items = [
 </script>
 
 <style scoped>
-.property-list-view > section {
-  min-inline-size: 0;
-  display: grid;
-  gap: var(--space-xl);
+.property-section {
   inline-size: min(100%, var(--container-lg));
 }
 </style>

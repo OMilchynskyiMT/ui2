@@ -1,14 +1,14 @@
 <template>
   <section class="sign-in-demo">
-    <div class="sign-in-panel">
-      <header class="brand">
+    <UiStack class="sign-in-panel" gap="calc(var(--space-xxl) * 1.5)">
+      <UiStack align="center" class="brand" gap="var(--space-lg)" tag="header">
         <img v-if="resolvedScheme === 'light'" alt="MultiTech" src="/images/MT-logo.svg" />
         <img v-else alt="MultiTech" src="/images/MT-logo-light.svg" />
-      </header>
+      </UiStack>
 
       <div :class="{ 'has-policy': usagePolicy }" class="content">
         <UiCard v-if="usagePolicy" class="policy-card">
-          <section aria-label="Usage policy" class="policy">
+          <UiStack aria-label="Usage policy" class="policy" gap="var(--space-xxl)" tag="section">
             <UiSectionHeader
               :icon="ScaleIcon"
               description="Review the policy for use of this device before signing in."
@@ -19,18 +19,18 @@
             <UiScrollArea class="policy-content" fade-edges overscroll="contain">
               <p>{{ usagePolicy }}</p>
             </UiScrollArea>
-          </section>
+          </UiStack>
         </UiCard>
 
         <UiCard class="sign-in-card">
-          <form class="sign-in-form" @submit.prevent="submit">
+          <UiStack class="sign-in-form" gap="var(--space-xxl)" tag="form" @submit.prevent="submit">
             <UiSectionHeader description="Sign in with your device credentials">Sign In</UiSectionHeader>
 
             <UiAlert v-if="submitted" tone="info">
               This is a component demo. No authentication request was sent.
             </UiAlert>
 
-            <div class="fields">
+            <UiStack class="fields" gap="var(--space-lg)">
               <UiTextField
                 v-model="username"
                 autocapitalize="none"
@@ -45,13 +45,13 @@
               </UiTextField>
 
               <UiPasswordField v-model="password" autocomplete="current-password" label="Password" required />
-            </div>
+            </UiStack>
 
             <UiButton :icon="LogInIcon" class="submit" type="submit">Sign in</UiButton>
-          </form>
+          </UiStack>
         </UiCard>
       </div>
-    </div>
+    </UiStack>
   </section>
 </template>
 
@@ -63,6 +63,7 @@ import UiButton from '@/lib/components/buttons/UiButton.vue'
 import UiPasswordField from '@/lib/components/fields/UiPasswordField.vue'
 import UiTextField from '@/lib/components/fields/UiTextField.vue'
 import UiScrollArea from '@/lib/components/layout/UiScrollArea.vue'
+import UiStack from '@/lib/components/layout/UiStack.vue'
 import UiCard from '@/lib/components/section/UiCard.vue'
 import UiSectionHeader from '@/lib/components/section/UiSectionHeader.vue'
 import UiAlert from '@/lib/components/status/UiAlert.vue'
@@ -99,35 +100,15 @@ const submit = (): void => {
   }
 
   .sign-in-panel {
-    display: grid;
-    gap: calc(var(--space-xxl) * 1.5);
     inline-size: min(100%, 62rem);
   }
 
   .brand {
-    display: grid;
-    justify-items: center;
-    gap: var(--space-lg);
     text-align: center;
 
     & > img {
       inline-size: min(13rem, 65%);
       block-size: auto;
-    }
-  }
-
-  .product {
-    display: grid;
-    gap: var(--space-xs);
-
-    & > strong {
-      font-size: var(--font-size-lg);
-      font-weight: var(--font-weight-semibold);
-    }
-
-    & > span {
-      color: var(--text-color-dimmed);
-      font-size: var(--font-size-sm);
     }
   }
 
@@ -149,17 +130,6 @@ const submit = (): void => {
     --padding-inline: var(--space-xxl);
     --radius: var(--radius-lg);
     --shadow: var(--shadow-md);
-  }
-
-  .sign-in-form,
-  .policy {
-    display: grid;
-    gap: var(--space-xxl);
-  }
-
-  .fields {
-    display: grid;
-    gap: var(--space-lg);
   }
 
   .submit {

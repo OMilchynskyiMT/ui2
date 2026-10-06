@@ -1,34 +1,34 @@
 <template>
-  <div class="alerts-view">
-    <section>
+  <UiStack gap="var(--space-xxl)">
+    <UiStack gap="var(--space-xl)" tag="section">
       <UiSectionHeader description="Feedback tones with the default icon and full message content">
         Alerts
       </UiSectionHeader>
 
-      <UiFormGrid :columns="{ small: 1, large: 2 }">
+      <UiGrid :columns="{ base: 1, large: 2 }" gap="var(--space-xxl)">
         <UiAlert v-for="tone in tones" :key="`default-${tone}`" :tone>
           {{ tone }}. Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum provident accusamus cumque
           dolore cum neque eligendi laudantium, reprehenderit, delectus sequi fuga officiis adipisci consectetur maxime
           numquam temporibus, vitae veritatis ut.
         </UiAlert>
-      </UiFormGrid>
-    </section>
+      </UiGrid>
+    </UiStack>
 
-    <section>
+    <UiStack gap="var(--space-xl)" tag="section">
       <UiSectionHeader description="Iconless alerts and alerts with custom icon/action content">
         Variants
       </UiSectionHeader>
 
-      <div class="variant-group">
+      <UiStack class="variant-group" gap="var(--space-md)">
         <strong>Without icons</strong>
-        <UiFormGrid :columns="{ small: 1, large: 2 }">
+        <UiGrid :columns="{ base: 1, large: 2 }" gap="var(--space-xxl)">
           <UiAlert v-for="tone in tones" :key="`no-icon-${tone}`" :icon="false" :tone>{{ tone }}</UiAlert>
-        </UiFormGrid>
-      </div>
+        </UiGrid>
+      </UiStack>
 
-      <div class="variant-group">
+      <UiStack class="variant-group" gap="var(--space-md)">
         <strong>Custom icon and action</strong>
-        <UiFormGrid :columns="{ small: 1, large: 2 }">
+        <UiGrid :columns="{ base: 1, large: 2 }" gap="var(--space-xxl)">
           <UiAlert v-for="tone in tones" :key="`custom-${tone}`" :tone>
             {{ tone }}. Custom icon.
             <template #icon>
@@ -38,18 +38,18 @@
               <UiButton size="small" tone="neutral">Action</UiButton>
             </template>
           </UiAlert>
-        </UiFormGrid>
-      </div>
-    </section>
+        </UiGrid>
+      </UiStack>
+    </UiStack>
 
-    <section>
+    <UiStack gap="var(--space-xl)" tag="section">
       <UiSectionHeader
         description="Loading, error, empty, and ready states rendered through a single boundary component"
       >
         Async state
       </UiSectionHeader>
 
-      <UiFormGrid>
+      <UiGrid :columns="{ base: 1, medium: 2 }" gap="var(--space-xxl)">
         <UiCard class="state-example">
           <UiAsyncState loading />
         </UiCard>
@@ -75,9 +75,9 @@
             <UiAlert tone="success">Content is ready.</UiAlert>
           </UiAsyncState>
         </UiCard>
-      </UiFormGrid>
-    </section>
-  </div>
+      </UiGrid>
+    </UiStack>
+  </UiStack>
 </template>
 
 <script lang="ts" setup>
@@ -85,7 +85,8 @@ import { InboxIcon, LockKeyholeOpenIcon } from '@lucide/vue'
 
 import UiButton from '@/lib/components/buttons/UiButton.vue'
 import type { FeedbackTone } from '@/lib/components/component.types'
-import UiFormGrid from '@/lib/components/grid/UiFormGrid.vue'
+import UiGrid from '@/lib/components/grid/UiGrid.vue'
+import UiStack from '@/lib/components/layout/UiStack.vue'
 import UiCard from '@/lib/components/section/UiCard.vue'
 import UiSectionHeader from '@/lib/components/section/UiSectionHeader.vue'
 import UiAlert from '@/lib/components/status/UiAlert.vue'
@@ -98,27 +99,10 @@ const demoError = new Error('Unable to load data')
 </script>
 
 <style scoped>
-.alerts-view {
-  min-inline-size: 0;
-  display: grid;
-  gap: var(--space-xxl);
-
-  & > section {
-    min-inline-size: 0;
-    display: grid;
-    gap: var(--space-xl);
-  }
-}
-
-.variant-group {
-  display: grid;
-  gap: var(--space-md);
-
-  & > strong {
-    color: var(--text-color-dimmed);
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-semibold);
-  }
+.variant-group > strong {
+  color: var(--text-color-dimmed);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
 }
 
 .state-example {

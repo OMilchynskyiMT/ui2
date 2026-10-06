@@ -4,9 +4,9 @@
     :style="{
       '--layout-align': align,
       '--layout-justify': resolveLayoutJustify(justify),
-      '--cluster-gap': gap,
+      '--inline-gap': gap,
     }"
-    class="cluster"
+    class="inline"
   >
     <slot />
   </component>
@@ -15,7 +15,7 @@
 <script lang="ts">
 import type { InlineLayoutAlign, LayoutJustify } from './layout.types'
 
-export type UiClusterProperties = {
+export type UiInlineProperties = {
   tag?: string
   align?: InlineLayoutAlign
   justify?: LayoutJustify
@@ -26,17 +26,17 @@ export type UiClusterProperties = {
 <script lang="ts" setup>
 import { resolveLayoutJustify } from './layout.types'
 
-const { align = 'center', justify = 'start', tag = 'div', gap } = defineProps<UiClusterProperties>()
+const { tag = 'div', align = 'center', justify = 'start', gap } = defineProps<UiInlineProperties>()
 </script>
 
 <style scoped>
 @layer components {
-  .cluster {
+  .inline {
     min-inline-size: 0;
     max-inline-size: 100%;
     display: flex;
-    flex-wrap: wrap;
-    gap: var(--cluster-gap, var(--space-sm));
+    flex-wrap: nowrap;
+    gap: var(--inline-gap, var(--space-sm));
     align-items: var(--layout-align);
     justify-content: var(--layout-justify);
 

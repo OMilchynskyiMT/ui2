@@ -1,6 +1,6 @@
 <template>
-  <div class="charts-view">
-    <section>
+  <UiStack gap="var(--space-xl)">
+    <UiStack gap="var(--space-xl)" tag="section">
       <UiSectionHeader description="Responsive bar chart with application-owned data and formatters">
         Network traffic
       </UiSectionHeader>
@@ -13,11 +13,12 @@
           label="Received and transmitted network traffic by day"
         />
       </div>
-    </section>
-  </div>
+    </UiStack>
+  </UiStack>
 </template>
 
 <script lang="ts" setup>
+import UiStack from '@/lib/components/layout/UiStack.vue'
 import UiSectionHeader from '@/lib/components/section/UiSectionHeader.vue'
 import { formatBytes } from '@/lib/format/bytes'
 import { Chart } from '@/components/chart'
@@ -69,12 +70,6 @@ const formatTrafficBytes = (value: number): string => formatBytes(value, { unitS
 </script>
 
 <style scoped>
-.charts-view > section {
-  min-inline-size: 0;
-  display: grid;
-  gap: var(--space-xl);
-}
-
 .chart {
   inline-size: min(100%, var(--container-xl));
   block-size: clamp(16rem, 50vw, 24rem);

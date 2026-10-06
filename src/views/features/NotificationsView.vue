@@ -1,6 +1,6 @@
 <template>
-  <div class="notifications-view">
-    <section>
+  <UiStack gap="var(--space-xxl)">
+    <UiStack gap="var(--space-xl)" tag="section">
       <UiSectionHeader description="Immediate notifications for each feedback tone and a custom icon/title example">
         Notifications
       </UiSectionHeader>
@@ -22,9 +22,9 @@
           Custom
         </UiButton>
       </UiCluster>
-    </section>
+    </UiStack>
 
-    <section>
+    <UiStack gap="var(--space-xl)" tag="section">
       <UiSectionHeader description="Timed notifications with progress indication and optional title/icon content">
         Timeouts
       </UiSectionHeader>
@@ -59,8 +59,8 @@
           Info with timeout
         </UiButton>
       </UiCluster>
-    </section>
-  </div>
+    </UiStack>
+  </UiStack>
 </template>
 
 <script lang="ts" setup>
@@ -68,22 +68,9 @@ import { ClockCheckIcon } from '@lucide/vue'
 
 import UiButton from '@/lib/components/buttons/UiButton.vue'
 import UiCluster from '@/lib/components/layout/UiCluster.vue'
+import UiStack from '@/lib/components/layout/UiStack.vue'
 import UiSectionHeader from '@/lib/components/section/UiSectionHeader.vue'
 import { useNotifications } from '@/components/notifications'
 
 const { error, warning, success, info, notify } = useNotifications()
 </script>
-
-<style scoped>
-.notifications-view {
-  min-inline-size: 0;
-  display: grid;
-  gap: var(--space-xxl);
-
-  & > section {
-    min-inline-size: 0;
-    display: grid;
-    gap: var(--space-xl);
-  }
-}
-</style>

@@ -1,6 +1,6 @@
 <template>
-  <div class="menu-view">
-    <section>
+  <UiStack gap="var(--space-xl)">
+    <UiStack align="start" gap="var(--space-xl)" tag="section">
       <UiSectionHeader description="Action menu with icons, typed values, and selection feedback">
         Menu button
       </UiSectionHeader>
@@ -17,14 +17,15 @@
       </UiMenuButton>
 
       <div v-if="selected" class="result">Selected: {{ selected }}</div>
-    </section>
-  </div>
+    </UiStack>
+  </UiStack>
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue'
 import { LogOutIcon, PaletteIcon, SaveIcon } from '@lucide/vue'
 
+import UiStack from '@/lib/components/layout/UiStack.vue'
 import type { UiMenuItem } from '@/lib/components/menu/UiMenu.vue'
 import UiMenuButton from '@/lib/components/menu/UiMenuButton.vue'
 import UiSectionHeader from '@/lib/components/section/UiSectionHeader.vue'
@@ -38,13 +39,6 @@ const menuItems: UiMenuItem<string>[] = [
 </script>
 
 <style scoped>
-.menu-view > section {
-  min-inline-size: 0;
-  display: grid;
-  justify-items: start;
-  gap: var(--space-xl);
-}
-
 .result {
   color: var(--text-color-dimmed);
   font-size: var(--font-size-sm);

@@ -1,5 +1,5 @@
 <template>
-  <div style="display: grid; gap: var(--space-xl)">
+  <UiStack gap="var(--space-xl)">
     <UiTable
       v-model:sort="sortV4"
       :columns="dhcpV4Columns"
@@ -61,7 +61,7 @@
     <UiConfirmDialog ref="confirm-delete-dialog" accept-text="Remove">
       Are you sure you want to remove this DHCP server?
     </UiConfirmDialog>
-  </div>
+  </UiStack>
 </template>
 
 <script lang="ts" setup>
@@ -70,6 +70,7 @@ import { CheckIcon, PencilIcon, TrashIcon, XIcon } from '@lucide/vue'
 
 import UiButton from '@/lib/components/buttons/UiButton.vue'
 import UiConfirmDialog, { type Exposed as ConfirmExposed } from '@/lib/components/dialog/UiConfirmDialog.vue'
+import UiStack from '@/lib/components/layout/UiStack.vue'
 import type { TableColumn, TableSort } from '@/lib/components/table/table.types'
 import UiTable from '@/lib/components/table/UiTable.vue'
 import UiBadge from '@/lib/components/UiBadge.vue'

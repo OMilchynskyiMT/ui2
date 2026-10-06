@@ -1,11 +1,11 @@
 <template>
-  <div class="progress-view">
-    <section>
+  <UiStack gap="var(--space-xxl)">
+    <UiStack gap="var(--space-xl)" tag="section">
       <UiSectionHeader description="Determinate circular progress at representative component sizes">
         Circular progress
       </UiSectionHeader>
 
-      <UiCluster align="center" class="samples">
+      <UiCluster align="center" gap="var(--space-xl)">
         <UiCircularProgress
           v-for="size in progressSizes"
           :key="size"
@@ -15,14 +15,14 @@
           style="color: var(--blue-500)"
         />
       </UiCluster>
-    </section>
+    </UiStack>
 
-    <section>
+    <UiStack gap="var(--space-xl)" tag="section">
       <UiSectionHeader description="Animated progress values using a heavier stroke">
         Animated circular progress
       </UiSectionHeader>
 
-      <UiCluster align="center" class="samples">
+      <UiCluster align="center" gap="var(--space-xl)">
         <UiCircularProgress
           v-for="size in progressSizes"
           :key="size"
@@ -32,12 +32,12 @@
           style="color: var(--purple-600)"
         />
       </UiCluster>
-    </section>
+    </UiStack>
 
-    <section>
+    <UiStack gap="var(--space-xl)" tag="section">
       <UiSectionHeader description="Indeterminate spinner sizing and stroke behavior">Spinners</UiSectionHeader>
 
-      <UiCluster align="center" class="samples">
+      <UiCluster align="center" gap="var(--space-xl)">
         <UiSpinner
           v-for="size in progressSizes"
           :key="size"
@@ -46,14 +46,14 @@
           style="color: var(--green-500)"
         />
       </UiCluster>
-    </section>
+    </UiStack>
 
-    <section>
+    <UiStack gap="var(--space-xl)" tag="section">
       <UiSectionHeader description="Default, customized, indeterminate, and segmented linear progress">
         Linear progress bars
       </UiSectionHeader>
 
-      <div class="linear-examples">
+      <UiStack class="linear-examples" gap="var(--space-xl)">
         <UiProgressBar :max="150" :value="72" style="--accent: var(--cyan-500)" />
         <UiProgressBar
           :value="90"
@@ -71,39 +71,41 @@
         />
         <UiProgressBar />
         <UiProgressBar :value="[28, 14, 5, 20]" style="--accent: var(--purple-500); --height: 1rem" />
-      </div>
-    </section>
+      </UiStack>
+    </UiStack>
 
-    <section>
+    <UiStack gap="var(--space-xl)" tag="section">
       <UiSectionHeader description="Composed placeholder layout using circle, block, and text skeletons">
         Skeleton
       </UiSectionHeader>
 
-      <div class="skeleton-example">
-        <div class="skeleton-heading">
+      <UiStack class="skeleton-example" gap="var(--space-lg)">
+        <UiInline gap="var(--space-md)">
           <UiSkeleton block-size="3rem" variant="circle" />
-          <div class="skeleton-lines">
+          <UiStack gap="var(--space-sm)">
             <UiSkeleton inline-size="11rem" variant="text" />
             <UiSkeleton inline-size="7rem" variant="text" />
-          </div>
-        </div>
+          </UiStack>
+        </UiInline>
 
         <UiSkeleton block-size="8rem" />
 
-        <div class="skeleton-lines">
+        <UiStack gap="var(--space-sm)">
           <UiSkeleton variant="text" />
           <UiSkeleton inline-size="86%" variant="text" />
           <UiSkeleton inline-size="62%" variant="text" />
-        </div>
-      </div>
-    </section>
-  </div>
+        </UiStack>
+      </UiStack>
+    </UiStack>
+  </UiStack>
 </template>
 
 <script lang="ts" setup>
 import { onUnmounted, ref } from 'vue'
 
 import UiCluster from '@/lib/components/layout/UiCluster.vue'
+import UiInline from '@/lib/components/layout/UiInline.vue'
+import UiStack from '@/lib/components/layout/UiStack.vue'
 import UiCircularProgress from '@/lib/components/progress/UiCircularProgress.vue'
 import UiProgressBar from '@/lib/components/progress/UiProgressBar.vue'
 import UiSpinner from '@/lib/components/progress/UiSpinner.vue'
@@ -134,46 +136,11 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-.progress-view {
-  min-inline-size: 0;
-  display: grid;
-  gap: var(--space-xxl);
-
-  & > section {
-    min-inline-size: 0;
-    display: grid;
-    gap: var(--space-xl);
-  }
-
-  & .samples {
-    --cluster-gap: var(--space-xl);
-  }
-}
-
-.linear-examples,
-.skeleton-example,
-.skeleton-lines {
-  display: grid;
-}
-
 .linear-examples {
-  gap: var(--space-xl);
   inline-size: min(100%, var(--container-lg));
 }
 
 .skeleton-example {
-  gap: var(--space-lg);
   inline-size: min(100%, 36rem);
-}
-
-.skeleton-heading {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  align-items: center;
-  gap: var(--space-md);
-}
-
-.skeleton-lines {
-  gap: var(--space-sm);
 }
 </style>

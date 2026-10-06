@@ -164,7 +164,7 @@ const timeoutStyle = (item: Notification): Record<string, string> => {
       }
 
       & > div.notification {
-        --accent: var(--surface-bg);
+        --accent: var(--tone-color);
         --border-width: 0px;
 
         position: relative;
@@ -188,13 +188,8 @@ const timeoutStyle = (item: Notification): Record<string, string> => {
 
         pointer-events: auto;
 
-        &[data-tone]:not([data-tone='neutral']) {
-          --accent: var(--tone-color);
+        &:not([data-tone='neutral']) {
           --border-width: 5px;
-        }
-
-        &[data-tone='neutral'] {
-          --accent: var(--tone-color);
         }
 
         & > div.content {

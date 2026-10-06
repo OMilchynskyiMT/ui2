@@ -1,13 +1,13 @@
 <template>
-  <UiFormGrid :columns="1">
+  <UiStack gap="var(--space-xxl)">
     <UiSectionHeader>WAN Configuration</UiSectionHeader>
 
-    <UiFormGrid :columns="1">
+    <UiStack gap="var(--space-xxl)">
       <UiCard>
-        <UiFormGrid :columns="2">
+        <UiGrid :columns="2" gap="var(--space-xxl)">
           <div>Mode</div>
           <div><UiBadge size="large" tone="success">FAILOVER</UiBadge></div>
-        </UiFormGrid>
+        </UiGrid>
       </UiCard>
 
       <UiTable :columns="wanColumns" :rows="wanRows" caption="WANs" mode="scroll">
@@ -28,15 +28,16 @@
           <UiIcon v-else :icon="XIcon" :style="{ '--color': 'var(--red-500)' }" />
         </template>
       </UiTable>
-    </UiFormGrid>
-  </UiFormGrid>
+    </UiStack>
+  </UiStack>
 </template>
 
 <script lang="ts" setup>
 import { CheckIcon, GripVerticalIcon, PencilIcon, XIcon } from '@lucide/vue'
 
 import UiButton from '@/lib/components/buttons/UiButton.vue'
-import UiFormGrid from '@/lib/components/grid/UiFormGrid.vue'
+import UiGrid from '@/lib/components/grid/UiGrid.vue'
+import UiStack from '@/lib/components/layout/UiStack.vue'
 import UiCard from '@/lib/components/section/UiCard.vue'
 import UiSectionHeader from '@/lib/components/section/UiSectionHeader.vue'
 import type { TableColumn } from '@/lib/components/table/table.types'

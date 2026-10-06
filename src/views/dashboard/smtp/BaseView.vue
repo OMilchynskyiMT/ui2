@@ -1,5 +1,5 @@
 <template>
-  <UiFormGrid :columns="1">
+  <UiStack gap="var(--space-xxl)">
     <UiSectionHeader>
       SMTP Configuration
       <template #description>
@@ -21,14 +21,14 @@
         </RouterView>
       </template>
     </UiTabs>
-  </UiFormGrid>
+  </UiStack>
 </template>
 
 <script lang="ts" setup>
 import { CogIcon, NotebookTabsIcon } from '@lucide/vue'
 import { useRoute, useRouter } from 'vue-router'
 
-import UiFormGrid from '@/lib/components/grid/UiFormGrid.vue'
+import UiStack from '@/lib/components/layout/UiStack.vue'
 import UiSectionHeader from '@/lib/components/section/UiSectionHeader.vue'
 import UiTabs, { type UiTabItem } from '@/lib/components/tabs/UiTabs.vue'
 import PageTransition from '@/components/transitions/PageTransition.vue'

@@ -1,6 +1,6 @@
 <template>
-  <div class="dialogs-view">
-    <section>
+  <UiStack gap="var(--space-xxl)">
+    <UiStack gap="var(--space-xl)" tag="section">
       <UiSectionHeader description="Basic, confirmation, and form dialogs using the shared dialog infrastructure">
         Dialog types
       </UiSectionHeader>
@@ -10,13 +10,13 @@
         <UiButton variant="tonal" @click="confirm1">Show confirm</UiButton>
         <UiButton variant="tonal" @click="f1?.show()">Show form</UiButton>
       </UiCluster>
-    </section>
+    </UiStack>
 
     <UiDialog ref="d1" @cancel="console.debug('canceled')">
-      <div class="dialog-content">
+      <UiStack align="start" gap="var(--space-lg)">
         <p>Basic dialog content with an explicit close action.</p>
         <UiButton @click="d1?.close()">Close</UiButton>
-      </div>
+      </UiStack>
     </UiDialog>
 
     <UiConfirmDialog ref="c1" title="Confirmation title (optional)">
@@ -44,14 +44,14 @@
         </UiCluster>
       </template>
 
-      <UiFormGrid>
+      <UiGrid :columns="{ base: 1, medium: 2 }" gap="var(--space-xxl)">
         <UiTextField v-model="form.name" label="Name" required />
         <UiTextField v-model="form.email" label="Email" required type="email" />
         <UiSwitch v-model="simulateFailure" label="Simulate API error" />
         <UiCheckbox v-model="keepOpen" label="Return false and keep dialog open" />
-      </UiFormGrid>
+      </UiGrid>
     </UiFormDialog>
-  </div>
+  </UiStack>
 </template>
 
 <script lang="ts" setup>
@@ -65,8 +65,9 @@ import UiFormDialog, { type Exposed as FormExposed } from '@/lib/components/dial
 import UiCheckbox from '@/lib/components/fields/UiCheckbox.vue'
 import UiSwitch from '@/lib/components/fields/UiSwitch.vue'
 import UiTextField from '@/lib/components/fields/UiTextField.vue'
-import UiFormGrid from '@/lib/components/grid/UiFormGrid.vue'
+import UiGrid from '@/lib/components/grid/UiGrid.vue'
 import UiCluster from '@/lib/components/layout/UiCluster.vue'
+import UiStack from '@/lib/components/layout/UiStack.vue'
 import UiSectionHeader from '@/lib/components/section/UiSectionHeader.vue'
 import UiIcon from '@/lib/components/UiIcon.vue'
 
@@ -123,25 +124,3 @@ const confirm1 = async (): Promise<void> => {
   }
 }
 </script>
-
-<style scoped>
-.dialogs-view,
-.dialogs-view > section,
-.dialog-content {
-  min-inline-size: 0;
-  display: grid;
-}
-
-.dialogs-view {
-  gap: var(--space-xxl);
-
-  & > section {
-    gap: var(--space-xl);
-  }
-}
-
-.dialog-content {
-  justify-items: start;
-  gap: var(--space-lg);
-}
-</style>

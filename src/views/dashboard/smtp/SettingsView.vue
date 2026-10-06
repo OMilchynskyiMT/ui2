@@ -1,16 +1,17 @@
 <template>
-  <UiFormGrid :columns="1">
+  <UiStack gap="var(--space-xxl)">
     <UiCard>
-      <UiFormGrid :columns="1">
+      <UiStack gap="var(--space-xxl)">
         <UiSectionHeader>Server Configuration</UiSectionHeader>
 
-        <UiFormGrid :columns="{ small: 1, medium: 2, extraLarge: 4 }">
-          <UiSwitch
-            v-model="form.status"
-            class="grid-full"
-            hint="Enable SMTP to allow your device to send email messages"
-            label="Enabled"
-          />
+        <UiGrid :columns="{ base: 1, medium: 2, extraLarge: 4 }" gap="var(--space-xxl)">
+          <UiGridItem span="full">
+            <UiSwitch
+              v-model="form.status"
+              hint="Enable SMTP to allow your device to send email messages"
+              label="Enabled"
+            />
+          </UiGridItem>
 
           <UiTextField v-model="form.server" label="Server" />
           <UiNumber v-model="form.port" label="Port" />
@@ -26,16 +27,18 @@
             hint="Activate server certificate verification using a list of trusted Certification Authorities (CAs)."
             label="Verify server certificate"
           />
-        </UiFormGrid>
-      </UiFormGrid>
+        </UiGrid>
+      </UiStack>
     </UiCard>
 
     <UiCard>
-      <UiFormGrid :columns="1">
+      <UiStack gap="var(--space-xxl)">
         <UiSectionHeader>Authentication</UiSectionHeader>
 
-        <UiFormGrid :columns="{ small: 1, medium: 2, extraLarge: 4 }">
-          <UiSwitch v-model="form.auth.enabled" class="grid-full" label="Enabled" />
+        <UiGrid :columns="{ base: 1, medium: 2, extraLarge: 4 }" gap="var(--space-xxl)">
+          <UiGridItem span="full">
+            <UiSwitch v-model="form.auth.enabled" label="Enabled" />
+          </UiGridItem>
 
           <UiTextField v-model="form.auth.username" label="Username">
             <template #leading><UiIcon :icon="UserIcon" /></template>
@@ -43,27 +46,27 @@
           <UiPasswordField v-model="form.auth.password" label="Password" />
           <UiTextField v-model="form.auth.email" label="Email" />
 
-          <div class="grid-align-center">
+          <UiGridItem align="center">
             <UiButton :icon="MailCheckIcon" tone="primary" variant="tonal">Send Test Email</UiButton>
-          </div>
-        </UiFormGrid>
-      </UiFormGrid>
+          </UiGridItem>
+        </UiGrid>
+      </UiStack>
     </UiCard>
 
     <UiCard>
-      <UiFormGrid :columns="1">
+      <UiStack gap="var(--space-xxl)">
         <UiSectionHeader>Mail Log Settings</UiSectionHeader>
 
-        <UiFormGrid :columns="{ small: 1, medium: 2, extraLarge: 4 }">
+        <UiGrid :columns="{ base: 1, medium: 2, extraLarge: 4 }" gap="var(--space-xxl)">
           <UiNumber v-model="form.maillog.entriesToKeep" label="Entries to keep" />
-        </UiFormGrid>
-      </UiFormGrid>
+        </UiGrid>
+      </UiStack>
     </UiCard>
 
     <UiBottomActions adaptive>
       <UiButton :icon="CheckIcon" tone="primary">Save</UiButton>
     </UiBottomActions>
-  </UiFormGrid>
+  </UiStack>
 </template>
 
 <script lang="ts" setup>
@@ -76,8 +79,10 @@ import UiNumber from '@/lib/components/fields/UiNumberField.vue'
 import UiPasswordField from '@/lib/components/fields/UiPasswordField.vue'
 import UiSwitch from '@/lib/components/fields/UiSwitch.vue'
 import UiTextField from '@/lib/components/fields/UiTextField.vue'
-import UiFormGrid from '@/lib/components/grid/UiFormGrid.vue'
+import UiGrid from '@/lib/components/grid/UiGrid.vue'
+import UiGridItem from '@/lib/components/grid/UiGridItem.vue'
 import UiBottomActions from '@/lib/components/layout/UiBottomActions.vue'
+import UiStack from '@/lib/components/layout/UiStack.vue'
 import UiCard from '@/lib/components/section/UiCard.vue'
 import UiSectionHeader from '@/lib/components/section/UiSectionHeader.vue'
 import UiIcon from '@/lib/components/UiIcon.vue'

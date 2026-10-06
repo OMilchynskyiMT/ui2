@@ -1,8 +1,8 @@
 <template>
-  <UiFormGrid :columns="1">
+  <UiStack gap="var(--space-xxl)">
     <UiSectionHeader>Usage Policy</UiSectionHeader>
 
-    <UiFormGrid :columns="1">
+    <UiStack gap="var(--space-xxl)">
       <UiCard>
         <UiTextarea
           v-model="usagePolicy"
@@ -20,12 +20,12 @@
           </template>
         </UiTextarea>
       </UiCard>
-    </UiFormGrid>
+    </UiStack>
 
     <UiBottomActions adaptive>
       <UiButton :icon="CheckIcon">Save</UiButton>
     </UiBottomActions>
-  </UiFormGrid>
+  </UiStack>
 </template>
 
 <script lang="ts" setup>
@@ -35,8 +35,8 @@ import { ScaleIcon } from '@lucide/vue'
 
 import UiButton from '@/lib/components/buttons/UiButton.vue'
 import UiTextarea from '@/lib/components/fields/UiTextarea.vue'
-import UiFormGrid from '@/lib/components/grid/UiFormGrid.vue'
 import UiBottomActions from '@/lib/components/layout/UiBottomActions.vue'
+import UiStack from '@/lib/components/layout/UiStack.vue'
 import UiCard from '@/lib/components/section/UiCard.vue'
 import UiSectionHeader from '@/lib/components/section/UiSectionHeader.vue'
 import UiIcon from '@/lib/components/UiIcon.vue'

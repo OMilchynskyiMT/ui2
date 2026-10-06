@@ -1,12 +1,15 @@
 <template>
   <component
     :is="tag"
-    :data-align="align"
-    :data-repeat="repeat"
     :style="{
       '--auto-grid-gap': gap,
+      '--auto-grid-row-gap': rowGap,
+      '--auto-grid-column-gap': columnGap,
+      '--auto-grid-repeat': repeat,
       '--auto-grid-item-min-size': minItemSize,
       '--auto-grid-track-min-size': trackMinSize,
+      '--layout-align': align,
+      '--layout-justify': justify,
     }"
     class="auto-grid"
   >
@@ -15,10 +18,15 @@
 </template>
 
 <script lang="ts">
+import type { LayoutAlign } from '../layout/layout.types'
+
 export type UiAutoGridProperties = {
   tag?: string
-  align?: 'start' | 'center' | 'end' | 'stretch'
+  align?: LayoutAlign
+  justify?: LayoutAlign
   gap?: string
+  rowGap?: string
+  columnGap?: string
   minItemSize?: string
   maxColumns?: number
   repeat?: 'auto-fit' | 'auto-fill'
@@ -31,7 +39,10 @@ import { computed } from 'vue'
 const {
   tag = 'div',
   align = 'stretch',
+  justify = 'stretch',
   gap,
+  rowGap,
+  columnGap,
   minItemSize,
   maxColumns,
   repeat = 'auto-fit',
@@ -43,7 +54,7 @@ const trackMinSize = computed(() => {
   const columnCount = Math.max(1, Math.trunc(maxColumns))
   if (columnCount === 1) return '100%'
 
-  const gridGap = 'var(--auto-grid-gap, var(--space-sm))'
+  const gridGap = 'var(--auto-grid-column-gap, var(--auto-grid-gap, var(--space-sm)))'
   const gaps = Array.from({ length: columnCount - 1 }, () => gridGap).join(' - ')
 
   return `max(var(--auto-grid-item-min-size, 14rem), calc((100% - ${gaps}) / ${columnCount}))`
@@ -56,34 +67,14 @@ const trackMinSize = computed(() => {
     min-inline-size: 0;
     display: grid;
     grid-template-columns: repeat(
-      auto-fit,
+      var(--auto-grid-repeat),
       minmax(min(100%, var(--auto-grid-track-min-size, var(--auto-grid-item-min-size, 14rem))), 1fr)
     );
-    gap: var(--auto-grid-gap, var(--space-sm));
+    gap: var(--auto-grid-row-gap, var(--auto-grid-gap, var(--space-sm)))
+      var(--auto-grid-column-gap, var(--auto-grid-gap, var(--space-sm)));
     justify-content: start;
-
-    &[data-repeat='auto-fill'] {
-      grid-template-columns: repeat(
-        auto-fill,
-        minmax(min(100%, var(--auto-grid-track-min-size, var(--auto-grid-item-min-size, 14rem))), 1fr)
-      );
-    }
-
-    &[data-align='start'] {
-      align-items: start;
-    }
-
-    &[data-align='center'] {
-      align-items: center;
-    }
-
-    &[data-align='end'] {
-      align-items: end;
-    }
-
-    &[data-align='stretch'] {
-      align-items: stretch;
-    }
+    align-items: var(--layout-align);
+    justify-items: var(--layout-justify);
 
     & > :deep(*) {
       min-inline-size: 0;

@@ -1,13 +1,10 @@
 <template>
-  <UiFormGrid :columns="1">
+  <UiStack gap="var(--space-xxl)">
     <UiCard>
-      <UiFormGrid :columns="{ small: 1, medium: 2, extraLarge: 4 }">
-        <UiSwitch
-          v-model="form.status"
-          class="grid-full"
-          hint="Configure this device as a DHCP server for the LAN"
-          label="Enabled"
-        />
+      <UiGrid :columns="{ base: 1, medium: 2, extraLarge: 4 }" gap="var(--space-xxl)">
+        <UiGridItem span="full">
+          <UiSwitch v-model="form.status" hint="Configure this device as a DHCP server for the LAN" label="Enabled" />
+        </UiGridItem>
 
         <UiSelect
           v-model="form.interface"
@@ -39,13 +36,13 @@
           hint="End of range for dynamically assigned IP addresses"
           label="Lease End"
         />
-      </UiFormGrid>
+      </UiGrid>
     </UiCard>
 
     <UiBottomActions adaptive>
       <UiButton :icon="CheckIcon">Save</UiButton>
     </UiBottomActions>
-  </UiFormGrid>
+  </UiStack>
 </template>
 
 <script lang="ts" setup>
@@ -56,8 +53,10 @@ import UiButton from '@/lib/components/buttons/UiButton.vue'
 import UiSelect from '@/lib/components/fields/UiSelect.vue'
 import UiSwitch from '@/lib/components/fields/UiSwitch.vue'
 import UiTextField from '@/lib/components/fields/UiTextField.vue'
-import UiFormGrid from '@/lib/components/grid/UiFormGrid.vue'
+import UiGrid from '@/lib/components/grid/UiGrid.vue'
+import UiGridItem from '@/lib/components/grid/UiGridItem.vue'
 import UiBottomActions from '@/lib/components/layout/UiBottomActions.vue'
+import UiStack from '@/lib/components/layout/UiStack.vue'
 import UiCard from '@/lib/components/section/UiCard.vue'
 
 const form = ref<{

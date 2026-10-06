@@ -1,43 +1,43 @@
 <template>
-  <component :is="tag" :data-align="align" :style="{ '--stack-gap': gap }" class="stack">
+  <component
+    :is="tag"
+    :style="{
+      '--layout-align': align,
+      '--layout-justify': resolveLayoutJustify(justify),
+      '--stack-gap': gap,
+    }"
+    class="stack"
+  >
     <slot />
   </component>
 </template>
 
 <script lang="ts">
+import type { LayoutAlign, LayoutJustify } from './layout.types'
+
 export type UiStackProperties = {
   tag?: string
-  align?: 'start' | 'center' | 'end' | 'stretch'
+  align?: LayoutAlign
+  justify?: LayoutJustify
   gap?: string
 }
 </script>
 
 <script lang="ts" setup>
-const { tag = 'div', align = 'stretch', gap } = defineProps<UiStackProperties>()
+import { resolveLayoutJustify } from './layout.types'
+
+const { tag = 'div', align = 'stretch', justify = 'start', gap } = defineProps<UiStackProperties>()
 </script>
 
 <style scoped>
 @layer components {
   .stack {
     min-inline-size: 0;
-    display: grid;
+    display: flex;
+    flex-direction: column;
     gap: var(--stack-gap, var(--space-sm));
-
-    &[data-align='start'] {
-      justify-items: start;
-    }
-
-    &[data-align='center'] {
-      justify-items: center;
-    }
-
-    &[data-align='end'] {
-      justify-items: end;
-    }
-
-    &[data-align='stretch'] {
-      justify-items: stretch;
-    }
+    align-items: var(--layout-align);
+    justify-content: var(--layout-justify);
 
     & > :deep(*) {
       min-inline-size: 0;

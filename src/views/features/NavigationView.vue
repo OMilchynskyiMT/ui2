@@ -1,6 +1,6 @@
 <template>
-  <div class="navigation-examples">
-    <section>
+  <UiStack gap="var(--space-xxl)">
+    <UiStack align="start" gap="var(--space-md)" tag="section">
       <UiSectionHeader description="Typed actions exposed through an anchored menu surface"
         >Menu button</UiSectionHeader
       >
@@ -16,21 +16,21 @@
         Actions
       </UiMenuButton>
       <div v-if="selectedAction" class="result">Selected: {{ selectedAction }}</div>
-    </section>
+    </UiStack>
 
-    <section>
+    <UiStack align="start" gap="var(--space-md)" tag="section">
       <UiSectionHeader description="Compact page navigation that adapts its visible range">Pagination</UiSectionHeader>
 
       <UiPagination v-model="page" :page-count="18" />
       <div class="result">Current page: {{ page }}</div>
-    </section>
+    </UiStack>
 
-    <section>
+    <UiStack align="start" gap="var(--space-md)" tag="section">
       <UiSectionHeader description="Independent native disclosure state with leading and trailing content"
         >Disclosures</UiSectionHeader
       >
 
-      <div class="disclosures">
+      <UiStack class="disclosures" gap="var(--space-sm)">
         <UiDisclosure
           v-model="firstDisclosureOpen"
           description="Native details/summary semantics"
@@ -55,10 +55,10 @@
         >
           <p>Each disclosure can be controlled independently through v-model when necessary.</p>
         </UiDisclosure>
-      </div>
-    </section>
+      </UiStack>
+    </UiStack>
 
-    <section>
+    <UiStack align="start" gap="var(--space-md)" tag="section">
       <UiSectionHeader description="Route-aware hierarchy with custom item rendering">Breadcrumbs</UiSectionHeader>
 
       <UiBreadcrumbs :items="breadcrumbs">
@@ -69,8 +69,8 @@
           <span v-else>{{ item.label }}</span>
         </template>
       </UiBreadcrumbs>
-    </section>
-  </div>
+    </UiStack>
+  </UiStack>
 </template>
 
 <script lang="ts" setup>
@@ -80,6 +80,7 @@ import { LogOutIcon, PaletteIcon, RefreshCwIcon, SaveIcon, TableConfigIcon, Tras
 import UiButton from '@/lib/components/buttons/UiButton.vue'
 import UiDisclosure from '@/lib/components/disclosure/UiDisclosure.vue'
 import UiCluster from '@/lib/components/layout/UiCluster.vue'
+import UiStack from '@/lib/components/layout/UiStack.vue'
 import type { UiMenuItem } from '@/lib/components/menu/UiMenu.vue'
 import UiMenuButton from '@/lib/components/menu/UiMenuButton.vue'
 import UiBreadcrumbs from '@/lib/components/navigation/UiBreadcrumbs.vue'
@@ -101,22 +102,8 @@ const menuItems: UiMenuItem<string>[] = [
 </script>
 
 <style scoped>
-.navigation-examples {
-  display: grid;
-  gap: var(--space-xxl);
-
-  & > section {
-    min-inline-size: 0;
-    display: grid;
-    justify-items: start;
-    gap: var(--space-md);
-  }
-}
-
 .disclosures {
   inline-size: min(100%, 48rem);
-  display: grid;
-  gap: var(--space-sm);
 }
 
 .result {

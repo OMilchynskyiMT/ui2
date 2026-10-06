@@ -1,11 +1,11 @@
 <template>
-  <div class="lists-view">
-    <section>
+  <UiStack gap="var(--space-xxl)">
+    <UiStack gap="var(--space-xl)" tag="section">
       <UiSectionHeader description="Default and custom item rendering with shared selection state">
         Listboxes
       </UiSectionHeader>
 
-      <UiFormGrid>
+      <UiGrid :columns="{ base: 1, medium: 2 }" gap="var(--space-xxl)">
         <UiListbox v-model="selected" :items="items" aria-label="Default listbox" />
         <UiListbox v-model="selected" :items="items" aria-label="Custom listbox">
           <template #item="{ item }">
@@ -13,10 +13,10 @@
             <div>{{ item.value }}</div>
           </template>
         </UiListbox>
-      </UiFormGrid>
-    </section>
+      </UiGrid>
+    </UiStack>
 
-    <section>
+    <UiStack gap="var(--space-xl)" tag="section">
       <UiSectionHeader
         description="Anchored overlays using the same listbox content at each supported corner placement"
       >
@@ -48,16 +48,17 @@
       >
         <UiListbox v-model="selected" :items="items" aria-label="Popover listbox" />
       </UiPopover>
-    </section>
-  </div>
+    </UiStack>
+  </UiStack>
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue'
 
 import UiButton from '@/lib/components/buttons/UiButton.vue'
-import UiFormGrid from '@/lib/components/grid/UiFormGrid.vue'
+import UiGrid from '@/lib/components/grid/UiGrid.vue'
 import UiCluster from '@/lib/components/layout/UiCluster.vue'
+import UiStack from '@/lib/components/layout/UiStack.vue'
 import type { ListboxOption } from '@/lib/components/list/listbox.types'
 import UiListbox from '@/lib/components/list/UiListbox.vue'
 import UiPopover, { type OverlayPlacement } from '@/lib/components/overlay/UiPopover.vue'
@@ -82,17 +83,3 @@ const showPopup = (anchor: HTMLElement | null, position: OverlayPlacement): void
   popupShow.value = true
 }
 </script>
-
-<style scoped>
-.lists-view {
-  min-inline-size: 0;
-  display: grid;
-  gap: var(--space-xxl);
-
-  & > section {
-    min-inline-size: 0;
-    display: grid;
-    gap: var(--space-xl);
-  }
-}
-</style>
