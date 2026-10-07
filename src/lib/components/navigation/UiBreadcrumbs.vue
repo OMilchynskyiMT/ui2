@@ -96,7 +96,7 @@ const getItemKey = (item: UiBreadcrumbItem<T>, index: number): string | number =
 
       & > span[aria-current='page'] {
         color: var(--text-color);
-        font-weight: var(--font-weight-semibold);
+        font-weight: var(--font-weight-medium);
       }
     }
   }

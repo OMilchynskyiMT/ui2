@@ -1,5 +1,5 @@
 <template>
-  <UiCard class="device-summary" padding="medium" variant="filled">
+  <UiCard class="device-summary" padding="medium">
     <div class="product-visual">
       <img v-if="imageSrc" :alt="imageAlt || modelNumber" :src="imageSrc" />
       <span v-else aria-hidden="true" class="fallback">
@@ -28,7 +28,7 @@
         </div>
       </dl>
 
-      <UiCluster align="baseline" class="metadata">
+      <UiCluster align="baseline" class="metadata" gap="var(--space-xs) var(--space-xl)">
         <span>
           <strong>Serial number</strong>
           <UiCopyButton :text="serialNumber">{{ serialNumber }}</UiCopyButton>
@@ -68,7 +68,7 @@ const { customName, modelNumber, serialNumber, imei, firmwareVersion, uptime, cu
 <style scoped>
 @layer components {
   .device-summary {
-    --display: grid;
+    --card-display: grid;
 
     grid-template-columns: minmax(12rem, 18rem) minmax(0, 1fr);
     align-items: center;
@@ -110,7 +110,7 @@ const { customName, modelNumber, serialNumber, imei, firmwareVersion, uptime, cu
         & > .name {
           overflow: hidden;
           font-size: var(--font-size-xl);
-          font-weight: var(--font-weight-semibold);
+          font-weight: var(--font-weight-medium);
           line-height: var(--line-height-tight);
           text-overflow: ellipsis;
           white-space: nowrap;
@@ -146,13 +146,12 @@ const { customName, modelNumber, serialNumber, imei, firmwareVersion, uptime, cu
           & > dt {
             color: var(--text-color-dimmed);
             font-size: var(--font-size-xs);
-            font-weight: var(--font-weight-semibold);
           }
 
           & > dd {
             min-inline-size: 0;
             overflow: hidden;
-            font-weight: var(--font-weight-semibold);
+            font-weight: var(--font-weight-medium);
             font-variant-numeric: tabular-nums;
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -161,8 +160,6 @@ const { customName, modelNumber, serialNumber, imei, firmwareVersion, uptime, cu
       }
 
       & > .metadata {
-        --cluster-gap: var(--space-xs) var(--space-xl);
-
         padding-block-start: var(--space-md);
         border-block-start: var(--border-width-thin) solid var(--divider-color);
         color: var(--text-color-dimmed);
@@ -171,7 +168,6 @@ const { customName, modelNumber, serialNumber, imei, firmwareVersion, uptime, cu
         & strong {
           margin-inline-end: var(--space-xs);
           color: var(--text-color);
-          font-weight: var(--font-weight-semibold);
         }
       }
     }

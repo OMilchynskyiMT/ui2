@@ -82,22 +82,22 @@ const summarizedValue = computed((): number | undefined => {
 <style lang="css" scoped>
 @layer components {
   .linear-progress {
-    --accent: var(--brand-color);
-    --height: 0.25rem;
-    --radius: max(1px, var(--height) / 2);
-    --progress-bg: color-mix(in oklch, var(--accent) 20%, transparent);
+    --progress-bar-color: var(--brand-color);
+    --progress-bar-height: 0.25rem;
+    --radius: max(1px, var(--progress-bar-height) / 2);
+    --progress-bar-track-color: color-mix(in oklch, var(--progress-bar-color) 20%, transparent);
     --indeterminate-duration: 1.5s;
 
     position: relative;
     width: 100%;
-    height: var(--height);
+    height: var(--progress-bar-height);
     overflow: hidden;
     display: flex;
     border-radius: var(--radius);
-    background: var(--progress-bg);
+    background: var(--progress-bar-track-color);
 
     & > .indicator {
-      --generated-color: oklch(from var(--accent) l c calc(h + var(--color-index) * 137.508));
+      --generated-color: oklch(from var(--progress-bar-color) l c calc(h + var(--color-index) * 137.508));
 
       flex: 0 0 var(--progress);
       min-inline-size: 0;
@@ -106,7 +106,7 @@ const summarizedValue = computed((): number | undefined => {
       transition: flex-basis var(--duration-lg) var(--bezier-smooth);
 
       &:first-child {
-        --generated-color: var(--accent);
+        --generated-color: var(--progress-bar-color);
         border-radius: var(--radius) 0 0 var(--radius);
       }
 

@@ -2,7 +2,7 @@
   <span :style="{ '--avatar-size': size }" class="avatar">
     <img v-if="src" :alt="alt" :src="src" />
     <span v-else-if="initials" class="initials">{{ initials }}</span>
-    <UiIcon v-else :icon="icon ?? User2Icon" />
+    <UiIcon v-else :icon="icon ?? User2Icon" :size="size" />
   </span>
 </template>
 
@@ -29,9 +29,10 @@ const { src, alt = '', initials, icon, size = '1.5rem' } = defineProps<UiAvatarP
 <style scoped>
 @layer components {
   .avatar {
-    --accent: var(--tone-primary);
+    /* Public CSS customization hook. */
+    --avatar-color: var(--tone-primary);
     --avatar-padding: calc(var(--avatar-size) / 4);
-    --avatar-bg: oklch(from var(--accent) l c h / 0.2);
+    --avatar-bg: oklch(from var(--avatar-color) l c h / 0.2);
 
     display: inline-grid;
     place-items: center;
@@ -40,7 +41,7 @@ const { src, alt = '', initials, icon, size = '1.5rem' } = defineProps<UiAvatarP
     overflow: hidden;
     border-radius: 50%;
     background-color: var(--avatar-bg);
-    color: var(--accent);
+    color: var(--avatar-color);
     line-height: 1;
 
     & > img {
@@ -51,13 +52,8 @@ const { src, alt = '', initials, icon, size = '1.5rem' } = defineProps<UiAvatarP
 
     & > .initials {
       font-size: calc(var(--avatar-size) * 0.6);
-      font-weight: var(--font-weight-semibold);
+      font-weight: var(--font-weight-medium);
       text-transform: uppercase;
-    }
-
-    & > svg {
-      --size: var(--avatar-size);
-      color: var(--accent);
     }
   }
 }

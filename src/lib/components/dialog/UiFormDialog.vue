@@ -172,17 +172,23 @@ defineExpose<Exposed>({
 <style scoped>
 @layer components {
   .form {
+    --form-gap: var(--space-xl);
+    --form-padding: var(--space-xl);
+    --form-title-font-size: var(--font-size-lg);
+    --form-content-gap: var(--space-xl);
+    --form-actions-gap: var(--space-sm);
+
     min-block-size: 0;
     max-block-size: inherit;
     display: flex;
     flex-direction: column;
-    gap: var(--form-gap, var(--space-xl));
+    gap: var(--form-gap);
     overflow: clip;
-    padding: var(--form-padding, var(--space-xl));
+    padding: var(--form-padding);
 
     .title {
-      font-size: var(--title-font-size, var(--font-size-lg));
-      font-weight: var(--font-weight-semibold);
+      font-size: var(--form-title-font-size);
+      font-weight: var(--font-weight-medium);
     }
 
     .content {
@@ -192,7 +198,7 @@ defineExpose<Exposed>({
 
       & .content-layout {
         display: grid;
-        gap: var(--form-content-gap, var(--space-xl));
+        gap: var(--form-content-gap);
       }
     }
 
@@ -205,7 +211,7 @@ defineExpose<Exposed>({
       display: flex;
       flex-wrap: wrap;
       flex-direction: row-reverse;
-      gap: var(--actions-gap, var(--space-sm));
+      gap: var(--form-actions-gap);
     }
   }
 }

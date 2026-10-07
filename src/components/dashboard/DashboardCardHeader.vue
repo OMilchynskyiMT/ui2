@@ -37,7 +37,7 @@ const { icon, eyebrow, title, description } = defineProps<{
 <style scoped>
 @layer components {
   .dashboard-card-header {
-    --sections-gap: var(--space-md);
+    --bar-sections-gap: var(--space-md);
 
     align-items: center;
 
@@ -58,7 +58,7 @@ const { icon, eyebrow, title, description } = defineProps<{
         overflow: hidden;
         color: var(--text-color-dimmed);
         font-size: var(--font-size-xs);
-        font-weight: var(--font-weight-semibold);
+        font-weight: var(--font-weight-medium);
         text-overflow: ellipsis;
         white-space: nowrap;
       }
@@ -68,7 +68,7 @@ const { icon, eyebrow, title, description } = defineProps<{
         margin: 0;
         overflow: hidden;
         font-size: var(--font-size-lg);
-        font-weight: var(--font-weight-semibold);
+        font-weight: var(--font-weight-medium);
         line-height: var(--line-height-tight);
         text-overflow: ellipsis;
         white-space: nowrap;

@@ -94,14 +94,16 @@ const getBarY = (index: number): number => {
 <style scoped>
 @layer components {
   .signal-strength {
-    --size: 1.25rem;
+    --signal-strength-size: 1.25rem;
+    --signal-strength-color: inherit;
+
     --level-opacity: 0.2;
 
     display: block;
-    block-size: var(--size);
+    block-size: var(--signal-strength-size);
     inline-size: auto;
     overflow: visible;
-    color: var(--color, inherit);
+    color: var(--signal-strength-color);
 
     .indicator {
       fill: currentColor;

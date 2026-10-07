@@ -35,7 +35,13 @@
                   @click="toggleSort(column)"
                 >
                   <span>{{ column.label }}</span>
-                  <UiIcon :icon="ChevronUpIcon" aria-hidden="true" class="sort-indicator" />
+                  <UiIcon
+                    :icon="ChevronUpIcon"
+                    aria-hidden="true"
+                    class="sort-indicator"
+                    color="var(--table-sort-indicator-color)"
+                    size="1rem"
+                  />
                 </button>
 
                 <template v-else>{{ column.label }}</template>
@@ -186,29 +192,29 @@ const toggleSort = (column: TableColumn<Row>): void => {
 
 <style scoped>
 div.table {
-  --max-block-size: none;
-  --bg: var(--surface-table);
-  --header-bg: var(--bg);
+  --table-max-block-size: none;
+  --table-bg: var(--surface-table);
+  --table-header-bg: var(--table-bg);
 
-  --cell-padding-block: var(--space-md);
-  --cell-padding-inline: var(--space-lg);
+  --table-cell-padding-block: var(--space-md);
+  --table-cell-padding-inline: var(--space-lg);
 
-  --border-width: 0px;
-  --border-color: var(--divider-color);
-  --border-radius: var(--radius-lg);
+  --table-border-width: 0px;
+  --table-border-color: var(--divider-color);
+  --table-border-radius: var(--radius-lg);
 
-  --divider-width: 1px;
+  --table-divider-width: var(--border-width-thin);
 
   min-inline-size: 0;
   container-type: inline-size;
 
   & > .scroll {
-    max-block-size: var(--max-block-size);
+    max-block-size: var(--table-max-block-size);
     box-shadow: var(--shadow-xs);
 
-    border: var(--border-width) solid var(--border-color);
-    border-radius: var(--border-radius);
-    background: var(--bg);
+    border: var(--table-border-width) solid var(--table-border-color);
+    border-radius: var(--table-border-radius);
+    background: var(--table-bg);
 
     & table.content {
       border-spacing: 0;
@@ -217,10 +223,9 @@ div.table {
       background: transparent;
 
       & > caption {
-        padding-block: var(--cell-padding-block);
-        padding-inline: var(--cell-padding-inline);
+        padding-block: var(--table-cell-padding-block);
+        padding-inline: var(--table-cell-padding-inline);
         text-align: start;
-        color: var(--text-color-info);
         font-size: var(--font-size-lg);
       }
     }
@@ -228,8 +233,8 @@ div.table {
 
   .header-cell,
   .cell {
-    padding-block: var(--cell-padding-block);
-    padding-inline: var(--cell-padding-inline);
+    padding-block: var(--table-cell-padding-block);
+    padding-inline: var(--table-cell-padding-inline);
     vertical-align: middle;
 
     &[data-align] {
@@ -268,9 +273,9 @@ div.table {
   }
 
   .header-cell {
-    background: var(--header-bg);
+    background: var(--table-header-bg);
     font-weight: var(--font-weight-bold);
-    border-block-end: var(--divider-width) solid var(--divider-color);
+    border-block-end: var(--table-divider-width) solid var(--divider-color);
 
     &[data-align='center'] .sort-button {
       justify-content: center;
@@ -282,7 +287,7 @@ div.table {
   }
 
   tbody > tr:not(:first-child) > :is(.cell, .details-cell) {
-    border-block-start: var(--divider-width) solid var(--divider-color);
+    border-block-start: var(--table-divider-width) solid var(--divider-color);
   }
 
   .sort-button {
@@ -298,9 +303,6 @@ div.table {
     cursor: pointer;
 
     & > .sort-indicator {
-      --color: var(--sort-indicator-color, var(--table-sort-indicator-color));
-      --size: 1rem;
-
       flex: none;
       opacity: 0;
       transform: scaleY(1);
@@ -325,7 +327,7 @@ div.table {
   }
 
   .state {
-    padding: var(--cell-padding-inline);
+    padding: var(--table-cell-padding-inline);
     text-align: center;
 
     & > .loading {
@@ -345,8 +347,8 @@ div.table {
     display: none;
 
     & > .details-cell {
-      padding-block: var(--cell-padding-block);
-      padding-inline: var(--cell-padding-inline);
+      padding-block: var(--table-cell-padding-block);
+      padding-inline: var(--table-cell-padding-inline);
 
       & > .details-list {
         display: grid;

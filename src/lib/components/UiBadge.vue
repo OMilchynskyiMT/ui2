@@ -35,7 +35,7 @@ const { tag = 'span', tone = 'neutral', size = 'medium', label = '' } = definePr
     background-color: var(--tone-color);
     color: var(--on-accent-color);
     font-size: var(--font-size-xs);
-    font-weight: var(--font-weight-semibold);
+    font-weight: var(--font-weight-medium);
     line-height: 1;
     white-space: nowrap;
 
@@ -47,7 +47,7 @@ const { tag = 'span', tone = 'neutral', size = 'medium', label = '' } = definePr
 
     &[data-size='large'] {
       --badge-size: 1.5rem;
-      --badge-padding-inline: 0.5rem;
+      --badge-padding-inline: var(--space-sm);
       font-size: var(--font-size-sm);
     }
   }

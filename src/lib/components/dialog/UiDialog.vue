@@ -199,40 +199,40 @@ defineExpose<Exposed>({ show, close, isVisible })
 @layer components {
   dialog {
     --dialog-width: 32rem;
-    --initial-translate-y: calc(-1 * var(--space-md));
-    --outer-margin: var(--space-lg);
+    --dialog-initial-translate-y: calc(-1 * var(--space-md));
+    --dialog-outer-margin: var(--space-lg);
 
     position: fixed;
     inset-block-start: calc(
-      var(--dialog-viewport-offset-block-start, 0px) + max(var(--outer-margin), var(--safe-area-top))
+      var(--dialog-viewport-offset-block-start, 0px) + max(var(--dialog-outer-margin), var(--safe-area-top))
     );
     inset-block-end: calc(
-      var(--dialog-viewport-inset-block-end, 0px) + max(var(--outer-margin), var(--safe-area-bottom))
+      var(--dialog-viewport-inset-block-end, 0px) + max(var(--dialog-outer-margin), var(--safe-area-bottom))
     );
     inset-inline-start: calc(
-      var(--dialog-viewport-offset-inline-start, 0px) + max(var(--outer-margin), var(--safe-area-left))
+      var(--dialog-viewport-offset-inline-start, 0px) + max(var(--dialog-outer-margin), var(--safe-area-left))
     );
     inset-inline-end: calc(
-      var(--dialog-viewport-inset-inline-end, 0px) + max(var(--outer-margin), var(--safe-area-right))
+      var(--dialog-viewport-inset-inline-end, 0px) + max(var(--dialog-outer-margin), var(--safe-area-right))
     );
     margin: auto;
     isolation: isolate;
 
     inline-size: var(--dialog-width);
     max-inline-size: calc(
-      var(--dialog-viewport-inline-size, 100dvw) - max(var(--outer-margin), var(--safe-area-left)) -
-        max(var(--outer-margin), var(--safe-area-right))
+      var(--dialog-viewport-inline-size, 100dvw) - max(var(--dialog-outer-margin), var(--safe-area-left)) -
+        max(var(--dialog-outer-margin), var(--safe-area-right))
     );
     max-block-size: calc(
-      var(--dialog-viewport-block-size, 100dvh) - max(var(--outer-margin), var(--safe-area-top)) -
-        max(var(--outer-margin), var(--safe-area-bottom))
+      var(--dialog-viewport-block-size, 100dvh) - max(var(--dialog-outer-margin), var(--safe-area-top)) -
+        max(var(--dialog-outer-margin), var(--safe-area-bottom))
     );
 
     color: inherit;
     background-color: transparent;
     opacity: 0;
     overflow: visible;
-    transform: translateY(var(--initial-translate-y));
+    transform: translateY(var(--dialog-initial-translate-y));
     border-radius: var(--dialog-radius, var(--radius-lg));
     box-shadow: var(--dialog-shadow, var(--shadow-md));
 
@@ -260,7 +260,7 @@ defineExpose<Exposed>({ show, close, isVisible })
 
     &[data-phase='closing'] {
       opacity: 0;
-      transform: translateY(var(--initial-translate-y));
+      transform: translateY(var(--dialog-initial-translate-y));
     }
 
     & > div.surface {
@@ -298,7 +298,7 @@ defineExpose<Exposed>({ show, close, isVisible })
   @starting-style {
     dialog[data-phase='opened'] {
       opacity: 0;
-      transform: translateY(var(--initial-translate-y));
+      transform: translateY(var(--dialog-initial-translate-y));
     }
 
     dialog[data-phase='opened']::backdrop {

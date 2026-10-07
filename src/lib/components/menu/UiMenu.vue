@@ -33,7 +33,7 @@
             @focus="activeIndex = index"
             @pointerenter="onItemPointerEnter(index)"
           >
-            <UiIcon v-if="item.icon" :icon="item.icon" :size="iconSize" class="item-icon" />
+            <UiIcon v-if="item.icon" :icon="item.icon" :size="iconSize" class="item-icon" color="var(--icon-color)" />
             <span class="title">{{ item.title }}</span>
           </button>
         </li>
@@ -302,7 +302,6 @@ watch(
 
       & > .item-icon {
         flex: 0 0 auto;
-        --color: var(--icon-color);
       }
 
       & > .title {

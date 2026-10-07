@@ -14,8 +14,8 @@
       </header>
 
       <UiScrollArea v-if="slots.default || message" class="message-scroll" fade-edges overscroll="contain">
-        <div :id="messageId" :style="{ '--icon-size': iconSize }" class="message">
-          <UiIcon :icon="icon" :size="iconSize" class="message-icon" />
+        <div :id="messageId" :style="{ '--confirm-icon-size': iconSize }" class="message">
+          <UiIcon :icon="icon" :size="iconSize" class="message-icon" color="var(--confirm-icon-color)" />
           <div>
             <slot>{{ message }}</slot>
           </div>
@@ -133,13 +133,18 @@ onBeforeUnmount(() => settle(false))
 <style scoped>
 @layer components {
   .confirm {
+    --confirm-gap: var(--space-xl);
+    --confirm-padding: var(--space-xl);
+    --confirm-message-gap: var(--space-lg);
+    --confirm-actions-gap: var(--space-sm);
+
     min-block-size: 0;
     max-block-size: inherit;
     display: flex;
     flex-direction: column;
-    gap: var(--gap, var(--space-xl));
+    gap: var(--confirm-gap);
     overflow: clip;
-    padding: var(--padding, var(--space-xl));
+    padding: var(--confirm-padding);
 
     & > header,
     & > footer.actions {
@@ -149,7 +154,7 @@ onBeforeUnmount(() => settle(false))
     & > header {
       &,
       & > h2 {
-        font-weight: var(--font-weight-semibold);
+        font-weight: var(--font-weight-medium);
       }
     }
 
@@ -160,12 +165,8 @@ onBeforeUnmount(() => settle(false))
 
       & .message {
         display: grid;
-        grid-template-columns: var(--icon-size) minmax(0, 1fr);
-        gap: var(--message-gap, var(--space-lg));
-
-        & > .message-icon {
-          --color: var(--icon-color, var(--confirm-icon-color));
-        }
+        grid-template-columns: var(--confirm-icon-size) minmax(0, 1fr);
+        gap: var(--confirm-message-gap);
 
         & > div {
           min-inline-size: 0;
@@ -179,7 +180,7 @@ onBeforeUnmount(() => settle(false))
       display: flex;
       flex-wrap: wrap;
       flex-direction: row-reverse;
-      gap: var(--actions-gap, var(--space-sm));
+      gap: var(--confirm-actions-gap);
     }
   }
 }

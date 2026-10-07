@@ -54,16 +54,18 @@ const open = defineModel<boolean>({ default: false })
 <style scoped>
 @layer components {
   .disclosure {
-    --accent: var(--tone-primary);
-    --padding-inline: var(--space-md);
-    --padding-block: var(--space-md);
-    --gap: var(--space-md);
-    --border-color: var(--divider-color);
-    --header-bg: transparent;
-    --summary-min-size: 12rem;
+    /* Public CSS customization hook. */
+    --disclosure-accent-color: var(--tone-primary);
+
+    --disclosure-padding-inline: var(--space-md);
+    --disclosure-padding-block: var(--space-md);
+    --disclosure-gap: var(--space-md);
+    --disclosure-border-color: var(--divider-color);
+    --disclosure-header-bg: transparent;
+    --disclosure-summary-min-size: 12rem;
 
     overflow: clip;
-    border: var(--border-width-thin) solid var(--border-color);
+    border: var(--border-width-thin) solid var(--disclosure-border-color);
     border-radius: var(--radius-lg);
     background-color: var(--surface-card);
 
@@ -71,19 +73,19 @@ const open = defineModel<boolean>({ default: false })
       display: flex;
       flex-wrap: wrap;
       align-items: center;
-      gap: var(--gap);
-      padding: var(--padding-block) var(--padding-inline);
-      background-color: var(--header-bg);
+      gap: var(--disclosure-gap);
+      padding: var(--disclosure-padding-block) var(--disclosure-padding-inline);
+      background-color: var(--disclosure-header-bg);
 
       transition: background-color var(--duration-sm) var(--bezier-smooth);
 
       &:has(> .trigger:focus-visible) {
-        --header-bg: color-mix(in oklch, var(--accent) 5%, transparent);
+        --disclosure-header-bg: color-mix(in oklch, var(--disclosure-accent-color) 5%, transparent);
       }
 
       @media (hover: hover) {
         &:has(> .trigger:hover) {
-          --header-bg: color-mix(in oklch, var(--accent) 5%, transparent);
+          --disclosure-header-bg: color-mix(in oklch, var(--disclosure-accent-color) 5%, transparent);
         }
       }
 
@@ -94,12 +96,12 @@ const open = defineModel<boolean>({ default: false })
       }
 
       & > .trigger {
-        min-inline-size: min(var(--summary-min-size), 100%);
-        flex: 1 1 var(--summary-min-size);
+        min-inline-size: min(var(--disclosure-summary-min-size), 100%);
+        flex: 1 1 var(--disclosure-summary-min-size);
 
         display: flex;
         align-items: center;
-        gap: var(--gap);
+        gap: var(--disclosure-gap);
 
         padding: 0;
         border: 0;
@@ -114,10 +116,6 @@ const open = defineModel<boolean>({ default: false })
           flex: 1 1 auto;
 
           display: grid;
-
-          & > .title {
-            font-weight: var(--font-weight-semibold);
-          }
 
           & > .description {
             color: var(--text-color-dimmed);
@@ -165,10 +163,10 @@ const open = defineModel<boolean>({ default: false })
         overflow: clip;
 
         & > .content {
-          padding: var(--padding-block) var(--padding-inline);
+          padding: var(--disclosure-padding-block) var(--disclosure-padding-inline);
 
           opacity: 0;
-          translate: 0 -0.25rem;
+          translate: 0 calc(-1 * var(--space-xs));
 
           transition:
             opacity var(--duration-sm) var(--bezier-smooth),

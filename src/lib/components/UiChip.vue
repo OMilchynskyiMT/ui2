@@ -40,7 +40,7 @@ const { variant = 'outlined', tone = 'primary', size = 'medium', label, title } 
     --bg: transparent;
     --border-width: 0;
     --border-color: oklch(from var(--accent-color) l c h / 0.3);
-    --padding-inline: 0.5rem;
+    --padding-inline: var(--space-sm);
     --gap-x: 0.375rem;
     --radius: var(--radius-lg);
     --font-size: var(--font-size-xs);

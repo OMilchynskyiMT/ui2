@@ -56,31 +56,32 @@ const onPointerEnter = (): void => {
 <style scoped>
 @layer components {
   .item {
-    min-block-size: var(--item-min-block-size);
+    min-block-size: var(--listbox-item-min-block-size);
     display: flex;
     align-items: center;
-    padding-inline: calc(var(--item-padding-inline) + var(--list-level, 0) * 1rem) var(--item-padding-inline);
+    padding-inline: calc(var(--listbox-item-padding-inline) + var(--list-level, 0) * var(--space-lg))
+      var(--listbox-item-padding-inline);
     border-radius: var(--radius-md);
     cursor: pointer;
     user-select: none;
-    background-color: var(--item-bg);
-    color: var(--item-color);
-    opacity: var(--item-opacity);
+    background-color: var(--listbox-item-bg);
+    color: var(--listbox-item-color);
+    opacity: var(--listbox-item-opacity);
 
     transition-property: background-color, color, opacity;
     transition-duration: var(--duration-sm);
     transition-timing-function: var(--bezier-smooth);
 
     &.active {
-      --item-bg: var(--item-bg-active);
+      --listbox-item-bg: var(--listbox-item-bg-active);
     }
 
     &.selected {
-      --item-color: var(--item-color-selected);
+      --listbox-item-color: var(--listbox-item-color-selected);
     }
 
     &.disabled {
-      --item-opacity: 0.5;
+      --listbox-item-opacity: 0.5;
       pointer-events: none;
     }
   }

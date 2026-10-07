@@ -54,23 +54,26 @@
       </UiSectionHeader>
 
       <UiStack class="linear-examples" gap="var(--space-xl)">
-        <UiProgressBar :max="150" :value="72" style="--accent: var(--cyan-500)" />
+        <UiProgressBar :max="150" :value="72" style="--progress-bar-color: var(--cyan-500)" />
         <UiProgressBar
           :value="90"
           style="
-            --accent: linear-gradient(
+            --progress-bar-color: linear-gradient(
               90deg,
               rgb(201, 33, 252) 0%,
               rgb(74, 126, 217) 30%,
               rgb(61, 168, 173) 50%,
               rgb(173, 166, 61) 80%
             );
-            --progress-bg: #05f2;
-            --height: 0.5rem;
+            --progress-bar-track-color: #05f2;
+            --progress-bar-height: 0.5rem;
           "
         />
         <UiProgressBar />
-        <UiProgressBar :value="[28, 14, 5, 20]" style="--accent: var(--purple-500); --height: 1rem" />
+        <UiProgressBar
+          :value="[28, 14, 5, 20]"
+          style="--progress-bar-color: var(--purple-500); --progress-bar-height: 1rem"
+        />
       </UiStack>
     </UiStack>
 

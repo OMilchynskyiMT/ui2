@@ -24,8 +24,8 @@
         </template>
 
         <template #cell-status="{ value }">
-          <UiIcon v-if="value" :icon="CheckIcon" :style="{ '--color': 'var(--icon-color-success)' }" />
-          <UiIcon v-else :icon="XIcon" :style="{ '--color': 'var(--icon-color-danger)' }" />
+          <UiIcon v-if="value" :icon="CheckIcon" color="var(--icon-color-success)" />
+          <UiIcon v-else :icon="XIcon" color="var(--icon-color-danger)" />
         </template>
       </UiTable>
     </UiStack>

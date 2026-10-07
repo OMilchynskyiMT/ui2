@@ -71,7 +71,7 @@ const emit = defineEmits<{
     box-shadow: var(--shadow-sm);
 
     & > .listbox-scroll {
-      --list-bg: var(--bg);
+      --listbox-bg: var(--bg);
 
       & .item {
         justify-content: space-between;

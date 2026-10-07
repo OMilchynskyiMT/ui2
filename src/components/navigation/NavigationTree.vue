@@ -155,14 +155,14 @@ watch(() => [route.fullPath, items] as const, syncExpandedItems, { immediate: tr
   --item-padding-inline: var(--space-sm);
   --item-padding-block: var(--space-sm);
   --accent: var(--brand-color);
-  --padding: 0px;
+  --navigation-tree-padding: 0px;
 
   list-style: none;
   position: relative;
   min-block-size: 0;
   display: grid;
   row-gap: var(--gap);
-  padding: var(--padding);
+  padding: var(--navigation-tree-padding);
 
   & > li.item {
     --item-cursor: pointer;
@@ -240,7 +240,7 @@ watch(() => [route.fullPath, items] as const, syncExpandedItems, { immediate: tr
     }
 
     &.branch > .item-control {
-      font-weight: var(--font-weight-semibold);
+      font-weight: var(--font-weight-medium);
     }
 
     &.disabled {

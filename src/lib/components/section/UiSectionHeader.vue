@@ -2,7 +2,7 @@
   <UiBar class="section-header">
     <template v-if="icon || slots.leading" #leading>
       <span class="leading-visual">
-        <UiIcon v-if="icon" :icon="icon" aria-hidden="true" />
+        <UiIcon v-if="icon" :icon="icon" aria-hidden="true" size="var(--section-header-icon-size, 1.375rem)" />
         <slot name="leading" />
       </span>
     </template>
@@ -38,7 +38,7 @@ const { icon, hint, description } = defineProps<{
 <style scoped>
 @layer components {
   .section-header {
-    --sections-gap: var(--space-sm);
+    --bar-sections-gap: var(--space-sm);
 
     align-items: start;
 
@@ -51,11 +51,6 @@ const { icon, hint, description } = defineProps<{
       block-size: 1.75rem;
       margin-block-start: 0.0625rem;
       color: var(--section-header-icon-color, var(--tone-primary));
-
-      & > :deep(.icon) {
-        --size: var(--section-header-icon-size, 1.375rem);
-        --color: currentColor;
-      }
     }
 
     & header.content {
@@ -64,12 +59,11 @@ const { icon, hint, description } = defineProps<{
 
       & > h2 {
         font-size: var(--section-header-title-size, var(--font-size-lg));
-        font-weight: var(--font-weight-semibold);
         line-height: var(--line-height-tight);
       }
 
       & > div.description {
-        margin-block-start: 0.125rem;
+        margin-block-start: var(--space-xxs);
         font-size: var(--font-size-sm);
         line-height: var(--line-height-compact);
         color: var(--text-color-dimmed);

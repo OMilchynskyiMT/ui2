@@ -124,8 +124,8 @@ defineExpose<UiBottomSheetExposed>({ show, close, isVisible })
 @layer components {
   dialog.bottom-sheet {
     --dialog-width: min(100%, var(--bottom-sheet-width, 42rem));
-    --initial-translate-y: 100%;
-    --outer-margin: 0px;
+    --dialog-initial-translate-y: 100%;
+    --dialog-outer-margin: 0px;
 
     inset-block-start: auto;
     inset-block-end: var(--dialog-viewport-inset-block-end, 0px);
@@ -182,7 +182,6 @@ defineExpose<UiBottomSheetExposed>({ show, close, isVisible })
           &,
           & > h2 {
             font-size: var(--font-size-lg);
-            font-weight: var(--font-weight-semibold);
           }
         }
 

@@ -163,7 +163,7 @@ onMounted(() => {
     --border-width: var(--border-width-thick);
     --container-bg: var(--bg);
     --control-height: 3rem;
-    --cursor: text;
+    --field-cursor: text;
     --details-font-size: var(--font-size-xs);
     --error-color: var(--error-text-color);
     --filled-label-block-start: calc(var(--filled-label-space) / 2);
@@ -194,7 +194,7 @@ onMounted(() => {
     display: flex;
     flex-direction: column;
     row-gap: var(--gap-y);
-    cursor: var(--cursor);
+    cursor: var(--field-cursor);
     opacity: var(--opacity);
     font-size: var(--font-size);
 
@@ -438,14 +438,14 @@ onMounted(() => {
 
   .field:is(.readonly) {
     --opacity: 0.75;
-    --cursor: default;
+    --field-cursor: default;
     user-select: text;
     caret-color: transparent;
   }
 
   .field:is(.disabled) {
     --opacity: 0.5;
-    --cursor: not-allowed;
+    --field-cursor: not-allowed;
     user-select: none;
 
     & > .container {

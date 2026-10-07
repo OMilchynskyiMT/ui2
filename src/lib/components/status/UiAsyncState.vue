@@ -49,11 +49,13 @@ const retry = (): void => {
 <style scoped>
 @layer components {
   .state {
+    --async-state-min-block-size: 8rem;
+
     display: grid;
     place-items: center;
 
     inline-size: 100%;
-    min-block-size: var(--min-block-size, 8rem);
+    min-block-size: var(--async-state-min-block-size);
 
     & > .visually-hidden {
       position: absolute;

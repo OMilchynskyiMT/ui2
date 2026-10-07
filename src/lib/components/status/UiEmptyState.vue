@@ -2,7 +2,7 @@
   <div class="empty-state">
     <div v-if="slots.icon || icon" aria-hidden="true" class="icon">
       <slot name="icon">
-        <UiIcon v-if="icon" :icon="icon" />
+        <UiIcon v-if="icon" :icon="icon" size="2rem" />
       </slot>
     </div>
 
@@ -51,10 +51,6 @@ const slots = useSlots()
     & > .icon {
       display: grid;
       place-items: center;
-
-      & > svg {
-        --size: 2rem;
-      }
     }
 
     & > .content {

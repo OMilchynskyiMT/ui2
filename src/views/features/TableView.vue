@@ -15,7 +15,7 @@
         mode="details"
         row-key="id"
         sticky-header
-        style="--max-block-size: 30rem"
+        style="--table-max-block-size: 30rem"
       >
         <template #cell-active="{ value }">
           {{ value ? 'Active' : 'Inactive' }}

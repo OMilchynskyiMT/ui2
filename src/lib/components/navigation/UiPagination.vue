@@ -217,7 +217,7 @@ const getPageLabel = (page: number): string => {
       &.active {
         color: var(--accent);
         background-color: color-mix(in oklch, var(--accent) 12%, transparent);
-        font-weight: var(--font-weight-semibold);
+        font-weight: var(--font-weight-medium);
         cursor: default;
       }
 

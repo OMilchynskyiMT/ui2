@@ -1,5 +1,5 @@
 <template>
-  <UiCard class="traffic-overview" padding="medium" variant="filled">
+  <UiCard class="traffic-overview" padding="medium">
     <UiStack gap="var(--space-md)">
       <DashboardCardHeader :icon="ArrowDownUpIcon" eyebrow="Received and transmitted traffic" title="Network traffic">
         <template v-if="period" #actions>

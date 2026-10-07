@@ -14,7 +14,7 @@
   >
     <span class="content">
       <span v-if="icon && iconPosition === 'leading'" class="icon-frame">
-        <UiIcon :icon class="button-icon" color="var(--icon-color, currentColor)" size="var(--icon-size)" />
+        <UiIcon :icon class="button-icon" color="var(--button-icon-color)" size="var(--icon-size)" />
       </span>
 
       <span v-if="slots.default || label !== undefined" class="label">
@@ -22,7 +22,7 @@
       </span>
 
       <span v-if="icon && iconPosition === 'trailing'" class="icon-frame">
-        <UiIcon :icon class="button-icon" color="var(--icon-color, currentColor)" size="var(--icon-size)" />
+        <UiIcon :icon class="button-icon" color="var(--button-icon-color)" size="var(--icon-size)" />
       </span>
     </span>
 
@@ -92,8 +92,10 @@ const {
     --block-size: 2.25rem;
     --icon-block-size: 1.75rem;
     --icon-size: 1.125rem;
-    --padding-inline: var(--space-md);
-    --padding-block: 0px;
+
+    --button-padding-inline: var(--space-md);
+    --button-padding-block: 0px;
+    --button-icon-color: currentColor;
     --border-width: 0px;
     --border-color: transparent;
     --border-radius: var(--button-border-radius);
@@ -103,7 +105,6 @@ const {
     --opacity: 1;
     --accent-color: var(--tone-color);
     --color: var(--button-text-color);
-    --icon-color: currentColor;
     --gap: var(--space-sm);
     --inline-size: auto;
 
@@ -119,8 +120,8 @@ const {
     block-size: var(--block-size);
     inline-size: var(--inline-size);
 
-    padding-inline: var(--padding-inline);
-    padding-block: var(--padding-block);
+    padding-inline: var(--button-padding-inline);
+    padding-block: var(--button-padding-block);
 
     border: var(--border-width) solid var(--border-color);
     border-radius: var(--border-radius);
@@ -197,7 +198,7 @@ const {
       --block-size: 2rem;
       --icon-block-size: 1.5rem;
       --icon-size: 1rem;
-      --padding-inline: 0.625rem;
+      --button-padding-inline: 0.625rem;
       --font-size: var(--font-size-sm);
       --gap: var(--space-xs);
     }
@@ -206,7 +207,7 @@ const {
       --block-size: 2.5rem;
       --icon-block-size: 2rem;
       --icon-size: 1.25rem;
-      --padding-inline: 1rem;
+      --button-padding-inline: var(--space-lg);
       --font-size: var(--font-size-lg);
       --gap: var(--space-md);
     }
@@ -238,7 +239,7 @@ const {
 
     &[data-layout='icon'] {
       --block-size: var(--icon-block-size);
-      --padding-inline: 0px;
+      --button-padding-inline: 0px;
       --border-radius: var(--radius-full);
       --gap: 0px;
       --inline-size: var(--block-size);
@@ -255,7 +256,7 @@ const {
     @media (width < container-token(--container-md)) {
       &[data-layout='adaptive'] {
         --block-size: var(--icon-block-size);
-        --padding-inline: 0px;
+        --button-padding-inline: 0px;
         --border-radius: var(--radius-full);
         --gap: 0px;
         --inline-size: var(--block-size);

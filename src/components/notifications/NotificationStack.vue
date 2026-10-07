@@ -16,7 +16,11 @@
         @pointerleave="resume(item.id, 'pointer')"
       >
         <div v-if="item.icon" class="icon">
-          <UiIcon :icon="item.icon as Component" />
+          <UiIcon
+            :icon="item.icon as Component"
+            color="var(--notification-accent)"
+            size="var(--notification-icon-size)"
+          />
         </div>
 
         <div class="content">
@@ -94,12 +98,11 @@ const timeoutStyle = (item: Notification): Record<string, string> => {
 <style scoped>
 @layer components {
   div.notifications {
-    --accent: currentColor;
-    --border-width: 0px;
-    --x-icon-size: 1rem;
-    --x-icon-color: var(--icon-color-muted);
-    --icon-size: 1.5rem;
-    --progress-width: 1px;
+    --notification-accent: currentColor;
+    --notification-border-width: 0px;
+    --notification-close-icon-color: var(--icon-color-muted);
+    --notification-icon-size: 1.5rem;
+    --notification-progress-width: 1px;
 
     position: fixed;
     inset-block-start: calc(
@@ -164,8 +167,8 @@ const timeoutStyle = (item: Notification): Record<string, string> => {
       }
 
       & > div.notification {
-        --accent: var(--tone-color);
-        --border-width: 0px;
+        --notification-accent: var(--tone-color);
+        --notification-border-width: 0px;
 
         position: relative;
         overflow: clip;
@@ -178,7 +181,7 @@ const timeoutStyle = (item: Notification): Record<string, string> => {
         align-items: start;
         column-gap: var(--space-md);
 
-        border-left: var(--border-width) solid var(--accent);
+        border-left: var(--notification-border-width) solid var(--notification-accent);
         padding: var(--space-sm) var(--space-sm) var(--space-sm) var(--space-md);
 
         background-color: var(--background-notification);
@@ -189,7 +192,7 @@ const timeoutStyle = (item: Notification): Record<string, string> => {
         pointer-events: auto;
 
         &:not([data-tone='neutral']) {
-          --border-width: 5px;
+          --notification-border-width: 5px;
         }
 
         & > div.content {
@@ -206,20 +209,10 @@ const timeoutStyle = (item: Notification): Record<string, string> => {
           place-items: center;
         }
 
-        & > div.icon {
-          & svg.icon {
-            --size: var(--icon-size);
-            --color: var(--accent);
-          }
-        }
-
         & > div.close > button {
-          --padding-inline: var(--space-xs);
-          --padding-block: var(--space-xs);
-          & svg.icon {
-            --size: var(--x-icon-size);
-            --color: var(--x-icon-color);
-          }
+          --button-padding-inline: var(--space-xs);
+          --button-padding-block: var(--space-xs);
+          --button-icon-color: var(--notification-close-icon-color);
         }
 
         &.paused > div.progress::after {
@@ -231,9 +224,9 @@ const timeoutStyle = (item: Notification): Record<string, string> => {
           inset-inline: 0;
           inset-block-end: 0;
 
-          block-size: var(--progress-width);
+          block-size: var(--notification-progress-width);
           overflow: hidden;
-          background: color-mix(in oklch, var(--accent) 10%, transparent);
+          background: color-mix(in oklch, var(--notification-accent) 10%, transparent);
 
           &::after {
             content: '';
@@ -242,7 +235,7 @@ const timeoutStyle = (item: Notification): Record<string, string> => {
             inline-size: 100%;
             block-size: 100%;
 
-            background: var(--accent);
+            background: var(--notification-accent);
 
             transform: scaleX(var(--timeout-progress));
             transform-origin: left center;

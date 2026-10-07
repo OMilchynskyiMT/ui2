@@ -48,7 +48,7 @@
               :aria-label="navigationVisible ? 'Hide navigation' : 'Show navigation'"
               :icon="MenuIcon"
               aria-controls="main-navigation"
-              style="--padding-inline: 0.5rem"
+              style="--button-padding-inline: var(--space-sm)"
               tone="neutral"
               variant="text"
               @click="toggleNavigation"
@@ -93,7 +93,7 @@
               layout="adaptive"
               menu-aria-label="User actions"
               placement="bottom-end"
-              style="--icon-color: var(--tone-primary)"
+              style="--button-icon-color: var(--tone-primary)"
               title="User actions"
               tone="neutral"
               variant="text"
@@ -102,9 +102,9 @@
               <strong>admin</strong>
 
               <template #menu-header>
-                <UiBar style="--sections-gap: 1rem">
+                <UiBar style="--bar-sections-gap: var(--space-lg)">
                   <template #leading>
-                    <UiAvatar :style="{ '--accent': 'var(--avatar-accent-color)' }" size="2rem" />
+                    <UiAvatar :style="{ '--avatar-color': 'var(--avatar-accent-color)' }" size="2rem" />
                   </template>
 
                   <div class="user">
@@ -354,7 +354,7 @@ useViewportSizeListener(({ width }) => {
   }
 
   .tree {
-    --padding: var(--space-xl) var(--space-xl) max(var(--space-xl), var(--safe-area-bottom))
+    --navigation-tree-padding: var(--space-xl) var(--space-xl) max(var(--space-xl), var(--safe-area-bottom))
       max(var(--space-xl), var(--safe-area-left));
   }
 }

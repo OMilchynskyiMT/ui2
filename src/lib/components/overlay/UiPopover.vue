@@ -132,13 +132,13 @@ watch(
 
   .anchored-overlay[data-placement^='top'].popover-enter-from,
   .anchored-overlay[data-placement^='top'].popover-leave-to {
-    translate: 0 0.5rem;
+    translate: 0 var(--space-sm);
     opacity: 0;
   }
 
   .anchored-overlay[data-placement^='bottom'].popover-enter-from,
   .anchored-overlay[data-placement^='bottom'].popover-leave-to {
-    translate: 0 -0.5rem;
+    translate: 0 calc(-1 * var(--space-sm));
     opacity: 0;
   }
 

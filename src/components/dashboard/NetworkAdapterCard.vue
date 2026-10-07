@@ -1,9 +1,9 @@
 <template>
-  <UiCard class="network-adapter" padding="medium" variant="filled">
+  <UiCard class="network-adapter" padding="medium">
     <UiStack gap="var(--space-lg)">
       <DashboardCardHeader :eyebrow="kindLabel" :icon="adapterIcon" :title="properties.name">
         <template #actions>
-          <UiCluster class="status" justify="end">
+          <UiCluster class="status" gap="var(--space-xs)" justify="end">
             <UiChip v-if="properties.current" label="Current WAN" size="small" tone="primary" variant="tonal" />
             <UiChip :label="properties.state" :tone="stateTone(properties.state)" size="small" variant="tonal" />
           </UiCluster>
@@ -18,7 +18,7 @@
         empty-value="-"
       >
         <template #value-signal>
-          <UiCluster v-if="signal" class="signal-value">
+          <UiCluster v-if="signal" class="signal-value" gap="var(--space-sm)">
             <SignalStrength :level="signal.level" :steps="signal.steps ?? 5" :title="signal.title" />
             <strong>{{ signal.value }}</strong>
           </UiCluster>
@@ -186,19 +186,14 @@ const details = computed<DetailSet>(() => {
 <style scoped>
 @layer components {
   .network-adapter {
-    & .status {
-      --cluster-gap: var(--space-xs);
-    }
-
     & .properties {
-      --field-size: min(9.5rem, 46%);
-      --row-gap: 0;
-      --row-padding: var(--space-sm) 0;
-      --border-style: solid;
+      --property-list-field-size: min(9.5rem, 46%);
+      --property-list-row-gap: 0;
+      --property-list-row-padding: var(--space-sm) 0;
+      --property-list-divider-style: solid;
 
       & :deep(.value) {
         justify-content: flex-end;
-        font-weight: var(--font-weight-semibold);
         text-align: end;
 
         & > .mono {
@@ -209,17 +204,14 @@ const details = computed<DetailSet>(() => {
     }
 
     & .signal-value {
-      --cluster-gap: var(--space-sm);
-
       flex-wrap: nowrap;
 
       & > :deep(.signal-strength) {
-        --color: var(--tone-warning);
+        --signal-strength-color: var(--tone-warning);
       }
 
       & > strong {
         font-size: var(--font-size-sm);
-        font-weight: var(--font-weight-semibold);
         font-variant-numeric: tabular-nums;
         white-space: nowrap;
       }

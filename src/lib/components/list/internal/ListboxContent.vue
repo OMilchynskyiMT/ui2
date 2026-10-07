@@ -139,26 +139,26 @@ defineExpose<ListboxContentExpose>({
 @layer components {
   .listbox-scroll {
     --max-block-size: min(16rem, var(--overlay-available-block-size, 16rem));
-    --list-bg: var(--surface-listbox);
+    --listbox-bg: var(--surface-listbox);
 
     max-block-size: var(--max-block-size);
     border-radius: inherit;
-    background-color: var(--list-bg);
-    --scroll-area-fade-color: var(--list-bg);
+    background-color: var(--listbox-bg);
+    --scroll-area-fade-color: var(--listbox-bg);
   }
 
   .list {
-    --item-min-block-size: 2.5rem;
-    --item-padding-inline: var(--space-md);
+    --listbox-item-min-block-size: 2.5rem;
+    --listbox-item-padding-inline: var(--space-md);
 
-    --item-opacity: 1;
-    --item-bg: transparent;
-    --item-bg-active: light-dark(
-      oklch(from var(--list-bg) calc(l - 0.033) c h),
-      oklch(from var(--list-bg) calc(l + 0.033) c h)
+    --listbox-item-opacity: 1;
+    --listbox-item-bg: transparent;
+    --listbox-item-bg-active: light-dark(
+      oklch(from var(--listbox-bg) calc(l - 0.033) c h),
+      oklch(from var(--listbox-bg) calc(l + 0.033) c h)
     );
-    --item-color: inherit;
-    --item-color-selected: var(--link-color);
+    --listbox-item-color: inherit;
+    --listbox-item-color-selected: var(--link-color);
     --group-color: oklch(from currentColor l c h / 0.64);
 
     display: flex;
@@ -167,7 +167,7 @@ defineExpose<ListboxContentExpose>({
     margin: 0;
     padding: var(--space-xs);
     list-style: none;
-    background-color: var(--list-bg);
+    background-color: var(--listbox-bg);
     border-radius: inherit;
 
     & > .group {
@@ -179,10 +179,10 @@ defineExpose<ListboxContentExpose>({
         display: flex;
         align-items: end;
         padding-block-end: var(--space-xs);
-        padding-inline: var(--item-padding-inline);
+        padding-inline: var(--listbox-item-padding-inline);
         color: var(--group-color);
         font-size: var(--font-size-sm);
-        font-weight: var(--font-weight-semibold);
+        font-weight: var(--font-weight-medium);
         user-select: none;
       }
 

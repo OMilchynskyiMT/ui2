@@ -37,7 +37,7 @@
           title="Network options"
         >
           <template #leading>
-            <UiIcon :icon="TableConfigIcon" size="36px" style="--color: var(--accent)" />
+            <UiIcon :icon="TableConfigIcon" color="var(--accent)" size="36px" />
           </template>
           <template #trailing>
             <UiCluster>
@@ -50,7 +50,7 @@
 
         <UiDisclosure
           description="Independent disclosure state"
-          style="--accent: var(--tone-success)"
+          style="--disclosure-accent-color: var(--tone-success)"
           title="Diagnostics"
         >
           <p>Each disclosure can be controlled independently through v-model when necessary.</p>

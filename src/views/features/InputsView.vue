@@ -149,7 +149,7 @@
           v-model="checkboxModel"
           hint="Custom color"
           label="Custom checkbox"
-          style="--control-color: var(--green-500)"
+          style="--selection-control-color: var(--green-500)"
         />
         <UiCheckbox v-model="indeterminateModel" indeterminate label="Indeterminate checkbox" />
 
@@ -168,7 +168,7 @@
           v-model="toggleModel"
           hint="Custom color"
           label="Custom toggle"
-          style="--control-color: var(--teal-500)"
+          style="--selection-control-color: var(--teal-500)"
         />
       </UiGrid>
     </UiStack>

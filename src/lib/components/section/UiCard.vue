@@ -20,6 +20,7 @@ const { tag = 'div', variant = 'filled', padding = 'large' } = defineProps<UiCar
 <style scoped>
 @layer components {
   .card {
+    --card-display: block;
     --card-padding-block: var(--space-xl);
     --card-padding-inline: var(--space-xl);
     --card-border-width: 0px;
@@ -28,11 +29,11 @@ const { tag = 'div', variant = 'filled', padding = 'large' } = defineProps<UiCar
     --card-shadow: var(--shadow-xs);
     --card-radius: var(--radius-lg);
 
-    display: var(--display, block);
+    display: var(--card-display);
     min-inline-size: 0;
     padding-block: var(--card-padding-block);
     padding-inline: var(--card-padding-inline);
-    border: var(--border-width, var(--card-border-width)) solid var(--border-color, var(--card-border-color));
+    border: var(--card-border-width) solid var(--card-border-color);
     border-radius: var(--card-radius);
     background: var(--card-bg);
     box-shadow: var(--card-shadow);

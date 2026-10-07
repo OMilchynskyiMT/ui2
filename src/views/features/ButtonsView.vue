@@ -130,7 +130,6 @@ const setLoading = (): void => {
 .variant-group > strong {
   color: var(--text-color-dimmed);
   font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-semibold);
   text-transform: capitalize;
 }
 

@@ -458,7 +458,7 @@ onMounted(() => {
     }
 
     div.field {
-      --cursor: default;
+      --field-cursor: default;
     }
 
     div.field button.field-control {
@@ -528,10 +528,6 @@ onMounted(() => {
         display: flex;
         flex-direction: column;
         row-gap: var(--space-xs);
-
-        & > strong {
-          font-weight: inherit;
-        }
 
         & > small {
           overflow-wrap: anywhere;

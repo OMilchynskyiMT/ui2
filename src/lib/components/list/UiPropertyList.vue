@@ -75,12 +75,12 @@ const internalFormatField = (field: string): string => {
 
 <style scoped>
 .property-list {
-  --field-size: min(12rem, 38%);
-  --column-gap: var(--space-md);
-  --row-gap: var(--space-sm);
-  --row-padding: var(--space-xxs) var(--space-xs);
-  --field-color: color-mix(in srgb, currentColor 68%, transparent);
-  --border-style: dashed;
+  --property-list-field-size: min(12rem, 38%);
+  --property-list-column-gap: var(--space-md);
+  --property-list-row-gap: var(--space-sm);
+  --property-list-row-padding: var(--space-xxs) var(--space-xs);
+  --property-list-field-color: color-mix(in srgb, currentColor 68%, transparent);
+  --property-list-divider-style: dashed;
 
   &,
   & > .item {
@@ -88,16 +88,16 @@ const internalFormatField = (field: string): string => {
   }
 
   grid-template-columns:
-    minmax(0, var(--field-size))
+    minmax(0, var(--property-list-field-size))
     minmax(0, 1fr);
-  gap: var(--row-gap) var(--column-gap);
+  gap: var(--property-list-row-gap) var(--property-list-column-gap);
 
   > .item {
     grid-template-columns: subgrid;
     grid-column: 1 / -1;
     align-items: center;
-    padding: var(--row-padding);
-    border-block-end: var(--border-width-thin) var(--border-style) var(--divider-color);
+    padding: var(--property-list-row-padding);
+    border-block-end: var(--border-width-thin) var(--property-list-divider-style) var(--divider-color);
 
     > .field,
     > .value {
@@ -108,7 +108,7 @@ const internalFormatField = (field: string): string => {
     }
 
     > .field {
-      color: var(--field-color);
+      color: var(--property-list-field-color);
     }
 
     > .value {

@@ -29,7 +29,7 @@
 
         <span :class="{ disabled: disabled || readonly }" class="color-picker">
           <span aria-hidden="true" class="swatch">
-            <UiIcon :icon="PaletteIcon" />
+            <UiIcon :icon="PaletteIcon" color="contrast-color(var(--swatch-color))" size="1rem" />
           </span>
 
           <input
@@ -188,11 +188,6 @@ defineExpose<UiFieldExpose>(createFieldExpose(() => fieldReference.value))
     border: var(--border-width-thin) solid color-mix(in oklch, var(--text-color) 20%, transparent);
     border-radius: var(--radius-md);
     background: var(--swatch-color);
-
-    & > .icon {
-      --size: 1rem;
-      --color: contrast-color(var(--swatch-color));
-    }
   }
 }
 </style>

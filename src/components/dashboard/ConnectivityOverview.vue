@@ -1,5 +1,5 @@
 <template>
-  <UiCard class="connectivity-overview" padding="medium" variant="filled">
+  <UiCard class="connectivity-overview" padding="medium">
     <UiStack gap="var(--space-lg)">
       <DashboardCardHeader :icon="Globe2Icon" eyebrow="Connectivity" title="Internet">
         <template #actions>
@@ -53,16 +53,16 @@ const detailItems: readonly PropertyListItem<ConnectivityDetails>[] = [
 @layer components {
   .connectivity-overview {
     & .properties {
-      --field-size: min(8rem, 42%);
-      --row-gap: 0;
-      --row-padding: var(--space-sm) 0;
-      --border-style: solid;
+      --property-list-field-size: min(8rem, 42%);
+      --property-list-row-gap: 0;
+      --property-list-row-padding: var(--space-sm) 0;
+      --property-list-divider-style: solid;
 
       & :deep(.value) {
         justify-content: flex-end;
         font-family: var(--font-mono);
         font-size: var(--font-size-xs);
-        font-weight: var(--font-weight-semibold);
+        font-weight: var(--font-weight-medium);
         text-align: end;
       }
     }

@@ -6,7 +6,6 @@
     aria-live="polite"
     class="network-status"
     padding="medium"
-    variant="filled"
   >
     <UiBar class="status-content">
       <template #leading>
@@ -53,7 +52,7 @@ const { label = 'Internet', online } = defineProps<{
     --card-bg: color-mix(in oklch, var(--status-color) 6%, transparent);
 
     & .status-content {
-      --sections-gap: var(--space-md);
+      --bar-sections-gap: var(--space-md);
     }
 
     & .visual {
@@ -72,14 +71,14 @@ const { label = 'Internet', online } = defineProps<{
       & > .label {
         color: var(--text-color-dimmed);
         font-size: var(--font-size-sm);
-        font-weight: var(--font-weight-semibold);
+        font-weight: var(--font-weight-medium);
         line-height: 1.25;
       }
 
       & > .value {
         color: var(--text-color);
         font-size: var(--font-size-lg);
-        font-weight: var(--font-weight-semibold);
+        font-weight: var(--font-weight-medium);
         line-height: 1.2;
       }
     }

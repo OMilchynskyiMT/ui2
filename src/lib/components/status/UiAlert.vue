@@ -2,7 +2,7 @@
   <div :data-tone="tone" class="alert">
     <div v-if="slots.icon || icon" aria-hidden="true" class="icon">
       <slot name="icon">
-        <UiIcon :icon="actualIcon" />
+        <UiIcon :icon="actualIcon" color="var(--alert-accent-color)" size="var(--alert-icon-size)" />
       </slot>
     </div>
 
@@ -57,28 +57,28 @@ const actualIcon = computed((): Component => {
 <style scoped>
 @layer components {
   .alert {
-    --border-width: var(--border-width-thin);
-    --icon-size: 1.5rem;
-    --accent: var(--tone-color);
+    --alert-border-width: var(--border-width-thin);
+    --alert-icon-size: 1.5rem;
+    --alert-accent-color: var(--tone-color);
     display: grid;
     align-items: start;
     gap: var(--space-md);
 
     padding: var(--space-md) var(--space-lg);
 
-    border: var(--border-width) solid color-mix(in srgb, var(--accent) 20%, transparent);
+    border: var(--alert-border-width) solid color-mix(in srgb, var(--alert-accent-color) 20%, transparent);
     border-radius: var(--radius-lg);
 
-    background-color: color-mix(in oklch, var(--accent) 8%, transparent);
+    background-color: color-mix(in oklch, var(--alert-accent-color) 8%, transparent);
 
     &:has(> .icon) {
-      grid-template-columns: var(--icon-size) minmax(0, 1fr);
+      grid-template-columns: var(--alert-icon-size) minmax(0, 1fr);
     }
     &:has(> .actions) {
       grid-template-columns: minmax(0, 1fr) auto;
     }
     &:has(> .icon):has(> .actions) {
-      grid-template-columns: var(--icon-size) minmax(0, 1fr) auto;
+      grid-template-columns: var(--alert-icon-size) minmax(0, 1fr) auto;
     }
 
     & > .icon {
@@ -86,11 +86,6 @@ const actualIcon = computed((): Component => {
       display: flex;
       align-items: center;
       justify-content: center;
-
-      & > svg.icon {
-        --size: var(--icon-size);
-        --color: var(--accent);
-      }
     }
 
     > .content {

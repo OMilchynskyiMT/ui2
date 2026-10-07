@@ -24,13 +24,14 @@ import UiBar from '@/lib/components/bars/UiBar.vue'
 
 <style scoped>
 .top-bar {
-  --height: calc(3rem + var(--safe-area-top));
-  --sections-gap: var(--space-lg);
-  --padding-block-start: var(--safe-area-top);
-  --padding-inline-start: max(var(--space-md), var(--safe-area-left));
-  --padding-inline-end: max(var(--space-md), var(--safe-area-right));
-  --bg: var(--surface-header);
-  box-shadow: inset 0 -1px var(--divider-color);
+  --bar-min-block-size: calc(3rem + var(--safe-area-top));
+  --bar-sections-gap: var(--space-lg);
+  --bar-padding-block-start: var(--safe-area-top);
+  --bar-padding-inline-start: max(var(--space-md), var(--safe-area-left));
+  --bar-padding-inline-end: max(var(--space-md), var(--safe-area-right));
+  --bar-background: var(--surface-header);
+
+  box-shadow: inset 0 calc(-1 * var(--border-width-thin)) var(--divider-color);
   isolation: isolate;
 }
 

@@ -1,5 +1,5 @@
 <template>
-  <UiCard class="capacity-usage" padding="medium" variant="filled">
+  <UiCard class="capacity-usage" padding="medium">
     <UiStack class="content" gap="var(--space-md)">
       <UiBar class="header">
         <template #leading>
@@ -43,7 +43,7 @@
         </span>
       </div>
 
-      <UiCluster class="legend">
+      <UiCluster class="legend" gap="var(--space-xs) var(--space-lg)">
         <span
           v-for="segment in renderedSegments"
           :key="segment.key"
@@ -140,7 +140,7 @@ const formattedUsed = computed(() => formatBytes(used.value))
     }
 
     & .header {
-      --sections-gap: var(--space-md);
+      --bar-sections-gap: var(--space-md);
 
       min-inline-size: 0;
 
@@ -161,7 +161,6 @@ const formattedUsed = computed(() => formatBytes(used.value))
           overflow: hidden;
           color: var(--text-color);
           font-size: var(--font-size-md);
-          font-weight: var(--font-weight-semibold);
           text-overflow: ellipsis;
           white-space: nowrap;
         }
@@ -179,7 +178,6 @@ const formattedUsed = computed(() => formatBytes(used.value))
       & .percentage {
         color: var(--accent-color);
         font-size: var(--font-size-xl);
-        font-weight: var(--font-weight-semibold);
         line-height: 1;
         font-variant-numeric: tabular-nums;
       }
@@ -193,7 +191,7 @@ const formattedUsed = computed(() => formatBytes(used.value))
       block-size: var(--track-height);
       border-radius: var(--radius-full);
       background: var(--track-bg);
-      box-shadow: inset 0 0 0 1px color-mix(in oklch, var(--text-color) 5%, transparent);
+      box-shadow: inset 0 0 0 var(--border-width-thin) color-mix(in oklch, var(--text-color) 5%, transparent);
 
       & > .segment {
         z-index: 0;
@@ -207,7 +205,6 @@ const formattedUsed = computed(() => formatBytes(used.value))
         background: var(--resolved-segment-color);
         color: var(--on-accent-color);
         font-size: var(--font-size-xxs);
-        font-weight: var(--font-weight-semibold);
         font-variant-numeric: tabular-nums;
         line-height: 1;
         white-space: nowrap;
@@ -244,8 +241,6 @@ const formattedUsed = computed(() => formatBytes(used.value))
     }
 
     & .legend {
-      --cluster-gap: var(--space-xs) var(--space-lg);
-
       min-inline-size: 0;
 
       & > .item {
@@ -273,7 +268,6 @@ const formattedUsed = computed(() => formatBytes(used.value))
 
         & > .value {
           color: var(--text-color);
-          font-weight: var(--font-weight-semibold);
           font-variant-numeric: tabular-nums;
         }
       }

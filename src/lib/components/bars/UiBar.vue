@@ -15,30 +15,32 @@ const { as = 'div' } = defineProps<{
 <style scoped>
 @layer components {
   .bar {
-    --height: auto;
-    --padding-inline: 0;
-    --padding-block: 0;
-
-    --sections-gap: var(--space-sm);
-    --items-gap: var(--space-sm);
-
-    --bg: transparent;
-    --color: inherit;
+    --bar-min-block-size: auto;
+    --bar-padding-inline: 0;
+    --bar-padding-block: 0;
+    --bar-padding-block-start: var(--bar-padding-block);
+    --bar-padding-block-end: var(--bar-padding-block);
+    --bar-padding-inline-start: var(--bar-padding-inline);
+    --bar-padding-inline-end: var(--bar-padding-inline);
+    --bar-sections-gap: var(--space-sm);
+    --bar-items-gap: var(--space-sm);
+    --bar-background: transparent;
+    --bar-color: inherit;
 
     display: grid;
     grid-template-columns: auto minmax(0, 1fr) auto;
     align-items: center;
     column-gap: 0;
     inline-size: 100%;
-    min-block-size: var(--height);
+    min-block-size: var(--bar-min-block-size);
     min-inline-size: 0;
-    padding-block-start: var(--padding-block-start, var(--padding-block));
-    padding-block-end: var(--padding-block-end, var(--padding-block));
-    padding-inline-start: var(--padding-inline-start, var(--padding-inline));
-    padding-inline-end: var(--padding-inline-end, var(--padding-inline));
+    padding-block-start: var(--bar-padding-block-start);
+    padding-block-end: var(--bar-padding-block-end);
+    padding-inline-start: var(--bar-padding-inline-start);
+    padding-inline-end: var(--bar-padding-inline-end);
 
-    background: var(--bg);
-    color: var(--color);
+    background: var(--bar-background);
+    color: var(--bar-color);
 
     & > :is(.leading, .main, .trailing) {
       min-inline-size: 0;
@@ -47,13 +49,13 @@ const { as = 'div' } = defineProps<{
     & > :is(.leading, .trailing) {
       display: flex;
       align-items: center;
-      gap: var(--items-gap);
+      gap: var(--bar-items-gap);
       white-space: nowrap;
     }
 
     & > .leading {
       &:not(:empty) {
-        margin-inline-end: var(--sections-gap);
+        margin-inline-end: var(--bar-sections-gap);
       }
     }
 
@@ -65,7 +67,7 @@ const { as = 'div' } = defineProps<{
 
     & > .trailing {
       &:not(:empty) {
-        margin-inline-start: var(--sections-gap);
+        margin-inline-start: var(--bar-sections-gap);
       }
     }
   }

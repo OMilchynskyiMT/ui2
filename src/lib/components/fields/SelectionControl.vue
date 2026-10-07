@@ -139,7 +139,10 @@ defineExpose<SelectionControlExpose>({
 <style scoped>
 @layer components {
   .selection-control {
-    --control-color: var(--interactive-control-color);
+    /* Public CSS customization hook. */
+    --selection-control-color: var(--interactive-control-color);
+
+    --control-color: var(--selection-control-color);
     --control-container-color: var(--interactive-control-container-color);
     --control-container-hover-color: color-mix(in srgb, var(--control-container-color) 90%, currentColor);
     --control-error-color: var(--interactive-control-error-color);

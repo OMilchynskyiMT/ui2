@@ -1,5 +1,5 @@
 <template>
-  <UiCard class="network-bridge" padding="medium" variant="filled">
+  <UiCard class="network-bridge" padding="medium">
     <UiStack gap="var(--space-lg)">
       <DashboardCardHeader :icon="NetworkIcon" :title="name" eyebrow="Bridge" />
 
@@ -72,16 +72,16 @@ const detailItems: readonly PropertyListItem<BridgeDetails>[] = [
 @layer components {
   .network-bridge {
     & .properties {
-      --field-size: min(9rem, 42%);
-      --row-gap: 0;
-      --row-padding: var(--space-sm) 0;
-      --border-style: solid;
+      --property-list-field-size: min(9rem, 42%);
+      --property-list-row-gap: 0;
+      --property-list-row-padding: var(--space-sm) 0;
+      --property-list-divider-style: solid;
 
       & :deep(.value) {
         justify-content: flex-end;
         font-family: var(--font-mono);
         font-size: var(--font-size-xs);
-        font-weight: var(--font-weight-semibold);
+        font-weight: var(--font-weight-medium);
         text-align: end;
       }
     }

@@ -11,10 +11,15 @@
         </template>
         <template #value-someTestThree="{ value }">
           <UiIcon :icon="UserIcon" color="red" />
-          <UiCopyButton :text="String(value)" style="--accent-color: var(--purple-500)">{{ value }}</UiCopyButton>
+          <UiCopyButton :text="String(value)" style="--copy-button-color: var(--purple-500)">{{ value }}</UiCopyButton>
         </template>
         <template #value-test4="{ value }">
-          <SignalStrength :level="Number(value)" :steps="5" style="--color: var(--cyan-600)" title="Lorem ipsum" />
+          <SignalStrength
+            :level="Number(value)"
+            :steps="5"
+            style="--signal-strength-color: var(--cyan-600)"
+            title="Lorem ipsum"
+          />
           {{ value }}
         </template>
       </UiPropertyList>

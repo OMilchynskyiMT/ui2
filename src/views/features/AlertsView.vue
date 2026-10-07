@@ -102,7 +102,6 @@ const demoError = new Error('Unable to load data')
 .variant-group > strong {
   color: var(--text-color-dimmed);
   font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-semibold);
 }
 
 .state-example {

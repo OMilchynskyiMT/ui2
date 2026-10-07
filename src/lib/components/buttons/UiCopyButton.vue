@@ -9,8 +9,8 @@
     @click="copy"
   >
     <span class="icon-frame">
-      <UiIcon :icon="CheckIcon" class="check" />
-      <UiIcon :icon="CopyIcon" class="copy" />
+      <UiIcon :icon="CheckIcon" class="check" color="var(--copy-button-color)" size="var(--copy-button-icon-size)" />
+      <UiIcon :icon="CopyIcon" class="copy" color="var(--copy-button-color)" size="var(--copy-button-icon-size)" />
     </span>
     <slot :copied>{{ label ?? '' }}</slot>
   </button>
@@ -85,13 +85,15 @@ onBeforeUnmount(clearResetTimer)
 <style scoped>
 @layer components {
   button.copy {
-    --accent-color: var(--copy-accent-color);
+    /* Public CSS customization hook. */
+    --copy-button-color: var(--copy-accent-color);
     --outline-border-color: transparent;
     --outline-bg: transparent;
     --cover-width: 100%;
     --cover-height: 100%;
     --feedback-shadow-color: transparent;
-    --icon-size: 1.25em;
+    --copy-button-icon-size: 1.25em;
+    --copy-button-disabled-opacity: 0.5;
 
     -webkit-tap-highlight-color: var(--outline-bg);
     position: relative;
@@ -105,21 +107,18 @@ onBeforeUnmount(clearResetTimer)
 
     &:disabled {
       cursor: default;
-      opacity: var(--disabled-opacity, 0.5);
+      opacity: var(--copy-button-disabled-opacity);
     }
 
     & > span.icon-frame {
-      flex: 0 0 var(--icon-size);
-      inline-size: var(--icon-size);
-      block-size: var(--icon-size);
+      flex: 0 0 var(--copy-button-icon-size);
+      inline-size: var(--copy-button-icon-size);
+      block-size: var(--copy-button-icon-size);
       display: grid;
       place-items: center;
       line-height: 0;
 
       & > svg.icon {
-        --size: var(--icon-size);
-        --color: var(--accent-color);
-
         grid-area: 1 / 1;
 
         transition-property: stroke-opacity;
@@ -158,13 +157,13 @@ onBeforeUnmount(clearResetTimer)
     }
 
     &:focus-visible {
-      --outline-bg: oklch(from var(--accent-color) l c h / 0.08);
-      --outline-border-color: oklch(from var(--accent-color) l c h / 0.24);
+      --outline-bg: oklch(from var(--copy-button-color) l c h / 0.08);
+      --outline-border-color: oklch(from var(--copy-button-color) l c h / 0.24);
     }
 
     &.copied {
-      --outline-bg: oklch(from var(--accent-color) l c h / 0.1);
-      --outline-border-color: oklch(from var(--accent-color) l c h / 0.2);
+      --outline-bg: oklch(from var(--copy-button-color) l c h / 0.1);
+      --outline-border-color: oklch(from var(--copy-button-color) l c h / 0.2);
       --feedback-shadow-color: var(--shadow-color-key);
       --cover-width: calc(100% + var(--space-sm));
       --cover-height: calc(100% + var(--space-xs));

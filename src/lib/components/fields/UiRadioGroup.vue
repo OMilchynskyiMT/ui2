@@ -135,7 +135,7 @@ const { hasError, hasHint, isInvalid, description } = useFieldState(
       padding: 0;
       color: var(--group-label-color);
       font-size: var(--font-size-md);
-      font-weight: var(--font-weight-semibold);
+      font-weight: var(--font-weight-medium);
     }
 
     & > .options {

@@ -13,7 +13,7 @@
           label="Usage Policy"
         >
           <template #leading>
-            <UiIcon :icon="ScaleIcon" style="--color: var(--icon-color-success)" />
+            <UiIcon :icon="ScaleIcon" color="var(--icon-color-success)" />
           </template>
           <template #counter="{ length, maxlength }">
             <template v-if="maxlength">{{ maxlength - length }} remaining</template>

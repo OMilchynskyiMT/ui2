@@ -1,5 +1,5 @@
 <template>
-  <UiCard class="service-status-list" padding="medium" variant="filled">
+  <UiCard class="service-status-list" padding="medium">
     <UiAutoGrid class="services" gap="var(--space-sm)" min-item-size="13.5rem">
       <UiBar v-for="service in services" :key="service.label" class="service">
         <template #leading>
@@ -43,10 +43,10 @@ const { services } = defineProps<{
 @layer components {
   .services {
     & > .service {
-      --sections-gap: var(--space-sm);
-      --items-gap: var(--space-sm);
-      --padding-block: var(--space-xs);
-      --padding-inline: var(--space-sm);
+      --bar-sections-gap: var(--space-sm);
+      --bar-items-gap: var(--space-sm);
+      --bar-padding-block: var(--space-xs);
+      --bar-padding-inline: var(--space-sm);
 
       min-block-size: 2.5rem;
       border: var(--border-width-thin) solid var(--divider-color);
@@ -57,7 +57,6 @@ const { services } = defineProps<{
         display: block;
         overflow: hidden;
         font-size: var(--font-size-sm);
-        font-weight: var(--font-weight-semibold);
         text-overflow: ellipsis;
         white-space: nowrap;
       }

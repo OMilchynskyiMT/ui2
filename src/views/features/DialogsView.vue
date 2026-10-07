@@ -39,7 +39,7 @@
     >
       <template #title>
         <UiCluster>
-          <UiIcon :icon="UserPlusIcon" size="2rem" style="--color: var(--pink-600)" />
+          <UiIcon :icon="UserPlusIcon" color="var(--pink-600)" size="2rem" />
           <span>Create user</span>
         </UiCluster>
       </template>
