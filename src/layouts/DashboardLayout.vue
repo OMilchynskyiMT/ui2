@@ -308,6 +308,7 @@ useViewportSizeListener(({ width }) => {
   }
 
   & > .page-shell {
+    grid-column: 2;
     min-inline-size: 0;
   }
 }
@@ -326,13 +327,12 @@ useViewportSizeListener(({ width }) => {
 }
 
 .panel {
-  position: sticky;
+  position: fixed;
   z-index: 2;
-  inset-block-start: 0;
-  align-self: start;
+  inset-block: 0;
+  inset-inline-start: 0;
   min-inline-size: 0;
   inline-size: var(--navigation-width);
-  block-size: 100dvh;
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
   overflow: clip;
@@ -468,10 +468,7 @@ useViewportSizeListener(({ width }) => {
     display: block;
 
     & > .panel {
-      position: fixed;
       z-index: 30;
-      inset-block: 0;
-      inset-inline-start: 0;
       inline-size: min(22rem, calc(100vi - var(--space-xxl)));
       max-inline-size: 100%;
       border-inline-end: 0;
