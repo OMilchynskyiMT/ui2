@@ -17,6 +17,7 @@ const slots = useSlots()
   display: grid;
   grid-template-rows: 1fr;
   min-block-size: 100dvh;
+  min-inline-size: 0;
   container-type: inline-size;
 
   &:has(> header) {
@@ -29,6 +30,10 @@ const slots = useSlots()
 
   &:has(> header):has(> footer) {
     grid-template-rows: auto 1fr auto;
+  }
+
+  & > .layout {
+    min-inline-size: 0;
   }
 }
 </style>

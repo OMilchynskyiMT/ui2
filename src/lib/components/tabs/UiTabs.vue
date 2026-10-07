@@ -1,39 +1,49 @@
 <template>
   <div
-    :id="id"
-    ref="tablist"
-    v-resize="updateIndicatorStyle"
-    role="tablist"
-    :aria-label="ariaLabel"
-    class="tabs"
-    @keydown="onKeydown"
+    :data-overflow-left="hasOverflowLeft || undefined"
+    :data-overflow-right="hasOverflowRight || undefined"
+    class="tabs-root"
   >
-    <button
-      v-for="(tab, index) in items"
-      :id="getTabId(index)"
-      :key="tab.value"
-      v-resize="updateIndicatorStyle"
-      v-ripple="{ disabled: tab.disabled ?? false }"
-      role="tab"
-      :aria-controls="slots.panel ? panelId : undefined"
-      :aria-disabled="tab.disabled || undefined"
-      :aria-selected="tab.value === model"
-      :class="['tab', { active: tab.value === model }]"
-      :disabled="tab.disabled"
-      :tabindex="index === tabStopIndex ? 0 : -1"
-      type="button"
-      @click="activate(tab)"
-      @focus="focusedIndex = index"
-    >
-      <span class="content">
-        <slot :name="`tab-${tab.value}`" :tab="tab">
-          <UiIcon v-if="tab.icon" :icon="tab.icon" :size="iconSize" />
-          <span class="label">{{ tab.title }}</span>
-        </slot>
-      </span>
-    </button>
+    <div ref="viewport" v-resize="updateScrollState" class="viewport" @scroll.passive="updateScrollState">
+      <div
+        :id="id"
+        ref="tablist"
+        v-resize="updateLayout"
+        role="tablist"
+        aria-orientation="horizontal"
+        :aria-label="ariaLabel"
+        class="tabs"
+        @focusout="onFocusout"
+        @keydown="onKeydown"
+      >
+        <button
+          v-for="(tab, index) in items"
+          :id="getTabId(index)"
+          :key="tab.value"
+          v-resize="updateLayout"
+          v-ripple="{ disabled: tab.disabled ?? false }"
+          role="tab"
+          :aria-controls="slots.panel ? panelId : undefined"
+          :aria-disabled="tab.disabled || undefined"
+          :aria-selected="tab.value === model"
+          :class="['tab', { active: tab.value === model }]"
+          :disabled="tab.disabled"
+          :tabindex="index === tabStopIndex ? 0 : -1"
+          type="button"
+          @click="activate(tab)"
+          @focus="onFocus(index)"
+        >
+          <span class="content">
+            <slot :name="`tab-${tab.value}`" :tab="tab">
+              <UiIcon v-if="tab.icon" :icon="tab.icon" :size="iconSize" />
+              <span class="label">{{ tab.title }}</span>
+            </slot>
+          </span>
+        </button>
 
-    <span ref="indicator" aria-hidden="true" class="indicator" />
+        <span ref="indicator" aria-hidden="true" class="indicator" />
+      </div>
+    </div>
   </div>
 
   <div v-if="slots.panel" :id="panelId" role="tabpanel" :aria-labelledby="activeTabId" class="tab-panel">
@@ -81,9 +91,12 @@ const emit = defineEmits<{
 
 const model = defineModel<Value>({ required: true })
 const slots = useSlots()
+const viewportReference = useTemplateRef<HTMLDivElement>('viewport')
 const tablistReference = useTemplateRef<HTMLDivElement>('tablist')
 const indicatorReference = useTemplateRef<HTMLSpanElement>('indicator')
 const focusedIndex = ref(-1)
+const hasOverflowLeft = ref(false)
+const hasOverflowRight = ref(false)
 const panelId = `${id}-panel`
 
 const getTabId = (index: number): string => `${id}-tab-${index}`
@@ -183,68 +196,177 @@ const updateIndicatorStyle = (): void => {
   const tablist = tablistReference.value
   const indicator = indicatorReference.value
   const activeElement = activeIndex.value === -1 ? undefined : getTabElement(activeIndex.value)
+  const activeContent = activeElement?.querySelector<HTMLElement>('.content')
 
-  if (!tablist || !indicator || !activeElement) {
+  if (!tablist || !indicator || !activeElement || !activeContent) {
     indicator?.style.setProperty('--indicator-width', '0px')
     return
   }
 
   const tablistRect = tablist.getBoundingClientRect()
-  const activeRect = activeElement.getBoundingClientRect()
+  const contentRect = activeContent.getBoundingClientRect()
 
-  indicator.style.setProperty('--indicator-x', `${activeRect.left - tablistRect.left}px`)
-  indicator.style.setProperty('--indicator-y', `${activeRect.bottom - tablistRect.bottom}px`)
-  indicator.style.setProperty('--indicator-width', `${activeRect.width}px`)
+  indicator.style.setProperty('--indicator-x', `${contentRect.left - tablistRect.left}px`)
+  indicator.style.setProperty('--indicator-width', `${contentRect.width}px`)
 }
 
-const syncIndicator = async (): Promise<void> => {
-  await nextTick()
+const updateScrollState = (): void => {
+  const viewport = viewportReference.value
+  const tablist = tablistReference.value
+  if (!viewport || !tablist) return
+
+  const viewportRect = viewport.getBoundingClientRect()
+  const tablistRect = tablist.getBoundingClientRect()
+
+  hasOverflowLeft.value = tablistRect.left < viewportRect.left - 1
+  hasOverflowRight.value = tablistRect.right > viewportRect.right + 1
+}
+
+const updateLayout = (): void => {
   updateIndicatorStyle()
+  updateScrollState()
 }
 
-onMounted(syncIndicator)
-watch(() => [model.value, items] as const, syncIndicator, { flush: 'post' })
+const getScrollBehavior = (): ScrollBehavior => {
+  return matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'
+}
+
+const scrollTabIntoView = (index: number): void => {
+  const viewport = viewportReference.value
+  const tab = getTabElement(index)
+  if (!viewport || !tab) return
+
+  const viewportRect = viewport.getBoundingClientRect()
+  const tabRect = tab.getBoundingClientRect()
+  const scrollPadding = Number.parseFloat(getComputedStyle(viewport).scrollPaddingInlineStart) || 0
+  const visibleLeft = viewportRect.left + scrollPadding
+  const visibleRight = viewportRect.right - scrollPadding
+
+  let delta = 0
+  if (tabRect.left < visibleLeft) {
+    delta = tabRect.left - visibleLeft
+  } else if (tabRect.right > visibleRight) {
+    delta = tabRect.right - visibleRight
+  }
+
+  if (Math.abs(delta) <= 1) return
+
+  viewport.scrollBy({ left: delta, behavior: getScrollBehavior() })
+}
+
+const onFocus = (index: number): void => {
+  focusedIndex.value = index
+  scrollTabIntoView(index)
+}
+
+const onFocusout = (event: FocusEvent): void => {
+  const nextTarget = event.relatedTarget
+  if (!(nextTarget instanceof Node) || !tablistReference.value?.contains(nextTarget)) {
+    focusedIndex.value = -1
+  }
+}
+
+const syncActiveTab = async (): Promise<void> => {
+  await nextTick()
+  updateLayout()
+
+  if (activeIndex.value !== -1) {
+    scrollTabIntoView(activeIndex.value)
+  }
+}
+
+onMounted(syncActiveTab)
+watch(() => [model.value, items] as const, syncActiveTab, { flush: 'post' })
 </script>
 
 <style scoped>
 @layer components {
-  .tabs {
-    --indicator-height: 2px;
+  .tabs-root {
+    --indicator-height: 3px;
     --indicator-color: var(--link-color);
     --indicator-width: 0;
     --indicator-x: 0;
-    --indicator-y: 0;
 
-    --gap: var(--space-sm);
+    --gap: var(--space-xxs);
     --tab-gap: var(--space-sm);
     --icon-size: v-bind(iconSize);
 
-    --tab-height: 2.5rem;
-    --tab-padding-inline: var(--space-sm);
+    --tab-height: 3rem;
+    --tab-padding-inline: var(--space-md);
     --tab-font-size: var(--font-size-md);
-    --tab-color: var(--text-color);
+    --tab-color: var(--text-color-secondary);
     --tab-color-active: var(--link-color);
     --tab-bg: transparent;
+    --tab-bg-hover: color-mix(in oklch, var(--text-color) 5%, transparent);
+    --tab-bg-active: color-mix(in oklch, var(--tab-color-active) 9%, transparent);
     --tab-opacity: 1;
 
+    --overflow-fade-size: var(--space-xl);
+    --scroll-padding-inline: var(--overflow-fade-size);
+
+    min-inline-size: 0;
+    overflow: hidden;
+
+    & > .viewport {
+      min-inline-size: 0;
+      overflow-x: auto;
+      overflow-y: hidden;
+      overscroll-behavior-inline: contain;
+      scrollbar-width: none;
+      scroll-padding-inline: var(--scroll-padding-inline);
+      -webkit-mask-image: linear-gradient(
+        to right,
+        var(--mask-left, #000) 0,
+        #000 var(--overflow-fade-size),
+        #000 calc(100% - var(--overflow-fade-size)),
+        var(--mask-right, #000) 100%
+      );
+      mask-image: linear-gradient(
+        to right,
+        var(--mask-left, #000) 0,
+        #000 var(--overflow-fade-size),
+        #000 calc(100% - var(--overflow-fade-size)),
+        var(--mask-right, #000) 100%
+      );
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    }
+
+    &[data-overflow-left] > .viewport {
+      --mask-left: transparent;
+    }
+
+    &[data-overflow-right] > .viewport {
+      --mask-right: transparent;
+    }
+  }
+
+  .tabs {
     position: relative;
     display: flex;
-    flex-flow: row wrap;
+    flex-flow: row nowrap;
     align-items: stretch;
-    align-content: stretch;
-    justify-content: flex-start;
     gap: var(--gap);
+
+    inline-size: max-content;
+    min-inline-size: 100%;
+
+    box-shadow: inset 0 calc(-1 * var(--border-width-thin)) 0 var(--divider-color);
 
     & > .indicator {
       position: absolute;
+      z-index: 2;
       inset-block-end: 0;
+      inset-inline-start: 0;
       block-size: var(--indicator-height);
       inline-size: var(--indicator-width);
       background-color: var(--indicator-color);
-      border-radius: var(--radius-full);
-      transform: translate(var(--indicator-x), var(--indicator-y));
+      border-radius: var(--radius-full) var(--radius-full) 0 0;
+      transform: translateX(var(--indicator-x));
+      pointer-events: none;
 
-      will-change: transform, width;
       transition-property: transform, width;
       transition-duration: var(--duration-lg);
       transition-timing-function: var(--bezier-emphasized);
@@ -256,6 +378,7 @@ watch(() => [model.value, items] as const, syncIndicator, { flush: 'post' })
       overflow: hidden;
 
       display: inline-flex;
+      flex: 0 0 auto;
       align-items: center;
       justify-content: center;
       gap: var(--tab-gap);
@@ -265,39 +388,50 @@ watch(() => [model.value, items] as const, syncIndicator, { flush: 'post' })
 
       padding-inline: var(--tab-padding-inline);
       border: 0;
-      border-radius: var(--radius-md);
+      border-radius: var(--radius-md) var(--radius-md) 0 0;
       color: var(--tab-color);
-      background: var(--tab-bg);
+      background-color: var(--tab-bg);
       font-size: var(--tab-font-size);
-      line-height: var(--icon-size);
+      font-weight: var(--font-weight-medium);
+      line-height: var(--line-height-compact);
       opacity: var(--tab-opacity);
       user-select: none;
       cursor: pointer;
+      scroll-margin-inline: var(--scroll-padding-inline);
 
       min-inline-size: 0;
-      max-inline-size: 100%;
+      max-inline-size: none;
 
-      will-change: background-color, color, opacity;
       transition-property: background-color, color, opacity;
       transition-duration: var(--duration-md);
       transition-timing-function: var(--bezier-smooth);
 
       &.active {
         --tab-color: var(--tab-color-active);
+        --tab-bg: var(--tab-bg-active);
       }
 
       &:focus-visible {
-        --tab-bg: color-mix(in oklch, var(--tab-color-active) 8%, transparent);
+        outline-offset: calc(-1 * var(--focus-ring-width));
       }
 
       @media (hover: hover) {
-        &:hover:not(:disabled) {
-          --tab-bg: color-mix(in oklch, var(--tab-color-active) 6%, transparent);
+        &:hover:not(:disabled, .active) {
+          --tab-color: var(--text-color-strong);
+          --tab-bg: var(--tab-bg-hover);
+        }
+
+        &.active:hover:not(:disabled) {
+          --tab-bg: color-mix(in oklch, var(--tab-color-active) 12%, transparent);
         }
       }
 
+      &:active:not(:disabled) {
+        --tab-bg: color-mix(in oklch, var(--tab-color-active) 14%, transparent);
+      }
+
       &:disabled {
-        --tab-opacity: 0.6;
+        --tab-opacity: 0.45;
         cursor: not-allowed;
       }
 
@@ -318,8 +452,6 @@ watch(() => [model.value, items] as const, syncIndicator, { flush: 'post' })
 
         & > span.label {
           min-inline-size: 0;
-          overflow: hidden;
-          text-overflow: ellipsis;
           white-space: nowrap;
         }
       }
