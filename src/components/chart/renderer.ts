@@ -28,6 +28,20 @@ type RendererOptions = Readonly<{
   formatValue: ChartValueFormatter
 }>
 
+type ChartTheme = Readonly<{
+  text: string
+  grid: string
+  tooltipBackground: string
+  tooltipText: string
+}>
+
+const resolveChartTheme = (): ChartTheme => ({
+  text: resolveColor('--chart-text-color'),
+  grid: resolveColor('--chart-grid-color'),
+  tooltipBackground: resolveColor('--chart-tooltip-background'),
+  tooltipText: resolveColor('--chart-tooltip-color'),
+})
+
 type Renderer = Readonly<{
   update: (chart: ChartDefinition) => boolean
   destroy: () => void
@@ -74,8 +88,10 @@ const createBarData = (chart: BarChart, options: RendererOptions): ChartJsData<'
 
 const createBarOptions = (chart: BarChart, options: RendererOptions): ChartJsOptions<'bar'> => {
   const isStacked = chart.stacked === true
+  const theme = resolveChartTheme()
 
   return {
+    color: theme.text,
     responsive: true,
     maintainAspectRatio: false,
     interaction: {
@@ -85,8 +101,14 @@ const createBarOptions = (chart: BarChart, options: RendererOptions): ChartJsOpt
     plugins: {
       legend: {
         display: chart.series.length > 1,
+        labels: {
+          color: theme.text,
+        },
       },
       tooltip: {
+        backgroundColor: theme.tooltipBackground,
+        titleColor: theme.tooltipText,
+        bodyColor: theme.tooltipText,
         callbacks: {
           label: context => {
             const label = context.dataset.label
@@ -101,17 +123,29 @@ const createBarOptions = (chart: BarChart, options: RendererOptions): ChartJsOpt
     scales: {
       x: {
         stacked: isStacked,
+        border: {
+          color: theme.grid,
+        },
         grid: {
           display: false,
+          color: theme.grid,
         },
         ticks: {
+          color: theme.text,
           maxRotation: 0,
         },
       },
       y: {
         stacked: isStacked,
         beginAtZero: true,
+        border: {
+          color: theme.grid,
+        },
+        grid: {
+          color: theme.grid,
+        },
         ticks: {
+          color: theme.text,
           callback: value => {
             return typeof value === 'number' ? options.formatValue(value) : value
           },
@@ -172,7 +206,10 @@ const createLineData = (chart: LineChart, options: RendererOptions): ChartJsData
 }
 
 const createLineOptions = (chart: LineChart, options: RendererOptions): ChartJsOptions<'line'> => {
+  const theme = resolveChartTheme()
+
   return {
+    color: theme.text,
     responsive: true,
     maintainAspectRatio: false,
     interaction: {
@@ -183,11 +220,15 @@ const createLineOptions = (chart: LineChart, options: RendererOptions): ChartJsO
       legend: {
         display: chart.series.length > 1,
         labels: {
+          color: theme.text,
           usePointStyle: true,
           pointStyle: 'line',
         },
       },
       tooltip: {
+        backgroundColor: theme.tooltipBackground,
+        titleColor: theme.tooltipText,
+        bodyColor: theme.tooltipText,
         callbacks: {
           label: context => {
             const label = context.dataset.label
@@ -200,10 +241,15 @@ const createLineOptions = (chart: LineChart, options: RendererOptions): ChartJsO
     },
     scales: {
       x: {
+        border: {
+          color: theme.grid,
+        },
         grid: {
           display: false,
+          color: theme.grid,
         },
         ticks: {
+          color: theme.text,
           autoSkip: true,
           maxRotation: 0,
           maxTicksLimit: 7,
@@ -211,7 +257,14 @@ const createLineOptions = (chart: LineChart, options: RendererOptions): ChartJsO
       },
       y: {
         beginAtZero: true,
+        border: {
+          color: theme.grid,
+        },
+        grid: {
+          color: theme.grid,
+        },
         ticks: {
+          color: theme.text,
           callback: value => {
             return typeof value === 'number' ? options.formatValue(value) : value
           },

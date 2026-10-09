@@ -104,6 +104,9 @@ const {
     --shadow: 0 0 0 transparent;
     --opacity: 1;
     --accent-color: var(--tone-color);
+    --accent-foreground-color: var(--tone-foreground-color);
+    --accent-container-color: var(--tone-container-color);
+    --accent-on-container-color: var(--tone-on-container-color);
     --color: var(--button-text-color);
     --gap: var(--space-sm);
     --inline-size: auto;
@@ -214,27 +217,22 @@ const {
 
     &[data-variant='outlined'] {
       --border-width: var(--button-border-width);
-      --border-color: var(--accent-color);
+      --border-color: var(--accent-foreground-color);
+      --color: var(--accent-foreground-color);
     }
 
     &[data-variant='filled'] {
       --bg: var(--accent-color);
-      --color: oklch(from var(--accent-color) calc(l + 0.65) c h);
+      --color: var(--on-accent-color);
     }
 
     &[data-variant='text'] {
-      --color: light-dark(
-        oklch(from var(--accent-color) calc(l - 0.1) c h),
-        oklch(from var(--accent-color) calc(l + 0.25) c h)
-      );
+      --color: var(--accent-foreground-color);
     }
 
     &[data-variant='tonal'] {
-      --bg: oklch(from var(--accent-color) l c h / 0.25);
-      --color: light-dark(
-        oklch(from var(--accent-color) calc(l - 0.15) c h),
-        oklch(from var(--accent-color) calc(l + 0.33) c h)
-      );
+      --bg: var(--accent-container-color);
+      --color: var(--accent-on-container-color);
     }
 
     &[data-layout='icon'] {
@@ -278,13 +276,13 @@ const {
 
       &:enabled[data-layout='icon'][data-variant='text']:hover {
         --opacity: 1;
-        --bg: oklch(from var(--accent-color) l c h / 0.1);
+        --bg: color-mix(in oklab, var(--accent-foreground-color) 10%, transparent);
       }
 
       @media (width < container-token(--container-md)) {
         &:enabled[data-layout='adaptive'][data-variant='text']:hover {
           --opacity: 1;
-          --bg: oklch(from var(--accent-color) l c h / 0.1);
+          --bg: color-mix(in oklab, var(--accent-foreground-color) 10%, transparent);
         }
       }
     }

@@ -297,8 +297,8 @@ watch(() => [model.value, items] as const, syncActiveTab, { flush: 'post' })
     --tab-color: var(--text-color-secondary);
     --tab-color-active: var(--link-color);
     --tab-bg: transparent;
-    --tab-bg-hover: color-mix(in oklch, var(--text-color) 5%, transparent);
-    --tab-bg-active: color-mix(in oklch, var(--tab-color-active) 9%, transparent);
+    --tab-bg-hover: color-mix(in oklab, var(--text-color) 5%, transparent);
+    --tab-bg-active: color-mix(in oklab, var(--tab-color-active) 9%, transparent);
     --tab-opacity: 1;
 
     --overflow-fade-size: var(--space-xl);
@@ -422,12 +422,12 @@ watch(() => [model.value, items] as const, syncActiveTab, { flush: 'post' })
         }
 
         &.active:hover:not(:disabled) {
-          --tab-bg: color-mix(in oklch, var(--tab-color-active) 12%, transparent);
+          --tab-bg: color-mix(in oklab, var(--tab-color-active) 12%, transparent);
         }
       }
 
       &:active:not(:disabled) {
-        --tab-bg: color-mix(in oklch, var(--tab-color-active) 14%, transparent);
+        --tab-bg: color-mix(in oklab, var(--tab-color-active) 14%, transparent);
       }
 
       &:disabled {

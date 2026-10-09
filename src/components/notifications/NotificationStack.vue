@@ -226,7 +226,7 @@ const timeoutStyle = (item: Notification): Record<string, string> => {
 
           block-size: var(--notification-progress-width);
           overflow: hidden;
-          background: color-mix(in oklch, var(--notification-accent) 10%, transparent);
+          background: color-mix(in oklab, var(--notification-accent) 10%, transparent);
 
           &::after {
             content: '';

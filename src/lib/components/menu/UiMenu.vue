@@ -242,7 +242,7 @@ watch(
   .menu-scroll {
     min-block-size: 0;
     flex: 1 1 auto;
-    --scroll-area-fade-color: var(--popover-bg, var(--scroll-fade-color));
+    --scroll-area-fade-color: var(--popover-bg, var(--surface-popover));
   }
 
   .menu-list {
@@ -277,16 +277,13 @@ watch(
       transition-timing-function: var(--bezier-smooth);
 
       &[data-tone]:not([data-tone='neutral']) {
-        --accent: var(--tone-color);
-        --icon-color: var(--tone-color);
-        --item-color: light-dark(
-          oklch(from var(--tone-color) calc(l - 0.15) c h),
-          oklch(from var(--tone-color) calc(l + 0.25) c h)
-        );
+        --accent: var(--tone-foreground-color);
+        --icon-color: var(--tone-foreground-color);
+        --item-color: var(--tone-foreground-color);
       }
 
       &:focus-visible {
-        --item-bg: color-mix(in oklch, var(--accent) 6%, transparent);
+        --item-bg: color-mix(in oklab, var(--accent) 6%, transparent);
       }
 
       &[aria-disabled='true'] {
@@ -296,7 +293,7 @@ watch(
 
       @media (hover: hover) {
         &:hover {
-          --item-bg: color-mix(in oklch, var(--accent) 6%, transparent);
+          --item-bg: color-mix(in oklab, var(--accent) 6%, transparent);
         }
       }
 

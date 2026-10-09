@@ -159,7 +159,7 @@ defineExpose<ListboxContentExpose>({
     );
     --listbox-item-color: inherit;
     --listbox-item-color-selected: var(--link-color);
-    --group-color: oklch(from currentColor l c h / 0.64);
+    --group-color: var(--text-color-dimmed);
 
     display: flex;
     flex-direction: column;

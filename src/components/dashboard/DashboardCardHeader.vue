@@ -47,7 +47,7 @@ const { icon, eyebrow, title, description } = defineProps<{
       display: grid;
       place-items: center;
       border-radius: var(--radius-lg);
-      background: color-mix(in oklch, var(--tone-primary) 12%, transparent);
+      background: color-mix(in oklab, var(--tone-primary) 12%, transparent);
       color: var(--tone-primary);
     }
 

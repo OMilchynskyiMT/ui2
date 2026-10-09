@@ -81,7 +81,7 @@ const { customName, modelNumber, serialNumber, imei, firmwareVersion, uptime, cu
       place-items: center;
       overflow: hidden;
       border-radius: var(--radius-lg);
-      background: color-mix(in oklch, var(--tone-primary) 5%, var(--surface-card));
+      background: color-mix(in oklab, var(--tone-primary) 5%, var(--surface-card));
 
       & > img {
         inline-size: 100%;
@@ -95,7 +95,7 @@ const { customName, modelNumber, serialNumber, imei, firmwareVersion, uptime, cu
         display: grid;
         place-items: center;
         border-radius: var(--radius-xl);
-        background: color-mix(in oklch, var(--tone-primary) 14%, transparent);
+        background: color-mix(in oklab, var(--tone-primary) 14%, transparent);
         color: var(--tone-primary);
       }
     }

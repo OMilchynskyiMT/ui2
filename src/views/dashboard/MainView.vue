@@ -30,7 +30,7 @@
         v-if="networkGroups.length > 0"
         :max-columns="2"
         align="start"
-        gap="var(--space-xl)"
+        gap="var(--space-lg)"
         min-item-size="calc(var(--container-md) / 2)"
       >
         <UiStack v-for="group in networkGroups" :key="group.id" gap="var(--space-lg)">
@@ -178,13 +178,13 @@ const trafficChart: ChartDefinition = {
       id: 'received',
       label: 'Received',
       values: receivedTraffic,
-      color: '--cyan-500',
+      color: '--data-color-3',
     },
     {
       id: 'transmitted',
       label: 'Transmitted',
       values: transmittedTraffic,
-      color: '--orange-400',
+      color: '--data-color-4',
     },
   ],
 }

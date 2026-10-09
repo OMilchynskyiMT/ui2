@@ -57,13 +57,15 @@
 
           <template #trailing>
             <UiButton
+              v-if="needSaveAndApply"
               :icon="SaveCheckIcon"
-              aria-label="Save & Restart"
+              aria-label="Save & Apply"
+              class="save-and-apply"
               layout="adaptive"
               title="Save and Apply"
               tone="danger"
               variant="tonal"
-              @click="saveAndApplyConfirm?.confirm"
+              @click="onSaveAndApply"
             >
               Save & Apply
             </UiButton>
@@ -153,7 +155,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, nextTick, ref, useTemplateRef } from 'vue'
+import { computed, nextTick, onMounted, ref, useTemplateRef } from 'vue'
 import {
   CogIcon,
   HomeIcon,
@@ -195,9 +197,19 @@ const isCompact = ref(getViewportSize().width < compactBreakpoint())
 const desktopNavigationVisible = ref(true)
 const mobileNavigationOpen = ref(false)
 const saveAndApplyConfirm = useTemplateRef<ConfirmExposed>('saveAndApplyConfirm')
+const needSaveAndApply = ref(false)
 
 const { toggleScheme, scheme: resolvedScheme } = useColorScheme()
 const { breadcrumbs } = useBreadcrumbs()
+
+const onSaveAndApply = async (): Promise<void> => {
+  if (!(await saveAndApplyConfirm.value?.confirm())) return
+
+  needSaveAndApply.value = false
+  setTimeout(() => {
+    needSaveAndApply.value = true
+  }, 5000)
+}
 
 const navigationVisible = computed(() => {
   return isCompact.value ? mobileNavigationOpen.value : desktopNavigationVisible.value
@@ -267,6 +279,12 @@ const userMenuHandler = (value: string): void => {
   toggleScheme()
 }
 
+onMounted(() => {
+  setTimeout(() => {
+    needSaveAndApply.value = true
+  }, 5000)
+})
+
 useViewportSizeListener(({ width }) => {
   const isCompact_ = width < compactBreakpoint()
   if (isCompact_ !== isCompact.value) mobileNavigationOpen.value = false
@@ -295,11 +313,16 @@ useViewportSizeListener(({ width }) => {
 }
 
 .page-breadcrumbs {
+  --opacity: 0.5;
   font-size: var(--font-size-xs);
-  background-color: var(--background-breadcrumbs);
   padding-inline: var(--space-sm);
   padding-block: var(--space-xxs);
-  color: var(--text-color-dimmed);
+  opacity: var(--opacity);
+  transition: opacity var(--duration-lg) var(--bezier-smooth);
+
+  &:is(:hover, :focus-within, :focus-visible) {
+    --opacity: 1;
+  }
 }
 
 .panel {
@@ -314,11 +337,36 @@ useViewportSizeListener(({ width }) => {
   grid-template-rows: auto minmax(0, 1fr);
   overflow: clip;
   border-inline-end: var(--border-width-thin) solid var(--divider-color);
-  background: var(--surface-navigation);
+  background: radial-gradient(
+    circle at top,
+    color-mix(in oklab, var(--blue-500) 1%, var(--surface-navigation)) 0%,
+    var(--surface-navigation) 33%
+  );
 
   transition-property: transform;
   transition-duration: var(--duration-lg);
   transition-timing-function: var(--bezier-smooth);
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      circle at top,
+      light-dark(
+          color-mix(in oklab, var(--blue-500) 15%, transparent),
+          color-mix(in oklab, var(--blue-400) 10%, transparent)
+        )
+        0%,
+      transparent 20%
+    );
+    opacity: 0;
+    transition: opacity var(--duration-xl) var(--bezier-smooth);
+  }
+
+  &:is(:hover, :focus-visible)::before {
+    opacity: 1;
+  }
 
   & > .header {
     min-block-size: calc(3rem + var(--safe-area-top));
@@ -348,7 +396,7 @@ useViewportSizeListener(({ width }) => {
   }
 
   & > .scroll {
-    --scroll-area-fade-color: var(--surface-page);
+    --scroll-area-fade-color: var(--surface-navigation);
 
     min-block-size: 0;
   }
@@ -389,8 +437,8 @@ useViewportSizeListener(({ width }) => {
   min-block-size: 100%;
   padding-block-start: var(--space-xl);
   padding-block-end: var(--space-xxl);
-  padding-inline-start: max(var(--space-xxl), var(--safe-area-left));
-  padding-inline-end: max(var(--space-xxl), var(--safe-area-right));
+  padding-inline-start: clamp(max(var(--space-sm), var(--safe-area-left)), 3vw, var(--space-xxl));
+  padding-inline-end: clamp(max(var(--space-sm), var(--safe-area-right)), 3vw, var(--space-xxl));
 
   & > main {
     min-inline-size: 0;
@@ -479,5 +527,27 @@ useViewportSizeListener(({ width }) => {
   .backdrop {
     transition: none;
   }
+}
+</style>
+
+<style>
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  block-size: 100%;
+  inline-size: 100%;
+  z-index: -1;
+  background: radial-gradient(
+    circle at 80% -25%,
+    color-mix(in oklab, light-dark(var(--red-200), var(--red-600)) 35%, transparent) 0%,
+    transparent 50%
+  );
+  opacity: 0;
+  transition: opacity var(--duration-lg) var(--bezier-smooth);
+}
+
+body:has(.save-and-apply)::before {
+  opacity: 1;
 }
 </style>

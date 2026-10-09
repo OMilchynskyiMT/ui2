@@ -184,7 +184,7 @@ onMounted(() => {
     --multiline-padding-block: calc(var(--padding-inline) * 0.75);
     --opacity: 1;
     --padding-inline: var(--space-md);
-    --prefix-color: oklch(from var(--text-color) l c h / 0.5);
+    --prefix-color: var(--text-color-dimmed);
     --prefix-opacity: 0;
     --prefix-scale: 0.75;
     --text-color: var(--text-color-strong);
@@ -212,8 +212,8 @@ onMounted(() => {
     }
 
     &:is([data-variant='filled']) {
-      --bg: color-mix(in oklch, var(--text-color) 6%, transparent);
-      --bg-hover: color-mix(in oklch, var(--bg) 97%, var(--text-color) 3%);
+      --bg: color-mix(in oklab, var(--text-color) 6%, transparent);
+      --bg-hover: color-mix(in oklab, var(--bg) 97%, var(--text-color) 3%);
       --filled-border-width: max(var(--border-width-thin), calc(var(--border-width) / 2));
     }
   }

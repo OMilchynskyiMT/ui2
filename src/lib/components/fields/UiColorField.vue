@@ -185,7 +185,7 @@ defineExpose<UiFieldExpose>(createFieldExpose(() => fieldReference.value))
     inline-size: 1.75rem;
     block-size: 1.75rem;
     pointer-events: none;
-    border: var(--border-width-thin) solid color-mix(in oklch, var(--text-color) 20%, transparent);
+    border: var(--border-width-thin) solid color-mix(in oklab, var(--text-color) 20%, transparent);
     border-radius: var(--radius-md);
     background: var(--swatch-color);
   }

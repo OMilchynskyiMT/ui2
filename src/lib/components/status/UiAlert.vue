@@ -59,7 +59,7 @@ const actualIcon = computed((): Component => {
   .alert {
     --alert-border-width: var(--border-width-thin);
     --alert-icon-size: 1.5rem;
-    --alert-accent-color: var(--tone-color);
+    --alert-accent-color: var(--tone-foreground-color);
     display: grid;
     align-items: start;
     gap: var(--space-md);
@@ -69,7 +69,7 @@ const actualIcon = computed((): Component => {
     border: var(--alert-border-width) solid color-mix(in srgb, var(--alert-accent-color) 20%, transparent);
     border-radius: var(--radius-lg);
 
-    background-color: color-mix(in oklch, var(--alert-accent-color) 8%, transparent);
+    background-color: color-mix(in oklab, var(--alert-accent-color) 8%, transparent);
 
     &:has(> .icon) {
       grid-template-columns: var(--alert-icon-size) minmax(0, 1fr);

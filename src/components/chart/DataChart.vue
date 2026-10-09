@@ -7,6 +7,8 @@
 <script lang="ts" setup>
 import { onMounted, onScopeDispose, ref, watch } from 'vue'
 
+import { useColorScheme } from '@/composables/useColorScheme'
+
 import { createChartRenderer } from './renderer'
 import type { ChartDefinition, ChartLabel, ChartLabelFormatter, ChartValueFormatter } from './types'
 
@@ -20,6 +22,7 @@ type Properties = {
 const { chart, label, formatLabel: formatLabelFunction, formatValue: formatValueFunction } = defineProps<Properties>()
 
 const canvas = ref<HTMLCanvasElement>()
+const { scheme } = useColorScheme()
 let renderer: ReturnType<typeof createChartRenderer> | undefined
 
 const formatLabel = (value: ChartLabel): string => {
@@ -38,7 +41,7 @@ onMounted(() => {
   })
 })
 
-watch([() => chart, () => formatLabelFunction, () => formatValueFunction], () => renderer?.update(chart))
+watch([() => chart, () => formatLabelFunction, () => formatValueFunction, scheme], () => renderer?.update(chart))
 onScopeDispose(() => renderer?.destroy())
 </script>
 

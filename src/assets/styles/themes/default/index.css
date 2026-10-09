@@ -21,7 +21,7 @@
   --border-width-thin: 1px;
   --border-width-thick: 2px;
 
-  --focus-ring-color: oklch(from var(--tone-primary) l c h / 0.25);
+  --focus-ring-color: var(--border-color-active);
   --focus-ring-width: var(--border-width-thick);
   --focus-ring-offset: 0px;
 

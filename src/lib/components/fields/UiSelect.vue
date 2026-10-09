@@ -372,7 +372,7 @@ defineExpose<UiSelectExpose>({
     white-space: nowrap;
 
     &.placeholder {
-      color: oklch(from var(--label-color) l c h / 0.5);
+      color: var(--hint-color);
     }
   }
 
@@ -380,7 +380,7 @@ defineExpose<UiSelectExpose>({
     display: grid;
     place-items: center;
     transform: scaleY(1);
-    color: oklch(from currentColor l c h / 0.5);
+    color: var(--icon-color-muted);
 
     transition: transform var(--duration-md) var(--bezier-smooth);
   }

@@ -161,7 +161,7 @@ onBeforeUnmount(() => settle(false))
     & > .message-scroll {
       min-block-size: 0;
       flex: 1 1 auto;
-      --scroll-area-fade-color: var(--dialog-bg, var(--scroll-fade-color));
+      --scroll-area-fade-color: var(--dialog-bg, var(--surface-dialog));
 
       & .message {
         display: grid;

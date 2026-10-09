@@ -150,7 +150,7 @@ const formattedUsed = computed(() => formatBytes(used.value))
         display: grid;
         place-items: center;
         border-radius: var(--radius-lg);
-        background: color-mix(in oklch, var(--accent-color) 12%, transparent);
+        background: color-mix(in oklab, var(--accent-color) 12%, transparent);
         color: var(--accent-color);
       }
 
@@ -191,7 +191,7 @@ const formattedUsed = computed(() => formatBytes(used.value))
       block-size: var(--track-height);
       border-radius: var(--radius-full);
       background: var(--track-bg);
-      box-shadow: inset 0 0 0 var(--border-width-thin) color-mix(in oklch, var(--text-color) 5%, transparent);
+      box-shadow: inset 0 0 0 var(--border-width-thin) color-mix(in oklab, var(--text-color) 5%, transparent);
 
       & > .segment {
         z-index: 0;

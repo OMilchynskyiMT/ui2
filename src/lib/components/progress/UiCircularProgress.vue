@@ -76,7 +76,7 @@ const strokeDashOffset = computed(() => 100 - normalizedValue.value)
     }
 
     & > circle.track {
-      stroke: color-mix(in oklch, currentColor, transparent 90%);
+      stroke: color-mix(in oklab, currentColor, transparent 90%);
     }
 
     & > circle.progress {

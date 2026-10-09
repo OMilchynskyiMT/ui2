@@ -35,7 +35,10 @@ const { variant = 'outlined', tone = 'primary', size = 'medium', label, title } 
 <style scoped>
 @layer components {
   .chip {
-    --accent-color: var(--tone-color);
+    --accent-color: var(--tone-foreground-color);
+    --solid-color: var(--tone-color);
+    --container-color: var(--tone-container-color);
+    --on-container-color: var(--tone-on-container-color);
     --chip-block-size: 1.5rem;
     --bg: transparent;
     --border-width: 0;
@@ -106,16 +109,13 @@ const { variant = 'outlined', tone = 'primary', size = 'medium', label, title } 
     }
 
     &[data-variant='filled'] {
-      --bg: var(--accent-color);
+      --bg: var(--solid-color);
       --color: var(--on-accent-color);
     }
 
     &[data-variant='tonal'] {
-      --bg: oklch(from var(--accent-color) l c h / 0.15);
-      --color: light-dark(
-        oklch(from var(--accent-color) calc(l - 0.1) c h),
-        oklch(from var(--accent-color) calc(l + 0.1) c h)
-      );
+      --bg: var(--container-color);
+      --color: var(--on-container-color);
     }
   }
 }

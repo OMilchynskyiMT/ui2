@@ -85,7 +85,7 @@ const summarizedValue = computed((): number | undefined => {
     --progress-bar-color: var(--brand-color);
     --progress-bar-height: 0.25rem;
     --radius: max(1px, var(--progress-bar-height) / 2);
-    --progress-bar-track-color: color-mix(in oklch, var(--progress-bar-color) 20%, transparent);
+    --progress-bar-track-color: color-mix(in oklab, var(--progress-bar-color) 20%, transparent);
     --indeterminate-duration: 1.5s;
 
     position: relative;

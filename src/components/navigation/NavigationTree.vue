@@ -168,7 +168,7 @@ watch(() => [route.fullPath, items] as const, syncExpandedItems, { immediate: tr
     --item-cursor: pointer;
     --item-bg: transparent;
     --icon-color: var(--icon-color-muted);
-    --arrow-color: oklch(from currentColor l c h / 0.25);
+    --arrow-color: var(--icon-color-muted);
     --indicator-color: transparent;
 
     display: grid;
@@ -195,7 +195,7 @@ watch(() => [route.fullPath, items] as const, syncExpandedItems, { immediate: tr
       transition-timing-function: var(--bezier-smooth);
 
       &:focus-visible {
-        --item-bg: color-mix(in oklch, var(--accent) 8%, transparent);
+        --item-bg: color-mix(in oklab, var(--accent) 8%, transparent);
       }
 
       &::before {
@@ -211,7 +211,7 @@ watch(() => [route.fullPath, items] as const, syncExpandedItems, { immediate: tr
 
       @media (hover: hover) {
         &:hover {
-          --item-bg: color-mix(in oklch, var(--accent) 6%, transparent);
+          --item-bg: color-mix(in oklab, var(--accent) 6%, transparent);
         }
       }
 
@@ -254,7 +254,7 @@ watch(() => [route.fullPath, items] as const, syncExpandedItems, { immediate: tr
     }
 
     &:not(.branch).active > .item-control {
-      --item-bg: color-mix(in oklch, var(--accent) 6%, transparent);
+      --item-bg: color-mix(in oklab, var(--accent) 6%, transparent);
       --item-cursor: default;
     }
 

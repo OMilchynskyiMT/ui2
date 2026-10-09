@@ -46,13 +46,13 @@ const trafficChart: ChartDefinition = {
       id: 'received',
       label: 'Received',
       values: raw.map(({ rx }) => rx),
-      color: '--orange-400',
+      color: '--data-color-4',
     },
     {
       id: 'transmitted',
       label: 'Transmitted',
       values: raw.map(({ tx }) => tx),
-      color: '--cyan-500',
+      color: '--data-color-3',
     },
   ],
 }

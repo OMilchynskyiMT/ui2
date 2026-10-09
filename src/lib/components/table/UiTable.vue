@@ -311,8 +311,12 @@ div.table {
       transition-timing-function: var(--bezier-smooth);
     }
 
-    &:is(:focus-visible, [data-direction]) > .sort-indicator {
+    &:focus-visible > .sort-indicator {
       opacity: 0.65;
+    }
+
+    &[data-direction] > .sort-indicator {
+      opacity: 1;
     }
 
     @media (hover: hover) {
@@ -338,7 +342,7 @@ div.table {
     }
 
     &:is(.loading, .empty) {
-      color: oklch(from currentColor l c h / 0.5);
+      color: var(--text-color-dimmed);
       font-size: var(--font-size-sm);
     }
   }

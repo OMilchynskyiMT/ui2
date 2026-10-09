@@ -211,12 +211,12 @@ const getPageLabel = (page: number): string => {
       transition-timing-function: var(--bezier-smooth);
 
       &:focus-visible {
-        background-color: color-mix(in oklch, var(--accent) 8%, transparent);
+        background-color: color-mix(in oklab, var(--accent) 8%, transparent);
       }
 
       &.active {
         color: var(--accent);
-        background-color: color-mix(in oklch, var(--accent) 12%, transparent);
+        background-color: color-mix(in oklab, var(--accent) 12%, transparent);
         font-weight: var(--font-weight-medium);
         cursor: default;
       }
@@ -228,7 +228,7 @@ const getPageLabel = (page: number): string => {
 
       @media (hover: hover) {
         &:hover {
-          background-color: color-mix(in oklch, var(--accent) 8%, transparent);
+          background-color: color-mix(in oklab, var(--accent) 8%, transparent);
         }
       }
     }

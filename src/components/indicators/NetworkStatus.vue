@@ -46,10 +46,10 @@ const { label = 'Internet', online } = defineProps<{
 @layer components {
   .network-status {
     --status-color: var(--tone-color);
-    --status-container: color-mix(in oklch, var(--status-color) 14%, transparent);
+    --status-container: color-mix(in oklab, var(--status-color) 14%, transparent);
 
     --card-radius: var(--radius-lg);
-    --card-bg: color-mix(in oklch, var(--status-color) 6%, transparent);
+    --card-bg: color-mix(in oklab, var(--status-color) 6%, var(--surface-card));
 
     & .status-content {
       --bar-sections-gap: var(--space-md);

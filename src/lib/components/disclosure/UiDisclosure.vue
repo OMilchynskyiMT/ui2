@@ -80,12 +80,12 @@ const open = defineModel<boolean>({ default: false })
       transition: background-color var(--duration-sm) var(--bezier-smooth);
 
       &:has(> .trigger:focus-visible) {
-        --disclosure-header-bg: color-mix(in oklch, var(--disclosure-accent-color) 5%, transparent);
+        --disclosure-header-bg: color-mix(in oklab, var(--disclosure-accent-color) 5%, transparent);
       }
 
       @media (hover: hover) {
         &:has(> .trigger:hover) {
-          --disclosure-header-bg: color-mix(in oklch, var(--disclosure-accent-color) 5%, transparent);
+          --disclosure-header-bg: color-mix(in oklab, var(--disclosure-accent-color) 5%, transparent);
         }
       }
 
@@ -129,7 +129,7 @@ const open = defineModel<boolean>({ default: false })
           display: grid;
           place-items: center;
 
-          color: oklch(from currentColor l c h / 0.5);
+          color: var(--icon-color-muted);
           transform: scaleY(1);
 
           transition: transform var(--duration-md) var(--bezier-smooth);

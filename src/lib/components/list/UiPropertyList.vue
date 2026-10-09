@@ -79,7 +79,7 @@ const internalFormatField = (field: string): string => {
   --property-list-column-gap: var(--space-md);
   --property-list-row-gap: var(--space-sm);
   --property-list-row-padding: var(--space-xxs) var(--space-xs);
-  --property-list-field-color: color-mix(in srgb, currentColor 68%, transparent);
+  --property-list-field-color: var(--text-color-dimmed);
   --property-list-divider-style: dashed;
 
   &,
