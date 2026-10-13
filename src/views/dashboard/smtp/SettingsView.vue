@@ -33,7 +33,12 @@
 
     <UiCard>
       <UiStack gap="var(--space-xxl)">
-        <UiSectionHeader>Authentication</UiSectionHeader>
+        <UiSectionHeader>
+          Authentication
+          <template #actions>
+            <UiButton :icon="MailCheckIcon" tone="primary" variant="tonal" size="small">Send Test Email</UiButton>
+          </template>
+        </UiSectionHeader>
 
         <UiGrid :columns="{ base: 1, medium: 2, extraLarge: 4 }" gap="var(--space-xxl)">
           <UiGridItem span="full">
@@ -45,10 +50,6 @@
           </UiTextField>
           <UiPasswordField v-model="form.auth.password" label="Password" />
           <UiTextField v-model="form.auth.email" label="Email" />
-
-          <UiGridItem align="center">
-            <UiButton :icon="MailCheckIcon" tone="primary" variant="tonal">Send Test Email</UiButton>
-          </UiGridItem>
         </UiGrid>
       </UiStack>
     </UiCard>
