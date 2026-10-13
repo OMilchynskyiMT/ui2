@@ -10,8 +10,8 @@
         ref="tablist"
         v-resize="updateLayout"
         role="tablist"
-        aria-orientation="horizontal"
         :aria-label="ariaLabel"
+        aria-orientation="horizontal"
         class="tabs"
         @focusout="onFocusout"
         @keydown="onKeydown"
@@ -47,7 +47,7 @@
   </div>
 
   <div v-if="slots.panel" :id="panelId" role="tabpanel" :aria-labelledby="activeTabId" class="tab-panel">
-    <slot :tab="activeTab" name="panel" />
+    <slot :index="activeIndex" :tab="activeTab" name="panel" />
   </div>
 </template>
 

@@ -1,6 +1,11 @@
 <template>
-  <div :style="{ '--page-transition-duration': `${duration}ms` }" class="m-page-transition">
-    <Transition :appear="appear" :duration="duration" :name="name">
+  <div :style="{ '--page-transition-duration': `${duration}ms` }" class="page-transition">
+    <Transition
+      :appear="appear"
+      :name="name ?? automaticName"
+      enter-active-class="page-transition-enter-active"
+      leave-active-class="page-transition-leave-active"
+    >
       <slot />
     </Transition>
   </div>
@@ -11,95 +16,106 @@ export type TransitionName = 'page-forward' | 'page-back' | 'page-fade' | 'page-
 </script>
 
 <script lang="ts" setup>
+import { ref, watch } from 'vue'
+
 const {
-  name = 'page-forward',
-  duration = 260,
+  name,
+  position,
+  duration = 300,
   appear = false,
 } = defineProps<{
   name?: TransitionName
+  position?: number
   duration?: number
   appear?: boolean
 }>()
+
+const automaticName = ref<TransitionName>(position === undefined ? 'page-forward' : 'page-enter')
+
+watch(
+  () => position,
+  (next, previous) => {
+    automaticName.value =
+      next === undefined || next === previous || previous === undefined || next < 0 || previous < 0
+        ? 'page-enter'
+        : next > previous
+          ? 'page-forward'
+          : 'page-back'
+  },
+  { flush: 'sync' }
+)
 </script>
 
 <style>
 @layer components {
-  .m-page-transition {
-    --page-shift: var(--space-xxl);
+  .page-transition {
+    --page-shift: 2.5rem;
 
     position: relative;
-    display: grid;
-    overflow: visible;
+    display: flow-root;
+    min-inline-size: 0;
 
     & > * {
-      --page-offset-x: 0px;
-      --page-offset-y: 0px;
-      --opacity: 1;
-
-      grid-area: 1 / 1;
       min-inline-size: 0;
-      align-self: start;
-      opacity: var(--opacity);
-      transform: translate3d(var(--page-offset-x), var(--page-offset-y), 0);
     }
 
-    &:has(
-      > :is(.page-forward-enter-active, .page-forward-leave-active, .page-back-enter-active, .page-back-leave-active)
-    ) {
-      overflow-x: clip;
-      overflow-y: visible;
+    & > .page-transition-enter-active {
+      transition: opacity var(--page-transition-duration) var(--bezier-smooth-entrance);
     }
 
-    &
-      > :is(
-        .page-forward-enter-active,
-        .page-forward-leave-active,
-        .page-back-enter-active,
-        .page-back-leave-active,
-        .page-fade-enter-active,
-        .page-fade-leave-active,
-        .page-enter-enter-active,
-        .page-enter-leave-active
-      ) {
-      transition-property: transform, opacity;
-      transition-duration: var(--page-transition-duration);
-      transition-timing-function: var(--bezier-smooth);
+    & > .page-transition-leave-active {
+      position: absolute;
+      inset-block-start: 0;
+      inset-inline: 0;
+      z-index: 1;
+      pointer-events: none;
+      transition:
+        opacity var(--page-transition-duration) var(--bezier-soft-exit),
+        transform var(--page-transition-duration) var(--bezier-smooth);
     }
 
     &
       > :is(
         .page-forward-enter-from,
-        .page-back-leave-to,
-        .page-forward-leave-to,
         .page-back-enter-from,
         .page-fade-enter-from,
-        .page-fade-leave-to,
         .page-enter-enter-from,
+        .page-forward-leave-to,
+        .page-back-leave-to,
+        .page-fade-leave-to,
         .page-enter-leave-to
       ) {
-      --opacity: 0;
+      opacity: 0;
     }
 
-    & > :is(.page-forward-enter-from, .page-back-leave-to) {
-      --page-offset-x: var(--page-shift);
-      --page-offset-y: 0px;
+    & > .page-forward-leave-to {
+      transform: translateX(calc(-1 * var(--page-shift)));
     }
 
-    & > :is(.page-forward-leave-to, .page-back-enter-from) {
-      --page-offset-x: calc(-1 * var(--page-shift));
-      --page-offset-y: 0px;
+    & > .page-back-leave-to {
+      transform: translateX(var(--page-shift));
     }
 
-    & > :is(.page-enter-enter-from, .page-enter-leave-to) {
-      --page-offset-x: 0px;
-      --page-offset-y: var(--page-shift);
+    & > .page-enter-leave-to {
+      transform: translateY(calc(-1 * var(--page-shift)));
+    }
+
+    &:has(> :is(.page-forward-leave-to, .page-back-leave-to)) {
+      overflow-x: clip;
+      overflow-y: visible;
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .m-page-transition {
-      --page-shift: 0px;
-      --page-transition-duration: 1ms;
+    .page-transition {
+      & > :is(.page-transition-enter-active, .page-transition-leave-active) {
+        transition-duration: 0s;
+        transition-delay: 0s;
+      }
+
+      & > :is(.page-forward-leave-to, .page-back-leave-to, .page-enter-leave-to) {
+        transform: none;
+      }
     }
   }
 }

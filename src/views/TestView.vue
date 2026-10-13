@@ -3,12 +3,12 @@
     :items="tabs"
     :model-value="route.name?.toString() ?? ''"
     aria-label="Component examples"
-    @update:model-value="goto($event, id => router.push({ name: id }))"
+    @update:model-value="router.push({ name: $event })"
   >
-    <template #panel>
+    <template #panel="{ index }">
       <main class="demo-content">
         <RouterView v-slot="{ Component }">
-          <PageTransition :name="transitionName" appear>
+          <PageTransition :position="index" appear>
             <component :is="Component" :key="route.fullPath" />
           </PageTransition>
         </RouterView>
@@ -23,7 +23,6 @@ import { useRoute, useRouter } from 'vue-router'
 
 import UiTabs, { type UiTabItem } from '@/lib/components/tabs/UiTabs.vue'
 import PageTransition from '@/components/transitions/PageTransition.vue'
-import { useTabNavigation } from '@/components/transitions/useTabNavigation'
 
 const tabs: UiTabItem<string>[] = [
   { icon: FormInputIcon, title: 'Inputs', value: 'inputs' },
@@ -48,10 +47,6 @@ const tabs: UiTabItem<string>[] = [
 
 const router = useRouter()
 const route = useRoute()
-const { transitionName, goto } = useTabNavigation(
-  tabs.filter(tab => !tab.disabled).map(tab => tab.value),
-  () => route.name?.toString()
-)
 </script>
 
 <style scoped>

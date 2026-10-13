@@ -11,11 +11,11 @@
       :items="tabs"
       :model-value="route.name?.toString() ?? ''"
       aria-label="DHCP sections"
-      @update:model-value="goto($event, id => router.push({ name: id }))"
+      @update:model-value="router.push({ name: $event })"
     >
-      <template #panel>
+      <template #panel="{ index }">
         <RouterView v-slot="{ Component }">
-          <PageTransition :name="transitionName" appear>
+          <PageTransition :position="index" appear>
             <component :is="Component" :key="route.fullPath" />
           </PageTransition>
         </RouterView>
@@ -32,7 +32,6 @@ import UiStack from '@/lib/components/layout/UiStack.vue'
 import UiSectionHeader from '@/lib/components/section/UiSectionHeader.vue'
 import UiTabs, { type UiTabItem } from '@/lib/components/tabs/UiTabs.vue'
 import PageTransition from '@/components/transitions/PageTransition.vue'
-import { useTabNavigation } from '@/components/transitions/useTabNavigation'
 
 const tabs: UiTabItem<string>[] = [
   { title: 'DHCP Configuration', icon: CogIcon, value: 'dhcp-config' },
@@ -42,8 +41,4 @@ const tabs: UiTabItem<string>[] = [
 
 const router = useRouter()
 const route = useRoute()
-const { transitionName, goto } = useTabNavigation(
-  tabs.map(tab => tab.value),
-  () => route.name?.toString()
-)
 </script>
