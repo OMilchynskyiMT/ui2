@@ -1,6 +1,15 @@
 import { expect, it } from 'vitest'
 
-import { getDisplayedTableRows, getTableCellText, getTableSortLabel } from '../table.shared'
+import {
+  getDisplayedTableRows,
+  getTableCellText,
+  getTableReorderGapIndex,
+  getTableReorderShift,
+  getTableReorderTargetIndex,
+  getTableReorderVisibleGapIndex,
+  getTableSortLabel,
+  reorderTableRows,
+} from '../table.shared'
 import type { TableColumn } from '../table.types'
 
 type Row = {
@@ -34,4 +43,77 @@ it('does not sort rows in manual mode', () => {
 it('formats cell text and sort labels', () => {
   expect(getTableCellText(rows[0]!, 0, columns[0]!)).toBe('Item 10')
   expect(getTableSortLabel(columns[0]!, { column: 'name', direction: 'asc' })).toContain('sorted ascending')
+})
+
+it('reorders rows without mutating the source array', () => {
+  const reordered = reorderTableRows(rows, 0, 2)
+
+  expect(reordered.map(row => row.name)).toEqual(['Item 2', 'Item 1', 'Item 10'])
+  expect(rows.map(row => row.name)).toEqual(['Item 10', 'Item 2', 'Item 1'])
+})
+
+it('maps drop gaps to final row indexes', () => {
+  expect(getTableReorderTargetIndex(3, 0, 0)).toBe(0)
+  expect(getTableReorderTargetIndex(3, 0, 1)).toBe(0)
+  expect(getTableReorderTargetIndex(3, 0, 2)).toBe(1)
+  expect(getTableReorderTargetIndex(3, 0, 3)).toBe(2)
+  expect(getTableReorderTargetIndex(3, 2, 0)).toBe(0)
+  expect(getTableReorderTargetIndex(3, 2, 1)).toBe(1)
+  expect(getTableReorderTargetIndex(3, 2, 3)).toBe(2)
+  expect(getTableReorderTargetIndex(3, 3, 3)).toBeNull()
+})
+
+it('calculates drop gaps from immutable midpoints rather than transformed rows', () => {
+  const centers = [20, 70, 150, 230]
+  expect(getTableReorderGapIndex(centers, -10)).toBe(0)
+  expect(getTableReorderGapIndex(centers, 70)).toBe(2)
+  expect(getTableReorderGapIndex(centers, 210)).toBe(3)
+  expect(getTableReorderGapIndex(centers, 300)).toBe(4)
+})
+
+it('displaces only rows crossed by the dragged row', () => {
+  expect([0, 1, 2, 3].map(index => getTableReorderShift(0, 2, index))).toEqual([undefined, 'up', 'up', undefined])
+  expect([0, 1, 2, 3].map(index => getTableReorderShift(3, 1, index))).toEqual([undefined, 'down', 'down', undefined])
+  expect([0, 1, 2, 3].map(index => getTableReorderShift(2, 2, index))).toEqual([
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+  ])
+})
+
+it('keeps a valid vertical drop gap outside all viewport edges', () => {
+  const centers = [30, 90, 150, 210]
+  // viewport begins at 100, scrolls 40 px, and has a sticky header to 130
+  expect(getTableReorderVisibleGapIndex(centers, -500, 130, 300, 100, 40)).toBe(1)
+  expect(getTableReorderVisibleGapIndex(centers, 500, 130, 300, 100, 40)).toBe(4)
+  expect(getTableReorderVisibleGapIndex(centers, 160, 130, 300, 100, 40)).toBe(2)
+  // different scrollTop selects a different destination even if the pointer is "stationary"
+  expect(getTableReorderVisibleGapIndex(centers, 160, 130, 300, 100, 100)).toBe(3)
+})
+
+it('previews the final positions of not dragged rows with unequal heights', () => {
+  const heights = [32, 57, 41, 96, 23]
+  const startOffsets = heights.map((_, index) => heights.slice(0, index).reduce((sum, height) => sum + height, 0))
+
+  // eslint-disable-next-line unicorn/prefer-iterator-to-array
+  const heightKeys = [...heights.keys()]
+  for (const fromIndex of heightKeys) {
+    for (const toIndex of heightKeys) {
+      const original = heights.map((height, index) => ({ height, index }))
+      const reordered = reorderTableRows(original, fromIndex, toIndex)
+      const finalOffsets = reordered.map((_, index) =>
+        reordered.slice(0, index).reduce((sum, row) => sum + row.height, 0)
+      )
+
+      const filteredHeightKeys = heightKeys.filter(k => k !== fromIndex)
+      for (const index of filteredHeightKeys) {
+        const shift = getTableReorderShift(fromIndex, toIndex, index)
+        const previewOffset =
+          startOffsets[index]! + (shift === 'up' ? -heights[fromIndex]! : shift === 'down' ? heights[fromIndex]! : 0)
+        const destinationIndex = reordered.findIndex(row => row.index === index)
+        expect(previewOffset).toBe(finalOffsets[destinationIndex])
+      }
+    }
+  }
 })

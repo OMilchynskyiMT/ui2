@@ -9,6 +9,63 @@ export type DisplayedTableRow<Row> = {
 
 const collator = new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' })
 
+export const getTableReorderTargetIndex = (rowCount: number, sourceIndex: number, gapIndex: number): number | null => {
+  if (rowCount <= 0 || sourceIndex < 0 || sourceIndex >= rowCount || gapIndex < 0 || gapIndex > rowCount) {
+    return null
+  }
+
+  return Math.min(rowCount - 1, gapIndex > sourceIndex ? gapIndex - 1 : gapIndex)
+}
+
+// resolve a drop position against stable, untransformed row midpoints
+export const getTableReorderGapIndex = (rowCenters: readonly number[], pointerY: number): number => {
+  const index = rowCenters.findIndex(center => pointerY < center)
+  return index === -1 ? rowCenters.length : index
+}
+
+// clamp vertical pointer position to the scroll viewport
+export const getTableReorderVisibleGapIndex = (
+  rowCenters: readonly number[],
+  clientY: number,
+  top: number,
+  bottom: number,
+  viewportTop: number,
+  scrollTop: number
+): number => {
+  const visibleY = Math.max(top, Math.min(clientY, bottom))
+  return getTableReorderGapIndex(rowCenters, visibleY - viewportTop + scrollTop)
+}
+
+// other rows slde into the vacated slot while the dragged row floats above them
+export const getTableReorderShift = (
+  sourceIndex: number,
+  targetIndex: number,
+  rowIndex: number
+): 'up' | 'down' | undefined => {
+  if (targetIndex > sourceIndex && rowIndex > sourceIndex && rowIndex <= targetIndex) return 'up'
+  if (targetIndex < sourceIndex && rowIndex >= targetIndex && rowIndex < sourceIndex) return 'down'
+  return undefined
+}
+
+export const reorderTableRows = <Row>(rows: readonly Row[], fromIndex: number, toIndex: number): Row[] => {
+  const reordered = [...rows]
+  if (
+    fromIndex === toIndex ||
+    fromIndex < 0 ||
+    fromIndex >= reordered.length ||
+    toIndex < 0 ||
+    toIndex >= reordered.length
+  ) {
+    return reordered
+  }
+
+  const [row] = reordered.splice(fromIndex, 1)
+  if (row === undefined) return reordered
+
+  reordered.splice(toIndex, 0, row)
+  return reordered
+}
+
 export const getTableColumnStyle = <Row>(column: TableColumn<Row>): CSSProperties => ({
   width: column.width,
   minWidth: column.minWidth,

@@ -38,6 +38,13 @@ export type TableColumn<Row> = {
   compare?: TableComparator<Row>
 }
 
+export type TableRowReorderEvent<Row> = {
+  row: Row
+  fromIndex: number
+  toIndex: number
+  rows: Row[]
+}
+
 type TableProperties<Row> = {
   columns: TableColumn<Row>[]
   rows: Row[]
@@ -52,6 +59,10 @@ type TableProperties<Row> = {
   compact?: TableCompactMode
   layout?: TableLayout
   mode?: TableResponsiveMode
+
+  // enables row-order editing
+  // NOTE: supply a stable rowKey when this mode is used
+  reorderable?: boolean
   sort?: TableSort | null
   sortMode?: TableSortMode
   stickyHeader?: boolean

@@ -10,11 +10,7 @@
         </UiGrid>
       </UiCard>
 
-      <UiTable :columns="wanColumns" :rows="wanRows" caption="WANs" mode="scroll">
-        <template #cell-drag>
-          <UiIcon :icon="GripVerticalIcon" style="cursor: grab" />
-        </template>
-
+      <UiTable v-model:rows="wanRows" :columns="wanColumns" caption="WANs" mode="scroll" reorderable row-key="name">
         <template #cell-actions>
           <UiButton :icon="PencilIcon" aria-label="Edit WAN" layout="icon" tone="neutral" variant="text" />
         </template>
@@ -33,7 +29,8 @@
 </template>
 
 <script lang="ts" setup>
-import { CheckIcon, GripVerticalIcon, PencilIcon, XIcon } from '@lucide/vue'
+import { ref } from 'vue'
+import { CheckIcon, PencilIcon, XIcon } from '@lucide/vue'
 
 import UiButton from '@/lib/components/buttons/UiButton.vue'
 import UiGrid from '@/lib/components/grid/UiGrid.vue'
@@ -52,14 +49,13 @@ type Wan = {
 }
 
 const wanColumns: TableColumn<Wan>[] = [
-  { key: 'drag', type: 'actions', label: '' },
   { key: 'status', label: 'State', sortable: true, width: '5rem' },
   { key: 'name', label: 'Name', sortable: true, rowHeader: true },
   { key: 'type', label: 'Type', sortable: true, compact: 'details' },
   { key: 'actions', label: 'Options', compact: 'keep', type: 'actions' },
 ]
 
-const wanRows: Wan[] = [
+const wanRows = ref<Wan[]>([
   {
     status: true,
     name: 'eth0',
@@ -75,5 +71,5 @@ const wanRows: Wan[] = [
     name: 'ppp0',
     type: 'CELLULAR',
   },
-]
+])
 </script>
