@@ -205,8 +205,10 @@ const timeoutStyle = (item: Notification): Record<string, string> => {
         & > div.icon,
         & > div.close {
           align-self: start;
-          display: grid;
-          place-items: center;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          block-size: 1lh;
         }
 
         & > div.close > button {
