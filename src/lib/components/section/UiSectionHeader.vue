@@ -1,29 +1,29 @@
 <template>
-  <UiBar class="section-header">
-    <template v-if="icon || slots.leading" #leading>
-      <span class="leading-visual">
+  <UiCluster align="start" class="section-header">
+    <div class="heading">
+      <span v-if="icon || slots.leading" class="leading-visual">
         <UiIcon v-if="icon" :icon="icon" aria-hidden="true" size="var(--section-header-icon-size, 1.375rem)" />
         <slot name="leading" />
       </span>
-    </template>
 
-    <template v-if="slots.actions" #trailing>
+      <header class="content">
+        <h2 :title="hint"><slot /></h2>
+        <div v-if="description || slots.description" class="description">
+          <slot name="description">{{ description }}</slot>
+        </div>
+      </header>
+    </div>
+
+    <UiCluster v-if="slots.actions" align="start" class="actions" justify="start">
       <slot name="actions" />
-    </template>
-
-    <header class="content">
-      <h2 :title="hint"><slot /></h2>
-      <div v-if="description || slots.description" class="description">
-        <slot name="description">{{ description }}</slot>
-      </div>
-    </header>
-  </UiBar>
+    </UiCluster>
+  </UiCluster>
 </template>
 
 <script lang="ts" setup>
 import { type Component, useSlots } from 'vue'
 
-import UiBar from '../bars/UiBar.vue'
+import UiCluster from '../layout/UiCluster.vue'
 import UiIcon from '../UiIcon.vue'
 
 const slots = useSlots()
@@ -38,9 +38,20 @@ const { icon, hint, description } = defineProps<{
 <style scoped>
 @layer components {
   .section-header {
-    --bar-sections-gap: var(--space-sm);
+    inline-size: 100%;
 
-    align-items: start;
+    & .heading {
+      display: flex;
+      align-items: flex-start;
+      flex: 1 1 18rem;
+      gap: var(--space-sm);
+      /* Keep the heading readable; move actions to another row when space runs out. */
+      min-inline-size: min(100%, 16rem);
+    }
+
+    & .actions {
+      flex: 0 1 auto;
+    }
 
     & .leading-visual {
       display: flex;
