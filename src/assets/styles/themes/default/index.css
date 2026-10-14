@@ -67,7 +67,7 @@
   --container-lg: container-token(--container-lg);
   --container-xl: container-token(--container-xl);
 
-  --touch-target-min: 2.75rem;
+  --touch-target-min: 2.5rem;
 }
 
 @media (prefers-reduced-motion: reduce) {
