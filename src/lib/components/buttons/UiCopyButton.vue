@@ -2,11 +2,11 @@
   <button
     :aria-label="label"
     :class="{ copied }"
-    :disabled
+    :disabled="disabled || copying"
+    :title="copied ? 'Copied to clipboard' : 'Copy to clipboard'"
     class="copy"
-    title="Copy to clipboard"
     type="button"
-    @click="copy"
+    @click="onCopy"
   >
     <span class="icon-frame">
       <UiIcon :icon="CheckIcon" class="check" color="var(--copy-button-color)" size="var(--copy-button-icon-size)" />
@@ -35,57 +35,51 @@ type Events = {
 </script>
 
 <script lang="ts" setup>
-import { onBeforeUnmount, ref, shallowRef } from 'vue'
+import { onScopeDispose } from 'vue'
 import { CheckIcon, CopyIcon } from '@lucide/vue'
 
+import { useClipboard } from '../../composables/useClipboard'
 import UiIcon from '../UiIcon.vue'
 
 const { text, label = 'Copy', resetAfter = 2500, disabled = false } = defineProps<Properties>()
-
-const copied = ref(false)
-const resetTimer = shallowRef<number>()
-
 const emit = defineEmits<Events>()
 defineSlots<Slots>()
 
-const copy = async (): Promise<void> => {
-  if (disabled) return
+const { copied, copying, copy, invalidate } = useClipboard()
+let feedbackTimer: ReturnType<typeof setTimeout> | undefined
 
+const clearFeedbackTimer = (): void => {
+  if (feedbackTimer === undefined) return
+  clearTimeout(feedbackTimer)
+  feedbackTimer = undefined
+}
+
+onScopeDispose(clearFeedbackTimer)
+
+const onCopy = async (): Promise<void> => {
+  if (disabled || copying.value) return
+
+  clearFeedbackTimer()
+  const value = text
   try {
-    if (!navigator.clipboard) {
-      throw new Error('Clipboard API is not available')
+    if (!(await copy(value))) return
+    emit('copied', value)
+
+    if (resetAfter > 0) {
+      feedbackTimer = setTimeout(() => {
+        invalidate()
+        feedbackTimer = undefined
+      }, resetAfter)
     }
-    await navigator.clipboard.writeText(text)
   } catch (error) {
     emit('error', error)
-    return
-  }
-
-  copied.value = true
-  emit('copied', text)
-  clearResetTimer()
-
-  if (resetAfter > 0) {
-    resetTimer.value = setTimeout(() => {
-      copied.value = false
-      resetTimer.value = undefined
-    }, resetAfter)
   }
 }
-
-const clearResetTimer = (): void => {
-  if (resetTimer.value === undefined) return
-  clearTimeout(resetTimer.value)
-  resetTimer.value = undefined
-}
-
-onBeforeUnmount(clearResetTimer)
 </script>
 
 <style scoped>
 @layer components {
   button.copy {
-    /* Public CSS customization hook. */
     --copy-button-color: var(--copy-accent-color);
     --outline-border-color: transparent;
     --outline-bg: transparent;
