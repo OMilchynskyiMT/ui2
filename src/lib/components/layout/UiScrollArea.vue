@@ -113,6 +113,7 @@ defineExpose<UiScrollAreaExpose>({
   .scroll-area {
     --scroll-area-fade-size: var(--space-xl);
     --scroll-area-fade-color: var(--scroll-fade-color);
+    --scrollbar-width: thin;
 
     position: relative;
     min-inline-size: 0;
@@ -127,6 +128,7 @@ defineExpose<UiScrollAreaExpose>({
       flex: 1 1 auto;
       scrollbar-gutter: var(--scroll-area-scrollbar-gutter);
       scroll-padding: var(--scroll-area-scroll-padding, 0);
+      scrollbar-width: var(--scrollbar-width);
 
       & > .content {
         min-inline-size: 0;
