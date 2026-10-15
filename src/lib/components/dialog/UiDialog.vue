@@ -253,6 +253,11 @@ defineExpose<Exposed>({ show, close, isVisible })
       border-radius: 0;
     }
 
+    &[data-fullscreen] > div.surface {
+      block-size: 100%;
+      max-block-size: 100%;
+    }
+
     &[data-phase='opened'] {
       opacity: 1;
       transform: translateY(0);
