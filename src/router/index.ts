@@ -157,6 +157,11 @@ const routes: RouterOptions['routes'] = [
             component: () => import('@/views/features/GridView.vue'),
           },
           {
+            path: 'log-viewer',
+            name: 'log-viewer',
+            component: () => import('@/views/features/LogViewerView.vue'),
+          },
+          {
             path: 'table',
             name: 'table',
             component: () => import('@/views/features/TableView.vue'),
