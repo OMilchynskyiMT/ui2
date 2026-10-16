@@ -21,7 +21,13 @@
       </template>
     </UiSectionHeader>
 
-    <UiLogViewer v-model:follow="following" v-model:wrap="wrapped" :text="log" expandable filename="device-system.log" />
+    <UiLogViewer
+      v-model:follow="following"
+      v-model:wrap="wrapped"
+      :text="log"
+      expandable
+      filename="device-system.log"
+    />
 
     <p class="hint">
       Scroll upward to stop following new lines; return to the bottom or select Follow latest to resume. Search
@@ -60,7 +66,7 @@ const restart = (): void => {
   sequence = 0
 
   bootTimer = setTimeout(() => {
-    Array.from({length: 20}, () => appendEntry())
+    Array.from({ length: 20 }, () => appendEntry())
     bootTimer = undefined
   }, 550)
 }

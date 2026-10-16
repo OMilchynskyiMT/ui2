@@ -36,7 +36,7 @@
         <UiSectionHeader>
           Authentication
           <template #actions>
-            <UiButton :icon="MailCheckIcon" tone="primary" variant="tonal" size="small">Send Test Email</UiButton>
+            <UiButton :icon="MailCheckIcon" size="small" tone="primary" variant="tonal">Send Test Email</UiButton>
           </template>
         </UiSectionHeader>
 
