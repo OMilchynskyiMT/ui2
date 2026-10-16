@@ -3,6 +3,10 @@ import { expect, it } from 'vitest'
 import {
   getDisplayedTableRows,
   getTableCellText,
+  getTablePage,
+  getTablePageCount,
+  getTablePageRows,
+  getTablePageSize,
   getTableReorderGapIndex,
   getTableReorderShift,
   getTableReorderTargetIndex,
@@ -116,4 +120,39 @@ it('previews the final positions of not dragged rows with unequal heights', () =
       }
     }
   }
+})
+
+it('paginates after sorting without changing the original source indexes', () => {
+  const sorted = getDisplayedTableRows(rows, columns, { column: 'name', direction: 'asc' }, 'client')
+
+  expect(getTablePageRows(sorted, 1, 2).map(entry => entry.row.name)).toEqual(['Item 1', 'Item 2'])
+  expect(getTablePageRows(sorted, 2, 2).map(entry => entry.sourceIndex)).toEqual([0])
+  expect(rows.map(row => row.name)).toEqual(['Item 10', 'Item 2', 'Item 1'])
+})
+
+it('clamps pages when rows are removed and handles empty and invalid states', () => {
+  expect(getTablePageCount(0, 10)).toBe(1)
+  expect(getTablePageCount(51, 10)).toBe(6)
+  expect(getTablePage(6, getTablePageCount(12, 10))).toBe(2)
+  expect(getTablePage(-5, 10)).toBe(1)
+  expect(getTablePage(NaN, 10)).toBe(1)
+  expect(
+    getTablePageRows(getDisplayedTableRows(rows, columns, null, 'client'), 99, 2).map(entry => entry.sourceIndex)
+  ).toEqual([2])
+  expect(getTablePageRows([], 1, 10)).toEqual([])
+  expect(getTablePageSize(0)).toBe(10)
+  expect(getTablePageSize(Infinity)).toBe(10)
+  expect(getTablePageSize(2.9)).toBe(2)
+})
+
+it('maps visible-page drag gaps to original indexes without crossing pages', () => {
+  const sixRows = [...rows, ...rows]
+  const entries = getDisplayedTableRows(sixRows, columns, null, 'client')
+  const secondPage = getTablePageRows(entries, 2, 2)
+  const pageStart = 2
+
+  expect(secondPage.map(entry => entry.sourceIndex)).toEqual([2, 3])
+  expect(getTableReorderTargetIndex(sixRows.length, 2, pageStart)).toBe(2)
+  expect(getTableReorderTargetIndex(sixRows.length, 2, pageStart + 2)).toBe(3)
+  expect(reorderTableRows(sixRows, 2, 3).map(row => row.count)).toEqual([10, 2, 10, 1, 2, 1])
 })

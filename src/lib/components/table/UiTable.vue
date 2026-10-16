@@ -93,10 +93,10 @@
                 <td v-if="reorderable" class="cell reorder-cell">
                   <button
                     :aria-describedby="reorderInstructionsId"
-                    :aria-keyshortcuts="rows.length > 1 ? 'Alt+ArrowUp Alt+ArrowDown' : undefined"
+                    :aria-keyshortcuts="canReorder ? 'Alt+ArrowUp Alt+ArrowDown' : undefined"
                     :aria-label="getReorderLabel(entry.sourceIndex)"
                     :aria-pressed="selectedRowIndex === entry.sourceIndex"
-                    :disabled="rows.length < 2"
+                    :disabled="!canReorder"
                     class="reorder-handle"
                     type="button"
                     @click="onReorderClick($event, entry.sourceIndex)"
@@ -171,10 +171,34 @@
       </div>
     </UiScrollArea>
 
+    <UiCluster v-if="pagination && rows.length > 0" align="center" class="table-footer" justify="between">
+      <span role="status" class="page-summary"> {{ firstVisibleRow }}-{{ lastVisibleRow }} of {{ rows.length }} </span>
+
+      <UiPagination
+        v-if="pageCount > 1"
+        v-model="page"
+        :aria-label="ariaLabel ? `${ariaLabel} pages` : 'Table pages'"
+        :disabled="loading"
+        :page-count="pageCount"
+        :sibling-count="0"
+      />
+
+      <UiSelect
+        v-if="pageSizeOptions !== false"
+        v-model="pageSize"
+        :disabled="loading"
+        :options="availablePageSizes"
+        class="page-size-select"
+        label="Rows per page"
+        size="small"
+      />
+    </UiCluster>
+
     <template v-if="reorderable">
       <span :id="reorderInstructionsId" class="visually-hidden">
         Drag to reorder; or select this handle, then another row handle to move without dragging. Alt+ArrowUp and
-        Alt+ArrowDown move one position. Escape cancels selection or dragging.
+        Alt+ArrowDown move one position{{ pagination ? ' within the visible page' : '' }}. Escape cancels selection or
+        dragging.
       </span>
       <span aria-live="polite" class="visually-hidden">{{ reorderAnnouncement }}</span>
     </template>
@@ -185,7 +209,10 @@
 import { computed, nextTick, onBeforeUnmount, ref, useId, useTemplateRef, watch } from 'vue'
 import { ChevronUpIcon, GripVerticalIcon } from '@lucide/vue'
 
+import UiSelect from '../fields/UiSelect.vue'
+import UiCluster from '../layout/UiCluster.vue'
 import UiScrollArea, { type UiScrollAreaExpose } from '../layout/UiScrollArea.vue'
+import UiPagination from '../navigation/UiPagination.vue'
 import UiSpinner from '../progress/UiSpinner.vue'
 import UiIcon from '../UiIcon.vue'
 import {
@@ -197,6 +224,10 @@ import {
   getTableColumnStyle,
   getTableDetailSlotName,
   getTableHeaderSlotName,
+  getTablePage,
+  getTablePageCount,
+  getTablePageRows,
+  getTablePageSize,
   getTableReorderShift,
   getTableReorderTargetIndex,
   getTableReorderVisibleGapIndex,
@@ -241,15 +272,19 @@ const {
   layout = 'auto',
   mode = 'scroll',
   reorderable = false,
+  pagination = false,
+  pageSizeOptions = [10, 25, 50, 100],
   sortMode = 'client',
   stickyHeader = false,
-} = defineProps<Omit<TableProperties<Row>, 'sort'>>()
+} = defineProps<Omit<TableProperties<Row>, 'sort' | 'page' | 'pageSize'>>()
 
 const emit = defineEmits<{
   reorder: [event: TableRowReorderEvent<Row>]
   'update:rows': [rows: Row[]]
 }>()
 const sort = defineModel<TableSort | null>('sort', { default: null })
+const page = defineModel<number>('page', { default: 1 })
+const pageSize = defineModel<number>('pageSize', { default: 10 })
 const slots = defineSlots<TableSlots<Row>>()
 const reorderInstructionsId = useId()
 const scrollAreaReference = useTemplateRef<UiScrollAreaExpose>('scrollArea')
@@ -268,7 +303,52 @@ const placedRowKey = ref<PropertyKey | null>(null)
 const effectiveSort = computed(() => (reorderable ? null : sort.value))
 const columnSpan = computed(() => Math.max(columns.length + Number(reorderable), 1))
 const detailColumns = computed(() => columns.filter(column => column.compact === 'details'))
-const displayedRows = computed(() => getDisplayedTableRows(rows, columns, effectiveSort.value, sortMode))
+const sortedRows = computed(() => getDisplayedTableRows(rows, columns, effectiveSort.value, sortMode))
+const normalizedPageSize = computed(() => getTablePageSize(pageSize.value))
+const pageCount = computed(() => getTablePageCount(rows.length, normalizedPageSize.value))
+const currentPage = computed(() => getTablePage(page.value, pageCount.value))
+const firstIndex = computed(() => (pagination ? (currentPage.value - 1) * normalizedPageSize.value : 0))
+const displayedRows = computed(() =>
+  pagination ? getTablePageRows(sortedRows.value, currentPage.value, normalizedPageSize.value) : sortedRows.value
+)
+const firstVisibleRow = computed(() => firstIndex.value + 1)
+const lastVisibleRow = computed(() => firstIndex.value + displayedRows.value.length)
+const canReorder = computed(() => displayedRows.value.length > 1)
+const availablePageSizes = computed(() => {
+  const sizes = pageSizeOptions === false ? [] : pageSizeOptions
+  return [...new Set([...sizes, normalizedPageSize.value].filter(size => Number.isSafeInteger(size) && size > 0))]
+    .toSorted((a, b) => a - b)
+    .map(size => ({ value: size, title: String(size) }))
+})
+
+watch(
+  pageCount,
+  () => {
+    if (pagination && page.value !== currentPage.value) page.value = currentPage.value
+  },
+  { immediate: true }
+)
+watch(
+  pageSize,
+  value => {
+    const normalized = getTablePageSize(value)
+    if (normalized !== value) pageSize.value = normalized
+  },
+  { immediate: true }
+)
+watch(pageSize, () => {
+  if (pagination) page.value = 1
+})
+watch(sort, () => {
+  if (pagination) page.value = 1
+})
+watch(
+  [currentPage, normalizedPageSize],
+  () => {
+    if (pagination) scrollAreaReference.value?.viewport?.scrollTo({ top: 0 })
+  },
+  { flush: 'post' }
+)
 const dropTargetIndex = computed(() => {
   if (draggingSourceIndex.value === null || dropGapIndex.value === null) return null
   return getTableReorderTargetIndex(rows.length, draggingSourceIndex.value, dropGapIndex.value)
@@ -299,7 +379,8 @@ const getRowShift = (index: number): 'up' | 'down' | undefined =>
     ? undefined
     : getTableReorderShift(draggingSourceIndex.value, dropTargetIndex.value, index)
 const isDropBefore = (index: number): boolean => activeDropGap.value === index
-const isDropAfter = (index: number): boolean => activeDropGap.value === rows.length && index === rows.length - 1
+const isDropAfter = (index: number): boolean =>
+  activeDropGap.value === firstIndex.value + displayedRows.value.length && index === lastVisibleRow.value - 1
 
 const toggleSort = (column: TableColumn<Row>): void => {
   if (reorderable) return
@@ -365,12 +446,15 @@ const onReorderKeydown = (event: KeyboardEvent, index: number): void => {
     return
   }
 
-  if (!event.altKey || event.ctrlKey || event.metaKey || event.shiftKey || rows.length < 2) return
+  if (!event.altKey || event.ctrlKey || event.metaKey || event.shiftKey || !canReorder.value) return
   if (event.key !== 'ArrowUp' && event.key !== 'ArrowDown') return
 
   event.preventDefault()
   selectedRowIndex.value = null
-  const next = Math.max(0, Math.min(rows.length - 1, index + (event.key === 'ArrowUp' ? -1 : 1)))
+  const next = Math.max(
+    firstIndex.value,
+    Math.min(lastVisibleRow.value - 1, index + (event.key === 'ArrowUp' ? -1 : 1))
+  )
   emitReorder(index, next)
 }
 
@@ -494,13 +578,15 @@ const updatePosition = (session: DragSession, viewport: HTMLDivElement): void =>
 }
 
 const resolveGap = (session: DragSession, viewport: HTMLDivElement, bounds: DOMRect, top: number): number => {
-  return getTableReorderVisibleGapIndex(
-    session.centers,
-    session.clientY,
-    top,
-    bounds.bottom,
-    bounds.top,
-    viewport.scrollTop
+  return (
+    getTableReorderVisibleGapIndex(
+      session.centers,
+      session.clientY,
+      top,
+      bounds.bottom,
+      bounds.top,
+      viewport.scrollTop
+    ) + firstIndex.value
   )
 }
 
@@ -538,7 +624,7 @@ const updateFrame = (time: number): void => {
 }
 
 const onPointerDown = (event: PointerEvent, sourceIndex: number): void => {
-  if (drag || !event.isPrimary || event.button !== 0 || rows.length < 2) return
+  if (drag || !event.isPrimary || event.button !== 0 || !canReorder.value) return
   if (!(event.currentTarget instanceof HTMLButtonElement)) return
   const row = event.currentTarget.closest<HTMLTableRowElement>('tr.row')
   if (!row || !scrollAreaReference.value?.viewport) return
@@ -606,7 +692,22 @@ const onPointerCancel = (event: PointerEvent): void => {
 }
 
 watch(
-  () => [rows, rows.length, columns, columns.length, rowKey, reorderable, loading, mode, compact, layout, stickyHeader],
+  () => [
+    rows,
+    rows.length,
+    columns,
+    columns.length,
+    rowKey,
+    reorderable,
+    loading,
+    mode,
+    compact,
+    layout,
+    stickyHeader,
+    pagination,
+    currentPage.value,
+    normalizedPageSize.value,
+  ],
   () => {
     resetDrag()
     selectedRowIndex.value = null
@@ -636,6 +737,23 @@ div.table {
   min-inline-size: 0;
   position: relative;
   container-type: inline-size;
+
+  .table-footer {
+    gap: var(--space-md);
+    padding-block: var(--space-sm);
+    padding-inline: var(--space-md);
+
+    .page-summary {
+      color: var(--text-color-dimmed);
+      font-size: var(--font-size-sm);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .page-size-select {
+      inline-size: 9rem;
+    }
+  }
 
   .table-content[data-reorder-clip] {
     overflow-y: clip;

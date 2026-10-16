@@ -63,6 +63,14 @@ type TableProperties<Row> = {
   // enables row-order editing
   // NOTE: supply a stable rowKey when this mode is used
   reorderable?: boolean
+
+  // local pagination (applied after client sorting); disabled by default
+  pagination?: boolean
+  page?: number
+  pageSize?: number
+  // false hides the page-size control; the current size is always a valid option
+  pageSizeOptions?: readonly number[] | false
+
   sort?: TableSort | null
   sortMode?: TableSortMode
   stickyHeader?: boolean

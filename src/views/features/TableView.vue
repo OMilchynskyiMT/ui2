@@ -6,6 +6,8 @@
       </UiSectionHeader>
 
       <UiTable
+        v-model:page="page"
+        v-model:page-size="pageSize"
         v-model:sort="sort"
         :columns
         :loading
@@ -13,6 +15,7 @@
         caption="Users"
         loading-label="Loading users..."
         mode="details"
+        pagination
         row-key="id"
         sticky-header
         style="--table-max-block-size: 30rem"
@@ -41,11 +44,19 @@ type User = {
   createdAt: string
 }
 
-const rows: User[] = [
-  { id: 1, name: 'John Smith', email: 'john@example.com', active: true, createdAt: '2026-07-25' },
-  { id: 2, name: 'Alice Walker', email: 'alice@example.com', active: false, createdAt: '2026-08-03' },
-  { id: 3, name: 'Bob Stone', email: 'bob@example.com', active: true, createdAt: '2026-06-18' },
-]
+const rows: User[] = Array.from({ length: 45 }, (_, index) => ({
+  id: index,
+  name: `Demo user ${index}`,
+  email: `user${index}@example.com`,
+  active: index % 3 !== 0,
+  createdAt: new Intl.DateTimeFormat('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  }).format(new Date()),
+}))
 
 const columns: TableColumn<User>[] = [
   {
@@ -84,6 +95,8 @@ const columns: TableColumn<User>[] = [
 ]
 
 const sort = ref<TableSort | null>(null)
+const page = ref(1)
+const pageSize = ref(10)
 const loading = ref(true)
 onMounted(() => {
   setTimeout(() => {

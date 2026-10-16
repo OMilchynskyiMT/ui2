@@ -177,3 +177,23 @@ export const getDisplayedTableRows = <Row>(
     return comparison === 0 ? leftEntry.sourceIndex - rightEntry.sourceIndex : comparison * direction
   })
 }
+
+// page indexes are one-based, while sourceIndex remains the index in the complete rows array
+export const getTablePageSize = (value: number): number =>
+  Number.isFinite(value) && value >= 1 ? Math.trunc(value) : 10
+
+export const getTablePageCount = (rowCount: number, pageSize: number): number =>
+  Math.max(1, Math.ceil(rowCount / getTablePageSize(pageSize)))
+
+export const getTablePage = (page: number, pageCount: number): number =>
+  Math.min(Math.max(Number.isFinite(page) ? Math.trunc(page) : 1, 1), Math.max(1, pageCount))
+
+export const getTablePageRows = <Row>(
+  entries: readonly DisplayedTableRow<Row>[],
+  page: number,
+  pageSize: number
+): DisplayedTableRow<Row>[] => {
+  const size = getTablePageSize(pageSize)
+  const start = (getTablePage(page, getTablePageCount(entries.length, size)) - 1) * size
+  return entries.slice(start, start + size)
+}
