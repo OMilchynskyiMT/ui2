@@ -157,6 +157,12 @@ const routes: RouterOptions['routes'] = [
             component: () => import('@/views/features/GridView.vue'),
           },
           {
+            path: 'certificate',
+            name: 'certificate',
+            component: () => import('@/views/features/CertificateView.vue'),
+            meta: { title: 'Certificate Details' },
+          },
+          {
             path: 'log-viewer',
             name: 'log-viewer',
             component: () => import('@/views/features/LogViewerView.vue'),
