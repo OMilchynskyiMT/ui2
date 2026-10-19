@@ -1,0 +1,11 @@
+@layer components {
+  kbd {
+    font-size: var(--kbd-font-size, var(--font-size-sm));
+
+    background: var(--surface-container-high);
+    color: var(--text-color);
+    border: 1px solid var(--divider-color);
+    border-radius: var(--radius-md);
+    padding-inline: var(--space-xxs);
+  }
+}
