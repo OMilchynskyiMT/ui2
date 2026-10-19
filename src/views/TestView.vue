@@ -37,6 +37,7 @@ const tabs: UiTabItem<string>[] = [
   { title: 'Grid', value: 'grid' },
   { title: 'Table', value: 'table' },
   { title: 'Log viewer', value: 'log-viewer' },
+  { title: 'Radio terminal', value: 'radio-terminal' },
   { title: 'Certificates', value: 'certificate' },
   { title: 'Property List', value: 'property-list' },
   { title: 'Alerts', value: 'alerts' },

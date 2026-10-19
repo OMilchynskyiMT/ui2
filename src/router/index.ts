@@ -168,6 +168,11 @@ const routes: RouterOptions['routes'] = [
             component: () => import('@/views/features/LogViewerView.vue'),
           },
           {
+            path: 'radio-terminal',
+            name: 'radio-terminal',
+            component: () => import('@/views/features/RadioTerminalView.vue'),
+          },
+          {
             path: 'table',
             name: 'table',
             component: () => import('@/views/features/TableView.vue'),

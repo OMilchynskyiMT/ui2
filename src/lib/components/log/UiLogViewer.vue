@@ -7,9 +7,9 @@
         <UiSearchField
           v-if="searchable"
           v-model="query"
+          :placeholder="searchPlaceholder"
           class="search"
           label=""
-          placeholder="Find in logs"
           size="small"
           variant="filled"
         />
@@ -159,6 +159,7 @@ export type UiLogViewerProperties = {
   filename?: string
   maxLines?: number
   searchable?: boolean
+  searchPlaceholder?: string
   wrappable?: boolean
   copyable?: boolean
   downloadable?: boolean
@@ -201,6 +202,7 @@ const {
   filename = 'device.log',
   maxLines = 5000,
   searchable = true,
+  searchPlaceholder = 'Find in logs',
   wrappable = true,
   copyable = true,
   downloadable = true,
