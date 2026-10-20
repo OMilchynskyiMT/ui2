@@ -168,6 +168,12 @@ const routes: RouterOptions['routes'] = [
             component: () => import('@/views/features/LogViewerView.vue'),
           },
           {
+            path: 'gps',
+            name: 'gps',
+            component: () => import('@/views/features/GpsView.vue'),
+            meta: { title: 'GPS Position' },
+          },
+          {
             path: 'relative-time',
             name: 'relative-time',
             component: () => import('@/views/features/RelativeTimeView.vue'),
