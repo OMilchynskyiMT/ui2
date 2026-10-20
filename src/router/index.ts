@@ -168,6 +168,12 @@ const routes: RouterOptions['routes'] = [
             component: () => import('@/views/features/LogViewerView.vue'),
           },
           {
+            path: 'steps',
+            name: 'steps',
+            component: () => import('@/views/features/StepsView.vue'),
+            meta: { title: 'Steps' },
+          },
+          {
             path: 'radio-terminal',
             name: 'radio-terminal',
             component: () => import('@/views/features/RadioTerminalView.vue'),
