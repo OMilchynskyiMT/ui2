@@ -39,6 +39,7 @@ const tabs: UiTabItem<string>[] = [
   { title: 'Log viewer', value: 'log-viewer' },
   { title: 'Radio terminal', value: 'radio-terminal' },
   { title: 'Steps', value: 'steps' },
+  { title: 'Relative time', value: 'relative-time' },
   { title: 'Certificates', value: 'certificate' },
   { title: 'Property List', value: 'property-list' },
   { title: 'Alerts', value: 'alerts' },

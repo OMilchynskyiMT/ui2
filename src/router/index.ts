@@ -168,6 +168,12 @@ const routes: RouterOptions['routes'] = [
             component: () => import('@/views/features/LogViewerView.vue'),
           },
           {
+            path: 'relative-time',
+            name: 'relative-time',
+            component: () => import('@/views/features/RelativeTimeView.vue'),
+            meta: { title: 'Relative Time' },
+          },
+          {
             path: 'steps',
             name: 'steps',
             component: () => import('@/views/features/StepsView.vue'),
