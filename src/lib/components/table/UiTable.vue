@@ -933,11 +933,6 @@ div.table {
     box-shadow: inset 0 -2px var(--table-reorder-accent);
   }
 
-  .reorder-handle:focus-visible {
-    outline: var(--focus-ring-width) solid var(--focus-ring-color);
-    outline-offset: var(--focus-ring-offset);
-  }
-
   @media (prefers-reduced-motion: reduce) {
     &[data-dragging] :is(.row, .details-row):not([data-dragging]) > :is(.cell, .details-cell) {
       transition: none;
