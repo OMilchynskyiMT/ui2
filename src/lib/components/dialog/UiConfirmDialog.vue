@@ -109,12 +109,12 @@ const setResult = (value: boolean): void => {
   dialog.value?.close()
 }
 
-const settle = (fallback: boolean): void => {
+const settle = (): void => {
   if (!pending) return
 
   const current = pending
   pending = undefined
-  current.resolve(current.result ?? fallback)
+  current.resolve(current.result ?? false)
 }
 
 const closing = (): void => {
@@ -124,10 +124,10 @@ const closing = (): void => {
 
 const accept = (): void => setResult(true)
 const decline = (): void => setResult(false)
-const closed = (): void => settle(false)
+const closed = (): void => settle()
 
 defineExpose<Exposed>({ confirm })
-onBeforeUnmount(() => settle(false))
+onBeforeUnmount(() => settle())
 </script>
 
 <style scoped>

@@ -229,7 +229,6 @@ onMounted(() => {
         cursorColumn.value = head - line.from + 1
         if (update.docChanged) model.value = update.state.doc.toString()
         if (update.focusChanged) {
-          // eslint-disable-next-line unicorn/prefer-ternary
           if (update.view.hasFocus) emit('focus')
           else emit('blur')
         }

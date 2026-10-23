@@ -61,8 +61,7 @@ export const createResizeDirective = (): Directive<Element, ResizeDirectiveValue
       const value = normalizeValue(binding.value)
       values.set(element, value)
 
-      if (previous?.box === value.box) return
-      if (!observer) return
+      if (!observer || previous?.box === value.box) return
 
       observer.unobserve(element)
       startObserving(observer, element, value.box)

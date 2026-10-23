@@ -164,7 +164,6 @@ const createBarRenderer = (canvas: HTMLCanvasElement, chart: BarChart, options: 
     options: createBarOptions(chart, options),
   })
 
-  // eslint-disable-next-line unicorn/consistent-boolean-name
   const update = (nextChart: ChartDefinition): boolean => {
     if (nextChart.type !== 'bar') return false
     validateChart(nextChart)
@@ -283,7 +282,6 @@ const createLineRenderer = (canvas: HTMLCanvasElement, chart: LineChart, options
     options: createLineOptions(chart, options),
   })
 
-  // eslint-disable-next-line unicorn/consistent-boolean-name
   const update = (nextChart: ChartDefinition): boolean => {
     if (nextChart.type !== 'line') return false
     validateChart(nextChart)

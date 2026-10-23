@@ -90,7 +90,6 @@ export const usePageModel = <T extends object, TTracked = T>(options: PageModelO
     saveError.value = undefined
   }
 
-  // eslint-disable-next-line unicorn/consistent-boolean-name
   const confirmDiscard = async (): Promise<boolean> => {
     if (!changes.dirty.value) return true
     if (!options.confirmDiscard) return false
@@ -112,7 +111,6 @@ export const usePageModel = <T extends object, TTracked = T>(options: PageModelO
     return confirmDiscard()
   }
 
-  // eslint-disable-next-line unicorn/consistent-boolean-name
   const load = async (loadOptions: PageLoadOptions = {}): Promise<boolean> => {
     if (isDisposed || saving.value) return false
     const currentOperation = ++operation
@@ -188,7 +186,6 @@ export const usePageModel = <T extends object, TTracked = T>(options: PageModelO
     saveError.value = undefined
     saving.value = true
 
-    // eslint-disable-next-line unicorn/consistent-boolean-name
     const execute = async (): Promise<boolean> => {
       // install currentSave before invoking application code, including synchronous failures
       await Promise.resolve()
@@ -224,7 +221,7 @@ export const usePageModel = <T extends object, TTracked = T>(options: PageModelO
 
   if (navigation) {
     usePageNavigationGuard(
-      computed(() => (options.confirmDiscard ? changes.dirty.value : false) || saving.value),
+      computed(() => (options.confirmDiscard && changes.dirty.value) ?? saving.value),
       {
         confirm: confirmDiscard,
         blocked: saving,

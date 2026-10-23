@@ -131,15 +131,12 @@ const closed = (): void => {
 }
 
 const isValid = (): boolean => {
-  if (!validate) return true
-  if (!form.value) return true
+  if (!validate || !form.value) return true
   return form.value.reportValidity()
 }
 
 const submitForm = async (): Promise<void> => {
-  if (submitting.value) return
-  if (submitDisabled) return
-  if (!isValid()) return
+  if (submitDisabled || submitting.value || !isValid()) return
 
   submitting.value = true
   let keepSubmittingUntilClose = false

@@ -46,6 +46,15 @@ it('initializes once from the persisted preference', async () => {
   expect(colorScheme.addEventListener).toHaveBeenCalledTimes(1)
 })
 
+it('uses the system preference when no explicit scheme is stored', async () => {
+  const colorScheme = await loadColorScheme(null, true)
+  colorScheme.initializeColorScheme()
+
+  expect(colorScheme.useColorScheme().rawScheme.value).toBe('system')
+  expect(colorScheme.useColorScheme().scheme.value).toBe('dark')
+  expect(colorScheme.root.dataset.scheme).toBe('dark')
+})
+
 it('changes the active scheme even when persistence is unavailable', async () => {
   const colorScheme = await loadColorScheme()
   colorScheme.storage.setItem.mockImplementation(() => {

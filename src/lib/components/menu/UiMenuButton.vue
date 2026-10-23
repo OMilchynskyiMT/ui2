@@ -166,10 +166,10 @@ const onButtonKeydown = (event: KeyboardEvent): void => {
     return
   }
 
-  if (event.key === 'ArrowUp') {
-    event.preventDefault()
-    show('last')
-  }
+  if (event.key !== 'ArrowUp') return
+
+  event.preventDefault()
+  show('last')
 }
 
 watch(

@@ -100,7 +100,7 @@ const hasOverflowRight = ref(false)
 const panelId = `${id}-panel`
 
 const getTabId = (index: number): string => `${id}-tab-${index}`
-const enabledIndexes = (): number[] => items.flatMap((tab, index) => (tab.disabled ? [] : [index]))
+const enabledIndexes = (): number[] => items.flatMap((tab, index) => (tab.disabled ? [] : index))
 
 const activeIndex = computed(() => items.findIndex(tab => tab.value === model.value))
 const activeTab = computed(() => items[activeIndex.value])
@@ -185,11 +185,11 @@ const onKeydown = (event: KeyboardEvent): void => {
     return
   }
 
-  if (activation === 'manual' && (event.key === 'Enter' || event.key === ' ')) {
-    event.preventDefault()
-    const tab = items[focusedIndex.value]
-    if (tab) activate(tab)
-  }
+  if (!(activation === 'manual' && (event.key === 'Enter' || event.key === ' '))) return
+
+  event.preventDefault()
+  const tab = items[focusedIndex.value]
+  if (tab) activate(tab)
 }
 
 const updateIndicatorStyle = (): void => {

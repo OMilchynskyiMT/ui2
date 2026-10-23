@@ -354,7 +354,7 @@ const dropTargetIndex = computed(() => {
   return getTableReorderTargetIndex(rows.length, draggingSourceIndex.value, dropGapIndex.value)
 })
 const activeDropGap = computed(() =>
-  dropTargetIndex.value !== null && dropTargetIndex.value !== draggingSourceIndex.value ? dropGapIndex.value : null
+  dropTargetIndex.value === null || dropTargetIndex.value === draggingSourceIndex.value ? null : dropGapIndex.value
 )
 
 const getColumnStyle = getTableColumnStyle<Row>
@@ -624,8 +624,15 @@ const updateFrame = (time: number): void => {
 }
 
 const onPointerDown = (event: PointerEvent, sourceIndex: number): void => {
-  if (drag || !event.isPrimary || event.button !== 0 || !canReorder.value) return
-  if (!(event.currentTarget instanceof HTMLButtonElement)) return
+  if (
+    drag ||
+    !event.isPrimary ||
+    event.button !== 0 ||
+    !canReorder.value ||
+    !(event.currentTarget instanceof HTMLButtonElement)
+  ) {
+    return
+  }
   const row = event.currentTarget.closest<HTMLTableRowElement>('tr.row')
   if (!row || !scrollAreaReference.value?.viewport) return
 

@@ -21,9 +21,9 @@
 import {
   BusFrontIcon,
   ChartBarIcon,
+  CodeXmlIcon,
   FormInputIcon,
   GaugeIcon,
-  CodeXmlIcon,
   GlobeIcon,
   LogInIcon,
   SmartphoneIcon,

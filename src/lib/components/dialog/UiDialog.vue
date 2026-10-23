@@ -155,8 +155,7 @@ const show = (isModal = true): void => {
 
 const close = (): void => {
   const element = dialog.value
-  if (!element?.open) return
-  if (phase.value === 'closing') return
+  if (!element?.open || phase.value === 'closing') return
 
   phase.value = 'closing'
   emit('closing')
@@ -170,8 +169,7 @@ const cancel = (event: Event): void => {
   const prevented = event.defaultPrevented
   event.preventDefault()
 
-  if (phase.value !== 'opened') return
-  if (persistent || prevented) return
+  if (persistent || prevented || phase.value !== 'opened') return
 
   close()
 }
@@ -183,10 +181,7 @@ const closed = (): void => {
 }
 
 const transitionend = (event: TransitionEvent): void => {
-  if (event.target !== dialog.value) return
-  if (phase.value !== 'closing') return
-  if (event.propertyName !== 'transform') return
-
+  if (event.target !== dialog.value || phase.value !== 'closing' || event.propertyName !== 'transform') return
   finishClose()
 }
 

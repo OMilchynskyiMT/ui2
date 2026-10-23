@@ -401,10 +401,10 @@ const revealMatch = (): void => {
   const markRect = mark.getBoundingClientRect()
   viewport.scrollTop += markRect.top - viewportRect.top - (viewport.clientHeight - markRect.height) / 2
 
-  if (!wrapped.value) {
-    if (markRect.left < viewportRect.left) viewport.scrollLeft += markRect.left - viewportRect.left
-    if (markRect.right > viewportRect.right) viewport.scrollLeft += markRect.right - viewportRect.right
-  }
+  if (wrapped.value) return
+
+  if (markRect.left < viewportRect.left) viewport.scrollLeft += markRect.left - viewportRect.left
+  if (markRect.right > viewportRect.right) viewport.scrollLeft += markRect.right - viewportRect.right
 }
 
 const moveMatch = (step: number): void => {
@@ -416,10 +416,10 @@ const moveMatch = (step: number): void => {
 
 watch(query, () => {
   activeMatchIndex.value = 0
-  if (query.value) {
-    following.value = false
-    void nextTick(revealMatch)
-  }
+  if (!query.value) return
+
+  following.value = false
+  void nextTick(revealMatch)
 })
 
 watch(matches, current => {

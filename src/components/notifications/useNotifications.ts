@@ -53,10 +53,10 @@ const remove = (id: string): void => {
   pauseReasons.delete(id)
 
   const index = notifications.value.findIndex(item => item.id === id)
-  if (index !== -1) {
-    notifications.value.splice(index, 1)
-    syncTimeouts()
-  }
+  if (index === -1) return
+
+  notifications.value.splice(index, 1)
+  syncTimeouts()
 }
 
 const startTimeout = (notification: Notification): void => {
