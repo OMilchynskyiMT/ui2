@@ -168,6 +168,12 @@ const routes: RouterOptions['routes'] = [
             component: () => import('@/views/features/LogViewerView.vue'),
           },
           {
+            path: 'code-editor',
+            name: 'code-editor',
+            component: () => import('@/views/features/CodeEditorView.vue'),
+            meta: { title: 'Code editor' },
+          },
+          {
             path: 'gps',
             name: 'gps',
             component: () => import('@/views/features/GpsView.vue'),
