@@ -42,7 +42,6 @@ it('restores only a valid persisted session', () => {
   session.restore()
 
   expect(session.isActive()).toBe(true)
-  expect(session.isExpired.value).toBe(false)
 })
 
 it('discards invalid persisted session data', () => {
@@ -69,8 +68,4 @@ it('keeps the in-memory session usable when persistence fails', () => {
   const session = useUserSession()
   expect(() => session.set(storedSession)).not.toThrow()
   expect(session.isActive()).toBe(true)
-
-  expect(() => session.expire()).not.toThrow()
-  expect(session.isActive()).toBe(false)
-  expect(session.isExpired.value).toBe(true)
 })

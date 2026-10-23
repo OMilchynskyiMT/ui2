@@ -43,8 +43,24 @@ export default defineConfigWithVueTs(
       'vue/component-name-in-template-casing': ['error', 'PascalCase'],
       'vue/component-definition-name-casing': ['error', 'PascalCase'],
 
-      'unicorn/prevent-abbreviations': 'off',
+      'unicorn/name-replacements': 'off',
       'unicorn/no-null': 'off',
+
+      'unicorn/prefer-ternary': 'off',
+      'unicorn/prefer-early-return': 'warn',
+      'unicorn/prefer-combined-guards': 'warn',
+      'unicorn/prefer-logical-operator-over-ternary': 'warn',
+      'unicorn/no-negated-condition': 'warn',
+      'unicorn/no-unnecessary-array-flat-map': 'warn',
+
+      // keep boolean prefixes meaningful without renaming actions by their return types
+      'unicorn/consistent-boolean-name': ['error', { checkVariables: 'prohibit', checkFunctions: 'never' }],
+
+      // keep conventional JSDoc formatting compatible with prettier
+      'unicorn/no-asterisk-prefix-in-documentation-comments': 'off',
+
+      // parameter defaults do not preserve the behavior of ?? or || fallbacks
+      'unicorn/prefer-default-parameters': ['error', { checkFallbackExpressions: false }],
 
       '@typescript-eslint/no-unused-vars': [
         'error',

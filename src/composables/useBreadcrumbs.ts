@@ -19,7 +19,7 @@ const getRecordParameters = (record: RouteRecordNormalized, route: ReturnType<ty
   const names = new Set(
     [...matches].flatMap(match => {
       const name = match[1]
-      return name ? [name] : []
+      return name ?? []
     })
   )
 
@@ -74,14 +74,12 @@ export const useBreadcrumbs = (): UseBreadcrumbs => {
       const { label, target } = resolveMetadata(metadata, record, route)
       if (!label) return []
 
-      return [
-        {
-          key: record.name?.toString() ?? `${index}-${record.path}`,
-          label,
-          target,
-          href: target ? router.resolve(target).href : undefined,
-        },
-      ]
+      return {
+        key: record.name?.toString() ?? `${index}-${record.path}`,
+        label,
+        target,
+        href: target ? router.resolve(target).href : undefined,
+      }
     })
   })
 

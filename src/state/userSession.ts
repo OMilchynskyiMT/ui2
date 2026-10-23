@@ -30,17 +30,13 @@ const isUserSession = (value: unknown): value is UserSession => {
 const store = (session: UserSession): void => {
   try {
     localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(session))
-  } catch {
-    // Storage is best-effort. Keep the in-memory session usable.
-  }
+  } catch {}
 }
 
 const clearStored = (): void => {
   try {
     localStorage.removeItem(SESSION_STORAGE_KEY)
-  } catch {
-    // Storage is best-effort. Keep the in-memory session usable.
-  }
+  } catch {}
 }
 
 const set = (session: UserSession): void => {
@@ -83,9 +79,7 @@ const restore = (): void => {
       user.value = session
       return
     }
-  } catch {
-    // Invalid persisted data is discarded below.
-  }
+  } catch {}
 
   user.value = undefined
   clearStored()

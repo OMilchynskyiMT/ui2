@@ -71,8 +71,7 @@ const dismiss = (reason: PopoverDismissReason): void => {
 }
 
 const onDocumentPointerDown = (event: Event): void => {
-  if (isContainsTarget(surfaceReference.value, event.target)) return
-  if (isContainsTarget(anchor, event.target)) return
+  if (isContainsTarget(surfaceReference.value, event.target) || isContainsTarget(anchor, event.target)) return
   dismiss('outside')
 }
 

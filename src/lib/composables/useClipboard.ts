@@ -12,7 +12,6 @@ export const useClipboard = () => {
     copying.value = false
   }
 
-  // eslint-disable-next-line unicorn/consistent-boolean-name
   const copy = async (text: string): Promise<boolean> => {
     const currentRequest = ++request
     copied.value = false

@@ -335,10 +335,10 @@ const onKeydown = (event: KeyboardEvent): void => {
     return
   }
 
-  if (event.key === 'Escape' && isOpen.value) {
-    event.preventDefault()
-    close()
-  }
+  if (!(event.key === 'Escape' && isOpen.value)) return
+
+  event.preventDefault()
+  close()
 }
 
 watch(model, setTextFromModel, { immediate: true })

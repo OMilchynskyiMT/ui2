@@ -49,7 +49,7 @@ const latitude = ref<number | null>(50.4501)
 const longitude = ref<number | null>(30.5234)
 const hasFix = ref(true)
 const position = computed(() =>
-  latitude.value !== null && longitude.value !== null ? { lat: latitude.value, lng: longitude.value } : null
+  latitude.value === null || longitude.value === null ? null : { lat: latitude.value, lng: longitude.value }
 )
 
 const setPosition = (lat: number, lng: number): void => {
