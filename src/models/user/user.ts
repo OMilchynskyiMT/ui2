@@ -1,4 +1,4 @@
-import { isApiError } from '@/api/errors'
+import { isApiError } from '@/lib/http'
 import {
   changePassword as requestChangePassword,
   commissioning as requestCommissioning,

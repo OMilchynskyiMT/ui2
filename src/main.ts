@@ -4,11 +4,13 @@ import { createApp } from 'vue'
 
 import { createResizeDirective } from '@/lib/directives/resize'
 import { ripple } from '@/lib/directives/ripple'
+import { setHttpUnauthorizedHandler } from '@/lib/http'
 import App from '@/App.vue'
 import { initializeColorScheme } from '@/composables/useColorScheme'
 import { createAppRouter } from '@/router'
 import { useUserSession } from '@/state/userSession'
 
+setHttpUnauthorizedHandler(() => useUserSession().expire())
 initializeColorScheme()
 useUserSession().restore()
 

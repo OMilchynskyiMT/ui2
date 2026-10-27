@@ -1,19 +1,22 @@
+import { AxiosError, type AxiosResponse } from 'axios'
 import { afterEach, expect, it, vi } from 'vitest'
 
-import { HttpError } from '@/lib/http'
+import { ApiError } from '@/lib/http'
 
 const { get } = vi.hoisted(() => ({ get: vi.fn() }))
-vi.mock('../http', () => ({ publicHttp: { get } }))
+vi.mock('@/lib/http', async importOriginal => ({
+  ...(await importOriginal<typeof import('@/lib/http')>()),
+  http: { get },
+}))
 
-import { isDeviceApiAvailable, isDeviceApiAvailableWithin, TEST_API_PATH } from '../deviceAvailability'
+import { isDeviceApiAvailable, isDeviceApiAvailableWithin } from '../deviceAvailability'
 
-const responseError = (status: number): HttpError =>
-  new HttpError(`HTTP ${status}`, {
-    kind: 'response',
-    method: 'GET',
-    url: TEST_API_PATH,
-    response: { status, data: undefined, headers: {} },
-  })
+const responseError = (status: number): AxiosError =>
+  new AxiosError(`HTTP ${status}`, AxiosError.ERR_BAD_RESPONSE, undefined, undefined, {
+    status,
+    data: undefined,
+    headers: {},
+  } as AxiosResponse)
 
 afterEach(() => {
   vi.useRealTimers()
@@ -25,13 +28,15 @@ it('accepts actual API responses, including login and commissioning responses', 
     .mockRejectedValueOnce(responseError(401))
     .mockRejectedValueOnce(responseError(409))
     .mockResolvedValueOnce({ data: {}, status: 200, headers: {} })
+    .mockRejectedValueOnce(new ApiError('Login required', 401, 200))
     .mockRejectedValueOnce(responseError(500))
 
   expect(await isDeviceApiAvailable()).toBe(true)
   expect(await isDeviceApiAvailable()).toBe(true)
   expect(await isDeviceApiAvailable()).toBe(true)
+  expect(await isDeviceApiAvailable()).toBe(true)
   expect(await isDeviceApiAvailable()).toBe(false)
-  expect(get).toHaveBeenCalledWith('/api/policy', { signal: undefined, timeout: 5000 })
+  expect(get).toHaveBeenCalledWith('/api/policy', { signal: undefined, timeout: 5000, skipSessionExpiration: true })
 })
 
 it('waits for availability with a bounded deadline and no overlapping probes', async () => {

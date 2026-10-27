@@ -1,12 +1,10 @@
-import { isHttpError } from '@/lib/http'
+import { isAxiosError } from 'axios'
 
-import { isApiError } from './errors'
-import { publicHttp } from './http'
+import { http, isApiError } from '@/lib/http'
 
 export const TEST_API_PATH = '/api/policy'
 
 export type DeviceAvailabilityOptions = {
-  // Maximum time spent waiting, including the initial delay
   timeout: number
   interval?: number
   initialDelay?: number
@@ -36,19 +34,19 @@ const delay = (duration: number, signal?: AbortSignal): Promise<void> => {
   })
 }
 
-// any successful response, HTTP 401 or HTTP 409 indicates that the device API answered
+// API response (even a failure) or HTTP 401/409 means the device answered
 export const isDeviceApiAvailable = async (signal?: AbortSignal, timeout = 5000): Promise<boolean> => {
   try {
-    await publicHttp.get(TEST_API_PATH, { signal, timeout })
+    await http.get(TEST_API_PATH, { signal, timeout, skipSessionExpiration: true })
     throwIfAborted(signal)
     return true
   } catch (error) {
     throwIfAborted(signal)
 
-    if (isHttpError(error) && error.kind === 'response') {
-      return error.response?.status === 401 || error.response?.status === 409
+    if (isApiError(error)) return true
+    if (isAxiosError(error) && error.response) {
+      return error.response.status === 401 || error.response.status === 409
     }
-    if (isApiError(error)) return error.httpStatus === 401 || error.httpStatus === 409
     return false
   }
 }

@@ -1,4 +1,4 @@
-import { http, publicHttp } from './http'
+import { http } from '@/lib/http'
 
 export type UserSignInResponse = {
   readonly user: string
@@ -22,26 +22,25 @@ export type PamResponse = {
 
 export const signIn = async (username: string, password: string): Promise<UserSignInResponse> => {
   const url = '/api/login'
-  const { data } = await publicHttp.post<UserSignInResponse>(url, {
-    json: { username, password },
-    timeout: 2 * 60 * 1000,
-  })
+  const { data } = await http.post<UserSignInResponse>(
+    url,
+    { username, password },
+    {
+      skipSessionExpiration: true,
+      timeout: 2 * 60 * 1000,
+    }
+  )
 
   return data
 }
 
 export const signOut = async (username: string, password: string): Promise<void> => {
   const url = '/api/logout'
-  await http.post(url, {
-    json: { username, password, logoutUser: username },
-    timeout: 2 * 60 * 1000,
-  })
+  await http.post(url, { username, password, logoutUser: username }, { timeout: 2 * 60 * 1000 })
 }
 
 const sendPasswdRequest = async (request: PamRequest): Promise<PamResponse> => {
-  const { data } = await http.post<PamResponse>('/api/command/passwd', {
-    json: request,
-  })
+  const { data } = await http.post<PamResponse>('/api/command/passwd', request)
 
   return data
 }
@@ -80,9 +79,7 @@ export const changePassword = async (
 }
 
 const sendCommissioningRequest = async (request: PamRequest): Promise<PamResponse> => {
-  const { data } = await http.post<PamResponse>('/api/commissioning', {
-    json: request,
-  })
+  const { data } = await http.post<PamResponse>('/api/commissioning', request)
 
   return data
 }
