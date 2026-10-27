@@ -128,16 +128,13 @@ export default defineConfigWithVueTs(
         {
           patterns: [
             {
-              group: [
-                '@/api/**',
-                '@/components/**',
-                '@/composables/**',
-                '@/layouts/**',
-                '@/models/**',
-                '@/router/**',
-                '@/views/**',
-              ],
+              group: ['@/api/**', '@/components/**', '@/composables/**', '@/layouts/**', '@/router/**', '@/views/**'],
               message: 'state must not depend on API, models, router, and UI layers',
+            },
+            {
+              group: ['@/models/**'],
+              allowTypeImports: true,
+              message: 'state may import model types, but not runtime values',
             },
           ],
         },
@@ -154,8 +151,13 @@ export default defineConfigWithVueTs(
         {
           patterns: [
             {
-              group: ['@/components/**', '@/layouts/**', '@/models/**', '@/router/**', '@/views/**'],
-              message: 'API modules must not depend on models, router, or UI components',
+              group: ['@/components/**', '@/layouts/**', '@/router/**', '@/views/**', '@/composables/**', '@/state/**'],
+              message: 'API modules must not depend on router, state, layouts, views, or UI components/composables',
+            },
+            {
+              group: ['@/models/**'],
+              allowTypeImports: true,
+              message: 'API modules may import model types, but not runtime values',
             },
           ],
         },
