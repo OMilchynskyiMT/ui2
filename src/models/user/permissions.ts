@@ -289,4 +289,4 @@ export type PermissionKey =
   | 'wanmngr'
   | 'wifi'
 
-export type Permission = Record<PermissionKey, PermissionValue>
+export type PermissionsList = Record<PermissionKey, PermissionValue>

@@ -1,4 +1,5 @@
 import { isApiError } from '@/lib/http'
+import { getPermissions } from '@/api/permissions'
 import {
   changePassword as requestChangePassword,
   commissioning as requestCommissioning,
@@ -10,7 +11,7 @@ import { type UserSession, useUserSession } from '@/state/userSession'
 export type { SystemUserRole, UserRole } from '@/state/userSession'
 export type User = UserSession
 
-export type SignInErrorReason = 'invalid-credentials' | 'session-conflict' | 'maximum-users'
+export type SignInErrorReason = 'invalid-credentials' | 'session-conflict' | 'maximum-users' | 'expired'
 
 export type SignInResult =
   | { readonly ok: true; readonly user: User }
@@ -19,12 +20,16 @@ export type SignInResult =
 const signIn = async (username: string, password: string): Promise<SignInResult> => {
   try {
     const data = await requestSignIn(username, password)
+    if (data.ispasswordexpired) {
+      return { ok: false, reason: 'expired' }
+    }
+    const permissions = await getPermissions()
 
     const user: User = {
       user: data.user,
       role: data.permission,
       isRemote: data.isremoteuser,
-      isPasswordExpired: data.ispasswordexpired ?? false,
+      permissions,
     }
 
     useUserSession().set(user)

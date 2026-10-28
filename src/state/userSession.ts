@@ -1,5 +1,7 @@
 import { readonly, ref } from 'vue'
 
+import type { PermissionsList } from '@/models/user/permissions'
+
 export const SESSION_STORAGE_KEY = 'session'
 
 export type SystemUserRole = 'admin' | 'user' | 'guest'
@@ -9,7 +11,7 @@ export type UserSession = {
   readonly user: string
   readonly role: UserRole
   readonly isRemote: boolean
-  readonly isPasswordExpired: boolean
+  readonly permissions: PermissionsList
 }
 
 const user = ref<UserSession>()
@@ -23,7 +25,7 @@ const isUserSession = (value: unknown): value is UserSession => {
     typeof session.user === 'string' &&
     typeof session.role === 'string' &&
     typeof session.isRemote === 'boolean' &&
-    typeof session.isPasswordExpired === 'boolean'
+    typeof session.permissions === 'object'
   )
 }
 

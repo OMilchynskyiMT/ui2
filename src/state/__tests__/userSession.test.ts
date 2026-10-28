@@ -1,5 +1,7 @@
 import { afterEach, beforeEach, expect, it, vi } from 'vitest'
 
+import type { PermissionsList } from '@/models/user/permissions'
+
 import { SESSION_STORAGE_KEY, type UserSession, useUserSession } from '../userSession'
 
 const createStorage = (): Storage => {
@@ -22,7 +24,7 @@ const storedSession: UserSession = {
   user: 'admin',
   role: 'admin',
   isRemote: false,
-  isPasswordExpired: false,
+  permissions: {} as PermissionsList,
 }
 
 beforeEach(() => {
