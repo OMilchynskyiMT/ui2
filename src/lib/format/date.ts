@@ -1,7 +1,3 @@
-/**
- * API date strings should include a timezone. A numeric timestamp is in milliseconds.
- * invalid input is not silently replaced with the current time
- */
 export type DateValue = Date | number | string
 
 export const toValidDate = (value: DateValue): Date => {
