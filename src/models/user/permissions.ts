@@ -290,3 +290,28 @@ export type PermissionKey =
   | 'wifi'
 
 export type PermissionsList = Record<PermissionKey, PermissionValue>
+
+export type PermissionAction = 'get' | 'edit' | 'add' | 'remove' | 'visible'
+export type PermissionRequirement =
+  | PermissionKey
+  | {
+      key: PermissionKey
+      action: PermissionAction | readonly PermissionAction[]
+    }
+
+const permissionIndex = { get: 0, edit: 1, add: 2, remove: 3, visible: 4 } as const
+
+export const hasPermission = (
+  permissions: Readonly<Record<PermissionKey, Readonly<PermissionValue>>> | undefined,
+  requirement: PermissionRequirement
+): boolean => {
+  const key = typeof requirement === 'string' ? requirement : requirement.key
+  const flags = permissions?.[key]
+  if (!flags) return false
+
+  // a plain resource key requires both Get and Visible
+  const requested = typeof requirement === 'string' ? (['get', 'visible'] as const) : requirement.action
+  const actions = typeof requested === 'string' ? [requested] : requested
+
+  return actions.length > 0 && actions.every(action => flags[permissionIndex[action]])
+}

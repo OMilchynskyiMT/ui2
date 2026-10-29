@@ -1,5 +1,6 @@
 import { createRouter, createWebHashHistory, type Router, type RouterOptions } from 'vue-router'
 
+import { installAccessGuard } from './access'
 import { applyPageMetadata } from './metadata'
 
 const routes: RouterOptions['routes'] = [
@@ -99,6 +100,26 @@ const routes: RouterOptions['routes'] = [
         ],
       },
     ],
+  },
+  {
+    path: '/access-denied',
+    name: 'access-denied',
+    component: () => import('@/views/AccessIssueView.vue'),
+    props: {
+      title: 'Access denied',
+      message: 'The current session does not have permission to view this page.',
+    },
+    meta: { title: 'Access denied' },
+  },
+  {
+    path: '/feature-unavailable',
+    name: 'feature-unavailable',
+    component: () => import('@/views/AccessIssueView.vue'),
+    props: {
+      title: 'Feature unavailable',
+      message: 'This feature is not supported by the device, or its capabilities could not be retrieved.',
+    },
+    meta: { title: 'Feature unavailable' },
   },
   {
     path: '/features',
@@ -251,6 +272,8 @@ export const createAppRouter = (): Router => {
     history: createWebHashHistory(import.meta.env.BASE_URL),
     routes,
   })
+
+  installAccessGuard(router)
 
   router.afterEach(to => {
     applyPageMetadata(to)
