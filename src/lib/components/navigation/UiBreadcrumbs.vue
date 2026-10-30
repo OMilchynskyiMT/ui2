@@ -9,11 +9,8 @@
       <li v-for="(item, index) in items" :key="getItemKey(item, index)" class="breadcrumb-item">
         <UiIcon v-if="index > 0" :icon="ChevronRightIcon" :size="separatorSize" aria-hidden="true" class="separator" />
 
-        <slot :current="index === items.length - 1" :index="index" :item="item" name="item">
-          <span
-            v-if="index === items.length - 1 || !item.href"
-            :aria-current="index === items.length - 1 ? 'page' : undefined"
-          >
+        <slot :current="isCurrent(item, index)" :index="index" :item="item" name="item">
+          <span v-if="isCurrent(item, index) || !item.href" :aria-current="isCurrent(item, index) ? 'page' : undefined">
             {{ item.label }}
           </span>
           <a v-else :href="item.href">{{ item.label }}</a>
@@ -34,6 +31,7 @@ export type UiBreadcrumbItem<T = unknown> = {
   href?: string
   target?: T
   key?: string | number
+  current?: boolean
 }
 
 export type UiBreadcrumbsProperties<T = unknown> = {
@@ -51,7 +49,7 @@ import UiIcon from '../UiIcon.vue'
 
 const slots = useSlots()
 const { items, ariaLabel = 'Breadcrumb', separatorSize = '1em' } = defineProps<UiBreadcrumbsProperties<T>>()
-
+const isCurrent = (item: UiBreadcrumbItem<T>, index: number): boolean => item.current ?? index === items.length - 1
 const getItemKey = (item: UiBreadcrumbItem<T>, index: number): string | number => item.key ?? `${index}-${item.label}`
 </script>
 

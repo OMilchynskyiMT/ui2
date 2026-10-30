@@ -1,7 +1,8 @@
 import { createRouter, createWebHashHistory, type Router, type RouterOptions } from 'vue-router'
 
+import { applyPageMetadata } from '@/composables/usePageMeta'
+
 import { installAccessGuard } from './access'
-import { applyPageMetadata } from './metadata'
 
 const routes: RouterOptions['routes'] = [
   {
@@ -15,27 +16,26 @@ const routes: RouterOptions['routes'] = [
         name: 'dashboard',
         component: () => import('@/views/dashboard/MainView.vue'),
         meta: {
-          breadcrumb: 'Dashboard',
           title: 'Dashboard',
         },
       },
       {
         path: 'setup',
         name: 'setup',
-        meta: { breadcrumb: { label: 'Setup', to: false } },
+        meta: { title: 'Setup', breadcrumb: { to: false } },
         children: [
           {
             path: 'wan',
             name: 'wan',
             component: () => import('@/views/dashboard/WanView.vue'),
-            meta: { breadcrumb: 'WAN', title: 'WAN' },
+            meta: { title: 'WAN' },
           },
           {
             path: 'dhcp',
             name: 'dhcp',
             component: () => import('@/views/dashboard/dhcp/BaseView.vue'),
             redirect: { name: 'dhcp-config' },
-            meta: { breadcrumb: 'DHCP', title: 'DHCP' },
+            meta: { title: 'DHCP' },
             children: [
               {
                 path: 'configuration',
@@ -62,7 +62,7 @@ const routes: RouterOptions['routes'] = [
             name: 'smtp',
             component: () => import('@/views/dashboard/smtp/BaseView.vue'),
             redirect: { name: 'smtp-settings' },
-            meta: { breadcrumb: 'SMTP' },
+            meta: { title: 'SMTP' },
             children: [
               {
                 path: 'configuration',
@@ -83,19 +83,19 @@ const routes: RouterOptions['routes'] = [
       {
         path: 'administration',
         name: 'administration',
-        meta: { breadcrumb: { label: 'Administration', to: false } },
+        meta: { title: 'Administration', breadcrumb: { to: false } },
         children: [
           {
             path: 'debug-options',
             name: 'debug-options',
             component: () => import('@/views/dashboard/DebugOptionsView.vue'),
-            meta: { breadcrumb: 'Debug Options', title: 'Debug Options' },
+            meta: { title: 'Debug Options' },
           },
           {
             path: 'usage-policy',
             name: 'usage-policy',
             component: () => import('@/views/dashboard/UsagePolicyView.vue'),
-            meta: { breadcrumb: 'Usage Policy', title: 'Usage Policy' },
+            meta: { title: 'Usage Policy' },
           },
         ],
       },
@@ -124,7 +124,7 @@ const routes: RouterOptions['routes'] = [
   {
     path: '/features',
     component: () => import('@/layouts/BaseLayout.vue'),
-    meta: { breadcrumb: 'Features' },
+    meta: { title: 'Features' },
     children: [
       {
         path: '',
@@ -135,6 +135,7 @@ const routes: RouterOptions['routes'] = [
             path: 'inputs',
             name: 'inputs',
             component: () => import('@/views/features/InputsView.vue'),
+            meta: { title: 'Inputs' },
           },
           {
             path: 'sign-in',
@@ -146,36 +147,43 @@ const routes: RouterOptions['routes'] = [
             path: 'spinners',
             name: 'spinners',
             component: () => import('@/views/features/SpinnersView.vue'),
+            meta: { title: 'Spinners' },
           },
           {
             path: 'buttons',
             name: 'buttons',
             component: () => import('@/views/features/ButtonsView.vue'),
+            meta: { title: 'Buttons' },
           },
           {
             path: 'lists',
             name: 'lists',
             component: () => import('@/views/features/ListsView.vue'),
+            meta: { title: 'Lists' },
           },
           {
             path: 'chips',
             name: 'chips',
             component: () => import('@/views/features/ChipsView.vue'),
+            meta: { title: 'Chips' },
           },
           {
             path: 'dialogs',
             name: 'dialogs',
             component: () => import('@/views/features/DialogsView.vue'),
+            meta: { title: 'Dialogs' },
           },
           {
             path: 'menu',
             name: 'menu',
             component: () => import('@/views/features/MenuView.vue'),
+            meta: { title: 'Menu' },
           },
           {
             path: 'grid',
             name: 'grid',
             component: () => import('@/views/features/GridView.vue'),
+            meta: { title: 'Grid' },
           },
           {
             path: 'certificate',
@@ -187,6 +195,7 @@ const routes: RouterOptions['routes'] = [
             path: 'log-viewer',
             name: 'log-viewer',
             component: () => import('@/views/features/LogViewerView.vue'),
+            meta: { title: 'Log Viewer' },
           },
           {
             path: 'code-editor',
@@ -216,38 +225,43 @@ const routes: RouterOptions['routes'] = [
             path: 'radio-terminal',
             name: 'radio-terminal',
             component: () => import('@/views/features/RadioTerminalView.vue'),
+            meta: { title: 'Radio Terminal' },
           },
           {
             path: 'table',
             name: 'table',
             component: () => import('@/views/features/TableView.vue'),
+            meta: { title: 'Table' },
           },
           {
             path: 'property-list',
             name: 'property-list',
             component: () => import('@/views/features/PropertyListView.vue'),
+            meta: { title: 'Property List' },
           },
           {
             path: 'alerts',
             name: 'alerts',
             component: () => import('@/views/features/AlertsView.vue'),
+            meta: { title: 'Alerts' },
           },
           {
             path: 'notifications',
             name: 'notifications',
             component: () => import('@/views/features/NotificationsView.vue'),
+            meta: { title: 'Notifications' },
           },
           {
             path: 'navigation',
             name: 'navigation',
             component: () => import('@/views/features/NavigationView.vue'),
-            meta: { breadcrumb: 'Navigation' },
+            meta: { title: 'Navigation' },
           },
           {
             path: 'mobile',
             name: 'mobile',
             component: () => import('@/views/features/MobileView.vue'),
-            meta: { breadcrumb: 'Mobile', title: 'Mobile Components' },
+            meta: { title: 'Mobile Components', breadcrumb: 'Mobile' },
           },
           {
             path: 'bar-chart',
@@ -275,8 +289,8 @@ export const createAppRouter = (): Router => {
 
   installAccessGuard(router)
 
-  router.afterEach(to => {
-    applyPageMetadata(to)
+  router.afterEach((to, _from, failure) => {
+    if (!failure) applyPageMetadata(to)
   })
 
   return router

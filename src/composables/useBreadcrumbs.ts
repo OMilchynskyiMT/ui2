@@ -2,16 +2,15 @@ import { computed, type ComputedRef } from 'vue'
 import { type RouteLocationRaw, type RouteRecordNormalized, useRoute, useRouter } from 'vue-router'
 
 import type { UiBreadcrumbItem } from '@/lib/components/navigation/UiBreadcrumbs.vue'
-import type { BreadcrumbMetadata, BreadcrumbTarget, RouteMetadataValue } from '@/router/types'
+import { resolveRouteMetadataValue } from '@/router/metadata'
+import type { BreadcrumbMetadata, BreadcrumbTarget } from '@/router/types'
+
+import { currentPageTitleOverride } from './usePageMeta'
 
 export type RouterBreadcrumbItem = UiBreadcrumbItem<RouteLocationRaw>
 
 export type UseBreadcrumbs = {
   breadcrumbs: ComputedRef<RouterBreadcrumbItem[]>
-}
-
-const resolveLabel = (label: RouteMetadataValue<string>, route: ReturnType<typeof useRoute>): string | undefined => {
-  return typeof label === 'function' ? label(route) : label
 }
 
 const getRecordParameters = (record: RouteRecordNormalized, route: ReturnType<typeof useRoute>) => {
@@ -41,13 +40,19 @@ const resolveDefaultTarget = (
 }
 
 const resolveMetadata = (
-  metadata: BreadcrumbMetadata,
+  metadata: Exclude<BreadcrumbMetadata, false> | undefined,
   record: RouteRecordNormalized,
   route: ReturnType<typeof useRoute>
 ): { label?: string; target?: RouteLocationRaw } => {
+  const fallbackLabel = resolveRouteMetadataValue(record.meta.title, route)
+
+  if (metadata === undefined) {
+    return { label: fallbackLabel, target: resolveDefaultTarget(record, route) }
+  }
+
   if (typeof metadata === 'string' || typeof metadata === 'function') {
     return {
-      label: resolveLabel(metadata, route),
+      label: resolveRouteMetadataValue(metadata, route) ?? fallbackLabel,
       target: resolveDefaultTarget(record, route),
     }
   }
@@ -57,7 +62,7 @@ const resolveMetadata = (
   const target = configuredTarget === false ? undefined : (configuredTarget ?? resolveDefaultTarget(record, route))
 
   return {
-    label: resolveLabel(metadata.label, route),
+    label: resolveRouteMetadataValue(metadata.label, route) ?? fallbackLabel,
     target,
   }
 }
@@ -69,14 +74,17 @@ export const useBreadcrumbs = (): UseBreadcrumbs => {
   const breadcrumbs = computed<RouterBreadcrumbItem[]>(() => {
     return route.matched.flatMap((record, index) => {
       const metadata = record.meta.breadcrumb
-      if (!metadata) return []
+      if (metadata === false) return []
 
-      const { label, target } = resolveMetadata(metadata, record, route)
+      const { label: routeLabel, target } = resolveMetadata(metadata, record, route)
+      const current = index === route.matched.length - 1
+      const label = current && metadata === undefined ? (currentPageTitleOverride.value ?? routeLabel) : routeLabel
       if (!label) return []
 
       return {
         key: record.name?.toString() ?? `${index}-${record.path}`,
         label,
+        current,
         target,
         href: target ? router.resolve(target).href : undefined,
       }
