@@ -43,14 +43,15 @@ const { icon, hint, description } = defineProps<{
     & .heading {
       display: flex;
       align-items: flex-start;
-      flex: 1 1 18rem;
+      flex: 1 1 0;
       gap: var(--space-sm);
-      /* Keep the heading readable; move actions to another row when space runs out. */
-      min-inline-size: min(100%, 16rem);
+      min-inline-size: min-content;
     }
 
     & .actions {
-      flex: 0 1 auto;
+      flex: 0 0 auto;
+      inline-size: max-content;
+      max-inline-size: 100%;
     }
 
     & .leading-visual {
