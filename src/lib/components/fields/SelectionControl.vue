@@ -139,7 +139,6 @@ defineExpose<SelectionControlExpose>({
 <style scoped>
 @layer components {
   .selection-control {
-    /* Public CSS customization hook. */
     --selection-control-color: var(--interactive-control-color);
 
     --control-color: var(--selection-control-color);
