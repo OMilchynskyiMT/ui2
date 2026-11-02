@@ -1,6 +1,7 @@
 import { readonly, ref } from 'vue'
 
 import type { PermissionsList } from '@/models/user/permissions'
+import { useDeviceStatusState } from '@/state/deviceStatus'
 import { useDeviceSystem } from '@/state/deviceSystem'
 
 export const SESSION_STORAGE_KEY = 'session'
@@ -44,6 +45,7 @@ const clearStored = (): void => {
 
 const set = (session: UserSession): void => {
   useDeviceSystem().clear()
+  useDeviceStatusState().clear()
   user.value = session
   isExpired.value = false
   store(session)
@@ -51,6 +53,7 @@ const set = (session: UserSession): void => {
 
 const remove = (): void => {
   useDeviceSystem().clear()
+  useDeviceStatusState().clear()
   user.value = undefined
   isExpired.value = false
   clearStored()
@@ -58,6 +61,7 @@ const remove = (): void => {
 
 const expire = (): void => {
   useDeviceSystem().clear()
+  useDeviceStatusState().clear()
   user.value = undefined
   isExpired.value = true
   clearStored()
@@ -65,6 +69,7 @@ const expire = (): void => {
 
 const restore = (): void => {
   useDeviceSystem().clear()
+  useDeviceStatusState().clear()
   isExpired.value = false
 
   let stored: string | null

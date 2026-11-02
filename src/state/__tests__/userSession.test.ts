@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, expect, it, vi } from 'vitest'
 
 import type { PermissionsList } from '@/models/user/permissions'
+import { useDeviceStatusState } from '@/state/deviceStatus'
 
 import { SESSION_STORAGE_KEY, type UserSession, useUserSession } from '../userSession'
 
@@ -70,4 +71,17 @@ it('keeps the in-memory session usable when persistence fails', () => {
   const session = useUserSession()
   expect(() => session.set(storedSession)).not.toThrow()
   expect(session.isActive()).toBe(true)
+})
+
+it('clears device status on a session change', () => {
+  const status = useDeviceStatusState()
+  useUserSession().set(storedSession)
+  status.set({ dbDirty: true, messages: [] })
+  const signal = status.getSignal()
+
+  useUserSession().remove()
+
+  expect(status.current.value).toBeUndefined()
+  expect(status.lastUpdated.value).toBeUndefined()
+  expect(signal.aborted).toBe(true)
 })
