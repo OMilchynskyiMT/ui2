@@ -141,6 +141,18 @@ const onLeafClick = (event: MouseEvent, item: NavigationTreeLeaf, navigate: (eve
     return
   }
 
+  // NOTE: modified clicks open a separate tab/window and must not close the current navigation drawer
+  if (
+    event.defaultPrevented ||
+    event.button !== 0 ||
+    event.metaKey ||
+    event.ctrlKey ||
+    event.shiftKey ||
+    event.altKey
+  ) {
+    return
+  }
+
   navigate(event)
   emit('navigate', item)
 }

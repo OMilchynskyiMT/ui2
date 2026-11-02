@@ -62,7 +62,7 @@ const open = defineModel<boolean>({ default: false })
     --disclosure-gap: var(--space-md);
     --disclosure-border-color: var(--divider-color);
     --disclosure-header-bg: transparent;
-    --disclosure-summary-min-size: 12rem;
+    --disclosure-summary-min-size: min-content;
 
     overflow: clip;
     border: var(--border-width-thin) solid var(--disclosure-border-color);
@@ -96,8 +96,8 @@ const open = defineModel<boolean>({ default: false })
       }
 
       & > .trigger {
-        min-inline-size: min(var(--disclosure-summary-min-size), 100%);
-        flex: 1 1 var(--disclosure-summary-min-size);
+        min-inline-size: var(--disclosure-summary-min-size);
+        flex: 1 1 0;
 
         display: flex;
         align-items: center;

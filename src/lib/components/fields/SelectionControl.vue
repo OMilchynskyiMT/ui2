@@ -331,10 +331,8 @@ defineExpose<SelectionControlExpose>({
 
       & > .label {
         min-inline-size: 0;
-        overflow: hidden;
         color: var(--control-text-color);
-        text-overflow: ellipsis;
-        white-space: nowrap;
+        overflow-wrap: anywhere;
       }
 
       & > .hint,

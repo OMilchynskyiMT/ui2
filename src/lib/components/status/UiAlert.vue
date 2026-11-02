@@ -60,8 +60,9 @@ const actualIcon = computed((): Component => {
     --alert-border-width: var(--border-width-thin);
     --alert-icon-size: 1.5rem;
     --alert-accent-color: var(--tone-foreground-color);
-    display: grid;
-    align-items: start;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
     gap: var(--space-md);
 
     padding: var(--space-md) var(--space-lg);
@@ -71,18 +72,8 @@ const actualIcon = computed((): Component => {
 
     background-color: color-mix(in oklab, var(--alert-accent-color) 8%, transparent);
 
-    &:has(> .icon) {
-      grid-template-columns: var(--alert-icon-size) minmax(0, 1fr);
-    }
-    &:has(> .actions) {
-      grid-template-columns: minmax(0, 1fr) auto;
-    }
-    &:has(> .icon):has(> .actions) {
-      grid-template-columns: var(--alert-icon-size) minmax(0, 1fr) auto;
-    }
-
     & > .icon {
-      align-self: start;
+      flex: 0 0 var(--alert-icon-size);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -90,15 +81,20 @@ const actualIcon = computed((): Component => {
     }
 
     > .content {
-      align-self: start;
-      min-inline-size: 0;
+      flex: 1 1 0;
+      min-inline-size: min(10rem, 60%);
+      overflow-wrap: anywhere;
     }
 
     > .actions {
-      align-self: start;
+      flex: 0 1 auto;
       display: flex;
+      flex-wrap: wrap;
       align-items: flex-start;
+      justify-content: flex-end;
       gap: var(--space-md);
+      max-inline-size: 100%;
+      margin-inline-start: auto;
     }
   }
 }

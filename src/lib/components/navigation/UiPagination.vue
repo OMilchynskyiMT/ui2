@@ -180,8 +180,11 @@ const getPageLabel = (page: number): string => {
 
     inline-size: fit-content;
     max-inline-size: 100%;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
 
     & > ul {
+      inline-size: max-content;
       list-style: none;
       display: flex;
       align-items: center;

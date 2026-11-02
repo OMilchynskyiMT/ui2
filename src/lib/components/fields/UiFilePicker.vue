@@ -579,18 +579,12 @@ onMounted(() => {
     }
   }
 
-  .file-upload {
-    :is(.disabled) {
-      & :is(.drop-zone, .field-control) {
-        cursor: not-allowed;
-      }
-    }
+  .file-upload.disabled :is(.drop-zone, .field-control) {
+    cursor: not-allowed;
+  }
 
-    :is(.readonly) {
-      & :is(.drop-zone, .field-control) {
-        cursor: default;
-      }
-    }
+  .file-upload.readonly :is(.drop-zone, .field-control) {
+    cursor: default;
   }
 }
 </style>
