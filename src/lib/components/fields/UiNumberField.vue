@@ -7,7 +7,7 @@
     :disabled="disabled"
     :error="error"
     :hint="hint"
-    :invalid="isInvalid"
+    :invalid="invalid"
     :label="label"
     :prefix="prefix"
     :readonly="readonly"
@@ -48,7 +48,7 @@ import { computed, ref, useAttrs, useSlots, watch } from 'vue'
 import { useId } from '@/lib/composables/useId'
 
 import { createFieldExpose, type UiFieldExpose } from './field.shared'
-import { clampNumber, formatNumber, type NumberModel, parseNumberText } from './number.shared'
+import { clampNumber, formatNumber, type NumberModel, parseNumberText, toNumberModel } from './number.shared'
 import UiTextField from './UiTextField.vue'
 
 defineOptions({
@@ -87,43 +87,17 @@ const model = defineModel<NumberModel>({ required: true })
 const field = ref<UiFieldExpose>()
 const text = ref(formatNumber(model.value))
 const parsedText = computed(() => parseNumberText(text.value))
-const isInvalid = computed(() => invalid || numberInvalid.value)
 
 watch(model, value => {
-  const parsed = parseNumberText(text.value)
+  const parsed = parsedText.value
+  if (Number.isNaN(value) && parsed.type === 'invalid') return
   if (parsed.type !== 'number' || parsed.value !== value) {
     text.value = formatNumber(value)
   }
 })
 
-const numberInvalid = computed(() => {
-  const parsed = parsedText.value
-  if (parsed.type === 'invalid') {
-    return true
-  }
-  if (parsed.type !== 'number') {
-    return false
-  }
-  if (typeof min === 'number' && parsed.value < min) {
-    return true
-  }
-  if (typeof max === 'number' && parsed.value > max) {
-    return true
-  }
-  return false
-})
-
 const commit = (): void => {
-  const parsed = parsedText.value
-
-  if (parsed.type === 'empty') {
-    model.value = null
-    return
-  }
-
-  if (parsed.type === 'number') {
-    model.value = parsed.value
-  }
+  model.value = toNumberModel(parsedText.value)
 }
 
 const onInput = (event: InputEvent): void => {
@@ -135,9 +109,7 @@ const onInput = (event: InputEvent): void => {
 }
 
 const onChange = (event: Event): void => {
-  if (lazy) {
-    commit()
-  }
+  if (lazy) commit()
   emit('change', event)
 }
 

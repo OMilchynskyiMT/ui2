@@ -16,6 +16,13 @@ export const parseNumberText = (value: string): NumberParseResult => {
   return Number.isFinite(number) ? { type: 'number', value: number } : { type: 'invalid' }
 }
 
+// NOTE: NaN carries an invalid numeric draft to the validation schema without losing its text
+export const toNumberModel = (parsed: NumberParseResult): NumberModel => {
+  if (parsed.type === 'empty') return null
+  if (parsed.type === 'invalid') return NaN
+  return parsed.value
+}
+
 export const clampNumber = (value: number, min?: number, max?: number): number => {
   if (typeof min === 'number' && value < min) return min
   if (typeof max === 'number' && value > max) return max

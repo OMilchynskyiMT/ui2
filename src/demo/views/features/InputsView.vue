@@ -91,7 +91,7 @@
           :max="10"
           :min="5"
           clamp-on-blur
-          label="Number field, 5–10, clamp on blur"
+          label="Number field, 5-10, clamp on blur"
         />
         <UiNumberField v-model="numberModel" label="Number field #2" placeholder="Numbers only" />
 

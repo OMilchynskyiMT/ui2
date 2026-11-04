@@ -1,8 +1,9 @@
 import { describe, expect, it } from 'vitest'
 
+import { integer, Schema, types } from '../../../validation'
 import { isHexColorValid, normalizeHexColor } from '../color.shared'
 import { filterSelectedFiles, isAcceptableFile, parseAccept } from '../filePicker.shared'
-import { clampNumber, formatNumber, parseNumberText } from '../number.shared'
+import { clampNumber, formatNumber, parseNumberText, toNumberModel } from '../number.shared'
 
 const file = (name: string, type: string): File => ({ name, type, size: 100, lastModified: 1 }) as File
 
@@ -21,6 +22,19 @@ describe('number helpers', () => {
     expect(parseNumberText('')).toEqual({ type: 'empty' })
     expect(parseNumberText('-.5')).toEqual({ type: 'number', value: -0.5 })
     expect(parseNumberText('1e3')).toEqual({ type: 'invalid' })
+  })
+
+  it('passes invalid numeric drafts to the schema instead of retaining a stale valid value', () => {
+    const interval = types.number(integer())
+    const schema = new Schema(types.object({ interval }))
+    const malformed = toNumberModel(parseNumberText('0s'))
+
+    expect(Number.isNaN(malformed)).toBe(true)
+    expect(schema.validate({ interval: malformed }).errors.interval).toEqual(['Expected number'])
+    expect(toNumberModel(parseNumberText(''))).toBeNull()
+    expect(toNumberModel(parseNumberText('1.5'))).toBe(1.5)
+    expect(schema.validate({ interval: 1.5 }).errors.interval).toEqual(['Must be an integer'])
+    expect(schema.validate({ interval: 3 }).valid).toBe(true)
   })
 
   it('formats and clamps model values', () => {
