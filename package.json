@@ -6,14 +6,13 @@
   "scripts": {
     "dev:mtcap3": "vite --mode mtcap3",
     "dev:mtr3": "vite --mode mtr3",
-
+    "dev:demo": "vite --mode demo",
     "build:mtcap3": "run-p type-check \"build-only -- --mode mtcap3\"",
     "build:mtr3": "run-p type-check \"build-only -- --mode mtr3\"",
-
+    "build:demo": "run-p type-check \"build-only -- --mode demo\"",
     "preview": "vite preview",
     "build-only": "vite build",
     "type-check": "vue-tsc --build",
-
     "lint": "eslint . --cache",
     "lint:eslint": "eslint . --fix --cache",
     "test": "vitest",

@@ -4,7 +4,7 @@
       <UiStack gap="var(--space-xxl)">
         <UiSectionHeader>Server Configuration</UiSectionHeader>
 
-        <UiGrid :columns="{ base: 1, medium: 2, extraLarge: 4 }" gap="var(--space-xxl)">
+        <UiGrid :columns="{ base: 1, medium: 2 }" gap="var(--space-xxl)">
           <UiGridItem span="full">
             <UiSwitch
               v-model="form.status"
@@ -40,7 +40,7 @@
           </template>
         </UiSectionHeader>
 
-        <UiGrid :columns="{ base: 1, medium: 2, extraLarge: 4 }" gap="var(--space-xxl)">
+        <UiGrid :columns="{ base: 1, medium: 2 }" gap="var(--space-xxl)">
           <UiGridItem span="full">
             <UiSwitch v-model="form.auth.enabled" label="Enabled" />
           </UiGridItem>
@@ -58,7 +58,7 @@
       <UiStack gap="var(--space-xxl)">
         <UiSectionHeader>Mail Log Settings</UiSectionHeader>
 
-        <UiGrid :columns="{ base: 1, medium: 2, extraLarge: 4 }" gap="var(--space-xxl)">
+        <UiGrid :columns="{ base: 1, medium: 2 }" gap="var(--space-xxl)">
           <UiNumber v-model="form.maillog.entriesToKeep" label="Entries to keep" />
         </UiGrid>
       </UiStack>

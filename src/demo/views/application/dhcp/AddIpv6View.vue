@@ -1,7 +1,7 @@
 <template>
   <UiStack gap="var(--space-xxl)">
     <UiCard>
-      <UiGrid :columns="{ base: 1, medium: 2, extraLarge: 4 }" gap="var(--space-xxl)">
+      <UiGrid :columns="{ base: 1, medium: 2 }" gap="var(--space-xxl)">
         <UiGridItem span="full">
           <UiSwitch
             v-model="form.status"

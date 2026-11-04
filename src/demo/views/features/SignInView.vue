@@ -2,8 +2,8 @@
   <section class="sign-in-demo">
     <UiStack class="sign-in-panel" gap="calc(var(--space-xxl) * 1.5)">
       <UiStack align="center" class="brand" gap="var(--space-lg)" tag="header">
-        <img v-if="resolvedScheme === 'light'" alt="MultiTech" src="/images/MT-logo.svg" />
-        <img v-else alt="MultiTech" src="/images/MT-logo-light.svg" />
+        <img v-if="resolvedScheme === 'light'" :src="lightLogo" alt="MultiTech" />
+        <img v-else :src="darkLogo" alt="MultiTech" />
       </UiStack>
 
       <div :class="{ 'has-policy': usagePolicy }" class="content">
@@ -71,6 +71,8 @@ import UiIcon from '@/lib/components/UiIcon.vue'
 import { useColorScheme } from '@/composables/useColorScheme'
 
 const { scheme: resolvedScheme } = useColorScheme()
+const lightLogo = `${import.meta.env.BASE_URL}images/MT-logo.svg`
+const darkLogo = `${import.meta.env.BASE_URL}images/MT-logo-light.svg`
 const username = ref('')
 const password = ref('')
 const submitted = ref(false)

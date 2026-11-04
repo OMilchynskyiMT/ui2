@@ -1,16 +1,16 @@
 <template>
   <UiStack gap="var(--space-xxl)">
     <UiSectionHeader>
-      SMTP Configuration
+      DHCP Servers and DHCPv6/RA Configuration
       <template #description>
-        Configure SMTP server and mail log settings to allow your device to send email messages
+        Configure DHCP server that supplies network configuration information to devices on the network
       </template>
     </UiSectionHeader>
 
     <UiTabs
       :items="tabs"
       :model-value="route.name?.toString() ?? ''"
-      aria-label="SMTP sections"
+      aria-label="DHCP sections"
       @update:model-value="router.push({ name: $event })"
     >
       <template #panel="{ index }">
@@ -25,7 +25,7 @@
 </template>
 
 <script lang="ts" setup>
-import { CogIcon, NotebookTabsIcon } from '@lucide/vue'
+import { CogIcon, PlusIcon } from '@lucide/vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import UiStack from '@/lib/components/layout/UiStack.vue'
@@ -34,10 +34,11 @@ import UiTabs, { type UiTabItem } from '@/lib/components/tabs/UiTabs.vue'
 import PageTransition from '@/components/transitions/PageTransition.vue'
 
 const tabs: UiTabItem<string>[] = [
-  { title: 'Settings', value: 'smtp-settings', icon: CogIcon },
-  { title: 'Mail Log', value: 'smtp-log', icon: NotebookTabsIcon },
+  { title: 'DHCP Configuration', icon: CogIcon, value: 'demo-dhcp-config' },
+  { title: 'Add IPv4 DHCP Server', icon: PlusIcon, value: 'demo-dhcp-add' },
+  { title: 'Add DHCPv6/RA', icon: PlusIcon, value: 'demo-dhcp-add-v6' },
 ]
 
-const route = useRoute()
 const router = useRouter()
+const route = useRoute()
 </script>

@@ -92,6 +92,7 @@ export default defineConfigWithVueTs(
                 '@/router/**',
                 '@/state/**',
                 '@/views/**',
+                '@/demo/**',
               ],
               message: 'src/lib must not depend on application layers',
             },
@@ -110,7 +111,7 @@ export default defineConfigWithVueTs(
         {
           patterns: [
             {
-              group: ['@/api/**', '@/components/**', '@/layouts/**', '@/models/**', '@/state/**', '@/views/**'],
+              group: ['@/api/**', '@/components/**', '@/layouts/**', '@/models/**', '@/state/**', '@/views/**', '@/demo/**'],
               message: 'generic composables must not depend on application domains or UI',
             },
           ],
@@ -128,7 +129,7 @@ export default defineConfigWithVueTs(
         {
           patterns: [
             {
-              group: ['@/api/**', '@/components/**', '@/composables/**', '@/layouts/**', '@/router/**', '@/views/**'],
+              group: ['@/api/**', '@/components/**', '@/composables/**', '@/layouts/**', '@/router/**', '@/views/**', '@/demo/**'],
               message: 'state must not depend on API, models, router, and UI layers',
             },
             {
@@ -151,7 +152,7 @@ export default defineConfigWithVueTs(
         {
           patterns: [
             {
-              group: ['@/components/**', '@/layouts/**', '@/router/**', '@/views/**', '@/composables/**', '@/state/**'],
+              group: ['@/components/**', '@/layouts/**', '@/router/**', '@/views/**', '@/composables/**', '@/state/**', '@/demo/**'],
               message: 'API modules must not depend on router, state, layouts, views, or UI components/composables',
             },
             {
@@ -174,7 +175,7 @@ export default defineConfigWithVueTs(
         {
           patterns: [
             {
-              group: ['@/components/**', '@/layouts/**', '@/router/**', '@/views/**'],
+              group: ['@/components/**', '@/layouts/**', '@/router/**', '@/views/**', '@/demo/**'],
               message: 'models must not depend on router or UI things',
             },
           ],
@@ -185,7 +186,13 @@ export default defineConfigWithVueTs(
 
   {
     name: 'architecture/ui',
-    files: ['src/components/**/*.{ts,vue}', 'src/layouts/**/*.{ts,vue}', 'src/views/**/*.{ts,vue}'],
+    files: [
+      'src/components/**/*.{ts,vue}',
+      'src/layouts/**/*.{ts,vue}',
+      'src/views/**/*.{ts,vue}',
+      'src/demo/layouts/**/*.{ts,vue}',
+      'src/demo/views/**/*.{ts,vue}',
+    ],
     rules: {
       'no-restricted-imports': [
         'error',

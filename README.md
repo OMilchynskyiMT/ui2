@@ -1,46 +1,44 @@
 # ui2
 
-## Recommended IDE Setup
+Vue 3 + Vite device UI, with a component showcase kept alongside production views.
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
-
-## Recommended Browser Setup
-
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
-
-## Type Support for `.vue` Imports in TS
-
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
+## Development
 
 ```sh
-npm install
+npm ci
+npm run dev:demo    # component showcase and mock device pages
+npm run dev:mtr3    # production application (MTR3)
+npm run dev:mtcap3  # production application (MTCAP3)
 ```
 
-### Compile and Hot-Reload for Development
+The demo build is served under `/ui2/`, matching the GitHub Pages base URL.
+The application demonstration starts at `/#/demo/application/dashboard` (after the base path),
+and the component showcase is under `/#/demo/components/inputs`.
+
+## Builds
 
 ```sh
-npm run dev
+npm run build:demo    # GitHub Pages, base /ui2/
+npm run build:mtr3    # firmware, base /
+npm run build:mtcap3  # firmware, base /
 ```
 
-### Type-Check, Compile and Minify for Production
+All builds write to `dist/`. The GitHub Pages workflow uses `build:demo`.
+
+- `src/demo/` contains the demonstration application, component examples, and demo-only routes.
+- `src/views/` and `src/router/device.ts` are reserved for actual device views and routes.
+- `src/lib/`, `src/components/`, and `src/composables/` remain shared.
+- The demo bootstrap does not restore user sessions, install device access guards,
+  or start device-status polling. Mock behavior remains local to the demonstration.
+- Firmware builds exclude `src/demo/` code altogether. The build configuration
+  verifies this in the output bundle and fails if a demo module is accidentally included.
+
+Production views currently contain explicit placeholders; they do not use the mock pages.
+
+## Checks
 
 ```sh
-npm run build
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
+npm run type-check
 npm run lint
+npm run test:run
 ```

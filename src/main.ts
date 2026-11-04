@@ -4,21 +4,29 @@ import { createApp } from 'vue'
 
 import { createResizeDirective } from '@/lib/directives/resize'
 import { ripple } from '@/lib/directives/ripple'
-import { setHttpUnauthorizedHandler } from '@/lib/http'
-import App from '@/App.vue'
 import { initializeColorScheme } from '@/composables/useColorScheme'
 import { createAppRouter } from '@/router'
-import { useUserSession } from '@/state/userSession'
 
-setHttpUnauthorizedHandler(() => useUserSession().expire())
-initializeColorScheme()
-useUserSession().restore()
+const bootstrap = async (): Promise<void> => {
+  initializeColorScheme()
 
-const app = createApp(App)
+  const { default: App } = import.meta.env.MODE === 'demo' ? await import('@/demo/App.vue') : await import('@/App.vue')
 
-app.use(createAppRouter())
+  if (import.meta.env.MODE !== 'demo') {
+    const [{ setHttpUnauthorizedHandler }, { useUserSession }] = await Promise.all([
+      import('@/lib/http'),
+      import('@/state/userSession'),
+    ])
 
-app.directive('resize', createResizeDirective())
-app.directive('ripple', ripple)
+    setHttpUnauthorizedHandler(() => useUserSession().expire())
+    useUserSession().restore()
+  }
 
-app.mount('#app')
+  const app = createApp(App)
+  app.use(await createAppRouter())
+  app.directive('resize', createResizeDirective())
+  app.directive('ripple', ripple)
+  app.mount('#app')
+}
+
+void bootstrap()
