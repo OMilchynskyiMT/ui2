@@ -108,7 +108,7 @@
                     @pointermove="onPointerMove"
                     @pointerup="onPointerUp"
                   >
-                    <UiIcon :icon="GripVerticalIcon" aria-hidden="true" size="1.125rem" />
+                    <UiIcon :icon="GripVerticalIcon" aria-hidden="true" size="1.25rem" />
                   </button>
                 </td>
 
@@ -852,10 +852,9 @@ div.table {
   }
 
   .reorder-handle {
-    display: inline-grid;
+    display: grid;
     place-items: center;
-    inline-size: 2.25rem;
-    block-size: 2.25rem;
+    block-size: 100%;
     border-radius: var(--radius-sm);
     color: var(--text-color-dimmed);
     cursor: grab;
