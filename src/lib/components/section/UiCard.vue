@@ -21,8 +21,8 @@ const { tag = 'div', variant = 'filled', padding = 'large' } = defineProps<UiCar
 @layer components {
   .card {
     --card-display: block;
-    --card-padding-block: var(--space-xl);
-    --card-padding-inline: var(--space-xl);
+    --card-padding-block: var(--card-padding, var(--space-xxl));
+    --card-padding-inline: var(--card-padding, var(--space-xxl));
     --card-border-width: 0px;
     --card-border-color: transparent;
     --card-bg: var(--surface-card);

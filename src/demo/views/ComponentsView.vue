@@ -1,5 +1,5 @@
 <template>
-  <div style="padding: 1rem;">
+  <div style="padding: 1rem">
     <UiButton @click="router.push({ name: 'demo-dashboard' })">to Dashboard</UiButton>
   </div>
 
