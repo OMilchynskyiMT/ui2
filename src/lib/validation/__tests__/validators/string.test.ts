@@ -1,16 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import {
-  email,
-  endsWith,
-  inRange,
-  length,
-  matches,
-  maxLength,
-  minLength,
-  nonBlank,
-  startsWith,
-} from '../../validators/string'
+import { endsWith, inRange, length, matches, maxLength, minLength, nonBlank, startsWith } from '../../validators/string'
 import { shouldValidate } from '../helpers'
 
 describe('nonBlank', () => {
@@ -138,23 +128,6 @@ describe('matches', () => {
     const stateful = matches(/a/g)
     expect(shouldValidate(stateful, 'a')).toBe(true)
     expect(shouldValidate(stateful, 'a')).toBe(true)
-  })
-})
-
-describe('email', () => {
-  const validator = email()
-
-  it('uses stable metadata', () => {
-    expect(validator.code).toBe('string.email')
-    expect(validator.message).toBe('Invalid email address')
-  })
-
-  it.each(['user@example.com', 'john.doet@example.com.us', 'user-name@example.io'])('accepts %j', value => {
-    expect(shouldValidate(validator, value)).toBe(true)
-  })
-
-  it.each(['user', 'user@localhost', '@example.com', 'user @example.com'])('rejects %j', value => {
-    expect(shouldValidate(validator, value)).toBe(false)
   })
 })
 

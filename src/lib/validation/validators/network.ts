@@ -1,16 +1,13 @@
 import type { Validator, ValidatorOptions } from '../types'
 import { type ContextValue, resolveContextValue } from './context'
-
 const ipv4Pattern = /^((\d|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])\.){3}(\d|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])$/
 const ipv6Pattern =
   /^((([\dA-Fa-f]{1,4}:){7}([\dA-Fa-f]{1,4}|:))|(([\dA-Fa-f]{1,4}:){6}(:[\dA-Fa-f]{1,4}|((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([\dA-Fa-f]{1,4}:){5}(((:[\dA-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([\dA-Fa-f]{1,4}:){4}(((:[\dA-Fa-f]{1,4}){1,3})|((:[\dA-Fa-f]{1,4})?:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([\dA-Fa-f]{1,4}:){3}(((:[\dA-Fa-f]{1,4}){1,4})|((:[\dA-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([\dA-Fa-f]{1,4}:){2}(((:[\dA-Fa-f]{1,4}){1,5})|((:[\dA-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([\dA-Fa-f]{1,4}:)(((:[\dA-Fa-f]{1,4}){1,6})|((:[\dA-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(:(((:[\dA-Fa-f]{1,4}){1,7})|((:[\dA-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(%.+)?$/
 const hostNamePattern = /^(([\dA-Za-z]|[A-Za-z][\dA-Za-z-]*[\dA-Za-z])\.)*([A-Za-z]|[A-Za-z][\dA-Za-z-]*[\dA-Za-z])$/
-const domainNamePattern = /^((?:(?:\w[+.-]?)*\w)+)((?:(?:\w[+.-]?){0,62}\w)+)\.(\w{2,6})$/
+const domainNamePattern =
+  /^(?=.{1,253}$)(?:[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?\.)+[A-Za-z](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?$/
 const macAddressPattern = /^([\dA-Fa-f]{2}[:-]){5}([\dA-Fa-f]{2})$/
-const phoneNumberPattern = /^\+*\({0,1}\d{1,3}\){0,1}[\d\s./-]*$/
 const leaseTimePattern = /^\d{1,3}(?:-\d{1,2}){2}$/
-const publicUrlPattern =
-  /^(?:https?|ftp):\/\/(?:\S+(?::\S*)?@)?(?:(?!10(?:\.\d{1,3}){3})(?!127(?:\.\d{1,3}){3})(?!169\.254(?:\.\d{1,3}){2})(?!192\.168(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[01])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4])|[\da-z\u{A1}-\u{FFFF}]+(?:-[\da-z\u{A1}-\u{FFFF}]+)*(?:\.[\da-z\u{A1}-\u{FFFF}]+(?:-[\da-z\u{A1}-\u{FFFF}]+)*)*\.[a-z\u{A1}-\u{FFFF}]{2,})(?::\d{2,5})?(?:\/\S*)?([^/])$/iu
 
 const reservedPorts = new Map<string, number>([
   ['FCGI ', 8888],
@@ -72,7 +69,7 @@ const isNetworkIpv4Address = (value: string): boolean => {
   return parsed !== undefined && isNetworkIpv4Number(parsed)
 }
 
-const isLegacyNetworkMaskValid = (networkValue: number, maskValue: number): boolean => {
+const isApplicableNetworkMask = (networkValue: number, maskValue: number): boolean => {
   const lastNetworkOctet = networkValue & 0xff
   const lastMaskOctet = maskValue & 0xff
   if (lastNetworkOctet === 0 && lastMaskOctet === 255) return false
@@ -89,20 +86,13 @@ const checkIpv4InNetwork = (address: string, network: string, mask: string | num
   const networkValue = ipv4ToNumber(network)
   const maskValue = maskToNumber(mask)
   if (addressValue === undefined || networkValue === undefined || maskValue === undefined) return undefined
+  if (maskValue !== 0 && (!isNetworkIpv4Address(network) || !isApplicableNetworkMask(networkValue, maskValue))) {
+    return false
+  }
 
-  // A syntactically valid network/mask pair can still be invalid for the legacy
-  // relation (for example a host address used as the network with /0). That is
-  // part of isIpInNetwork() itself, not a prerequisite syntax error.
-  if (!isNetworkIpv4Address(network) || !isLegacyNetworkMaskValid(networkValue, maskValue)) return false
-
-  // Preserve the legacy isIpInNetwork() contract: its `network` argument is used
-  // as the beginning of the usable range and is not normalized implicitly.
-  // Preserve the signed 32-bit complement used by the legacy implementation.
-  // In particular, /0 produces a negative usable range and therefore contains no hosts.
-  const range = ~maskValue - 1
-  const start = networkValue + 1
-  const end = start + range - 1
-  return addressValue >= start && addressValue <= end
+  const normalizedNetwork = (networkValue & maskValue) >>> 0
+  const broadcast = (normalizedNetwork | (~maskValue >>> 0)) >>> 0
+  return addressValue > normalizedNetwork && addressValue < broadcast
 }
 
 const parseCidr = (value: string): Readonly<{ network: number; mask: number }> | undefined => {
@@ -124,6 +114,54 @@ const areNetworksOverlap = (left: string, right: string): boolean => {
 
   const commonMask = Math.min(first.mask, second.mask)
   return (first.network & commonMask) === (second.network & commonMask)
+}
+
+const parseIpv6WithPrefix = (value: string): Readonly<{ address: string; prefix: number }> | undefined => {
+  const parts = value.split('/')
+  if (parts.length !== 2) return undefined
+  const [address, prefixText] = parts
+  if (!address || !prefixText || !/^\d{1,3}$/.test(prefixText)) return undefined
+  const prefix = Number(prefixText)
+  if (!ipv6Pattern.test(address) || !Number.isSafeInteger(prefix) || prefix < 0 || prefix > 128) return undefined
+  return { address, prefix }
+}
+
+const isIpv6LinkLocal = (value: string): boolean => {
+  if (!ipv6Pattern.test(value) || value.length < 4 || value[3] === ':') return false
+  return /^[Ff][Ee][89ABab]/.test(value)
+}
+
+const isIpv6InterfaceApplicable = (value: string): boolean => {
+  if (!ipv6Pattern.test(value)) return false
+
+  // NOTE: zone identifier must not affect checks for unspecified or loopback addresses
+  const address = value.split('%', 1)[0]!
+  let position = 0
+  for (; position < address.length; position++) {
+    const character = address[position]
+    if (character !== '0' && character !== ':' && character !== '.') break
+  }
+
+  if (position === address.length) return false
+  if (position === address.length - 1 && address[position] === '1') return false
+
+  const lowerAddress = address.toLowerCase()
+  return (
+    !(lowerAddress.length > 5 && lowerAddress.startsWith('f') && lowerAddress[1] === 'f') ||
+    lowerAddress[2] === ':' ||
+    lowerAddress[3] === ':'
+  )
+}
+
+const isPortRange = (value: string | number): boolean => {
+  if (typeof value === 'number') return Number.isSafeInteger(value) && value >= 1 && value <= 65_535
+
+  const portTexts = value.split(/[:-]/).map(part => part.trim())
+  if (portTexts.some(part => !/^\d{1,5}$/.test(part))) return false
+  const ports = portTexts.map(Number)
+  if (ports.length === 1) return ports[0]! >= 1 && ports[0]! <= 65_535
+  if (ports.length !== 2) return false
+  return ports[0]! >= 1 && ports[0]! <= 65_535 && ports[1]! >= 1 && ports[1]! <= 65_535 && ports[0]! <= ports[1]!
 }
 
 export const ipv4Address = (options?: ValidatorOptions): Validator<string> => {
@@ -173,7 +211,7 @@ export const ipv4Gateway = (
       if (gateway === undefined || addressValue === undefined || maskValue === undefined) return true
 
       const network = (addressValue & maskValue) >>> 0
-      if (!isNetworkIpv4Number(network) || !isLegacyNetworkMaskValid(network, maskValue)) return false
+      if (!isNetworkIpv4Number(network) || !isApplicableNetworkMask(network, maskValue)) return false
 
       const broadcast = (network | (~maskValue >>> 0)) >>> 0
       return gateway > network && gateway < broadcast
@@ -229,27 +267,12 @@ export const ipv6Address = (options?: ValidatorOptions): Validator<string> => {
   }
 }
 
-const parseIpv6WithPrefix = (value: string): Readonly<{ address: string; prefix: number }> | undefined => {
-  // Preserve the legacy split(..., 2) + parseInt behavior. Existing configurations
-  // may therefore contain suffix text after a numeric prefix or an extra slash.
-  const [address, prefixText] = value.split('/', 2)
-  if (!address || prefixText === undefined) return undefined
-  const prefix = Number.parseInt(prefixText, 10)
-  if (!ipv6Pattern.test(address) || !Number.isSafeInteger(prefix) || prefix < 0 || prefix > 128) return undefined
-  return { address, prefix }
-}
-
 export const ipv6WithPrefix = (options?: ValidatorOptions): Validator<string> => {
   return {
     code: 'network.ipv6WithPrefix',
     message: options?.message ?? 'Must be a valid IPv6 address with prefix',
     validate: value => parseIpv6WithPrefix(value) !== undefined,
   }
-}
-
-const isIpv6LinkLocal = (value: string): boolean => {
-  if (!ipv6Pattern.test(value) || value.length < 4 || value[3] === ':') return false
-  return /^[Ff][Ee][89ABab]/.test(value)
 }
 
 export const ipv6LinkLocalAddress = (options?: ValidatorOptions): Validator<string> => {
@@ -269,26 +292,6 @@ export const ipv6LinkLocalWithPrefix = (options?: ValidatorOptions): Validator<s
       return parsed !== undefined && isIpv6LinkLocal(parsed.address)
     },
   }
-}
-
-const isIpv6InterfaceApplicable = (value: string): boolean => {
-  if (!ipv6Pattern.test(value)) return false
-
-  // Keep the legacy applicability rules exactly: unspecified (::), loopback (::1),
-  // and multicast (ff00::/8) addresses are not valid interface addresses.
-  let position = 0
-  for (; position < value.length; position++) {
-    const character = value[position]
-    if (character !== '0' && character !== ':' && character !== '.') break
-  }
-
-  if (position === value.length) return false
-  if (position === value.length - 1 && value[position] === '1') return false
-
-  const address = value.toLowerCase()
-  return (
-    !(address.length > 5 && address.startsWith('f') && address[1] === 'f') || address[2] === ':' || address[3] === ':'
-  )
 }
 
 export const ipv6InterfaceAddress = (options?: ValidatorOptions): Validator<string> => {
@@ -315,8 +318,6 @@ export const trapIpv4Address = (options?: ValidatorOptions): Validator<string> =
     code: 'network.trapIpv4Address',
     message: options?.message ?? 'Must not be in 127.0.0.0/8 or 224.0.0.0/3',
     validate: value => {
-      // NOTE: checks only the legacy trap-address restriction.
-      // Use it with ipv4Address() when full IPv4 syntax validation is required
       const first = Number.parseInt(value.split('.', 1)[0] ?? '', 10)
       return first !== 127 && !(first >= 224 && first <= 255)
     },
@@ -328,14 +329,6 @@ export const macAddress = (options?: ValidatorOptions): Validator<string> => {
     code: 'network.macAddress',
     message: options?.message ?? 'Must be a valid MAC address',
     validate: value => macAddressPattern.test(value),
-  }
-}
-
-export const phoneNumber = (options?: ValidatorOptions): Validator<string> => {
-  return {
-    code: 'network.phoneNumber',
-    message: options?.message ?? 'Must be a valid phone number',
-    validate: value => phoneNumberPattern.test(value),
   }
 }
 
@@ -365,16 +358,6 @@ export const availableServerPort = (serviceName: string, options?: ValidatorOpti
       }),
     validate: value => conflictingService(value) === undefined,
   }
-}
-
-const isPortRange = (value: string | number): boolean => {
-  if (typeof value === 'number') return Number.isSafeInteger(value) && value >= 1 && value <= 65_535
-
-  const ports = value.split(/[:-]/).map(Number)
-  if (ports.some(candidate => !Number.isSafeInteger(candidate) || Number.isNaN(candidate))) return false
-  if (ports.length === 1) return ports[0]! >= 1 && ports[0]! <= 65_535
-  if (ports.length !== 2) return false
-  return ports[0]! >= 1 && ports[0]! <= 65_535 && ports[1]! >= 1 && ports[1]! <= 65_535 && ports[0]! <= ports[1]!
 }
 
 export const portRange = (options?: ValidatorOptions): Validator<string | number> => {
@@ -407,14 +390,6 @@ export const domainOrIpAddress = (options?: ValidatorOptions): Validator<string>
     code: 'network.domainOrIpAddress',
     message: options?.message ?? 'Must be a valid hostname, IPv4 address, or IPv6 address',
     validate: value => ipv4Pattern.test(value) || hostNamePattern.test(value) || ipv6Pattern.test(value.trim()),
-  }
-}
-
-export const publicUrl = (options?: ValidatorOptions): Validator<string> => {
-  return {
-    code: 'network.publicUrl',
-    message: options?.message ?? 'Must be a valid public HTTP, HTTPS, or FTP URL',
-    validate: value => publicUrlPattern.test(value),
   }
 }
 

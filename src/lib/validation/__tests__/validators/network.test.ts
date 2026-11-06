@@ -21,10 +21,8 @@ import {
   leaseTime,
   macAddress,
   nonOverlappingIpv4Network,
-  phoneNumber,
   portCsv,
   portRange,
-  publicUrl,
   ssid,
   trapIpv4Address,
 } from '../../validators/network'
@@ -39,7 +37,7 @@ type StringCase = Readonly<{
   invalid: readonly string[]
 }>
 
-const stringCases: readonly StringCase[] = [
+const cases: readonly StringCase[] = [
   {
     name: 'ipv4Address',
     validator: ipv4Address(),
@@ -77,8 +75,15 @@ const stringCases: readonly StringCase[] = [
     validator: ipv6WithPrefix(),
     code: 'network.ipv6WithPrefix',
     message: 'Must be a valid IPv6 address with prefix',
-    valid: ['2001:db8::1/64', '::1/128', '2001:db8::1/64suffix', '2001:db8::1/64/ignored'],
-    invalid: ['2001:db8::1', '2001:db8::1/129', '2001:db8::1/nope'],
+    valid: ['2001:db8::1/64', '::1/128', 'fe80::1%eth0/64'],
+    invalid: [
+      '2001:db8::1',
+      '2001:db8::1/129',
+      '2001:db8::1/nope',
+      '2001:db8::1/64suffix',
+      '2001:db8::1/64/ignored',
+      '2001:db8::1/-1',
+    ],
   },
   {
     name: 'ipv6LinkLocalAddress',
@@ -102,7 +107,7 @@ const stringCases: readonly StringCase[] = [
     code: 'network.ipv6InterfaceAddress',
     message: 'Must be an applicable IPv6 interface address',
     valid: ['2001:db8::1', 'fe80::1'],
-    invalid: ['::', '::1', 'ff02::1'],
+    invalid: ['::', '::1', 'ff02::1', '::%lo', '::1%lo'],
   },
   {
     name: 'ipv6InterfaceAddressWithPrefix',
@@ -129,14 +134,6 @@ const stringCases: readonly StringCase[] = [
     invalid: ['001122AABBFF', '00:11:22:33:44', '00:11:22:33:44:GG'],
   },
   {
-    name: 'phoneNumber',
-    validator: phoneNumber(),
-    code: 'network.phoneNumber',
-    message: 'Must be a valid phone number',
-    valid: ['+1 800 555-0100', '+(1) 800 555-0100', '380501234567'],
-    invalid: ['phone', '+abc'],
-  },
-  {
     name: 'leaseTime',
     validator: leaseTime(),
     code: 'network.leaseTime',
@@ -149,8 +146,8 @@ const stringCases: readonly StringCase[] = [
     validator: domainName(),
     code: 'network.domainName',
     message: 'Must be a valid domain name',
-    valid: ['example.com', 'sub.example.org'],
-    invalid: ['localhost', 'example', 'example.technology'],
+    valid: ['example.com', 'sub.example.org', 'example.technology', 'a-b.example', 'device.xn--p1ai'],
+    invalid: ['localhost', 'example', '-bad.example', 'bad-.example', 'bad..example', 'bad_name.example'],
   },
   {
     name: 'domainOrIpAddress',
@@ -159,14 +156,6 @@ const stringCases: readonly StringCase[] = [
     message: 'Must be a valid hostname, IPv4 address, or IPv6 address',
     valid: ['localhost', 'device.local', '192.168.1.1', '2001:db8::1', ' 2001:db8::1 '],
     invalid: ['bad host', '256.1.1.1', 'host_name'],
-  },
-  {
-    name: 'publicUrl',
-    validator: publicUrl(),
-    code: 'network.publicUrl',
-    message: 'Must be a valid public HTTP, HTTPS, or FTP URL',
-    valid: ['https://example.com/path', 'ftp://example.com/file'],
-    invalid: ['http://192.168.1.1/path', 'https://localhost/path', 'example.com'],
   },
   {
     name: 'ssid',
@@ -178,7 +167,7 @@ const stringCases: readonly StringCase[] = [
   },
 ]
 
-describe.each(stringCases)('$name', ({ validator, code, message, valid, invalid }) => {
+describe.each(cases)('$name', ({ validator, code, message, valid, invalid }) => {
   it('uses stable metadata', () => {
     expect(validator.code).toBe(code)
     expect(getValidatorMessage(validator, valid[0] ?? '')).toBe(message)
@@ -196,7 +185,7 @@ describe.each(stringCases)('$name', ({ validator, code, message, valid, invalid 
 describe('portRange', () => {
   const validator = portRange()
 
-  it('preserves string and numeric legacy inputs', () => {
+  it('preserves string and numeric inputs', () => {
     expect(validator.code).toBe('network.portRange')
     expect(validator.message).toBe('Must be a valid port or ascending port range')
     expect(shouldValidate(validator, 80)).toBe(true)
@@ -205,13 +194,16 @@ describe('portRange', () => {
     expect(shouldValidate(validator, 0)).toBe(false)
     expect(shouldValidate(validator, '443-80')).toBe(false)
     expect(shouldValidate(validator, '1-2-3')).toBe(false)
+    expect(shouldValidate(validator, '1e2')).toBe(false)
+    expect(shouldValidate(validator, '0x50')).toBe(false)
+    expect(shouldValidate(validator, '80:1e3')).toBe(false)
   })
 })
 
 describe('portCsv', () => {
   const validator = portCsv()
 
-  it('preserves string and numeric legacy inputs', () => {
+  it('preserves string and numeric inputs', () => {
     expect(validator.code).toBe('network.portCsv')
     expect(validator.message).toBe('Must be a comma-separated list of ports or port ranges')
     expect(shouldValidate(validator, 443)).toBe(true)
@@ -219,13 +211,14 @@ describe('portCsv', () => {
     expect(shouldValidate(validator, 65_536)).toBe(false)
     expect(shouldValidate(validator, '80,0')).toBe(false)
     expect(shouldValidate(validator, '80,443-80')).toBe(false)
+    expect(shouldValidate(validator, '80,1e2')).toBe(false)
   })
 })
 
 describe('ipv4Mask', () => {
   const validator = ipv4Mask()
 
-  it('accepts both legacy numeric prefixes and dotted masks', () => {
+  it('accepts both numeric prefixes and dotted masks', () => {
     expect(validator.code).toBe('network.ipv4Mask')
     expect(validator.message).toBe('Must be an IPv4 prefix between 0 and 32 or a valid dotted-decimal netmask')
     expect(shouldValidate(validator, 24)).toBe(true)
@@ -249,7 +242,7 @@ describe('ipv4Gateway', () => {
     expect(shouldValidate(validator, 'invalid')).toBe(true)
   })
 
-  it('preserves legacy network applicability constraints', () => {
+  it('preserves network applicability constraints', () => {
     expect(shouldValidate(ipv4Gateway('67.62.196.61', '0.0.0.0'), '66.165.34.227')).toBe(false)
     expect(shouldValidate(ipv4Gateway('127.0.0.10', 24), '127.0.0.1')).toBe(false)
   })
@@ -258,7 +251,7 @@ describe('ipv4Gateway', () => {
 describe('ipv4InNetwork', () => {
   const validator = ipv4InNetwork('10.0.0.0', '24')
 
-  it('supports the legacy numeric-string mask form', () => {
+  it('supports the numeric-string mask form', () => {
     expect(validator.code).toBe('network.ipv4InNetwork')
     expect(shouldValidate(validator, '10.0.0.1')).toBe(true)
     expect(shouldValidate(validator, '10.0.0.254')).toBe(true)
@@ -267,15 +260,21 @@ describe('ipv4InNetwork', () => {
     expect(shouldValidate(validator, 'invalid')).toBe(true)
   })
 
-  it('preserves the legacy non-normalizing network argument behavior', () => {
-    const legacy = ipv4InNetwork('10.0.0.5', 24)
-    expect(shouldValidate(legacy, '10.0.0.5')).toBe(false)
-    expect(shouldValidate(legacy, '10.0.0.6')).toBe(true)
+  it('normalizes the network address before calculating usable host addresses', () => {
+    const network = ipv4InNetwork('10.0.0.5', 24)
+    expect(shouldValidate(network, '10.0.0.1')).toBe(true)
+    expect(shouldValidate(network, '10.0.0.5')).toBe(true)
+    expect(shouldValidate(network, '10.0.0.254')).toBe(true)
+    expect(shouldValidate(network, '10.0.0.0')).toBe(false)
+    expect(shouldValidate(network, '10.0.0.255')).toBe(false)
   })
 
-  it('preserves the legacy signed /0 range behavior', () => {
-    const legacy = ipv4InNetwork('67.51.90.72', '0.0.0.0')
-    expect(shouldValidate(legacy, '67.62.196.61')).toBe(false)
+  it('calculates the /0 range without signed arithmetic overflow', () => {
+    const network = ipv4InNetwork('67.51.90.72', '0.0.0.0')
+    expect(shouldValidate(network, '67.62.196.61')).toBe(true)
+    expect(shouldValidate(network, '0.0.0.0')).toBe(false)
+    expect(shouldValidate(network, '255.255.255.255')).toBe(false)
+    expect(shouldValidate(ipv4InNetwork('0.0.0.0', 0), '67.62.196.61')).toBe(true)
   })
 })
 
@@ -306,7 +305,7 @@ describe('nonOverlappingIpv4Network', () => {
 describe('availableServerPort', () => {
   const validator = availableServerPort('HTTP')
 
-  it('rejects ports reserved by another legacy service', () => {
+  it('rejects ports reserved by another service', () => {
     expect(validator.code).toBe('network.availableServerPort')
     expect(shouldValidate(validator, 443)).toBe(true)
     expect(shouldValidate(validator, 53)).toBe(false)
@@ -323,7 +322,7 @@ describe('availableServerPort', () => {
     expect(shouldValidate(availableServerPort('DNS'), 53)).toBe(true)
   })
 
-  it('preserves the legacy SMTP reserved-port table', () => {
+  it('preserves the SMTP reserved-port table', () => {
     expect(shouldValidate(availableServerPort('HTTP'), 57)).toBe(false)
     expect(getValidatorMessage(availableServerPort('HTTP'), 57)).toBe('Port 57 is reserved for SMTP')
     expect(shouldValidate(availableServerPort('SMTP'), 57)).toBe(true)

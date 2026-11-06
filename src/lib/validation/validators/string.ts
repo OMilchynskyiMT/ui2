@@ -92,14 +92,3 @@ export const matches = (pattern: RegExp, options?: ValidatorOptions): Validator<
     },
   }
 }
-
-const emailPattern =
-  /^(([^\s"(),.:;<>@[\\\]]+(\.[^\s"(),.:;<>@[\\\]]+)*)|(\.+"))@((\[(?:\d{1,3}\.){3}\d{1,3}])|(([\dA-Za-z-]+\.)+[A-Za-z]{2,}))$/
-
-export const email = (options?: ValidatorOptions): Validator<string> => {
-  return {
-    code: 'string.email',
-    message: options?.message ?? 'Invalid email address',
-    validate: value => emailPattern.test(value),
-  }
-}
