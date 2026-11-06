@@ -14,10 +14,20 @@
             <slot name="caption">{{ caption }}</slot>
           </caption>
 
-          <thead v-if="columns.length > 0">
+          <thead v-if="columns.length > 0 || selectable || reorderable">
             <tr>
               <th v-if="reorderable" class="header-cell reorder-cell" scope="col">
                 <span class="visually-hidden">Row order</span>
+              </th>
+
+              <th v-if="selectable" class="header-cell selection-cell" scope="col">
+                <UiCheckbox
+                  :aria-label="selectAllLabel"
+                  :disabled="loading || selectionScopeKeys.length === 0"
+                  :indeterminate="selectionState.indeterminate"
+                  :model-value="selectionState.checked"
+                  @update:model-value="toggleAllRows"
+                />
               </th>
 
               <th
@@ -78,7 +88,7 @@
           </tbody>
 
           <tbody v-else>
-            <template v-for="entry in displayedRows" :key="getRowKey(entry.row, entry.sourceIndex)">
+            <template v-for="(entry, index) in displayedRows" :key="getRowKey(entry.row, entry.sourceIndex)">
               <tr
                 :data-dragging="draggingSourceIndex === entry.sourceIndex || undefined"
                 :data-drop-after="isDropAfter(entry.sourceIndex) || undefined"
@@ -86,6 +96,7 @@
                 :data-picked="selectedRowIndex === entry.sourceIndex || undefined"
                 :data-placed="placedRowKey === getRowKey(entry.row, entry.sourceIndex) || undefined"
                 :data-row-index="entry.sourceIndex"
+                :data-selected="isRowSelected(entry.row, entry.sourceIndex) || undefined"
                 :data-shift="getRowShift(entry.sourceIndex)"
                 class="row"
                 @animationend="onPlacedAnimationEnd"
@@ -110,6 +121,15 @@
                   >
                     <UiIcon :icon="GripVerticalIcon" aria-hidden="true" size="1.25rem" />
                   </button>
+                </td>
+
+                <td v-if="selectable" class="cell selection-cell">
+                  <UiCheckbox
+                    :aria-label="`${isRowSelected(entry.row, entry.sourceIndex) ? 'Deselect' : 'Select'} row ${firstIndex + index + 1}`"
+                    :disabled="!canSelectRow(entry.row, entry.sourceIndex)"
+                    :model-value="isRowSelected(entry.row, entry.sourceIndex)"
+                    @update:model-value="setRowSelected(entry.row, entry.sourceIndex, $event)"
+                  />
                 </td>
 
                 <component
@@ -141,6 +161,7 @@
                 :data-dragging="draggingSourceIndex === entry.sourceIndex || undefined"
                 :data-drop-after="isDropAfter(entry.sourceIndex) || undefined"
                 :data-row-index="entry.sourceIndex"
+                :data-selected="isRowSelected(entry.row, entry.sourceIndex) || undefined"
                 :data-shift="getRowShift(entry.sourceIndex)"
                 class="details-row"
               >
@@ -209,6 +230,7 @@
 import { computed, nextTick, onBeforeUnmount, ref, useId, useTemplateRef, watch } from 'vue'
 import { ChevronUpIcon, GripVerticalIcon } from '@lucide/vue'
 
+import UiCheckbox from '../fields/UiCheckbox.vue'
 import UiSelect from '../fields/UiSelect.vue'
 import UiCluster from '../layout/UiCluster.vue'
 import UiScrollArea, { type UiScrollAreaExpose } from '../layout/UiScrollArea.vue'
@@ -232,9 +254,12 @@ import {
   getTableReorderTargetIndex,
   getTableReorderVisibleGapIndex,
   getTableRowKey,
+  getTableSelectableKeys,
+  getTableSelectionState,
   getTableSortDirection,
   getTableSortLabel,
   reorderTableRows,
+  updateTableSelection,
 } from './table.shared'
 import type { TableColumn, TableProperties, TableRowReorderEvent, TableSlots, TableSort } from './table.types'
 
@@ -272,11 +297,13 @@ const {
   layout = 'auto',
   mode = 'scroll',
   reorderable = false,
+  selectable = false,
+  selectAllMode = 'page',
   pagination = false,
   pageSizeOptions = [10, 25, 50, 100],
   sortMode = 'client',
   stickyHeader = false,
-} = defineProps<Omit<TableProperties<Row>, 'sort' | 'page' | 'pageSize'>>()
+} = defineProps<Omit<TableProperties<Row>, 'sort' | 'page' | 'pageSize' | 'selectedKeys'>>()
 
 const emit = defineEmits<{
   reorder: [event: TableRowReorderEvent<Row>]
@@ -285,6 +312,7 @@ const emit = defineEmits<{
 const sort = defineModel<TableSort | null>('sort', { default: null })
 const page = defineModel<number>('page', { default: 1 })
 const pageSize = defineModel<number>('pageSize', { default: 10 })
+const selectedKeys = defineModel<PropertyKey[]>('selectedKeys', { default: () => [] })
 const slots = defineSlots<TableSlots<Row>>()
 const reorderInstructionsId = useId()
 const scrollAreaReference = useTemplateRef<UiScrollAreaExpose>('scrollArea')
@@ -301,7 +329,7 @@ const reorderAnnouncement = ref('')
 const placedRowKey = ref<PropertyKey | null>(null)
 
 const effectiveSort = computed(() => (reorderable ? null : sort.value))
-const columnSpan = computed(() => Math.max(columns.length + Number(reorderable), 1))
+const columnSpan = computed(() => Math.max(columns.length + Number(reorderable) + Number(Boolean(selectable)), 1))
 const detailColumns = computed(() => columns.filter(column => column.compact === 'details'))
 const sortedRows = computed(() => getDisplayedTableRows(rows, columns, effectiveSort.value, sortMode))
 const normalizedPageSize = computed(() => getTablePageSize(pageSize.value))
@@ -311,6 +339,22 @@ const firstIndex = computed(() => (pagination ? (currentPage.value - 1) * normal
 const displayedRows = computed(() =>
   pagination ? getTablePageRows(sortedRows.value, currentPage.value, normalizedPageSize.value) : sortedRows.value
 )
+const canSelectRow = (row: Row, index: number): boolean =>
+  typeof selectable === 'function' ? selectable(row, index) : selectable
+const getRowKey = (row: Row, rowIndex: number): PropertyKey => getTableRowKey(row, rowIndex, rowKey)
+const selectionKeys = computed(() => {
+  if (!selectable) return []
+  if (rowKey === undefined) throw new Error('UiTable: rowKey is required when selection is enabled')
+  return getTableSelectableKeys(sortedRows.value, getRowKey, canSelectRow)
+})
+const pageSelectionKeys = computed(() => getTableSelectableKeys(displayedRows.value, getRowKey, canSelectRow))
+const selectionScopeKeys = computed(() => (selectAllMode === 'all' ? selectionKeys.value : pageSelectionKeys.value))
+const selectedKeySet = computed(() => new Set(selectedKeys.value))
+const selectionState = computed(() => getTableSelectionState(selectedKeySet.value, selectionScopeKeys.value))
+const selectAllLabel = computed(() => {
+  const scope = selectAllMode === 'all' || !pagination ? 'rows' : 'rows on this page'
+  return `${selectionState.value.checked ? 'Deselect' : 'Select'} all ${scope}`
+})
 const firstVisibleRow = computed(() => firstIndex.value + 1)
 const lastVisibleRow = computed(() => firstIndex.value + displayedRows.value.length)
 const canReorder = computed(() => displayedRows.value.length > 1)
@@ -363,7 +407,27 @@ const getCellText = getTableCellText<Row>
 const getHeaderSlotName = getTableHeaderSlotName<Row>
 const getCellSlotName = getTableCellSlotName<Row>
 const getDetailSlotName = getTableDetailSlotName<Row>
-const getRowKey = (row: Row, rowIndex: number): PropertyKey => getTableRowKey(row, rowIndex, rowKey)
+const isRowSelected = (row: Row, index: number): boolean =>
+  Boolean(selectable) && selectedKeySet.value.has(getRowKey(row, index))
+const setRowSelected = (row: Row, index: number, isChecked: boolean): void => {
+  if (!canSelectRow(row, index)) return
+  selectedKeys.value = updateTableSelection(selectedKeys.value, [getRowKey(row, index)], isChecked)
+}
+const toggleAllRows = (isChecked: boolean): void => {
+  selectedKeys.value = updateTableSelection(selectedKeys.value, selectionScopeKeys.value, isChecked)
+}
+
+watch(
+  [selectionKeys, selectedKeys, () => loading],
+  () => {
+    if (loading) return
+    const eligible = new Set(selectionKeys.value)
+    const next = [...new Set(selectedKeys.value.filter(key => eligible.has(key)))]
+    if (next.length !== selectedKeys.value.length) selectedKeys.value = next
+  },
+  { immediate: true, flush: 'sync' }
+)
+
 const getSortDirection = (column: TableColumn<Row>) => getTableSortDirection(column, effectiveSort.value)
 const getAriaSort = (column: TableColumn<Row>) => getTableAriaSort(column, effectiveSort.value)
 const getSortLabel = (column: TableColumn<Row>): string => getTableSortLabel(column, effectiveSort.value)
@@ -849,6 +913,17 @@ div.table {
     padding-inline: var(--space-sm);
     text-align: center;
     white-space: nowrap;
+  }
+
+  .selection-cell {
+    inline-size: 1%;
+    padding-inline: var(--space-sm);
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  :is(.row, .details-row)[data-selected] > :is(.cell, .details-cell) {
+    background: color-mix(in oklab, var(--tone-primary) 4%, var(--table-bg));
   }
 
   .reorder-handle {

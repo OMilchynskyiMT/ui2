@@ -5,9 +5,23 @@
         Responsive table
       </UiSectionHeader>
 
+      <UiCluster
+        v-if="selectedKeys.length > 0"
+        align="center"
+        gap="var(--space-sm)"
+        style="background: var(--surface-container); padding: var(--space-sm)"
+      >
+        <span role="status">{{ selectedKeys.length }} selected</span>
+        <UiButton size="small" variant="tonal" @click="setSelectedActive(true)">Activate</UiButton>
+        <UiButton size="small" variant="tonal" @click="setSelectedActive(false)">Deactivate</UiButton>
+        <UiButton size="small" tone="danger" variant="tonal" @click="removeSelected">Remove</UiButton>
+        <UiButton size="small" tone="warning" variant="tonal" @click="selectedKeys = []">Clear selection</UiButton>
+      </UiCluster>
+
       <UiTable
         v-model:page="page"
         v-model:page-size="pageSize"
+        v-model:selected-keys="selectedKeys"
         v-model:sort="sort"
         :columns
         :loading
@@ -17,6 +31,7 @@
         mode="details"
         pagination
         row-key="id"
+        selectable
         sticky-header
         style="--table-max-block-size: 30rem"
       >
@@ -31,6 +46,8 @@
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue'
 
+import UiButton from '@/lib/components/buttons/UiButton.vue'
+import UiCluster from '@/lib/components/layout/UiCluster.vue'
 import UiStack from '@/lib/components/layout/UiStack.vue'
 import UiSectionHeader from '@/lib/components/section/UiSectionHeader.vue'
 import type { TableColumn, TableSort } from '@/lib/components/table/table.types'
@@ -44,19 +61,21 @@ type User = {
   createdAt: string
 }
 
-const rows: User[] = Array.from({ length: 45 }, (_, index) => ({
-  id: index,
-  name: `Demo user ${index}`,
-  email: `user${index}@example.com`,
-  active: index % 3 !== 0,
-  createdAt: new Intl.DateTimeFormat('en-US', {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  }).format(new Date()),
-}))
+const rows = ref<User[]>(
+  Array.from({ length: 45 }, (_, index) => ({
+    id: index,
+    name: `Demo user ${index}`,
+    email: `user${index}@example.com`,
+    active: index % 3 !== 0,
+    createdAt: new Intl.DateTimeFormat('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+    }).format(new Date()),
+  }))
+)
 
 const columns: TableColumn<User>[] = [
   {
@@ -97,7 +116,21 @@ const columns: TableColumn<User>[] = [
 const sort = ref<TableSort | null>(null)
 const page = ref(1)
 const pageSize = ref(10)
+const selectedKeys = ref<PropertyKey[]>([])
 const loading = ref(true)
+
+const setSelectedActive = (isActive: boolean): void => {
+  const selected = new Set(selectedKeys.value)
+  rows.value = rows.value.map(row => (selected.has(row.id) ? { ...row, active: isActive } : row))
+  selectedKeys.value = []
+}
+
+const removeSelected = (): void => {
+  const selected = new Set(selectedKeys.value)
+  rows.value = rows.value.filter(row => !selected.has(row.id))
+  selectedKeys.value = []
+}
+
 onMounted(() => {
   setTimeout(() => {
     loading.value = false

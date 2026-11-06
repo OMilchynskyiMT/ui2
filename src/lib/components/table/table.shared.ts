@@ -7,6 +7,61 @@ export type DisplayedTableRow<Row> = {
   sourceIndex: number
 }
 
+export type TableSelectionState = {
+  checked: boolean
+  indeterminate: boolean
+}
+
+// selection is identified by row keys
+export const getTableSelectableKeys = <Row>(
+  entries: readonly DisplayedTableRow<Row>[],
+  getKey: (row: Row, sourceIndex: number) => PropertyKey,
+  canSelect: (row: Row, sourceIndex: number) => boolean
+): PropertyKey[] => {
+  const selectable: PropertyKey[] = []
+  const seen = new Set<PropertyKey>()
+
+  for (const { row, sourceIndex } of entries) {
+    const key = getKey(row, sourceIndex)
+    if (
+      (typeof key !== 'string' && typeof key !== 'number' && typeof key !== 'symbol') ||
+      (typeof key === 'number' && !Number.isFinite(key))
+    ) {
+      throw new TypeError('UiTable: rowKey must resolve to a valid string, number, or symbol for every row')
+    }
+    if (seen.has(key)) throw new Error('UiTable: rowKey must be unique for every row')
+
+    seen.add(key)
+    if (canSelect(row, sourceIndex)) selectable.push(key)
+  }
+
+  return selectable
+}
+
+export const getTableSelectionState = (
+  selectedKeys: ReadonlySet<PropertyKey>,
+  selectableKeys: readonly PropertyKey[]
+): TableSelectionState => {
+  const selectedCount = selectableKeys.filter(key => selectedKeys.has(key)).length
+  return {
+    checked: selectableKeys.length > 0 && selectedCount === selectableKeys.length,
+    indeterminate: selectedCount > 0 && selectedCount < selectableKeys.length,
+  }
+}
+
+export const updateTableSelection = (
+  selectedKeys: readonly PropertyKey[],
+  keys: readonly PropertyKey[],
+  isChecked: boolean
+): PropertyKey[] => {
+  const next = new Set(selectedKeys)
+  for (const key of keys) {
+    if (isChecked) next.add(key)
+    else next.delete(key)
+  }
+  return [...next]
+}
+
 const collator = new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' })
 
 export const getTableReorderTargetIndex = (rowCount: number, sourceIndex: number, gapIndex: number): number | null => {

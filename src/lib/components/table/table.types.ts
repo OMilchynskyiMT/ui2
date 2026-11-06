@@ -4,6 +4,7 @@ export type TableLayout = 'auto' | 'fixed' | 'content'
 export type TableResponsiveMode = 'scroll' | 'details'
 export type TableCompactMode = boolean | 'auto'
 export type TableSortMode = 'client' | 'manual'
+export type TableSelectAllMode = 'page' | 'all'
 export type CellAlign = 'start' | 'center' | 'end'
 export type SortDirection = 'asc' | 'desc'
 export type TableColumnKey = string
@@ -63,6 +64,14 @@ type TableProperties<Row> = {
   // enables row-order editing
   // NOTE: supply a stable rowKey when this mode is used
   reorderable?: boolean
+
+  // enables checkbox selection
+  // requires unique, stable rowKey values
+  // a predicate fn can exclude individual rows from selection
+  selectable?: boolean | ((row: Row, rowIndex: number) => boolean)
+  // header checkbox targets the current page by default
+  selectAllMode?: TableSelectAllMode
+  selectedKeys?: PropertyKey[]
 
   // local pagination (applied after client sorting); disabled by default
   pagination?: boolean

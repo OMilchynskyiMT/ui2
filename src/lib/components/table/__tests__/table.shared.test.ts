@@ -11,8 +11,11 @@ import {
   getTableReorderShift,
   getTableReorderTargetIndex,
   getTableReorderVisibleGapIndex,
+  getTableSelectableKeys,
+  getTableSelectionState,
   getTableSortLabel,
   reorderTableRows,
+  updateTableSelection,
 } from '../table.shared'
 import type { TableColumn } from '../table.types'
 
@@ -155,4 +158,78 @@ it('maps visible-page drag gaps to original indexes without crossing pages', () 
   expect(getTableReorderTargetIndex(sixRows.length, 2, pageStart)).toBe(2)
   expect(getTableReorderTargetIndex(sixRows.length, 2, pageStart + 2)).toBe(3)
   expect(reorderTableRows(sixRows, 2, 3).map(row => row.count)).toEqual([10, 2, 10, 1, 2, 1])
+})
+
+it('track row selection by stable keys through sorting and pagination', () => {
+  const sorted = getDisplayedTableRows(rows, columns, { column: 'name', direction: 'asc' }, 'client')
+  const keys = (entries: typeof sorted) =>
+    getTableSelectableKeys(
+      entries,
+      row => row.name,
+      () => true
+    )
+
+  const firstPage = keys(getTablePageRows(sorted, 1, 2))
+  const secondPage = keys(getTablePageRows(sorted, 2, 2))
+
+  expect(firstPage).toEqual(['Item 1', 'Item 2'])
+  expect(secondPage).toEqual(['Item 10'])
+
+  const selected = updateTableSelection([], firstPage, true)
+  expect(getTableSelectionState(new Set(selected), firstPage)).toEqual({ checked: true, indeterminate: false })
+  expect(getTableSelectionState(new Set(selected), secondPage)).toEqual({ checked: false, indeterminate: false })
+
+  // deselecting the second page must not erase selections on the first page
+  expect(updateTableSelection(selected, secondPage, false)).toEqual(['Item 1', 'Item 2'])
+  expect(updateTableSelection(selected, secondPage, true)).toEqual(['Item 1', 'Item 2', 'Item 10'])
+})
+
+it('computes checked and indeterminate header states for selectable rows only', () => {
+  const selected = new Set<PropertyKey>([1, 3])
+  expect(getTableSelectionState(selected, [1, 2, 3])).toEqual({ checked: false, indeterminate: true })
+  expect(getTableSelectionState(selected, [1, 3])).toEqual({ checked: true, indeterminate: false })
+  expect(getTableSelectionState(selected, [4])).toEqual({ checked: false, indeterminate: false })
+  expect(getTableSelectionState(selected, [])).toEqual({ checked: false, indeterminate: false })
+})
+
+it('excludes disabled rows from select-all while retaining their unique keys', () => {
+  const entries = getDisplayedTableRows(rows, columns, null, 'client')
+  const keys = getTableSelectableKeys(
+    entries,
+    row => row.count,
+    row => row.count !== 2
+  )
+  expect(keys).toEqual([10, 1])
+  expect(updateTableSelection([], keys, true)).toEqual([10, 1])
+})
+
+it('rejects ambiguous and invalid row keys for selectable tables', () => {
+  const entries = getDisplayedTableRows(rows, columns, null, 'client')
+  expect(() =>
+    getTableSelectableKeys(
+      entries,
+      () => 'duplicate',
+      () => true
+    )
+  ).toThrow(/unique/)
+  expect(() =>
+    getTableSelectableKeys(
+      entries,
+      () => undefined as never,
+      () => true
+    )
+  ).toThrow(/rowKey/)
+  expect(() =>
+    getTableSelectableKeys(
+      entries,
+      () => NaN,
+      () => true
+    )
+  ).toThrow(/rowKey/)
+})
+
+it('supports idempotent selection updates and preserves off-page ids', () => {
+  expect(updateTableSelection([11, 22], [22, 33, 33], true)).toEqual([11, 22, 33])
+  expect(updateTableSelection([11, 22, 33], [22], false)).toEqual([11, 33])
+  expect(updateTableSelection([11], [], true)).toEqual([11])
 })
