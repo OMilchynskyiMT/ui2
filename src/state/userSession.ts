@@ -20,14 +20,20 @@ const user = ref<UserSession>()
 const isExpired = ref(false)
 
 const isUserSession = (value: unknown): value is UserSession => {
-  if (typeof value !== 'object' || value === null) return false
+  if (typeof value !== 'object' || value === null || Array.isArray(value)) return false
 
   const session = value as Record<PropertyKey, unknown>
+  const permissions = session.permissions
   return (
     typeof session.user === 'string' &&
     typeof session.role === 'string' &&
     typeof session.isRemote === 'boolean' &&
-    typeof session.permissions === 'object'
+    typeof permissions === 'object' &&
+    permissions !== null &&
+    !Array.isArray(permissions) &&
+    Object.values(permissions as Record<string, unknown>).every(
+      flags => Array.isArray(flags) && flags.length === 5 && flags.every((flag: unknown) => typeof flag === 'boolean')
+    )
   )
 }
 

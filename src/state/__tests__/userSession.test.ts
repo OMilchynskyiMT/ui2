@@ -57,6 +57,20 @@ it('discards invalid persisted session data', () => {
   expect(localStorage.getItem(SESSION_STORAGE_KEY)).toBeNull()
 })
 
+it.each([
+  { permissions: null },
+  { permissions: [] },
+  { permissions: { dhcp: [true, false, true] } },
+  { permissions: { dhcp: [true, 'yes', true, false, true] } },
+])('rejects malformed persisted permissions: %j', fields => {
+  localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify({ ...storedSession, ...fields }))
+
+  useUserSession().restore()
+
+  expect(useUserSession().isActive()).toBe(false)
+  expect(localStorage.getItem(SESSION_STORAGE_KEY)).toBeNull()
+})
+
 it('keeps the in-memory session usable when persistence fails', () => {
   vi.stubGlobal('localStorage', {
     getItem: () => null,
